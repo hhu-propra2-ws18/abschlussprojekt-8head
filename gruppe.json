@@ -10,29 +10,29 @@
 			"name": "Marvin Ohst",
 			"github-name": "MarvinOh"
 		},
-                {
-                        "name": "Roman Cherkovsky",
-                        "github-name": "kingfishbrain"
-                },
-                {
-                        "name": "Jan Kneiphof",
-                        "github-name": "JanKneiphof"
-                },
-                {
-                        "name": "Joshua Spinak",
-                        "github-name": "jspinak"
-                },
-                {
-                        "name": "",
-                        "github-name": ""
-                },
-                {
-                        "name": "",
-                        "github-name": ""
-                },
-                {
-                        "name": "",
-                        "github-name": ""
-                }
+		{
+			"name": "Roman Cherkovsky",
+			"github-name": "kingfishbrain"
+		},
+		{
+			"name": "Jan Kneiphof",
+			"github-name": "JanKneiphof"
+		},
+		{
+			"name": "Joshua Spinak",
+			"github-name": "jspinak"
+		},
+		{
+			"name": "Jakob Kalus",
+			"github-name": "zn5"
+		},
+		{
+			"name": "",
+			"github-name": ""
+		},
+		{
+			"name": "",
+			"github-name": ""
+		}
 	]
 }
