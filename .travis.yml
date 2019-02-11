@@ -5,6 +5,7 @@ jdk:
 - oraclejdk8
 
 script:
+- cd ausleih-service/
 - ./gradlew build --scan -s
 
 before_cache:
