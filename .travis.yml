@@ -6,7 +6,9 @@ jdk:
 
 script:
 - cd ausleih-service/
-- ./src/gradlew build --scan -s
+- chmod =+rwx gradlew
+- chmod =+rwx gradle
+- ./gradlew build --scan -s
 
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
