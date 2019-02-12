@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="formatting">
+    <meta charset="UTF-8">
+    <style>
+        #items body {
+            border: 1px solid black;
+            background-color: whitesmoke;
+            padding-top: 30px;
+            padding-right: 30px;
+            padding-bottom: 40px;
+            padding-left: 30px;
+        }
+        #items p {
+            font: 12px arial, sans-serif;
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #items td, #items th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #items tr:nth-child(even){background-color: #f2f2f2;}
+
+        #items tr:hover {background-color: #ddd;}
+
+        #items th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <nav th:fragment="main-menu">
+        <ul>
+            <li><a href="/">Gegenstand Suchen</a></li>
+            <li><a href="/newAccount">Konto Eröffnen</a></li>
+            <li><a href="/login">Login</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

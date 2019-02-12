@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="menu :: formatting">
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -18,8 +18,8 @@
         <p class="card-text" th:text="${artikel.beschreibung}">Beschreibung</p>
         <p class="card-text">Verfügbarkeit:</p>
         <p class="card-text" th:text="${artikel.verfuegbarkeit}">Verfügbarkeit</p>
-        <p class="card-text">Ausleihkosten:</p>
-        <p class="card-text" th:text="${artikel.ausleihkosten} + &euro;">Ausleihkosten</p>
+        <p class="card-text">Täglicher Ausleihkosten:</p>
+        <p class="card-text" th:text="${artikel.ausleihkosten} + &euro;">Täglicher Ausleihkosten</p>
         <p class="card-text">Kaution:</p>
         <p class="card-text" th:text="${artikel.kaution} + &euro;">Kaution</p>
         <p class="card-text">Standort:</p>
