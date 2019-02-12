@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface AbholortRepository extends CrudRepository<Abholort,Long> {
+public interface AbholortRepository extends CrudRepository<Abholort, Long> {
 	List<Abholort> findAll();
 }

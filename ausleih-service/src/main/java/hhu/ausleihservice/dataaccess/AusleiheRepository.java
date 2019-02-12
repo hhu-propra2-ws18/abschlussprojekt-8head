@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface AusleiheRepository extends CrudRepository<Ausleihe,Long> {
+public interface AusleiheRepository extends CrudRepository<Ausleihe, Long> {
 	List<Ausleihe> findAll();
 }
