@@ -26,6 +26,7 @@
         <p class="card-text" th:text="${artikel.standort}">Standort</p>
         <p class="card-text">Verleihender:</p>
         <a th:href="@{/profile(id=${artikel.getPersonId()})}" class="card-link"><p class="card-text" th:text="${artikel.getPersonName()}">Name</p></a>
+        <br><a href="/liste">Zurück</a>
     </div>
 </div>
 
