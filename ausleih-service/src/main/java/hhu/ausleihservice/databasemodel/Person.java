@@ -18,7 +18,29 @@ public class Person {
 	private String email;
 
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private Set<Item> ownedItems;
+	private Set<Item> items;
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private Set<Item> borrowedItems;
+	private Set<Ausleihe> ausleihen;
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	private Set<Item> abholOrte;
+
+	public void addAusleihe(Ausleihe ausleihe) {
+		ausleihen.add(ausleihe);
+		ausleihe.setAusleiher(this);
+	}
+
+	public void removeAusleihe(Ausleihe ausleihe) {
+		ausleihen.remove(ausleihe);
+		ausleihe.setAusleiher(null);
+	}
+
+	public void addItem(Item item) {
+		items.add(item);
+		item.setBesitzer(this);
+	}
+
+	public void removeItem(Item item) {
+		items.remove(item);
+		item.setBesitzer(null);
+	}
 }
