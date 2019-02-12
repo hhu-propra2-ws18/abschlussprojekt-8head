@@ -71,12 +71,23 @@ public class AusleihServiceController {
 	@GetMapping("/liste")
 	public String artikelListe(Model model){
 
+		model.addAttribute("artikelListe", testListe);
+
 		return "artikelListe";
 	}
 
 	@GetMapping("/details")
-	public String artikelDetails(Model model, @RequestParam(defaultValue = "-1", required = false) long id){
+	public String artikelDetails(Model model, @RequestParam int id){
 
-		return "artikelListe";
+		try {
+			TestArtikel artikel = testListe.get(id);
+			model.addAttribute("artikel", artikel);
+			return "artikelDetails";
+
+		} catch(ArrayIndexOutOfBoundsException e){
+
+			model.addAttribute("id", id);
+			return "artikelNichtGefunden";
+		}
 	}
 }
