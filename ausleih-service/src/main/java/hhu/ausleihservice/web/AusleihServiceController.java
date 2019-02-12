@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 public class AusleihServiceController {
@@ -16,6 +19,28 @@ public class AusleihServiceController {
 	//Temporäre Testklasse
 	@Data
 	private class TestArtikel{
+
+		private TestArtikel(){}
+		private TestArtikel(
+				int id,
+				String titel,
+				String beschreibung,
+				String verfuegbarkeit,
+				int ausleihkosten,
+				int kaution,
+				String standort,
+				int personId
+				){
+			this.id             = id;
+			this.titel          = titel;
+			this.beschreibung   = beschreibung;
+			this.verfuegbarkeit = verfuegbarkeit;
+			this.ausleihkosten  = ausleihkosten;
+			this.kaution        = kaution;
+			this.standort       = standort;
+			this.personId       = personId;
+		}
+
 		@Id
 		@GeneratedValue(strategy=GenerationType.IDENTITY)
 		private int id;
@@ -29,11 +54,19 @@ public class AusleihServiceController {
 		//In richtiger Klasse durch person Objekt ersetzen
 		private int personId;
 
-		int getPersonId(){
+		private int getPersonId(){
 			//In richtiger Klasse durch person.getId() ersetzen
 			return personId;
 		}
 	}
+
+	private List<TestArtikel> testListe = new ArrayList<>(
+			Arrays.asList(
+			new TestArtikel(0, "Stift", "Zum stiften gehen", "Mo-Fr 08:00-22:00", 3, 1, "Dusseldorf", 0),
+			new TestArtikel(1, "Fahrrad", "Falls man sich radlos fühlt", "Sa-So 03:00-03-45", 30, 70, "Düsburg", 5),
+			new TestArtikel(2, "Pfeil", "Wenn man den Bogen schon raus hat", "Mo,Mi 15:00-17:00", 42, 1337, "Eßn", 7)
+			)
+	);
 
 	@GetMapping("/liste")
 	public String artikelListe(Model model){
