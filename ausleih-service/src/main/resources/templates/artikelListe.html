@@ -22,7 +22,7 @@
             <td th:text="${artikel.tagessatz} + &euro;"></td>
             <td th:text="${artikel.kaution} + &euro;"></td>
             <td th:text="${artikel.standort}"></td>
-            <td><a th:href="@{/artikelDetails(id=${artikel.id})}">anzeigen</a></td>
+            <td><a th:href="@{/details(id=${artikel.id})}">anzeigen</a></td>
         </tr>
     </th:block>
 </table>
