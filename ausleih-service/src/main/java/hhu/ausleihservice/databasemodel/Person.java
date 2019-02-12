@@ -9,7 +9,7 @@ import java.util.Set;
 @Data
 public class Person {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 
 	private String name;
@@ -22,7 +22,7 @@ public class Person {
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private Set<Ausleihe> ausleihen;
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private Set<Item> abholOrte;
+	private Set<Abholort> abholOrte;
 
 	public void addAusleihe(Ausleihe ausleihe) {
 		ausleihen.add(ausleihe);

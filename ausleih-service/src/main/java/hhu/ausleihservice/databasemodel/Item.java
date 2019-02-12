@@ -1,5 +1,6 @@
 package hhu.ausleihservice.databasemodel;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,12 +11,14 @@ import java.util.Set;
 @Data
 public class Item {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 
 	private String titel;
+	private String beschreibung;
 	private int tagessatz;
 	private int kautionswert;
+	private Abholort standort;
 
 	private LocalDate availableFrom;
 	private LocalDate availableTill;
@@ -34,8 +37,15 @@ public class Item {
 		ausleihe.setItem(null);
 	}
 
-
-	public boolean availabe(){
+	public boolean available(){
 		return availableTill.isBefore(LocalDate.now());
+	}
+
+	public long getPersonId(){
+		return besitzer.getId();
+	}
+
+	public String getPersonName(){
+		return besitzer.getVorname() + " " + besitzer.getName();
 	}
 }
