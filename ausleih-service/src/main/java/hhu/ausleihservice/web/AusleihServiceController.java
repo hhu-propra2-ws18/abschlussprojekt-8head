@@ -57,7 +57,7 @@ public class AusleihServiceController {
 		private int personId;
 		private String personName;
 
-		private int getPersonId(){
+		public int getPersonId(){
 			//In richtiger Klasse durch person.getId() ersetzen
 			return personId;
 		}
