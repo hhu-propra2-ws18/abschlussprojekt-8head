@@ -90,4 +90,11 @@ public class AusleihServiceController {
 			return "artikelNichtGefunden";
 		}
 	}
+
+	@GetMapping("/")
+	public String startseite(Model model){
+		return "startseite";
+	}
+
+
 }
