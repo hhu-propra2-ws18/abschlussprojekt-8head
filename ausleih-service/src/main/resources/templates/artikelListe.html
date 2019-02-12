@@ -14,12 +14,12 @@
 <h1>Artikel</h1>
 
 <table>
-    <tr><th>Name</th><th>Verfügbarkeit</th><th>Ausleihkosten</th><th>Kaution</th><th>Standort</th></tr>
+    <tr><th>Name</th><th>Verfügbarkeit</th><th>Tagessatz</th><th>Kaution</th><th>Standort</th></tr>
     <th:block th:each="artikel : ${artikelListe}">
         <tr>
             <td th:text="${artikel.titel}"></td>
             <td th:text="${artikel.verfuegbarkeit}"></td>
-            <td th:text="${artikel.ausleihkosten} + &euro;"></td>
+            <td th:text="${artikel.tagessatz} + &euro;"></td>
             <td th:text="${artikel.kaution} + &euro;"></td>
             <td th:text="${artikel.standort}"></td>
             <td><a th:href="@{/artikelDetails(id=${artikel.id})}">anzeigen</a></td>

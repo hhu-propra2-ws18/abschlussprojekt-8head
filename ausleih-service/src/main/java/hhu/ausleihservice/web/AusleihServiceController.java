@@ -26,7 +26,7 @@ public class AusleihServiceController {
 				String titel,
 				String beschreibung,
 				String verfuegbarkeit,
-				int ausleihkosten,
+				int tagessatz,
 				int kaution,
 				String standort,
 				int personId
@@ -35,7 +35,7 @@ public class AusleihServiceController {
 			this.titel          = titel;
 			this.beschreibung   = beschreibung;
 			this.verfuegbarkeit = verfuegbarkeit;
-			this.ausleihkosten  = ausleihkosten;
+			this.tagessatz      = tagessatz;
 			this.kaution        = kaution;
 			this.standort       = standort;
 			this.personId       = personId;
@@ -47,7 +47,7 @@ public class AusleihServiceController {
 		private String titel;
 		private String beschreibung;
 		private String verfuegbarkeit;
-		private int ausleihkosten;
+		private int tagessatz;
 		private int kaution;
 		private String standort;
 
