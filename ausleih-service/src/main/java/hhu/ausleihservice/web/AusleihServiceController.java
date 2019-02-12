@@ -92,7 +92,7 @@ public class AusleihServiceController {
 			model.addAttribute("artikel", artikel);
 			return "artikelDetails";
 
-		} catch(ArrayIndexOutOfBoundsException e){
+		} catch(IndexOutOfBoundsException e){
 
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
