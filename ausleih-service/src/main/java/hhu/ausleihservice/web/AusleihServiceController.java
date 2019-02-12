@@ -106,5 +106,10 @@ public class AusleihServiceController {
 		return "startseite";
 	}
 
+	@GetMapping("/register")
+	public String register(Model model){
+		return "register";
+	}
+
 
 }
