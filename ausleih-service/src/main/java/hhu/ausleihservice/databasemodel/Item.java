@@ -17,33 +17,33 @@ public class Item {
 	private int tagessatz;
 	private int kautionswert;
 
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Abholort abholort;
 
 	private LocalDate availableFrom;
 	private LocalDate availableTill;
 	@ManyToOne
 	private Person besitzer;
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Ausleihe> ausleihen;
 	@Lob
 	private byte[] picture;
 
-	private boolean isInPeriod(LocalDate date,LocalDate start,LocalDate end){
-		return date.isAfter(start)
-				&& date.isBefore(end)
-				&& date.isEqual(start)
-				&& date.isEqual(end);
+	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
+		return (date.isAfter(start)
+				&& date.isBefore(end))
+				|| (date.isEqual(start)
+				|| date.isEqual(end));
 	}
 
-	public boolean isAvailable(LocalDate date){
-		if(!isInPeriod(date,availableFrom,availableTill)){
+	public boolean isAvailable(LocalDate date) {
+		if (!isInPeriod(date, availableFrom, availableTill)) {
 			return false;
 		}
-		for (Ausleihe ausleihe: ausleihen) {
+		for (Ausleihe ausleihe : ausleihen) {
 			LocalDate startDatum = ausleihe.getStartDatum();
 			LocalDate endDatum = ausleihe.getEndDatum();
-			if(isInPeriod(date,startDatum,endDatum)){
+			if (isInPeriod(date, startDatum, endDatum)) {
 				return false;
 			}
 		}
@@ -61,7 +61,7 @@ public class Item {
 	}
 
 
-	public boolean availabe(){
+	public boolean availabe() {
 		return availableTill.isBefore(LocalDate.now());
 	}
 }
