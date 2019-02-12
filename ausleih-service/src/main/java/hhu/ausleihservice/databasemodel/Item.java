@@ -17,6 +17,9 @@ public class Item {
 	private int tagessatz;
 	private int kautionswert;
 
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	private Abholort abholort;
+
 	private LocalDate availableFrom;
 	private LocalDate availableTill;
 	@ManyToOne
