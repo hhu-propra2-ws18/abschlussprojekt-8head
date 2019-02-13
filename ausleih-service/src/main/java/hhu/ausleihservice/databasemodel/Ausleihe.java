@@ -17,4 +17,5 @@ public class Ausleihe {
 	private Person ausleiher;
 	private LocalDate startDatum;
 	private LocalDate endDatum;
+	private Long reservationId;
 }
