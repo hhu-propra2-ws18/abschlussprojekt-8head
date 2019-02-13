@@ -1,39 +1,37 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="menu :: formatting">
+<head th:replace="../static/css/style :: formatting">
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-		  integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
 	<title>Artikeldetails</title>
 </head>
 <body>
-<div class="card" style="width: 18rem;">
-	<div class="card-body">
-		<h1 class="card-title" th:text="${artikel.titel}">Titel</h1>
-		<p class="card-text">Beschreibung:</p>
-		<p class="card-text" th:text="${artikel.beschreibung}">Beschreibung</p>
-		<p class="card-text">Verfügbar ab:</p>
-		<p class="card-text" th:text="${artikel.availableFrom.format(dateformat)}">Verfügbarkeit</p>
-		<p class="card-text">Verfügbar bis:</p>
-		<p class="card-text" th:text="${artikel.availableTill.format(dateformat)}">Verfügbarkeit</p>
-		<p class="card-text">Tagessatz:</p>
-		<p class="card-text" th:text="${artikel.tagessatz} + &euro;">Tagessatz</p>
-		<p class="card-text">Kaution:</p>
-		<p class="card-text" th:text="${artikel.kautionswert} + &euro;">Kaution</p>
-		<p class="card-text">Standort:</p>
-		<p class="card-text" th:text="${artikel.abholort.beschreibung}">Standort</p>
-		<p class="card-text">Verleihender:</p>
-		<a th:href="@{/profile(id=${artikel.getPersonId()})}" class="card-link"><p class="card-text"
-																				   th:text="${artikel.getPersonName()}">
-			Name</p></a>
-		<br><a href="/liste">Zurück</a>
-	</div>
-</div>
+<nav th:replace="../static/css/style :: main-menu">menu</nav>
+<h1 th:text="${artikel.titel}">Titel</h1>
+<table id="items">
+	<tr>
+		<th>Beschreibung</th>
+		<th>Verfügbarkeit ab</th>
+		<th>Verfügbar bis</th>
+		<th>Tagessatz</th>
+		<th>Kaution</th>
+		<th>Standort</th>
+		<th>Verleihender</th>
+	</tr>
+	<td th:text="${artikel.beschreibung}">Beschreibung</td>
+	<td th:text="${artikel.verfuegbarkeit}">Verfügbarkeit</td>
+	<td th:text="${artikel.availableFrom.format(dateformat)}">Verfügbar ab</td>
+	<td th:text="${artikel.availableTill.format(dateformat)}">Verfügbar bis</td>
+	<td th:text="${artikel.tagessatz} + &euro;">Tagessatz</td>
+	<td th:text="${artikel.kaution} + &euro;">Kaution</td>
+	<td th:text="${artikel.standort}">Standort</td>
+	<td><a th:href="@{/profile(id=${artikel.getPersonId()})}" th:text="${artikel.getPersonName()}"><p>Name</p></a></td>
+	</tr>
+</table>
+<br>
+<a href="/liste">Zurück</a>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
