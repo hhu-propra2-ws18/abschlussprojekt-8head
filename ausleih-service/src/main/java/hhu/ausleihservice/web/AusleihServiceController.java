@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 public class AusleihServiceController {
@@ -21,20 +23,32 @@ public class AusleihServiceController {
 
 	private final static DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_DATE;
 
+	//Checks if a string contains all strings in an array
+	private boolean containsArray(String string, String[] array){
+		for (String entry : array) {
+			if(!string.contains(entry)){return false;}
+		}
+		return true;
+	}
 
 	@GetMapping("/liste")
-	public String artikelListe(Model model, @RequestParam(required = false) String query) {
+	public String artikelListe(Model model, @RequestParam(required = false) String q) {
 
 		List<Item> list;
 
-		if(query == null || query.isEmpty()){
+		if(q == null || q.isEmpty()){
 			list = itemRepository.findAll();
 		} else {
 			//Ignores case
-			String[] qArray = query.toLowerCase().split(" ");
+			String[] qArray = q.toLowerCase().split(" ");
 			list = itemRepository.findAll()
 				.stream()
-				.filter(item -> containsArray(item.getTitel().toLowerCase(), qArray))
+				.filter(
+					item -> containsArray(
+						(item.getTitel() + item.getBeschreibung()).toLowerCase(),
+						qArray
+					)
+				)
 				.collect(Collectors.toList());
 		}
 
@@ -44,12 +58,40 @@ public class AusleihServiceController {
 		return "artikelListe";
 	}
 
-	private boolean containsArray(String string, String[] array){
-		for (String entry : array) {
-			if(!string.contains(entry)){return false;}
-		}
-		return true;
+	//TODO create artikelsuche.html, benutzersuche.html, benutzerListe.html
+	@GetMapping("/artikelsuche")
+	public String artikelSuche(Model model){
+		return "artikelSuche";
 	}
+
+
+	@PostMapping("/artikelsuche")
+	public String artikelSuche(Model model,
+	                           long idMin,
+	                           long idMax,
+	                           String query, //For titel or beschreibung (clarify this on page)
+                               int tagessatzMax,
+                               int kautionswertMax,
+                               int availableFromDay, int availableFromMonth, int availableFromYear,
+                               int availableTillDay, int availableTillMonth, int availableTillYear
+	                           ){
+		Stream<Item> listStream = itemRepository.findAll().stream();
+
+		listStream = listStream.filter(item -> (idMin <= item.getId() && item.getId() <= idMax) );
+
+		if(query != null && !query.equals("")){
+			//Ignores Case
+			String[] qArray = query.toLowerCase().split(" ");
+			listStream = listStream.filter(
+					item -> containsArray(
+							(item.getTitel() + item.getBeschreibung()).toLowerCase(),
+							qArray));
+		}
+
+
+		return "artikelListe";
+	}
+
 
 
 	@GetMapping("/details")
