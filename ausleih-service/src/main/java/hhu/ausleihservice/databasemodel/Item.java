@@ -19,6 +19,9 @@ public class Item {
 	private int kautionswert;
 	private Abholort standort;
 
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Abholort abholort;
+
 	private LocalDate availableFrom;
 	private LocalDate availableTill;
 	@ManyToOne
@@ -29,10 +32,10 @@ public class Item {
 	private byte[] picture;
 
 	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
-		return date.isAfter(start)
-				&& date.isBefore(end)
-				&& date.isEqual(start)
-				&& date.isEqual(end);
+		return (date.isAfter(start)
+				&& date.isBefore(end))
+				|| (date.isEqual(start)
+				|| date.isEqual(end));
 	}
 
 	public boolean isAvailable(LocalDate date) {
