@@ -8,16 +8,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+
 @Controller
 public class AusleihServiceController {
 
 	@Autowired
-	ItemRepository itemRepository;
+	private ItemRepository itemRepository;
+
+	private final static DateTimeFormatter DATEFORMAT = DateTimeFormatter.BASIC_ISO_DATE;
 
 
 	@GetMapping("/liste")
 	public String artikelListe(Model model) {
 
+		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", itemRepository.findAll());
 
 		return "artikelListe";
@@ -26,14 +32,13 @@ public class AusleihServiceController {
 	@GetMapping("/details")
 	public String artikelDetails(Model model, @RequestParam long id) {
 
-		try {
-			//TODO fix this
-			Item artikel = itemRepository.findById(id);
-			model.addAttribute("artikel", artikel);
+		Optional<Item> artikel = itemRepository.findById(id);
+		model.addAttribute("dateformat", DATEFORMAT);
+
+		if(artikel.isPresent()) {
+			model.addAttribute("artikel", artikel.get());
 			return "artikelDetails";
-
-		} catch (IndexOutOfBoundsException e) {
-
+		} else {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
 		}

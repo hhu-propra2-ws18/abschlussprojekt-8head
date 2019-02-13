@@ -11,23 +11,27 @@
 <nav th:replace="../static/css/style :: main-menu">menu</nav>
 <h1 th:text="${artikel.titel}">Titel</h1>
 <table id="items">
-<tr>
-	<th>Beschreibung</th>
-	<th>Verfügbarkeit</th>
-	<th>Tagessatz</th>
-	<th>Kaution</th>
-	<th>Standort</th>
-	<th>Verleihender</th>
-</tr>
+	<tr>
+		<th>Beschreibung</th>
+		<th>Verfügbarkeit ab</th>
+		<th>Verfügbar bis</th>
+		<th>Tagessatz</th>
+		<th>Kaution</th>
+		<th>Standort</th>
+		<th>Verleihender</th>
+	</tr>
 	<td th:text="${artikel.beschreibung}">Beschreibung</td>
 	<td th:text="${artikel.verfuegbarkeit}">Verfügbarkeit</td>
+	<td th:text="${artikel.availableFrom.format(dateformat)}">Verfügbar ab</td>
+	<td th:text="${artikel.availableTill.format(dateformat)}">Verfügbar bis</td>
 	<td th:text="${artikel.tagessatz} + &euro;">Tagessatz</td>
 	<td th:text="${artikel.kaution} + &euro;">Kaution</td>
 	<td th:text="${artikel.standort}">Standort</td>
 	<td><a th:href="@{/profile(id=${artikel.getPersonId()})}" th:text="${artikel.getPersonName()}"><p>Name</p></a></td>
-</tr>
+	</tr>
 </table>
-<br><a href="/liste">Zurück</a>
+<br>
+<a href="/liste">Zurück</a>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
