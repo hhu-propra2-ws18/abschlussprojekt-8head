@@ -17,7 +17,7 @@ public class AusleihServiceController {
 	@Autowired
 	private ItemRepository itemRepository;
 
-	private final static DateTimeFormatter DATEFORMAT = DateTimeFormatter.BASIC_ISO_DATE;
+	private final static DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_DATE;
 
 
 	@GetMapping("/liste")
