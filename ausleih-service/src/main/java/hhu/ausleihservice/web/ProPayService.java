@@ -17,7 +17,7 @@ public class ProPayService {
 	@Autowired
 	ProPayInterface proPayInterface;
 
-	public void ueberweiseTagessaetze(Ausleihe ausleihe){
+	public void ueberweiseTagessaetze(Ausleihe ausleihe) {
 		int tagesSatz = ausleihe.getItem().getTagessatz();
 		Period period = Period.between(ausleihe.getStartDatum(), ausleihe.getEndDatum());
 		int amount = tagesSatz * period.getDays();
@@ -26,7 +26,7 @@ public class ProPayService {
 		proPayInterface.transferFunds(ausleiher, besitzer, (double) amount);
 	}
 
-	public void kautionReservieren(Ausleihe ausleihe){
+	public void kautionReservieren(Ausleihe ausleihe) {
 		int kautionswert = ausleihe.getItem().getKautionswert();
 		String ausleiher = ausleihe.getAusleiher().getUsername();
 		String besitzer = ausleihe.getItem().getBesitzer().getUsername();
@@ -34,23 +34,23 @@ public class ProPayService {
 		ausleihe.setReservationId(reservation.getId());
 	}
 
-	public void punishRerservation(Ausleihe ausleihe){
+	public void punishRerservation(Ausleihe ausleihe) {
 		long reservationId = ausleihe.getReservationId();
 		String ausleiher = ausleihe.getAusleiher().getUsername();
 		proPayInterface.punishReservation(reservationId, ausleiher);
 	}
 
-	public void releaseReservation(Ausleihe ausleihe){
+	public void releaseReservation(Ausleihe ausleihe) {
 		long reservationId = ausleihe.getReservationId();
 		String ausleiher = ausleihe.getAusleiher().getUsername();
 		proPayInterface.releaseReservation(reservationId, ausleiher);
 	}
 
-	public double getProPayKontostand(Person person){
+	public double getProPayKontostand(Person person) {
 		return proPayInterface.getAccountInfo(person.getUsername()).getBalance();
 	}
 
-	public void addFunds(Person person, double betrag){
+	public void addFunds(Person person, double betrag) {
 		proPayInterface.addFunds(person.getUsername(), betrag);
 	}
 
