@@ -23,7 +23,7 @@ public class PersonService implements UserDetailsService {
 			UserDetails userdetails = User.builder()
 					.username(u.getUsername())
 					.password(u.getPassword())
-					.authorities(u.getRolle().toString())
+					.authorities(u.getRolle().name())
 					.build();
 			return userdetails;
 		}
