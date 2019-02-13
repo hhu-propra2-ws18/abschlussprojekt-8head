@@ -11,7 +11,7 @@ public class Ausleihe {
 	@Id
 	@GeneratedValue
 	private Long id;
-    @ManyToOne
+	@ManyToOne
 	private Item item;
 	@ManyToOne
 	private Person ausleiher;

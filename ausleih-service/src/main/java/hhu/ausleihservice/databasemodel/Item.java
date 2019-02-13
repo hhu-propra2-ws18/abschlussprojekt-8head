@@ -1,6 +1,5 @@
 package hhu.ausleihservice.databasemodel;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,8 +23,31 @@ public class Item {
 	private LocalDate availableTill;
 	@ManyToOne
 	private Person besitzer;
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Ausleihe> ausleihen;
+	@Lob
+	private byte[] picture;
+
+	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
+		return date.isAfter(start)
+				&& date.isBefore(end)
+				&& date.isEqual(start)
+				&& date.isEqual(end);
+	}
+
+	public boolean isAvailable(LocalDate date) {
+		if (!isInPeriod(date, availableFrom, availableTill)) {
+			return false;
+		}
+		for (Ausleihe ausleihe : ausleihen) {
+			LocalDate startDatum = ausleihe.getStartDatum();
+			LocalDate endDatum = ausleihe.getEndDatum();
+			if (isInPeriod(date, startDatum, endDatum)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	public void addAusleihe(Ausleihe ausleihe) {
 		ausleihen.add(ausleihe);

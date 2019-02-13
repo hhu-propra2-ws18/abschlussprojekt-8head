@@ -14,14 +14,19 @@ public class Person {
 
 	private String name;
 	private String vorname;
+
 	private String username;
+	private String password;
+	private Rolle rolle;
+
+
 	private String email;
 
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Item> items;
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Ausleihe> ausleihen;
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Abholort> abholOrte;
 
 	public void addAusleihe(Ausleihe ausleihe) {
