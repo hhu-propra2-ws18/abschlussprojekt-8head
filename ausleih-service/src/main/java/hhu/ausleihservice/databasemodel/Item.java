@@ -63,6 +63,22 @@ public class Item {
 		return true;
 	}
 
+	//Format of input is "YYYY-MM-DD"
+	public boolean isAvailableFromTill(String from, String till) {
+		try {
+			String[] fromStringArray = from.split("-");
+			String[] tillStringArray = till.split("-");
+
+			LocalDate fromDate = LocalDate.of(Integer.parseInt(fromStringArray[0]), Integer.parseInt(fromStringArray[1]), Integer.parseInt(fromStringArray[2]));
+			LocalDate tillDate = LocalDate.of(Integer.parseInt(tillStringArray[0]), Integer.parseInt(tillStringArray[1]), Integer.parseInt(tillStringArray[2]));
+
+			return availableFrom.isBefore(fromDate) && tillDate.isBefore(availableTill);
+
+		} catch(ArrayIndexOutOfBoundsException|NumberFormatException e) {
+			return false;
+		}
+	}
+
 	public void addAusleihe(Ausleihe ausleihe) {
 		ausleihen.add(ausleihe);
 		ausleihe.setItem(this);
@@ -76,6 +92,7 @@ public class Item {
 	public boolean available(){
 		return availableTill.isBefore(LocalDate.now());
 	}
+
 
 	public long getPersonId(){
 		return besitzer.getId();

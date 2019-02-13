@@ -1,7 +1,9 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.dataaccess.ItemRepository;
+import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Item;
+import hhu.ausleihservice.databasemodel.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +23,8 @@ public class AusleihServiceController {
 
 	@Autowired
 	private ItemRepository itemRepository;
+	@Autowired
+	private PersonRepository personRepository;
 
 	private final static DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_DATE;
 
@@ -58,22 +63,22 @@ public class AusleihServiceController {
 		return "artikelListe";
 	}
 
-	//TODO create artikelsuche.html, benutzersuche.html, benutzerListe.html
+	//TODO create artikelSuche.html, benutzerSuche.html, benutzerListe.html
 	@GetMapping("/artikelsuche")
 	public String artikelSuche(Model model){
+		model.addAttribute("datum", LocalDateTime.now().format(DATEFORMAT));
 		return "artikelSuche";
 	}
-
 
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
 	                           long idMin,
 	                           long idMax,
-	                           String query, //For titel or beschreibung (clarify this on page)
+	                           String query, //For titel or beschreibung
                                int tagessatzMax,
                                int kautionswertMax,
-                               int availableFromDay, int availableFromMonth, int availableFromYear,
-                               int availableTillDay, int availableTillMonth, int availableTillYear
+                               String availableMin, //1979-12-20
+                               String availableMax
 	                           ){
 		Stream<Item> listStream = itemRepository.findAll().stream();
 
@@ -88,8 +93,50 @@ public class AusleihServiceController {
 							qArray));
 		}
 
+		listStream = listStream.filter(item -> item.getTagessatz() <= tagessatzMax);
+		listStream = listStream.filter(item -> item.getKautionswert() <= kautionswertMax);
+
+		listStream = listStream.filter(
+			item -> item.isAvailableFromTill(availableMin, availableMax)
+		);
+
+		List<Item> list = listStream.collect(Collectors.toList());
+		model.addAttribute("dateformat", DATEFORMAT);
+		model.addAttribute("artikelListe", list);
 
 		return "artikelListe";
+	}
+
+	@GetMapping("/benutzersuche")
+	public String benutzerSuche(Model model){
+		return "benutzerSuche";
+	}
+
+	@PostMapping("/benutzersuche")
+	public String benutzerSuche(Model model,
+	                            long idMin,
+	                            long idMax,
+                                String query //For name, vorname, username
+	                            ){
+
+		Stream<Person> listStream = personRepository.findAll().stream();
+
+		listStream = listStream.filter(person -> (idMin <= person.getId() && person.getId() <= idMax) );
+
+		if(query != null && !query.equals("")){
+			//Ignores Case
+			String[] qArray = query.toLowerCase().split(" ");
+			listStream = listStream.filter(
+					person -> containsArray(
+							(person.getVorname() + person.getName() + person.getUsername()).toLowerCase(),
+							qArray));
+		}
+
+		List<Person> list = listStream.collect(Collectors.toList());
+		model.addAttribute("dateformat", DATEFORMAT);
+		model.addAttribute("benutzerListe", list);
+
+		return "benutzerListe";
 	}
 
 
