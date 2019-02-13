@@ -5,6 +5,7 @@ import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.databasemodel.Rolle;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -112,32 +113,34 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/")
-	public String startseite(Model model) {
-		Person simon = new Person();
-		simon.setUsername("siker102");
-		simon.setRolle(Rolle.ADMIN);
-		simon.setPassword("$2a$10$mTkoHy1ISOHh.i0l0pJqKur0AOFVeBG1C.zwOkYGcS/T1fDVvEv3i");
-		personRepository.save(simon);
-
-		System.out.println(personRepository.findAll().get(0));
-
+	public String startseite() {
 		return "startseite";
 	}
 
 	@GetMapping("/register")
-	public String register(Model model){
+	public String register(Person person, Model model){
+		model.addAttribute("person", person);
 		return "register";
 	}
 
 	@PostMapping("/register")
-	public String added(Model model, @ModelAttribute("person") Person person) {
+	public String added(Person person, Model model) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		person.setPassword(encoder.encode(person.getPassword()));
 		personRepository.save(person);
-		return "redirect:http://localhost:8080/startseite/";
+		System.out.println(person);
+		return "redirect:http://localhost:8080/";
 	}
 
 	@GetMapping("/admin")
 	public String admin(Model model){
 		return "admin";
+	}
+
+
+	@ModelAttribute(value = "person")
+	public Person newPerson(){
+		return new Person();
 	}
 
 }
