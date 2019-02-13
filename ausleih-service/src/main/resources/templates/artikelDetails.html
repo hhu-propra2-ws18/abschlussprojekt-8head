@@ -21,7 +21,6 @@
 		<th>Verleihender</th>
 	</tr>
 	<td th:text="${artikel.beschreibung}">Beschreibung</td>
-	<td th:text="${artikel.verfuegbarkeit}">Verfügbarkeit</td>
 	<td th:text="${artikel.availableFrom.format(dateformat)}">Verfügbar ab</td>
 	<td th:text="${artikel.availableTill.format(dateformat)}">Verfügbar bis</td>
 	<td th:text="${artikel.tagessatz} + &euro;">Tagessatz</td>
