@@ -10,16 +10,15 @@ import java.util.Set;
 @Data
 public class Item {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 
 	private String titel;
 	private String beschreibung;
 	private int tagessatz;
 	private int kautionswert;
-	private Abholort standort;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
 	private Abholort abholort;
 
 	private LocalDate availableFrom;
@@ -38,7 +37,7 @@ public class Item {
 				|| date.isEqual(end));
 	}
 
-	public boolean isAvailable(LocalDate date) {
+	boolean isAvailable(LocalDate date) {
 		if (!isInPeriod(date, availableFrom, availableTill)) {
 			return false;
 		}

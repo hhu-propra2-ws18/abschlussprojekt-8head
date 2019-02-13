@@ -1,6 +1,8 @@
 package hhu.ausleihservice.databasemodel;
 
+import hhu.ausleihservice.dataaccess.AbholortRepository;
 import hhu.ausleihservice.dataaccess.ItemRepository;
+import hhu.ausleihservice.dataaccess.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
@@ -8,7 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,11 +18,30 @@ import java.util.Set;
 public class DatabaseInitializer implements ServletContextInitializer {
 
 	@Autowired
-	ItemRepository itemRepository;
+	private ItemRepository itemRepository;
+	@Autowired
+	private PersonRepository personRepository;
+	@Autowired
+	private AbholortRepository abholortRepository;
 
 	@Override
-	public void onStartup(ServletContext servletContext) throws ServletException {
+	public void onStartup(ServletContext servletContext) {
 		System.out.println("Populating the database");
+
+		Abholort ort1 = new Abholort(); ort1.setBeschreibung("Höhle");
+		Abholort ort2 = new Abholort(); ort2.setBeschreibung("Garage");
+		Abholort ort3 = new Abholort(); ort3.setBeschreibung("Haus");
+		Abholort ort4 = new Abholort(); ort4.setBeschreibung("Verloren");
+
+		Set<Abholort> orte1 = new HashSet<>();
+		Set<Abholort> orte2 = new HashSet<>();
+		Set<Abholort> orte3 = new HashSet<>();
+
+		orte1.add(ort1);
+		orte2.add(ort2);
+		orte2.add(ort3);
+		orte3.add(ort4);
+
 
 		Person person1 = new Person();
 		Person person2 = new Person();
@@ -41,23 +62,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person2.setEmail("notWorking@uni.com");
 		person3.setEmail("screaming@computer.de");
 
-		Set<Abholort> orte1 = new HashSet<>();
-		Set<Abholort> orte2 = new HashSet<>();
-		Set<Abholort> orte3 = new HashSet<>();
-
-		Abholort ort1 = new Abholort(); ort1.setBeschreibung("Höhle");
-		Abholort ort2 = new Abholort(); ort1.setBeschreibung("Garage");
-		Abholort ort3 = new Abholort(); ort1.setBeschreibung("Haus");
-		Abholort ort4 = new Abholort(); ort1.setBeschreibung("Verloren");
-
-		orte1.add(ort1);
-		orte2.add(ort2);
-		orte2.add(ort3);
-		orte3.add(ort4);
-
-		person1.setAbholOrte(orte1);
-		person2.setAbholOrte(orte2);
-		person3.setAbholOrte(orte3);
+		person1.setAbholorte(orte1);
+		person2.setAbholorte(orte2);
+		person3.setAbholorte(orte3);
 
 
 		Item item1 = new Item();
@@ -80,9 +87,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item2.setKautionswert(1245);
 		item3.setKautionswert(55);
 
-		item1.setStandort(ort1);
-		item2.setStandort(ort3);
-		item3.setStandort(ort4);
+		item1.setAbholort(ort1);
+		item2.setAbholort(ort3);
+		item3.setAbholort(ort4);
 
 		item1.setAvailableFrom(LocalDate.now().plusDays(1));
 		item2.setAvailableFrom(LocalDate.now().plusDays(3));
@@ -92,6 +99,24 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item2.setAvailableTill(LocalDate.now().plusDays(35));
 		item3.setAvailableTill(LocalDate.now().plusDays(46));
 
-		//TODO add remaining fields
+		item1.setBesitzer(person1);
+		item2.setBesitzer(person2);
+		item3.setBesitzer(person3);
+
+		this.abholortRepository.save(ort1);
+		this.abholortRepository.save(ort2);
+		this.abholortRepository.save(ort3);
+		this.abholortRepository.save(ort4);
+
+		this.personRepository.save(person1);
+		this.personRepository.save(person2);
+		this.personRepository.save(person3);
+
+		this.itemRepository.save(item1);
+		this.itemRepository.save(item2);
+		this.itemRepository.save(item3);
+
+
+
 	}
 }

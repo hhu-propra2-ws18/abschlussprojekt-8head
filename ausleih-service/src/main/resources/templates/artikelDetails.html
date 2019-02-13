@@ -17,14 +17,16 @@
 		<h1 class="card-title" th:text="${artikel.titel}">Titel</h1>
 		<p class="card-text">Beschreibung:</p>
 		<p class="card-text" th:text="${artikel.beschreibung}">Beschreibung</p>
-		<p class="card-text">Verfügbarkeit:</p>
-		<p class="card-text" th:text="${artikel.verfuegbarkeit}">Verfügbarkeit</p>
+		<p class="card-text">Verfügbar ab:</p>
+		<p class="card-text" th:text="${artikel.availableFrom.format(dateformat)}">Verfügbarkeit</p>
+		<p class="card-text">Verfügbar bis:</p>
+		<p class="card-text" th:text="${artikel.availableTill.format(dateformat)}">Verfügbarkeit</p>
 		<p class="card-text">Tagessatz:</p>
 		<p class="card-text" th:text="${artikel.tagessatz} + &euro;">Tagessatz</p>
 		<p class="card-text">Kaution:</p>
-		<p class="card-text" th:text="${artikel.kaution} + &euro;">Kaution</p>
+		<p class="card-text" th:text="${artikel.kautionswert} + &euro;">Kaution</p>
 		<p class="card-text">Standort:</p>
-		<p class="card-text" th:text="${artikel.standort}">Standort</p>
+		<p class="card-text" th:text="${artikel.abholort.beschreibung}">Standort</p>
 		<p class="card-text">Verleihender:</p>
 		<a th:href="@{/profile(id=${artikel.getPersonId()})}" class="card-link"><p class="card-text"
 																				   th:text="${artikel.getPersonName()}">
