@@ -111,5 +111,10 @@ public class AusleihServiceController {
 		return "register";
 	}
 
+	@GetMapping("/admin")
+	public String admin(Model model){
+		return "admin";
+	}
+
 
 }
