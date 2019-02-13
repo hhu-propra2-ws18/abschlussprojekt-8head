@@ -1,6 +1,10 @@
 package hhu.ausleihservice.web;
 
+import hhu.ausleihservice.dataaccess.PersonRepository;
+import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.databasemodel.Rolle;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +19,10 @@ import java.util.List;
 
 @Controller
 public class AusleihServiceController {
+
+	@Autowired
+	PersonRepository personRepository;
+
 
 	//Temporäre Testklasse
 	@Data
@@ -103,6 +111,14 @@ public class AusleihServiceController {
 
 	@GetMapping("/")
 	public String startseite(Model model) {
+		Person simon = new Person();
+		simon.setUsername("siker102");
+		simon.setRolle(Rolle.ADMIN);
+		simon.setPassword("$2a$10$mTkoHy1ISOHh.i0l0pJqKur0AOFVeBG1C.zwOkYGcS/T1fDVvEv3i");
+		personRepository.save(simon);
+
+		System.out.println(personRepository.findAll().get(0));
+
 		return "startseite";
 	}
 
