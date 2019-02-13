@@ -25,7 +25,7 @@
 	<td th:text="${artikel.availableTill.format(dateformat)}">Verfügbar bis</td>
 	<td th:text="${artikel.tagessatz} + &euro;">Tagessatz</td>
 	<td th:text="${artikel.kautionswert} + &euro;">Kaution</td>
-	<td th:text="${artikel.standort}">Standort</td>
+	<td th:text="${artikel.abholort}">Standort</td>
 	<td><a th:href="@{/profile(id=${artikel.getPersonId()})}" th:text="${artikel.getPersonName()}"><p>Name</p></a></td>
 	</tr>
 </table>
