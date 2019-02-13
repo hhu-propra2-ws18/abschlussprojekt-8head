@@ -123,12 +123,13 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/register")
-	public String register(Model model) {
+	public String register(Model model){
 		return "register";
 	}
 
 	@GetMapping("/admin")
-	public String admin(Model model) {
+	public String admin(Model model){
 		return "admin";
 	}
+
 }
