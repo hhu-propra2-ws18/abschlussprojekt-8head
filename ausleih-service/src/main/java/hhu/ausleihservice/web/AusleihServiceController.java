@@ -123,17 +123,12 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/register")
-	public String register(Model model){
+	public String register(Model model) {
 		return "register";
 	}
 
-<<<<<<< HEAD
 	@GetMapping("/admin")
-	public String admin(Model model){
+	public String admin(Model model) {
 		return "admin";
 	}
-
-=======
->>>>>>> Added basic login screen
-
 }

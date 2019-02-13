@@ -6,11 +6,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 public class config extends WebSecurityConfigurerAdapter {
+
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		//super.configure(http);
 		http.authorizeRequests()
 				.antMatchers("/").permitAll()
+				.antMatchers("/register").permitAll()
 				.antMatchers("/admin").hasRole("ADMIN")
 				.anyRequest().authenticated()
 				.and().formLogin().permitAll()
