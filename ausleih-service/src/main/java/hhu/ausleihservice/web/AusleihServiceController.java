@@ -23,15 +23,15 @@ public class AusleihServiceController {
 
 
 	@GetMapping("/liste")
-	public String artikelListe(Model model, @RequestParam(required = false) String query) {
+	public String artikelListe(Model model, @RequestParam(required = false) String q) {
 
 		List<Item> list;
 
-		if(query == null || query.isEmpty()){
+		if(q == null || q.isEmpty()){
 			list = itemRepository.findAll();
 		} else {
 			//Ignores case
-			String[] qArray = query.toLowerCase().split(" ");
+			String[] qArray = q.toLowerCase().split(" ");
 			list = itemRepository.findAll()
 				.stream()
 				.filter(item -> containsArray(item.getTitel().toLowerCase(), qArray))

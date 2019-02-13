@@ -87,12 +87,14 @@
 <body>
 
 <nav th:fragment="main-menu">
-	<form method="get" action="/" id="search"></form>
+	<form method="get" action="/liste" id="search"></form>
+	
 	<a id="logo" href=# class="image image-full"><img th:src="@{img/8head.jpg}" alt="8head" width="50" height="50"/></a>
 	<div>
 		<input form="search" type="text" name="q" placeholder="search..">
 		<input form="search" type="submit" value="search" ></input>
 	</div>
+	<a href="/artikelsuche">Erweiterte Suche</a>
 	<a href="/newAccount">Konto Eröffnen</a>
 	<a href="/login">Login</a>
 </nav>
