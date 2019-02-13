@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.GeneratedValue;
@@ -123,12 +125,20 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/register")
-	public String register(Model model){
+	public String register(Model model) {
+		Person newPerson = new Person();
+		model.addAttribute("person", newPerson);
 		return "register";
 	}
 
+	@PostMapping("/register")
+	public String added(Model model, @ModelAttribute("person") Person person) {
+		personRepository.save(person);
+		return "redirect:http://localhost:8080/startseite/";
+	}
+
 	@GetMapping("/admin")
-	public String admin(Model model){
+	public String admin(Model model) {
 		return "admin";
 	}
 
