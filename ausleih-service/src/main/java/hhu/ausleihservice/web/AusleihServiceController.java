@@ -127,10 +127,13 @@ public class AusleihServiceController {
 		return "register";
 	}
 
+<<<<<<< HEAD
 	@GetMapping("/admin")
 	public String admin(Model model){
 		return "admin";
 	}
 
+=======
+>>>>>>> Added basic login screen
 
 }
