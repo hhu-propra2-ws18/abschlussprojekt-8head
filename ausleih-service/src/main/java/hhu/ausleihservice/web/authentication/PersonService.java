@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+
 public class PersonService implements UserDetailsService {
 	@Autowired
 	private PersonProvider users;
@@ -23,7 +24,7 @@ public class PersonService implements UserDetailsService {
 			UserDetails userdetails = User.builder()
 					.username(u.getUsername())
 					.password(u.getPassword())
-					.authorities(u.getRolle().toString())
+					.authorities(u.getRolle().name())
 					.build();
 			return userdetails;
 		}
