@@ -3,11 +3,29 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Register</title>
-
-
-
 </head>
 <body>
+<nav th:replace="../static/css/style :: main-menu">menu</nav>
+<h1>Neues Konto Erstellen</h1>
+
+<table id="items">
+	<tr>
+		<td>Vorname</td>
+		<td>Nachname</td>
+		<td>Username</td>
+		<td>Password</td>
+	</tr>
+	<form>
+		<td><input name="vorname" type="text">Vorname</td>
+		<td><input name="name" type="text">Nachname</td>
+		<td><input name="username" type="text">Username</td>
+		<td><input name="password" type="text">Password</td>
+		<td>
+			<button type="submit" formmethod="post">Konto erstellen</button>
+		</td>
+	</form>
+	</tr>
+</table>
 
 </body>
 </html>
