@@ -81,6 +81,10 @@
 			margin-top: -20px;
 		}
 
+		.topnav-right {
+			float: right;
+		}
+
 	</style>
 </head>
 
@@ -88,8 +92,12 @@
 <nav th:fragment="main-menu">
 	<a id="logo" href=# class="image image-full"><img th:src="@{img/8head.jpg}" alt="8head" width="50" height="50"/></a>
 	<a href="/liste">Gegenstand Suchen</a>
-	<a href="/newAccount">Konto Eröffnen</a>
+	<a href="/register">Konto Eröffnen</a>
 	<a href="/login">Login</a>
+	<div class="topnav-right">
+	<a href="#">Profil</a>
+	<a href="logout">Logout</a>
+	</div>
 </nav>
 </body>
 </html>
