@@ -30,6 +30,18 @@ public class Item {
 	@Lob
 	private byte[] picture;
 
+	//Getter and Setter are copying the array to prevent data leaking outside by storing/giving the reference to the array
+	@Lob
+	public byte[] getPicture(){
+		byte[] out = new byte[picture.length];
+		System.arraycopy(picture, 0, out, 0, picture.length);
+		return out;
+	}
+	public void setPicture(byte[] in){
+		picture = new byte[in.length];
+		System.arraycopy(in, 0, picture, 0, in.length);
+	}
+
 	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
 		return (date.isAfter(start)
 				&& date.isBefore(end))
