@@ -23,10 +23,11 @@ import java.util.List;
 @Controller
 public class AusleihServiceController {
 
-	@Autowired
-	PersonRepository personRepository;
+	private PersonRepository personRepository;
 
-
+	public AusleihServiceController(PersonRepository perRepository){
+		this.personRepository = perRepository;
+	}
 	//Temporäre Testklasse
 	@Data
 	private class TestArtikel {
@@ -118,7 +119,8 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/register")
-	public String register(Person person, Model model){
+	public String register(Model model){
+		Person person = new Person();
 		model.addAttribute("person", person);
 		return "register";
 	}
@@ -127,8 +129,9 @@ public class AusleihServiceController {
 	public String added(Person person, Model model) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		person.setPassword(encoder.encode(person.getPassword()));
+		person.setRolle(Rolle.USER);
 		personRepository.save(person);
-		System.out.println(person);
+		System.out.println(personRepository.findAll().get(0));
 		return "redirect:http://localhost:8080/";
 	}
 
