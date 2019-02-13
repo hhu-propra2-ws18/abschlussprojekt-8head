@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class AusleihServiceController {
@@ -21,13 +23,34 @@ public class AusleihServiceController {
 
 
 	@GetMapping("/liste")
-	public String artikelListe(Model model) {
+	public String artikelListe(Model model, @RequestParam(required = false) String query) {
+
+		List<Item> list;
+
+		if(query == null || query.isEmpty()){
+			list = itemRepository.findAll();
+		} else {
+			//Ignores case
+			String[] qArray = query.toLowerCase().split(" ");
+			list = itemRepository.findAll()
+				.stream()
+				.filter(item -> containsArray(item.getTitel().toLowerCase(), qArray))
+				.collect(Collectors.toList());
+		}
 
 		model.addAttribute("dateformat", DATEFORMAT);
-		model.addAttribute("artikelListe", itemRepository.findAll());
+		model.addAttribute("artikelListe", list);
 
 		return "artikelListe";
 	}
+
+	private boolean containsArray(String string, String[] array){
+		for (String entry : array) {
+			if(!string.contains(entry)){return false;}
+		}
+		return true;
+	}
+
 
 	@GetMapping("/details")
 	public String artikelDetails(Model model, @RequestParam long id) {
