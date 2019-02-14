@@ -21,12 +21,11 @@ import java.util.stream.Stream;
 @Controller
 public class AusleihServiceController {
 
+	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_DATE;
 	@Autowired
 	private ItemRepository itemRepository;
 	@Autowired
 	private PersonRepository personRepository;
-
-	private final static DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 
 	//Checks if a string contains all strings in an array
 	private boolean containsArray(String string, String[] array) {
