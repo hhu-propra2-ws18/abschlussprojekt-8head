@@ -29,9 +29,11 @@ public class AusleihServiceController {
 	private final static DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 
 	//Checks if a string contains all strings in an array
-	private boolean containsArray(String string, String[] array){
+	private boolean containsArray(String string, String[] array) {
 		for (String entry : array) {
-			if(!string.contains(entry)){return false;}
+			if (!string.contains(entry)) {
+				return false;
+			}
 		}
 		return true;
 	}
@@ -41,20 +43,20 @@ public class AusleihServiceController {
 
 		List<Item> list;
 
-		if(q == null || q.isEmpty()){
+		if (q == null || q.isEmpty()) {
 			list = itemRepository.findAll();
 		} else {
 			//Ignores case
 			String[] qArray = q.toLowerCase().split(" ");
 			list = itemRepository.findAll()
-				.stream()
-				.filter(
-					item -> containsArray(
-						(item.getTitel() + item.getBeschreibung()).toLowerCase(),
-						qArray
+					.stream()
+					.filter(
+							item -> containsArray(
+									(item.getTitel() + item.getBeschreibung()).toLowerCase(),
+									qArray
+							)
 					)
-				)
-				.collect(Collectors.toList());
+					.collect(Collectors.toList());
 		}
 
 		model.addAttribute("dateformat", DATEFORMAT);
@@ -65,7 +67,7 @@ public class AusleihServiceController {
 
 	//TODO create artikelSuche.html, benutzerSuche.html, benutzerListe.html
 	@GetMapping("/artikelsuche")
-	public String artikelSuche(Model model){
+	public String artikelSuche(Model model) {
 		model.addAttribute("datum", LocalDateTime.now().format(DATEFORMAT));
 		return "artikelSuche";
 	}
@@ -73,14 +75,14 @@ public class AusleihServiceController {
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
 	                           String query, //For titel or beschreibung
-                               @RequestParam(defaultValue="2147483647") int tagessatzMax,
-                               @RequestParam(defaultValue="2147483647") int kautionswertMax,
-                               String availableMin, //1979-12-20
-                               String availableMax
-	                           ){
+	                           @RequestParam(defaultValue = "2147483647") int tagessatzMax,
+	                           @RequestParam(defaultValue = "2147483647") int kautionswertMax,
+	                           String availableMin, //1979-12-20
+	                           String availableMax
+	) {
 		Stream<Item> listStream = itemRepository.findAll().stream();
 
-		if(query != null && !query.equals("")){
+		if (query != null && !query.equals("")) {
 			//Ignores Case
 			String[] qArray = query.toLowerCase().split(" ");
 			listStream = listStream.filter(
@@ -93,7 +95,7 @@ public class AusleihServiceController {
 		listStream = listStream.filter(item -> item.getKautionswert() <= kautionswertMax);
 
 		listStream = listStream.filter(
-			item -> item.isAvailableFromTill(availableMin, availableMax)
+				item -> item.isAvailableFromTill(availableMin, availableMax)
 		);
 
 		List<Item> list = listStream.collect(Collectors.toList());
@@ -104,7 +106,7 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/benutzersuche")
-	public String benutzerSuche(Model model){
+	public String benutzerSuche(Model model) {
 		return "benutzerSuche";
 	}
 
@@ -112,14 +114,14 @@ public class AusleihServiceController {
 	public String benutzerSuche(Model model,
 	                            long idMin,
 	                            long idMax,
-                                String query //For name, vorname, username
-	                            ){
+	                            String query //For name, vorname, username
+	) {
 
 		Stream<Person> listStream = personRepository.findAll().stream();
 
-		listStream = listStream.filter(person -> (idMin <= person.getId() && person.getId() <= idMax) );
+		listStream = listStream.filter(person -> (idMin <= person.getId() && person.getId() <= idMax));
 
-		if(query != null && !query.equals("")){
+		if (query != null && !query.equals("")) {
 			//Ignores Case
 			String[] qArray = query.toLowerCase().split(" ");
 			listStream = listStream.filter(
@@ -136,14 +138,13 @@ public class AusleihServiceController {
 	}
 
 
-
 	@GetMapping("/details")
 	public String artikelDetails(Model model, @RequestParam long id) {
 
 		Optional<Item> artikel = itemRepository.findById(id);
 		model.addAttribute("dateformat", DATEFORMAT);
 
-		if(artikel.isPresent()) {
+		if (artikel.isPresent()) {
 			model.addAttribute("artikel", artikel.get());
 			return "artikelDetails";
 		} else {
