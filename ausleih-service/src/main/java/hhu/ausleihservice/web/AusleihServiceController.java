@@ -76,7 +76,7 @@ public class AusleihServiceController {
 	                           String query, //For titel or beschreibung
 	                           @RequestParam(defaultValue = "2147483647") int tagessatzMax,
 	                           @RequestParam(defaultValue = "2147483647") int kautionswertMax,
-	                           String availableMin, //1979-12-20
+	                           String availableMin, //YYYY-MM-DD
 	                           String availableMax
 	) {
 		Stream<Item> listStream = itemRepository.findAll().stream();
@@ -111,21 +111,17 @@ public class AusleihServiceController {
 
 	@PostMapping("/benutzersuche")
 	public String benutzerSuche(Model model,
-	                            long idMin,
-	                            long idMax,
 	                            String query //For nachname, vorname, username
 	) {
 
 		Stream<Person> listStream = personRepository.findAll().stream();
-
-		listStream = listStream.filter(person -> (idMin <= person.getId() && person.getId() <= idMax));
 
 		if (query != null && !query.equals("")) {
 			//Ignores Case
 			String[] qArray = query.toLowerCase().split(" ");
 			listStream = listStream.filter(
 					person -> containsArray(
-							(person.getNachname() + " " + person.getUsername()).toLowerCase(),
+							(person.getName() + " " + person.getUsername()).toLowerCase(),
 							qArray));
 		}
 
