@@ -10,7 +10,7 @@ import java.util.Set;
 @Data
 public class Item {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	private String titel;
@@ -32,12 +32,13 @@ public class Item {
 
 	//Getter and Setter are copying the array to prevent data leaking outside by storing/giving the reference to the array
 	@Lob
-	public byte[] getPicture(){
+	public byte[] getPicture() {
 		byte[] out = new byte[picture.length];
 		System.arraycopy(picture, 0, out, 0, picture.length);
 		return out;
 	}
-	public void setPicture(byte[] in){
+
+	public void setPicture(byte[] in) {
 		picture = new byte[in.length];
 		System.arraycopy(in, 0, picture, 0, in.length);
 	}
@@ -65,18 +66,15 @@ public class Item {
 
 	//Format of input is "YYYY-MM-DD"
 	public boolean isAvailableFromTill(String from, String till) {
-		try {
-			String[] fromStringArray = from.split("-");
-			String[] tillStringArray = till.split("-");
-
-			LocalDate fromDate = LocalDate.of(Integer.parseInt(fromStringArray[0]), Integer.parseInt(fromStringArray[1]), Integer.parseInt(fromStringArray[2]));
-			LocalDate tillDate = LocalDate.of(Integer.parseInt(tillStringArray[0]), Integer.parseInt(tillStringArray[1]), Integer.parseInt(tillStringArray[2]));
-
-			return availableFrom.isBefore(fromDate) && tillDate.isBefore(availableTill);
-
-		} catch(ArrayIndexOutOfBoundsException|NumberFormatException e) {
-			return false;
+		LocalDate temp = LocalDate.parse(from);
+		LocalDate end = LocalDate.parse(till);
+		while (!temp.equals(end)) {
+			if (!isAvailable(temp)) {
+				return false;
+			}
+			temp = temp.plusDays(1);
 		}
+		return true;
 	}
 
 	public void addAusleihe(Ausleihe ausleihe) {
@@ -89,16 +87,11 @@ public class Item {
 		ausleihe.setItem(null);
 	}
 
-	public boolean available(){
-		return availableTill.isBefore(LocalDate.now());
-	}
-
-
-	public long getPersonId(){
+	public long getPersonId() {
 		return besitzer.getId();
 	}
 
-	public String getPersonName(){
+	public String getPersonName() {
 		return besitzer.getVorname() + " " + besitzer.getName();
 	}
 }
