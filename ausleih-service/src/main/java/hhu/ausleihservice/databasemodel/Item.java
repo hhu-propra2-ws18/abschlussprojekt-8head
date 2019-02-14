@@ -43,24 +43,13 @@ public class Item {
 	}
 
 	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
-		return (date.isAfter(start)
-				&& date.isBefore(end))
-				|| (date.isEqual(start)
-				|| date.isEqual(end));
+		return (!date.isBefore(start) && !date.isAfter(end));
 	}
 
-	boolean isAvailable(LocalDate date) {
-		if (!isInPeriod(date, availableFrom, availableTill)) {
-			return false;
-		}
-		for (Ausleihe ausleihe : ausleihen) {
-			LocalDate startDatum = ausleihe.getStartDatum();
-			LocalDate endDatum = ausleihe.getEndDatum();
-			if (isInPeriod(date, startDatum, endDatum)) {
-				return false;
-			}
-		}
-		return true;
+	public boolean isAvailable(LocalDate date) {
+		return isInPeriod(date,availableFrom,availableTill)
+				&& ausleihen.stream().noneMatch((ausleihe)
+				-> isInPeriod(date,ausleihe.getStartDatum(),ausleihe.getEndDatum()));
 	}
 
 	public void addAusleihe(Ausleihe ausleihe) {
@@ -72,11 +61,6 @@ public class Item {
 		ausleihen.remove(ausleihe);
 		ausleihe.setItem(null);
 	}
-
-	public boolean available(){
-		return availableTill.isBefore(LocalDate.now());
-	}
-
 	public long getPersonId(){
 		return besitzer.getId();
 	}
