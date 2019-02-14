@@ -1,4 +1,4 @@
-package hhu.ausleihservice.web.authentication;
+/*package hhu.ausleihservice.web.authentication;
 
 import java.util.Optional;
 
@@ -9,4 +9,4 @@ public interface PersonProvider extends JpaRepository<Person, Long> {
 
 	Optional<Person> findByUsername(String username);
 
-}
+}*/

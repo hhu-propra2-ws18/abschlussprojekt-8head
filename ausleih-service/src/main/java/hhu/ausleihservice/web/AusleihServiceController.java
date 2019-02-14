@@ -1,10 +1,8 @@
 package hhu.ausleihservice.web;
 
-import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.databasemodel.Rolle;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.Item;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,18 +11,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Controller
 public class AusleihServiceController {
 
-	private PersonRepository personRepository;
-	private ItemRepository itemRepository;
+	private PersonService personService;
+	private ItemService itemService;
 
-	public AusleihServiceController(PersonRepository perRepository, ItemRepository iRepository){
-		this.personRepository = perRepository;
-		this.itemRepository = iRepository;
+	public AusleihServiceController(PersonService perService, ItemService iService){
+		this.personService = perService;
+		this.itemService = iService;
 	}
 
 	private final static DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_DATE;
@@ -34,7 +33,7 @@ public class AusleihServiceController {
 	public String artikelListe(Model model) {
 
 		model.addAttribute("dateformat", DATEFORMAT);
-		model.addAttribute("artikelListe", itemRepository.findAll());
+		model.addAttribute("artikelListe", itemService.findAll());
 
 		return "artikelListe";
 	}
@@ -42,7 +41,7 @@ public class AusleihServiceController {
 	@GetMapping("/details")
 	public String artikelDetails(Model model, @RequestParam long id) {
 
-		Optional<Item> artikel = itemRepository.findById(id);
+		Optional<Item> artikel = itemService.findByID(id);
 		model.addAttribute("dateformat", DATEFORMAT);
 
 		if(artikel.isPresent()) {
@@ -55,7 +54,11 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/")
-	public String startseite() {
+	public String startseite(Model model, Principal p) {
+		//boolean a = false;
+		Person person = personService.get(p);
+		model.addAttribute("person", person);
+
 		return "startseite";
 	}
 
@@ -71,9 +74,8 @@ public class AusleihServiceController {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		person.setPassword(encoder.encode(person.getPassword()));
 		person.setRolle(Rolle.USER);
-		personRepository.save(person);
-		System.out.println(personRepository.findAll().get(0));
-		return "redirect:http://localhost:8080/";
+		personService.save(person);
+		return startseite(model, null);
 	}
 
 	@GetMapping("/admin")
@@ -81,6 +83,11 @@ public class AusleihServiceController {
 		return "admin";
 	}
 
+	@GetMapping("/profil")
+	public String user(Model model, Principal p) {
+		model.addAttribute("username", p.getName());
+		return "profil";
+	}
 
 	@ModelAttribute(value = "person")
 	public Person newPerson(){

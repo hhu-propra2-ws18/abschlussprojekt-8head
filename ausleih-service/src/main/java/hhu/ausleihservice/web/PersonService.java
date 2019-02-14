@@ -1,5 +1,6 @@
-package hhu.ausleihservice.web.authentication;
+package hhu.ausleihservice.web;
 
+import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -8,13 +9,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @Service
-
 public class PersonService implements UserDetailsService {
 	@Autowired
-	private PersonProvider users;
+	private PersonRepository users;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -31,4 +32,14 @@ public class PersonService implements UserDetailsService {
 		throw new UsernameNotFoundException("Invalid Username");
 	}
 
+	public Person get(Principal p){
+		if(p==null){
+			return null;
+		}
+		return users.findByUsername(p.getName()).get();
+	}
+
+	public void save(Person person) {
+		users.save(person);
+	}
 }
