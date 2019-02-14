@@ -53,11 +53,11 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		Person person3 = new Person();
 
 		person1.setVorname("Gerold");
-		person1.setName("Steiner");
+		person1.setNachname("Steiner");
 		person2.setVorname("Volker");
-		person2.setName("Racho");
+		person2.setNachname("Racho");
 		person3.setVorname("Wilma");
-		person3.setName("Pause");
+		person3.setNachname("Pause");
 
 		person1.setUsername("Miner4lwasser");
 		person2.setUsername("Kawumms");

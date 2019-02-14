@@ -38,7 +38,6 @@ public class Item {
 		System.arraycopy(picture, 0, out, 0, picture.length);
 		return out;
 	}
-
 	public void setPicture(byte[] in) {
 		picture = new byte[in.length];
 		System.arraycopy(in, 0, picture, 0, in.length);
@@ -54,7 +53,6 @@ public class Item {
 	public boolean isAvailable(){
 		return isAvailable(LocalDate.now());
 	}
-
 	boolean isAvailable(LocalDate date) {
 		if (!isInPeriod(date, availableFrom, availableTill)) {
 			return false;
@@ -86,17 +84,9 @@ public class Item {
 		ausleihen.add(ausleihe);
 		ausleihe.setItem(this);
 	}
-
 	public void removeAusleihe(Ausleihe ausleihe) {
 		ausleihen.remove(ausleihe);
 		ausleihe.setItem(null);
 	}
 
-	public long getPersonId() {
-		return besitzer.getId();
-	}
-
-	public String getPersonName() {
-		return besitzer.getVorname() + " " + besitzer.getName();
-	}
 }

@@ -65,7 +65,6 @@ public class AusleihServiceController {
 		return "artikelListe";
 	}
 
-	//TODO create artikelSuche.html, benutzerSuche.html, benutzerListe.html
 	@GetMapping("/artikelsuche")
 	public String artikelSuche(Model model) {
 		model.addAttribute("datum", LocalDateTime.now().format(DATEFORMAT));
@@ -114,7 +113,7 @@ public class AusleihServiceController {
 	public String benutzerSuche(Model model,
 	                            long idMin,
 	                            long idMax,
-	                            String query //For name, vorname, username
+	                            String query //For nachname, vorname, username
 	) {
 
 		Stream<Person> listStream = personRepository.findAll().stream();
@@ -126,7 +125,7 @@ public class AusleihServiceController {
 			String[] qArray = query.toLowerCase().split(" ");
 			listStream = listStream.filter(
 					person -> containsArray(
-							(person.getVorname() + person.getName() + person.getUsername()).toLowerCase(),
+							(person.getNachname() + " " + person.getUsername()).toLowerCase(),
 							qArray));
 		}
 
