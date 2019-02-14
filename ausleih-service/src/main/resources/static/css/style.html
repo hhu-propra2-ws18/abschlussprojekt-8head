@@ -5,6 +5,7 @@
 	<meta name="_csrf" th:content="${_csrf.token}"/>
 	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 	<style>
+
 		#items body, #neuerArtikel body {
 			border: 1px solid black;
 			background-color: cornflowerblue;
@@ -50,7 +51,7 @@
 			overflow: hidden;
 		}
 
-		nav a, div {
+		nav a, .menubar {
 			display: block;
 			float: left;
 			/*fonts settings*/
@@ -84,6 +85,7 @@
 		}
 
 		.topnav-right {
+			display: block;
 			float: right;
 			/*fonts settings*/
 			font-family: sans-serif;
@@ -95,7 +97,7 @@
 			padding-right: 10px;
 			padding-bottom: 10px;
 			padding-left: 10px;
-			margin-top: -10px;
+			margin-top: -18px;
 		}
 
 	</style>
@@ -107,7 +109,7 @@
 	<form method="get" action="/liste" id="search"></form>
 
 	<a id="logo" href="/" class="image image-full"><img th:src="@{img/8head.jpg}" alt="8head" width="50" height="50"/></a>
-	<div>
+	<div class="menubar">
 		<input form="search" type="text" name="q" placeholder="Artikel suchen...">
 		<input form="search" type="submit" value="Suche">
 	</div>
