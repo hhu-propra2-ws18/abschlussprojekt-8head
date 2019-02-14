@@ -73,8 +73,8 @@ public class AusleihServiceController {
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
 	                           String query, //For titel or beschreibung
-                               int tagessatzMax,
-                               int kautionswertMax,
+                               @RequestParam(defaultValue="2147483647") int tagessatzMax,
+                               @RequestParam(defaultValue="2147483647") int kautionswertMax,
                                String availableMin, //1979-12-20
                                String availableMax
 	                           ){
