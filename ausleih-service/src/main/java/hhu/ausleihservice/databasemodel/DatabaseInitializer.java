@@ -8,9 +8,7 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,10 +26,14 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	public void onStartup(ServletContext servletContext) {
 		System.out.println("Populating the database");
 
-		Abholort ort1 = new Abholort(); ort1.setBeschreibung("Höhle");
-		Abholort ort2 = new Abholort(); ort2.setBeschreibung("Garage");
-		Abholort ort3 = new Abholort(); ort3.setBeschreibung("Haus");
-		Abholort ort4 = new Abholort(); ort4.setBeschreibung("Verloren");
+		Abholort ort1 = new Abholort();
+		ort1.setBeschreibung("Höhle");
+		Abholort ort2 = new Abholort();
+		ort2.setBeschreibung("Garage");
+		Abholort ort3 = new Abholort();
+		ort3.setBeschreibung("Haus");
+		Abholort ort4 = new Abholort();
+		ort4.setBeschreibung("Verloren");
 
 		Set<Abholort> orte1 = new HashSet<>();
 		Set<Abholort> orte2 = new HashSet<>();
@@ -115,7 +117,6 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.itemRepository.save(item1);
 		this.itemRepository.save(item2);
 		this.itemRepository.save(item3);
-
 
 
 	}

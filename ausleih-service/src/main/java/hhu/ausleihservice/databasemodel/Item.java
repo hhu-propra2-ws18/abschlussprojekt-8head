@@ -10,7 +10,7 @@ import java.util.Set;
 @Data
 public class Item {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	private String titel;
@@ -30,14 +30,16 @@ public class Item {
 	@Lob
 	private byte[] picture;
 
-	//Getter and Setter are copying the array to prevent data leaking outside by storing/giving the reference to the array
+	//Getter and Setter are copying the array to prevent data leaking
+	// outside by storing/giving the reference to the array
 	@Lob
-	public byte[] getPicture(){
+	public byte[] getPicture() {
 		byte[] out = new byte[picture.length];
 		System.arraycopy(picture, 0, out, 0, picture.length);
 		return out;
 	}
-	public void setPicture(byte[] in){
+
+	public void setPicture(byte[] in) {
 		picture = new byte[in.length];
 		System.arraycopy(in, 0, picture, 0, in.length);
 	}
@@ -47,9 +49,9 @@ public class Item {
 	}
 
 	public boolean isAvailable(LocalDate date) {
-		return isInPeriod(date,availableFrom,availableTill)
+		return isInPeriod(date, availableFrom, availableTill)
 				&& ausleihen.stream().noneMatch((ausleihe)
-				-> isInPeriod(date,ausleihe.getStartDatum(),ausleihe.getEndDatum()));
+				-> isInPeriod(date, ausleihe.getStartDatum(), ausleihe.getEndDatum()));
 	}
 
 	public void addAusleihe(Ausleihe ausleihe) {
@@ -61,11 +63,12 @@ public class Item {
 		ausleihen.remove(ausleihe);
 		ausleihe.setItem(null);
 	}
-	public long getPersonId(){
+
+	public long getPersonId() {
 		return besitzer.getId();
 	}
 
-	public String getPersonName(){
+	public String getPersonName() {
 		return besitzer.getVorname() + " " + besitzer.getName();
 	}
 }

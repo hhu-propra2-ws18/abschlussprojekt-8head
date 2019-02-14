@@ -14,11 +14,9 @@ import java.util.Optional;
 @Controller
 public class AusleihServiceController {
 
+	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_DATE;
 	@Autowired
 	private ItemRepository itemRepository;
-
-	private final static DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_DATE;
-
 
 	@GetMapping("/liste")
 	public String artikelListe(Model model) {
@@ -35,7 +33,7 @@ public class AusleihServiceController {
 		Optional<Item> artikel = itemRepository.findById(id);
 		model.addAttribute("dateformat", DATEFORMAT);
 
-		if(artikel.isPresent()) {
+		if (artikel.isPresent()) {
 			model.addAttribute("artikel", artikel.get());
 			return "artikelDetails";
 		} else {
