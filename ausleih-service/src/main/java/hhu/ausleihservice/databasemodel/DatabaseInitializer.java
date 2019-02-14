@@ -8,9 +8,7 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -120,7 +118,6 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.itemRepository.save(item1);
 		this.itemRepository.save(item2);
 		this.itemRepository.save(item3);
-
 
 
 	}

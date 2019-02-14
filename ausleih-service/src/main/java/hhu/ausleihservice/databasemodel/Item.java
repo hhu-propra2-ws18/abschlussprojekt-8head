@@ -31,14 +31,15 @@ public class Item {
 	@Lob
 	private byte[] picture;
 
-	//Getter and Setter are copying the array to prevent data leaking
-	// outside by storing/giving the reference to the array
+	//Getter and Setter are copying the array to prevent
+	// data leaking outside by storing/giving the reference to the array
 	@Lob
 	public byte[] getPicture() {
 		byte[] out = new byte[picture.length];
 		System.arraycopy(picture, 0, out, 0, picture.length);
 		return out;
 	}
+
 	public void setPicture(byte[] in) {
 		picture = new byte[in.length];
 		System.arraycopy(in, 0, picture, 0, in.length);
@@ -48,13 +49,22 @@ public class Item {
 		return (!date.isBefore(start) && !date.isAfter(end));
 	}
 
-	public boolean isAvailable(LocalDate date) {
-		return isInPeriod(date, availableFrom, availableTill)
-				&& ausleihen.stream().noneMatch((ausleihe)
-				-> isInPeriod(date, ausleihe.getStartDatum(), ausleihe.getEndDatum()));
-
-	public boolean isAvailable(){
+	public boolean isAvailable() {
 		return isAvailable(LocalDate.now());
+	}
+
+	boolean isAvailable(LocalDate date) {
+		if (!isInPeriod(date, availableFrom, availableTill)) {
+			return false;
+		}
+		for (Ausleihe ausleihe : ausleihen) {
+			LocalDate startDatum = ausleihe.getStartDatum();
+			LocalDate endDatum = ausleihe.getEndDatum();
+			if (isInPeriod(date, startDatum, endDatum)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	//Format of input is "YYYY-MM-DD"
@@ -70,7 +80,7 @@ public class Item {
 		return true;
 	}
 
-	public void addAusleihe(Ausleihe ausleihe) {
+	void addAusleihe(Ausleihe ausleihe) {
 		ausleihen.add(ausleihe);
 		ausleihe.setItem(this);
 	}
@@ -79,5 +89,4 @@ public class Item {
 		ausleihen.remove(ausleihe);
 		ausleihe.setItem(null);
 	}
-
 }
