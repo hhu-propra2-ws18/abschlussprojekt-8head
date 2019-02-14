@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 @Controller
 public class AusleihServiceController {
 
-	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_DATE;
+	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 	@Autowired
 	private ItemRepository itemRepository;
 	@Autowired
@@ -53,7 +53,9 @@ public class AusleihServiceController {
 					.stream()
 					.filter(
 							item -> containsArray(
-									(item.getTitel() + item.getBeschreibung()).toLowerCase(),
+									(item.getTitel()
+											+ item.getBeschreibung())
+											.toLowerCase(),
 									qArray
 							)
 					)
@@ -74,11 +76,13 @@ public class AusleihServiceController {
 
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
-	                           String query, //For titel or beschreibung
-	                           @RequestParam(defaultValue = "2147483647") int tagessatzMax,
-	                           @RequestParam(defaultValue = "2147483647") int kautionswertMax,
-	                           String availableMin, //YYYY-MM-DD
-	                           String availableMax
+							   String query, //For titel or beschreibung
+							   @RequestParam(defaultValue = "2147483647")
+										   int tagessatzMax,
+							   @RequestParam(defaultValue = "2147483647")
+										   int kautionswertMax,
+							   String availableMin, //YYYY-MM-DD
+							   String availableMax
 	) {
 		Stream<Item> listStream = itemRepository.findAll().stream();
 
@@ -112,7 +116,7 @@ public class AusleihServiceController {
 
 	@PostMapping("/benutzersuche")
 	public String benutzerSuche(Model model,
-	                            String query //For nachname, vorname, username
+								String query //For nachname, vorname, username
 	) {
 
 		Stream<Person> listStream = personRepository.findAll().stream();

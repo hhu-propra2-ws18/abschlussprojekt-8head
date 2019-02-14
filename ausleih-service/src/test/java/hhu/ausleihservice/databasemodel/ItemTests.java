@@ -12,6 +12,9 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ItemTests {
@@ -47,7 +50,7 @@ public class ItemTests {
 
 
 	@Test
-	public void isAvailableFromTillPeriodInside(){
+	public void isAvailableFromTillPeriodInside() {
 		Item item = new Item();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
@@ -59,7 +62,7 @@ public class ItemTests {
 	}
 
 	@Test
-	public void isAvailableFromTillPeriodOnLeftEdge(){
+	public void isAvailableFromTillPeriodOnLeftEdge() {
 		Item item = new Item();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
@@ -71,7 +74,7 @@ public class ItemTests {
 	}
 
 	@Test
-	public void isAvailableFromTillPeriodOnRightEdge(){
+	public void isAvailableFromTillPeriodOnRightEdge() {
 		Item item = new Item();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
@@ -83,7 +86,7 @@ public class ItemTests {
 	}
 
 	@Test
-	public void isAvailableFromTillPeriodOverLeftEdge(){
+	public void isAvailableFromTillPeriodOverLeftEdge() {
 		Item item = new Item();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
@@ -95,7 +98,7 @@ public class ItemTests {
 	}
 
 	@Test
-	public void isAvailableFromTillPeriodOverRightEdge(){
+	public void isAvailableFromTillPeriodOverRightEdge() {
 		Item item = new Item();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
@@ -107,7 +110,7 @@ public class ItemTests {
 	}
 
 	@Test
-	public void isAvailableFromTillPeriodOverRightEdgeSmallPeriod(){
+	public void isAvailableFromTillPeriodOverRightEdgeSmallPeriod() {
 		Item item = new Item();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2000, 1, 10));
@@ -119,7 +122,7 @@ public class ItemTests {
 	}
 
 	@Test
-	public void isAvailableFromTillWithAusleiheNoConflict(){
+	public void isAvailableFromTillWithAusleiheNoConflict() {
 		Item item = new Item();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
@@ -136,7 +139,7 @@ public class ItemTests {
 	}
 
 	@Test
-	public void isAvailableFromTillWithAusleiheWithConflictInside(){
+	public void isAvailableFromTillWithAusleiheWithConflictInside() {
 		Item item = new Item();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
@@ -153,7 +156,7 @@ public class ItemTests {
 	}
 
 	@Test
-	public void isAvailableFromTillWithAusleiheWithConflictOnLeftEdge(){
+	public void isAvailableFromTillWithAusleiheWithConflictOnLeftEdge() {
 		Item item = new Item();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
@@ -170,7 +173,7 @@ public class ItemTests {
 	}
 
 	@Test
-	public void isAvailableFromTillWithAusleiheWithConflictOnRightEdge(){
+	public void isAvailableFromTillWithAusleiheWithConflictOnRightEdge() {
 		Item item = new Item();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));

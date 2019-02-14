@@ -31,8 +31,8 @@ public class Item {
 	@Lob
 	private byte[] picture;
 
-	//Getter and Setter are copying the array to prevent data leaking
-	// outside by storing/giving the reference to the array
+	//Getter and Setter are copying the array to prevent
+	// data leaking outside by storing/giving the reference to the array
 	@Lob
 	public byte[] getPicture() {
 		byte[] out = new byte[picture.length];
@@ -49,7 +49,7 @@ public class Item {
 		return (!date.isBefore(start) && !date.isAfter(end));
 	}
 
-	public boolean isAvailable(){
+	public boolean isAvailable() {
 		return isAvailable(LocalDate.now());
 	}
 	boolean isAvailable(LocalDate date) {
