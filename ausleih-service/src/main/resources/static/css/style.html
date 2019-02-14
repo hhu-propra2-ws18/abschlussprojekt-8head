@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="formatting">
 	<meta charset="UTF-8">
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 	<style>
 		#items body, #neuerArtikel body {
 			border: 1px solid black;
@@ -93,6 +95,7 @@
 	<div>
 		<input form="search" type="text" name="q" placeholder="search..">
 		<input form="search" type="submit" value="search" ></input>
+		<input form="search" type="submit" value="Suche" ></input>
 	</div>
 	<a href="/artikelsuche">Erweiterte Suche</a>
 	<a href="/newAccount">Konto Eröffnen</a>
