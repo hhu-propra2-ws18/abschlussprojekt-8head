@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -26,7 +27,7 @@ public class Item {
 	@ManyToOne
 	private Person besitzer;
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Ausleihe> ausleihen;
+	private Set<Ausleihe> ausleihen = new HashSet<>();
 	@Lob
 	private byte[] picture;
 
@@ -50,6 +51,10 @@ public class Item {
 				|| date.isEqual(end));
 	}
 
+	public boolean isAvailable(){
+		return isAvailable(LocalDate.now());
+	}
+
 	boolean isAvailable(LocalDate date) {
 		if (!isInPeriod(date, availableFrom, availableTill)) {
 			return false;
@@ -68,7 +73,7 @@ public class Item {
 	public boolean isAvailableFromTill(String from, String till) {
 		LocalDate temp = LocalDate.parse(from);
 		LocalDate end = LocalDate.parse(till);
-		while (!temp.equals(end)) {
+		while (!temp.equals(end.plusDays(1))) {
 			if (!isAvailable(temp)) {
 				return false;
 			}
@@ -77,7 +82,7 @@ public class Item {
 		return true;
 	}
 
-	public void addAusleihe(Ausleihe ausleihe) {
+	void addAusleihe(Ausleihe ausleihe) {
 		ausleihen.add(ausleihe);
 		ausleihe.setItem(this);
 	}

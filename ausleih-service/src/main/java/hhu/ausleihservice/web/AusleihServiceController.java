@@ -26,7 +26,7 @@ public class AusleihServiceController {
 	@Autowired
 	private PersonRepository personRepository;
 
-	private final static DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_DATE;
+	private final static DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 
 	//Checks if a string contains all strings in an array
 	private boolean containsArray(String string, String[] array){
@@ -72,8 +72,6 @@ public class AusleihServiceController {
 
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
-	                           long idMin,
-	                           long idMax,
 	                           String query, //For titel or beschreibung
                                int tagessatzMax,
                                int kautionswertMax,
@@ -81,8 +79,6 @@ public class AusleihServiceController {
                                String availableMax
 	                           ){
 		Stream<Item> listStream = itemRepository.findAll().stream();
-
-		listStream = listStream.filter(item -> (idMin <= item.getId() && item.getId() <= idMax) );
 
 		if(query != null && !query.equals("")){
 			//Ignores Case
