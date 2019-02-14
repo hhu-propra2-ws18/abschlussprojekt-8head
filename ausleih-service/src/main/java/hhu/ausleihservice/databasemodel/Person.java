@@ -19,7 +19,6 @@ public class Person {
 	private String password;
 	private Rolle rolle;
 
-
 	private String email;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

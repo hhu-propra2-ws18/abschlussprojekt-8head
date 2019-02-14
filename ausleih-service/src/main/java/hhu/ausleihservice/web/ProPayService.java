@@ -12,10 +12,12 @@ import java.time.Period;
 
 @Component
 public class ProPayService {
-	@Autowired
-	AusleiheRepository ausleiheRepository;
-	@Autowired
-	ProPayInterface proPayInterface;
+
+	private ProPayInterface proPayInterface;
+
+	public ProPayService(ProPayInterface proPayInterface){
+		this.proPayInterface = proPayInterface;
+	}
 
 	public void ueberweiseTagessaetze(Ausleihe ausleihe) {
 		int tagesSatz = ausleihe.getItem().getTagessatz();
