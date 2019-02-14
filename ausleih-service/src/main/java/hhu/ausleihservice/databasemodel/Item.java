@@ -10,14 +10,15 @@ import java.util.Set;
 @Data
 public class Item {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 
 	private String titel;
+	private String beschreibung;
 	private int tagessatz;
 	private int kautionswert;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
 	private Abholort abholort;
 
 	private LocalDate availableFrom;
@@ -29,6 +30,18 @@ public class Item {
 	@Lob
 	private byte[] picture;
 
+	//Getter and Setter are copying the array to prevent data leaking outside by storing/giving the reference to the array
+	@Lob
+	public byte[] getPicture(){
+		byte[] out = new byte[picture.length];
+		System.arraycopy(picture, 0, out, 0, picture.length);
+		return out;
+	}
+	public void setPicture(byte[] in){
+		picture = new byte[in.length];
+		System.arraycopy(in, 0, picture, 0, in.length);
+	}
+
 	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
 		return (date.isAfter(start)
 				&& date.isBefore(end))
@@ -36,7 +49,7 @@ public class Item {
 				|| date.isEqual(end));
 	}
 
-	public boolean isAvailable(LocalDate date) {
+	boolean isAvailable(LocalDate date) {
 		if (!isInPeriod(date, availableFrom, availableTill)) {
 			return false;
 		}
@@ -60,8 +73,15 @@ public class Item {
 		ausleihe.setItem(null);
 	}
 
-
-	public boolean availabe() {
+	public boolean available(){
 		return availableTill.isBefore(LocalDate.now());
+	}
+
+	public long getPersonId(){
+		return besitzer.getId();
+	}
+
+	public String getPersonName(){
+		return besitzer.getVorname() + " " + besitzer.getName();
 	}
 }

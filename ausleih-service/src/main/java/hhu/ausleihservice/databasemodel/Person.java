@@ -9,7 +9,7 @@ import java.util.Set;
 @Data
 public class Person {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 
 	private String name;
@@ -26,8 +26,8 @@ public class Person {
 	private Set<Item> items;
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Ausleihe> ausleihen;
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Item> abholOrte;
+	@OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+	private Set<Abholort> abholorte;
 
 	public void addAusleihe(Ausleihe ausleihe) {
 		ausleihen.add(ausleihe);

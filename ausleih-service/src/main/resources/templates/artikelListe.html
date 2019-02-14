@@ -22,10 +22,10 @@
 	<th:block th:each="artikel : ${artikelListe}">
 		<tr>
 			<td th:text="${artikel.titel}"></td>
-			<td th:text="${artikel.verfuegbarkeit}"></td>
+			<td th:text="${artikel.availableFrom.format(dateformat) + '-' + artikel.availableTill.format(dateformat)}"></td>
 			<td th:text="${artikel.tagessatz} + &euro;"></td>
-			<td th:text="${artikel.kaution} + &euro;"></td>
-			<td th:text="${artikel.standort}"></td>
+			<td th:text="${artikel.kautionswert} + &euro;"></td>
+			<td th:text="${artikel.abholort.beschreibung}"></td>
 			<td><a th:href="@{/details(id=${artikel.id})}">anzeigen</a></td>
 		</tr>
 	</th:block>
