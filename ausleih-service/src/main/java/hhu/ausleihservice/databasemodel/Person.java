@@ -12,13 +12,12 @@ public class Person {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 
-	private String name;
+	private String nachname;
 	private String vorname;
 
 	private String username;
 	private String password;
 	private Rolle rolle;
-
 
 	private String email;
 
@@ -47,5 +46,9 @@ public class Person {
 	public void removeItem(Item item) {
 		items.remove(item);
 		item.setBesitzer(null);
+	}
+
+	public String getName(){
+		return vorname + " " + nachname;
 	}
 }

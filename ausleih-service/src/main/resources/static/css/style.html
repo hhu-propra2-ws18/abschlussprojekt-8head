@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="formatting">
 	<meta charset="UTF-8">
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 	<style>
 		#items body, #neuerArtikel body {
 			border: 1px solid black;
@@ -48,7 +50,7 @@
 			overflow: hidden;
 		}
 
-		nav a {
+		nav a, div {
 			display: block;
 			float: left;
 			/*fonts settings*/
@@ -89,14 +91,22 @@
 </head>
 
 <body>
+
 <nav th:fragment="main-menu">
+	<form method="get" action="/liste" id="search"></form>
+
 	<a id="logo" href=# class="image image-full"><img th:src="@{img/8head.jpg}" alt="8head" width="50" height="50"/></a>
-	<a href="/liste">Gegenstand Suchen</a>
+	<div>
+		<input form="search" type="text" name="q" placeholder="Artikel suchen...">
+		<input form="search" type="submit" value="Suche">
+	</div>
+	<a href="/artikelsuche">Erweiterte Artikelsuche</a>
 	<a href="/register">Konto Eröffnen</a>
 	<a href="/login">Login</a>
+	<a href="/benutzersuche">Benutzersuche</a>
 	<div class="topnav-right">
-	<a href="#">Profil</a>
-	<a href="logout">Logout</a>
+		<a href="/profil">Profil</a>
+		<a href="/logout">Logout</a>
 	</div>
 </nav>
 </body>
