@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 @Controller
 public class AusleihServiceController {
 
+	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_DATE;
 	@Autowired
 	private ItemRepository itemRepository;
 	@Autowired
