@@ -44,10 +44,7 @@ public class Item {
 	}
 
 	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
-		return (date.isAfter(start)
-				&& date.isBefore(end))
-				|| (date.isEqual(start)
-				|| date.isEqual(end));
+		return (!date.isBefore(start) && !date.isAfter(end));
 	}
 
 	public boolean isAvailable(){
@@ -88,5 +85,4 @@ public class Item {
 		ausleihen.remove(ausleihe);
 		ausleihe.setItem(null);
 	}
-
 }

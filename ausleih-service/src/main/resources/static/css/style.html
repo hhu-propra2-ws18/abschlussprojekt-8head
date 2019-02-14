@@ -65,7 +65,7 @@
 			padding-left: 10px;
 			margin-top: -10px;
 		}
-		
+
 		nav a:hover {
 			background-color: darkseagreen;
 		}
@@ -83,6 +83,10 @@
 			margin-top: -20px;
 		}
 
+		.topnav-right {
+			float: right;
+		}
+
 	</style>
 </head>
 
@@ -90,16 +94,20 @@
 
 <nav th:fragment="main-menu">
 	<form method="get" action="/liste" id="search"></form>
-	
+
 	<a id="logo" href=# class="image image-full"><img th:src="@{img/8head.jpg}" alt="8head" width="50" height="50"/></a>
 	<div>
 		<input form="search" type="text" name="q" placeholder="Artikel suchen...">
-		<input form="search" type="submit" value="Suche" >
+		<input form="search" type="submit" value="Suche">
 	</div>
 	<a href="/artikelsuche">Erweiterte Artikelsuche</a>
-	<a href="/newAccount">Konto Eröffnen</a>
+	<a href="/register">Konto Eröffnen</a>
 	<a href="/login">Login</a>
 	<a href="/benutzersuche">Benutzersuche</a>
+	<div class="topnav-right">
+		<a href="/profil">Profil</a>
+		<a href="/logout">Logout</a>
+	</div>
 </nav>
 </body>
 </html>
