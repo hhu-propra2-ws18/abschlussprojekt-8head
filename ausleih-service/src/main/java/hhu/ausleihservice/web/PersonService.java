@@ -1,6 +1,7 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.dataaccess.PersonRepository;
+import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,5 +43,8 @@ public class PersonService implements UserDetailsService {
 
 	public void save(Person person) {
 		users.save(person);
+	}
+	public List<Person> findAll() {
+		return users.findAll();
 	}
 }

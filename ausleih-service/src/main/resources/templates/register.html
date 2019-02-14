@@ -11,14 +11,13 @@
 <table id="items">
 	<form th:action="@{/register}" th:object="${person}" method="post">
 		<div><input name="vorname" type="text" th:value="*{vorname}">Vorname</div>
-		<div><input name="name" type="text" th:value="*{name}">Nachname</div>
+		<div><input name="nachname" type="text" th:value="*{nachname}">Nachname</div>
 		<div><input name="username" type="text" th:value="*{username}">Username</div>
 		<div><input name="password" type="text" th:value="*{password}">Password</div>
 		<div>
 			<button type="submit" class="btn btn-primary">Erstellen</button>
 		</div>
 	</form>
-	</tr>
 </table>
 
 </body>
