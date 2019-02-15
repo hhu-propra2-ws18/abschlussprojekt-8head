@@ -82,7 +82,7 @@ public class Item {
 		return true;
 	}
 
-	ArrayList<Period> getAvailablePeriods(){
+	public ArrayList<Period> getAvailablePeriods(){
 
 		ArrayList<Period> out = new ArrayList<>();
 
