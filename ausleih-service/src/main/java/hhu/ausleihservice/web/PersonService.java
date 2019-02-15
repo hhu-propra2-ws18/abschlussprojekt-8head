@@ -2,7 +2,7 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Person;
-import org.springframework.beans.factory.annotation.Autowired;
+import hhu.ausleihservice.web.responsestatus.PersonNichtVorhanden;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,36 +15,44 @@ import java.util.Optional;
 
 @Service
 public class PersonService implements UserDetailsService {
-	@Autowired
+
 	private PersonRepository users;
+
+	PersonService(PersonRepository userRep) {
+		this.users = userRep;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Optional<Person> user = users.findByUsername(username);
 		if (user.isPresent()) {
 			Person u = user.get();
-			UserDetails userdetails = User.builder()
+			return User.builder()
 					.username(u.getUsername())
 					.password(u.getPassword())
 					.authorities(u.getRolle().name())
 					.build();
-			return userdetails;
 		}
 		throw new UsernameNotFoundException("Invalid Username");
 	}
 
-	public Person get(Principal p) {
+	Person get(Principal p) {
 		if (p == null) {
+			System.out.println("Null Principal");
 			return null;
 		}
-		return users.findByUsername(p.getName()).get();
+		Optional<Person> person = users.findByUsername(p.getName());
+		if (!person.isPresent()) {
+			throw new PersonNichtVorhanden();
+		}
+		return person.get();
 	}
 
-	public void save(Person person) {
+	void save(Person person) {
 		users.save(person);
 	}
 
-	public List<Person> findAll() {
+	List<Person> findAll() {
 		return users.findAll();
 	}
 }
