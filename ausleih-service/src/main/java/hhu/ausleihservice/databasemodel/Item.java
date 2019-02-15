@@ -53,7 +53,9 @@ public class Item {
 
 	public void addAusleihe(Ausleihe ausleihe) {
 		ausleihen.add(ausleihe);
-		ausleihe.setItem(this);
+		if (ausleihe != null) {
+			ausleihe.setItem(this);
+		}
 	}
 
 	public void removeAusleihe(Ausleihe ausleihe) {
