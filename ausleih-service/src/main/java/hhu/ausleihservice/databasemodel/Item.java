@@ -81,9 +81,15 @@ public class Item {
 		return true;
 	}
 
-	public ArrayList<Period> getAvailablePeriods(){
+	ArrayList<Period> getAvailablePeriods(){
 
 		ArrayList<Period> out = new ArrayList<>();
+
+		if(ausleihen.isEmpty()){
+			out.add(new Period(availableFrom, availableTill));
+			return out;
+		}
+
 		Ausleihe[] sortierteAusleihen = getSortierteAusleihen();
 		int length = sortierteAusleihen.length;
 
@@ -94,7 +100,7 @@ public class Item {
 			out.add(new Period(start, end.minusDays(1)));
 		}
 
-		for(int i = 1; i < length-1; i++){
+		for(int i = 0; i < length-1; i++){
 
 			start = sortierteAusleihen[i].getEndDatum();
 			end = sortierteAusleihen[i+1].getStartDatum();
@@ -126,7 +132,10 @@ public class Item {
 
 			for (Ausleihe test : tempAusleihen) {
 				LocalDate testDate = test.getStartDatum();
-				if(testDate.isBefore(smallestDate)){smallestDate = testDate;}
+				if(testDate.isBefore(smallestDate)){
+					smallest = test;
+					smallestDate = smallest.getStartDatum();
+				}
 			}
 			sortierteAusleihen[i] = smallest;
 			tempAusleihen.remove(smallest);

@@ -36,6 +36,7 @@ public class Ausleihe {
 				+ "ausleiher=" + ((ausleiher==null) ? "null" : ausleiher.getName()) + ", "
 				+ "startDatum=" + ((startDatum==null) ? "null" : startDatum.toString()) + ", "
 				+ "endDatum=" + ((endDatum==null) ? "null" : endDatum.toString()) + ", "
-				+ "reservationId=" + ((reservationId==null) ? "null" : reservationId.toString());
+				+ "reservationId=" + ((reservationId==null) ? "null" : reservationId.toString())
+				+ ")";
 	}
 }
