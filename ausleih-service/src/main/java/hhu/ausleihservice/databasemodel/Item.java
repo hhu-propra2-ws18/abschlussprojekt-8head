@@ -4,7 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -78,6 +80,60 @@ public class Item {
 			temp = temp.plusDays(1);
 		}
 		return true;
+	}
+
+	public ArrayList<Period> getAvailablePeriods(){
+
+		ArrayList<Period> out = new ArrayList<>();
+		Ausleihe[] sortierteAusleihen = getSortierteAusleihen();
+		int length = sortierteAusleihen.length;
+
+		LocalDate start = availableFrom;
+		LocalDate end = sortierteAusleihen[0].getStartDatum();
+
+		if(!start.equals(end)){
+			out.add(new Period(start, end.minusDays(1)));
+		}
+
+		for(int i = 1; i < length-1; i++){
+
+			start = sortierteAusleihen[i].getEndDatum();
+			end = sortierteAusleihen[i+1].getStartDatum();
+
+			if(!start.equals(end)){
+				out.add(new Period(start.plusDays(1), end.minusDays(1)));
+			}
+		}
+
+		start = sortierteAusleihen[length-1].getEndDatum();
+		end = availableTill;
+
+		if(!start.equals(end)){
+			out.add(new Period(start.plusDays(1), end));
+		}
+
+		return out;
+	}
+
+	Ausleihe[] getSortierteAusleihen() {
+
+		Ausleihe[] sortierteAusleihen = new Ausleihe[ausleihen.size()];
+		List<Ausleihe> tempAusleihen = new ArrayList<>(ausleihen);
+
+		for(int i = 0; i < ausleihen.size(); i++) {
+
+			Ausleihe smallest = tempAusleihen.get(0);
+			LocalDate smallestDate = smallest.getStartDatum();
+
+			for (Ausleihe test : tempAusleihen) {
+				LocalDate testDate = test.getStartDatum();
+				if(testDate.isBefore(smallestDate)){smallestDate = testDate;}
+			}
+			sortierteAusleihen[i] = smallest;
+			tempAusleihen.remove(smallest);
+		}
+
+		return sortierteAusleihen;
 	}
 
 	void addAusleihe(Ausleihe ausleihe) {

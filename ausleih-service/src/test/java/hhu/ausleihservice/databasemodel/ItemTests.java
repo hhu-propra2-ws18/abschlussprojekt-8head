@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -184,6 +185,154 @@ public class ItemTests {
 		String till = "2000-07-01";
 
 		assertFalse(item.isAvailableFromTill(from, till));
+	}
+
+
+	@Test
+	public void getSortierteAusleihenWithNoAusleihen() {
+		Item item = new Item();
+		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
+		item.setAvailableTill(LocalDate.of(2001, 1, 1));
+
+		assertEquals(0, item.getSortierteAusleihen().length);
+	}
+
+	@Test
+	public void getSortierteAusleihenWithOneAusleihen() {
+		Item item = new Item();
+		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
+		item.setAvailableTill(LocalDate.of(2001, 1, 1));
+
+		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setStartDatum(LocalDate.of(2000, 7, 1));
+		ausleihe.setEndDatum(LocalDate.of(2000, 7, 1));
+		item.addAusleihe(ausleihe);
+
+		assertEquals(1, item.getSortierteAusleihen().length);
+		assertEquals(ausleihe, item.getSortierteAusleihen()[0]);
+	}
+
+	@Test
+	public void getSortierteAusleihenWithTwoSortedAusleihen() {
+		Item item = new Item();
+		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
+		item.setAvailableTill(LocalDate.of(2001, 1, 1));
+
+		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setStartDatum(LocalDate.of(2000, 7, 1));
+		ausleihe1.setEndDatum(LocalDate.of(2000, 7, 1));
+		item.addAusleihe(ausleihe1);
+
+		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setStartDatum(LocalDate.of(2000, 8, 1));
+		ausleihe2.setEndDatum(LocalDate.of(2000, 8, 1));
+		item.addAusleihe(ausleihe2);
+
+		assertEquals(2, item.getSortierteAusleihen().length);
+		assertEquals(ausleihe1, item.getSortierteAusleihen()[0]);
+		assertEquals(ausleihe2, item.getSortierteAusleihen()[1]);
+	}
+
+	@Test
+	public void getSortierteAusleihenWithTwoUnsortedAusleihen() {
+		Item item = new Item();
+		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
+		item.setAvailableTill(LocalDate.of(2001, 1, 1));
+
+		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setStartDatum(LocalDate.of(2000, 8, 1));
+		ausleihe1.setEndDatum(LocalDate.of(2000, 8, 1));
+		item.addAusleihe(ausleihe1);
+
+		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setStartDatum(LocalDate.of(2000, 7, 1));
+		ausleihe2.setEndDatum(LocalDate.of(2000, 7, 1));
+		item.addAusleihe(ausleihe2);
+
+		assertEquals(2, item.getSortierteAusleihen().length);
+		assertEquals(ausleihe2, item.getSortierteAusleihen()[0]);
+		assertEquals(ausleihe1, item.getSortierteAusleihen()[1]);
+	}
+
+	@Test
+	public void getSortierteAusleihenWithThreeSortedAusleihen() {
+		Item item = new Item();
+		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
+		item.setAvailableTill(LocalDate.of(2001, 1, 1));
+
+		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setStartDatum(LocalDate.of(2000, 7, 1));
+		ausleihe1.setEndDatum(LocalDate.of(2000, 7, 1));
+		item.addAusleihe(ausleihe1);
+
+		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setStartDatum(LocalDate.of(2000, 8, 1));
+		ausleihe2.setEndDatum(LocalDate.of(2000, 8, 1));
+		item.addAusleihe(ausleihe2);
+
+		Ausleihe ausleihe3 = new Ausleihe();
+		ausleihe3.setStartDatum(LocalDate.of(2000, 9, 1));
+		ausleihe3.setEndDatum(LocalDate.of(2000, 9, 1));
+		item.addAusleihe(ausleihe3);
+
+		assertEquals(3, item.getSortierteAusleihen().length);
+		assertEquals(ausleihe1, item.getSortierteAusleihen()[0]);
+		assertEquals(ausleihe2, item.getSortierteAusleihen()[1]);
+		assertEquals(ausleihe3, item.getSortierteAusleihen()[2]);
+	}
+
+	@Test
+	public void getSortierteAusleihenWithThreeUnsortedAusleihen() {
+		Item item = new Item();
+		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
+		item.setAvailableTill(LocalDate.of(2001, 1, 1));
+
+		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setStartDatum(LocalDate.of(2000, 8, 1));
+		ausleihe1.setEndDatum(LocalDate.of(2000, 8, 1));
+		item.addAusleihe(ausleihe1);
+
+		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setStartDatum(LocalDate.of(2000, 7, 1));
+		ausleihe2.setEndDatum(LocalDate.of(2000, 7, 1));
+		item.addAusleihe(ausleihe2);
+
+		Ausleihe ausleihe3 = new Ausleihe();
+		ausleihe3.setStartDatum(LocalDate.of(2000, 9, 1));
+		ausleihe3.setEndDatum(LocalDate.of(2000, 9, 1));
+		item.addAusleihe(ausleihe3);
+
+		assertEquals(3, item.getSortierteAusleihen().length);
+		assertEquals(ausleihe2, item.getSortierteAusleihen()[0]);
+		assertEquals(ausleihe1, item.getSortierteAusleihen()[1]);
+		assertEquals(ausleihe3, item.getSortierteAusleihen()[2]);
+	}
+
+	@Test
+	public void getSortierteAusleihenWithThreeLongUnsortedAusleihen() {
+		Item item = new Item();
+		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
+		item.setAvailableTill(LocalDate.of(2001, 1, 1));
+
+		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setStartDatum(LocalDate.of(2000, 4, 1));
+		ausleihe1.setEndDatum(LocalDate.of(2000, 5, 1));
+		item.addAusleihe(ausleihe1);
+
+		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setStartDatum(LocalDate.of(2000, 2, 1));
+		ausleihe2.setEndDatum(LocalDate.of(2000, 3, 1));
+		item.addAusleihe(ausleihe2);
+
+		Ausleihe ausleihe3 = new Ausleihe();
+		ausleihe3.setStartDatum(LocalDate.of(2000, 9, 1));
+		ausleihe3.setEndDatum(LocalDate.of(2000, 10, 1));
+		item.addAusleihe(ausleihe3);
+
+		assertEquals(3, item.getSortierteAusleihen().length);
+		assertEquals(ausleihe2, item.getSortierteAusleihen()[0]);
+		assertEquals(ausleihe1, item.getSortierteAusleihen()[1]);
+		assertEquals(ausleihe3, item.getSortierteAusleihen()[2]);
 	}
 
 }
