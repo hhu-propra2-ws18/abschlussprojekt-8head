@@ -19,9 +19,9 @@
 	</tr>
 	<th:block th:each="benutzer : ${benutzerListe}">
 		<tr>
-			<td th:text="${benutzer.name}"></td>
-			<td th:text="${benutzer.Username}"></td>
-			<td><a th:href="@{/profil(id=${benutzer.id})}">anzeigen</a></td>
+			<td th:text="|${benutzer.vorname} ${benutzer.vorname}|"></td>
+			<td th:text="${benutzer.username}"></td>
+			<td><a th:href="@{profil/{benutzerID} (benutzerID=${benutzer.id})}">anzeigen</a></td>
 		</tr>
 	</th:block>
 </table>

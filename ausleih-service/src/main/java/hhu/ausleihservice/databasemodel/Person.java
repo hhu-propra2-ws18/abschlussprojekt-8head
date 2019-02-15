@@ -47,8 +47,4 @@ public class Person {
 		items.remove(item);
 		item.setBesitzer(null);
 	}
-
-	public String getName() {
-		return vorname + " " + nachname;
-	}
 }

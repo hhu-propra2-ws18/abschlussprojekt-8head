@@ -8,6 +8,7 @@ import hhu.ausleihservice.databasemodel.Item;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -129,7 +130,10 @@ public class AusleihServiceController {
 			String[] qArray = query.toLowerCase().split(" ");
 			listStream = listStream.filter(
 					person -> containsArray(
-							(person.getName() + " " + person.getUsername()).toLowerCase(),
+							(person.getVorname() + " " +
+									person.getNachname() + " " +
+									person.getUsername())
+									.toLowerCase(),
 							qArray));
 		}
 
@@ -184,9 +188,15 @@ public class AusleihServiceController {
 		return "admin";
 	}
 
+	@GetMapping("/profil/{id}")
+	public String otheruser(Model model, @PathVariable Long id) {
+		model.addAttribute("person", personService.getById(id));
+		return "profil";
+	}
+
 	@GetMapping("/profil")
 	public String user(Model model, Principal p) {
-		model.addAttribute("username", p.getName());
+		model.addAttribute("person", personService.get(p));
 		return "profil";
 	}
 }
