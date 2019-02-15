@@ -3,7 +3,6 @@ package hhu.ausleihservice.databasemodel;
 import hhu.ausleihservice.dataaccess.AbholortRepository;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +14,17 @@ import java.util.Set;
 @Component
 public class DatabaseInitializer implements ServletContextInitializer {
 
-	@Autowired
-	private ItemRepository itemRepository;
-	@Autowired
 	private PersonRepository personRepository;
-	@Autowired
+	private ItemRepository itemRepository;
 	private AbholortRepository abholortRepository;
+
+	public DatabaseInitializer(PersonRepository perRepository,
+							   ItemRepository iRepository,
+							   AbholortRepository abhRepository) {
+		this.personRepository = perRepository;
+		this.itemRepository = iRepository;
+		this.abholortRepository = abhRepository;
+	}
 
 	@Override
 	public void onStartup(ServletContext servletContext) {
