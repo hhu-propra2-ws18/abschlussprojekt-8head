@@ -2,8 +2,6 @@ package hhu.ausleihservice.propay;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -55,7 +53,7 @@ public class ProPayInterface {
 
 	public void transferFunds(String sourceAccount, String targetAccount, double amount) {
 		try {
-			String response = WebClient
+			WebClient
 					.create()
 					.post()
 					.uri(builder -> builder.scheme("http")
