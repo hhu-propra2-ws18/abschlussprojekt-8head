@@ -6,10 +6,10 @@ import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.propay.ProPayInterface;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.*;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 
 import java.time.LocalDate;
-import java.util.List;
 
 
 public class ProPayServiceTest {
@@ -18,16 +18,15 @@ public class ProPayServiceTest {
 
 	private ProPayService proPayService;
 
-	private List<Ausleihe> ausleihen;
 
 	@Before
-	public void init(){
+	public void init() {
 
 	}
 
 
 	@Test
-	public void ueberweiseTagessaetze(){
+	public void ueberweiseTagessaetze() {
 		Ausleihe ausleihe = new Ausleihe();
 		Item fahrrad = new Item();
 		Person burak = new Person();

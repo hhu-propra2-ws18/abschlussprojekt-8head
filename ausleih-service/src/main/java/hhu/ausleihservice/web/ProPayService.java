@@ -1,11 +1,9 @@
 package hhu.ausleihservice.web;
 
-import hhu.ausleihservice.dataaccess.AusleiheRepository;
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.propay.ProPayInterface;
 import hhu.ausleihservice.propay.ProPayReservation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Period;
@@ -15,7 +13,7 @@ public class ProPayService {
 
 	private ProPayInterface proPayInterface;
 
-	public ProPayService(ProPayInterface proPayInterface){
+	public ProPayService(ProPayInterface proPayInterface) {
 		this.proPayInterface = proPayInterface;
 	}
 
@@ -49,7 +47,7 @@ public class ProPayService {
 	}
 
 	public double getProPayKontostand(Person person) {
-		return proPayInterface.getAccountInfo(person.getUsername()).getBalance();
+		return proPayInterface.getAccountInfo(person.getUsername()).getAmount();
 	}
 
 	public void addFunds(Person person, double betrag) {
