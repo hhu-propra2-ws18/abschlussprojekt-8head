@@ -53,7 +53,7 @@ public class ProPayInterface {
 
 	public void transferFunds(String sourceAccount, String targetAccount, double amount) {
 		try {
-			String response = WebClient
+			WebClient
 					.create()
 					.post()
 					.uri(builder -> builder.scheme("http")
