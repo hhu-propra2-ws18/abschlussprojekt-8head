@@ -2,8 +2,6 @@ package hhu.ausleihservice.propay;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -26,17 +24,12 @@ public class ProPayInterface {
 					.bodyToMono(ProPayAccount.class);
 			return mono.block();
 		} catch (Exception e) {
-			System.out.println("GET Events Failed");
+			System.out.println("getAccountInfo failed");
 		}
 		return new ProPayAccount();
 	}
 
 	public ProPayAccount addFunds(String proPayName, double amount) {
-
-		LinkedMultiValueMap map = new LinkedMultiValueMap();
-		map.add("account", proPayName);
-		map.add("amount", amount);
-
 		try {
 			final Mono<ProPayAccount> mono
 					= WebClient
@@ -46,50 +39,39 @@ public class ProPayInterface {
 							.host("localhost")
 							.port(8888)
 							.pathSegment("account", proPayName)
+							.queryParam("amount", amount)
 							.build())
-					.body(BodyInserters.fromMultipartData(map))
 					.accept(MediaType.APPLICATION_JSON_UTF8)
 					.retrieve()
 					.bodyToMono(ProPayAccount.class);
 			return mono.block();
 		} catch (Exception e) {
-			System.out.println("GET Events Failed");
+			System.out.println("addFunds failed");
 		}
 		return new ProPayAccount();
 	}
 
 	public void transferFunds(String sourceAccount, String targetAccount, double amount) {
-		LinkedMultiValueMap map = new LinkedMultiValueMap();
-		map.add("sourceAccount", sourceAccount);
-		map.add("targetAccount", targetAccount);
-		map.add("amount", amount);
-
 		try {
-			String response = WebClient
+			WebClient
 					.create()
 					.post()
-					.uri(builder -> builder.scheme("httpp")
+					.uri(builder -> builder.scheme("http")
 							.host("localhost")
 							.port(8888)
 							.pathSegment("account", sourceAccount, "transfer", targetAccount)
+							.queryParam("amount", amount)
 							.build())
-					.body(BodyInserters.fromMultipartData(map))
 					.accept(MediaType.APPLICATION_JSON_UTF8)
 					.retrieve()
 					.bodyToMono(String.class)
 					.block();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("trnsferFunds failed");
 		}
 	}
 
-	public ProPayReservation createReservation(String sourceAccount, String targetAccount, double amount) {
-
-		LinkedMultiValueMap map = new LinkedMultiValueMap();
-		map.add("sourceAccount", sourceAccount);
-		map.add("targetAccount", targetAccount);
-		map.add("amount", amount);
-
+	public ProPayReservation createReservation(String account, String targetAccount, double amount) {
 		try {
 			final Mono<ProPayReservation> mono
 					= WebClient
@@ -98,24 +80,20 @@ public class ProPayInterface {
 					.uri(builder -> builder.scheme("http")
 							.host("localhost")
 							.port(8888)
-							.pathSegment("reservation", "reserve", sourceAccount, targetAccount)
+							.pathSegment("reservation", "reserve", account, targetAccount)
+							.queryParam("amount", amount)
 							.build())
-					.body(BodyInserters.fromMultipartData(map))
 					.accept(MediaType.APPLICATION_JSON_UTF8)
 					.retrieve()
 					.bodyToMono(ProPayReservation.class);
 			return mono.block();
 		} catch (Exception e) {
-			System.out.println("GET Events Failed");
+			System.out.println("createReservation failed");
 		}
 		return new ProPayReservation();
 	}
 
 	public ProPayAccount releaseReservation(long reservationId, String account) {
-		LinkedMultiValueMap map = new LinkedMultiValueMap();
-		map.add("reservationId", reservationId);
-		map.add("account", account);
-
 		try {
 			final Mono<ProPayAccount> mono
 					= WebClient
@@ -125,23 +103,19 @@ public class ProPayInterface {
 							.host("localhost")
 							.port(8888)
 							.pathSegment("reservation", "release", account)
+							.queryParam("reservationId", reservationId)
 							.build())
-					.body(BodyInserters.fromMultipartData(map))
 					.accept(MediaType.APPLICATION_JSON_UTF8)
 					.retrieve()
 					.bodyToMono(ProPayAccount.class);
 			return mono.block();
 		} catch (Exception e) {
-			System.out.println("GET Events Failed");
+			System.out.println("releaseReservation failed");
 		}
 		return new ProPayAccount();
 	}
 
 	public ProPayAccount punishReservation(long reservationId, String account) {
-		LinkedMultiValueMap map = new LinkedMultiValueMap();
-		map.add("reservationId", reservationId);
-		map.add("account", account);
-
 		try {
 			final Mono<ProPayAccount> mono
 					= WebClient
@@ -151,14 +125,14 @@ public class ProPayInterface {
 							.host("localhost")
 							.port(8888)
 							.pathSegment("reservation", "punish", account)
+							.queryParam("reservationId", reservationId)
 							.build())
-					.body(BodyInserters.fromMultipartData(map))
 					.accept(MediaType.APPLICATION_JSON_UTF8)
 					.retrieve()
 					.bodyToMono(ProPayAccount.class);
 			return mono.block();
 		} catch (Exception e) {
-			System.out.println("GET Events Failed");
+			System.out.println("punishReservation failed");
 		}
 		return new ProPayAccount();
 	}

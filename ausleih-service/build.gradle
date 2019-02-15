@@ -10,6 +10,7 @@ buildscript {
 	}
 }
 plugins {
+	id "com.github.spotbugs" version "1.6.9"
 	id "com.gradle.build-scan" version "1.16"
 }
 buildScan {
@@ -20,7 +21,29 @@ buildScan {
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'checkstyle'
 
+checkstyle {
+	toolVersion '7.8.1'
+	configFile file("config/checkstyle/checkstyle.xml")
+}
+checkstyleMain {
+	source ='src/main/java'
+}
+checkstyleTest {
+	source ='src/test/java'
+}
+
+spotbugs {
+	ignoreFailures = false
+	toolVersion = '3.1.11'
+	reportsDir = file("$project.buildDir/reports/spotbugs")
+	effort = "max"
+}
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+	reports.xml.enabled = false
+	reports.html.enabled = true
+}
 group = 'hhu'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
@@ -43,4 +66,4 @@ dependencies {
 	compile 'io.projectreactor:reactor-core'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-}
+	testCompile group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '2.1.0.RELEASE'}

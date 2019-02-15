@@ -3,35 +3,42 @@ package hhu.ausleihservice.databasemodel;
 import hhu.ausleihservice.dataaccess.AbholortRepository;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
 public class DatabaseInitializer implements ServletContextInitializer {
 
-	@Autowired
-	private ItemRepository itemRepository;
-	@Autowired
 	private PersonRepository personRepository;
-	@Autowired
+	private ItemRepository itemRepository;
 	private AbholortRepository abholortRepository;
+
+	public DatabaseInitializer(PersonRepository perRepository,
+							   ItemRepository iRepository,
+							   AbholortRepository abhRepository) {
+		this.personRepository = perRepository;
+		this.itemRepository = iRepository;
+		this.abholortRepository = abhRepository;
+	}
 
 	@Override
 	public void onStartup(ServletContext servletContext) {
 		System.out.println("Populating the database");
 
-		Abholort ort1 = new Abholort(); ort1.setBeschreibung("Höhle");
-		Abholort ort2 = new Abholort(); ort2.setBeschreibung("Garage");
-		Abholort ort3 = new Abholort(); ort3.setBeschreibung("Haus");
-		Abholort ort4 = new Abholort(); ort4.setBeschreibung("Verloren");
+		Abholort ort1 = new Abholort();
+		Abholort ort2 = new Abholort();
+		Abholort ort3 = new Abholort();
+		Abholort ort4 = new Abholort();
+
+		ort1.setBeschreibung("Höhle");
+		ort2.setBeschreibung("Garage");
+		ort3.setBeschreibung("Haus");
+		ort4.setBeschreibung("Verloren");
 
 		Set<Abholort> orte1 = new HashSet<>();
 		Set<Abholort> orte2 = new HashSet<>();
@@ -48,11 +55,11 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		Person person3 = new Person();
 
 		person1.setVorname("Gerold");
-		person1.setName("Steiner");
+		person1.setNachname("Steiner");
 		person2.setVorname("Volker");
-		person2.setName("Racho");
+		person2.setNachname("Racho");
 		person3.setVorname("Wilma");
-		person3.setName("Pause");
+		person3.setNachname("Pause");
 
 		person1.setUsername("Miner4lwasser");
 		person2.setUsername("Kawumms");
@@ -115,7 +122,6 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.itemRepository.save(item1);
 		this.itemRepository.save(item2);
 		this.itemRepository.save(item3);
-
 
 
 	}

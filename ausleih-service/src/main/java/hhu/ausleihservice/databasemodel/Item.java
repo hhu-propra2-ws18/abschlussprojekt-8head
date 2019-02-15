@@ -4,13 +4,14 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Data
 public class Item {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	private String titel;
@@ -26,27 +27,30 @@ public class Item {
 	@ManyToOne
 	private Person besitzer;
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Ausleihe> ausleihen;
+	private Set<Ausleihe> ausleihen = new HashSet<>();
 	@Lob
 	private byte[] picture;
 
-	//Getter and Setter are copying the array to prevent data leaking outside by storing/giving the reference to the array
+	//Getter and Setter are copying the array to prevent
+	// data leaking outside by storing/giving the reference to the array
 	@Lob
-	public byte[] getPicture(){
+	public byte[] getPicture() {
 		byte[] out = new byte[picture.length];
 		System.arraycopy(picture, 0, out, 0, picture.length);
 		return out;
 	}
-	public void setPicture(byte[] in){
+
+	public void setPicture(byte[] in) {
 		picture = new byte[in.length];
 		System.arraycopy(in, 0, picture, 0, in.length);
 	}
 
 	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
-		return (date.isAfter(start)
-				&& date.isBefore(end))
-				|| (date.isEqual(start)
-				|| date.isEqual(end));
+		return (!date.isBefore(start) && !date.isAfter(end));
+	}
+
+	public boolean isAvailable() {
+		return isAvailable(LocalDate.now());
 	}
 
 	boolean isAvailable(LocalDate date) {
@@ -63,7 +67,20 @@ public class Item {
 		return true;
 	}
 
-	public void addAusleihe(Ausleihe ausleihe) {
+	//Format of input is "YYYY-MM-DD"
+	public boolean isAvailableFromTill(String from, String till) {
+		LocalDate temp = LocalDate.parse(from);
+		LocalDate end = LocalDate.parse(till);
+		while (!temp.equals(end.plusDays(1))) {
+			if (!isAvailable(temp)) {
+				return false;
+			}
+			temp = temp.plusDays(1);
+		}
+		return true;
+	}
+
+	void addAusleihe(Ausleihe ausleihe) {
 		ausleihen.add(ausleihe);
 		ausleihe.setItem(this);
 	}
@@ -71,17 +88,5 @@ public class Item {
 	public void removeAusleihe(Ausleihe ausleihe) {
 		ausleihen.remove(ausleihe);
 		ausleihe.setItem(null);
-	}
-
-	public boolean available(){
-		return availableTill.isBefore(LocalDate.now());
-	}
-
-	public long getPersonId(){
-		return besitzer.getId();
-	}
-
-	public String getPersonName(){
-		return besitzer.getVorname() + " " + besitzer.getName();
 	}
 }

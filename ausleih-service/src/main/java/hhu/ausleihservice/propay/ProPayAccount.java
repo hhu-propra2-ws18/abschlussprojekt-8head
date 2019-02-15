@@ -7,7 +7,7 @@ import java.util.Set;
 @Data
 public class ProPayAccount {
 
-	private String accountName;
-	private double balance;
+	private String account;
+	private double amount;
 	private Set<ProPayReservation> reservations;
 }

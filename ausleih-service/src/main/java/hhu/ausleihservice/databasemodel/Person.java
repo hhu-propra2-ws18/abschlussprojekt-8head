@@ -9,10 +9,10 @@ import java.util.Set;
 @Data
 public class Person {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private String name;
+	private String nachname;
 	private String vorname;
 
 	private String username;
@@ -46,5 +46,9 @@ public class Person {
 	public void removeItem(Item item) {
 		items.remove(item);
 		item.setBesitzer(null);
+	}
+
+	public String getName() {
+		return vorname + " " + nachname;
 	}
 }
