@@ -52,8 +52,8 @@ public class Item {
 	}
 
 	public void addAusleihe(Ausleihe ausleihe) {
-		ausleihen.add(ausleihe);
 		if (ausleihe != null) {
+			ausleihen.add(ausleihe);
 			ausleihe.setItem(this);
 		}
 	}
