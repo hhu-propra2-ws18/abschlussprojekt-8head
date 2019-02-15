@@ -2,6 +2,7 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.databasemodel.Rolle;
+import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import hhu.ausleihservice.databasemodel.Item;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,6 +29,7 @@ public class AusleihServiceController {
 		this.personService = perService;
 		this.itemService = iService;
 	}
+
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 
 	//Checks if a string contains all strings in an array
@@ -80,9 +81,9 @@ public class AusleihServiceController {
 	public String artikelSuche(Model model,
 							   String query, //For titel or beschreibung
 							   @RequestParam(defaultValue = "2147483647")
-										   int tagessatzMax,
+									   int tagessatzMax,
 							   @RequestParam(defaultValue = "2147483647")
-										   int kautionswertMax,
+									   int kautionswertMax,
 							   String availableMin, //YYYY-MM-DD
 							   String availableMax
 	) {
@@ -143,16 +144,15 @@ public class AusleihServiceController {
 	@GetMapping("/details")
 	public String artikelDetails(Model model, @RequestParam long id) {
 
-		Optional<Item> artikel = itemService.findByID(id);
-		model.addAttribute("dateformat", DATEFORMAT);
-
-		if (artikel.isPresent()) {
-			model.addAttribute("artikel", artikel.get());
-			return "artikelDetails";
-		} else {
+		try {
+			Item artikel = itemService.findByID(id);
+			model.addAttribute("artikel", artikel);
+		} catch (ItemNichtVorhanden a) {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
 		}
+		model.addAttribute("dateformat", DATEFORMAT);
+		return "artikelDetails";
 	}
 
 	@GetMapping("/")
