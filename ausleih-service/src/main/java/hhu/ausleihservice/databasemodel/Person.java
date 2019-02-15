@@ -29,21 +29,25 @@ public class Person {
 	private Set<Abholort> abholorte;
 
 	public void addAusleihe(Ausleihe ausleihe) {
+		if(ausleihe == null){return;}
 		ausleihen.add(ausleihe);
 		ausleihe.setAusleiher(this);
 	}
 
 	public void removeAusleihe(Ausleihe ausleihe) {
+		if(ausleihe == null){return;}
 		ausleihen.remove(ausleihe);
 		ausleihe.setAusleiher(null);
 	}
 
 	public void addItem(Item item) {
+		if(item == null){return;}
 		items.add(item);
 		item.setBesitzer(this);
 	}
 
 	public void removeItem(Item item) {
+		if(item == null){return;}
 		items.remove(item);
 		item.setBesitzer(null);
 	}

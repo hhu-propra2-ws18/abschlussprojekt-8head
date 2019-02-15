@@ -145,11 +145,13 @@ public class Item {
 	}
 
 	void addAusleihe(Ausleihe ausleihe) {
+		if(ausleihe == null){return;}
 		ausleihen.add(ausleihe);
 		ausleihe.setItem(this);
 	}
 
 	public void removeAusleihe(Ausleihe ausleihe) {
+		if(ausleihe == null){return;}
 		ausleihen.remove(ausleihe);
 		ausleihe.setItem(null);
 	}
