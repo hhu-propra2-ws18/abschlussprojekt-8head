@@ -7,14 +7,10 @@ import hhu.ausleihservice.databasemodel.Item;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
-//import hhu.ausleihservice.dataaccess.ItemRepository;
-//import hhu.ausleihservice.dataaccess.PersonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,8 +29,7 @@ public class AusleihServiceController {
 		this.personService = perService;
 		this.itemService = iService;
 	}
-
-	private final static DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
+	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 
 	//Checks if a string contains all strings in an array
 	private boolean containsArray(String string, String[] array) {
@@ -60,7 +55,9 @@ public class AusleihServiceController {
 					.stream()
 					.filter(
 							item -> containsArray(
-									(item.getTitel() + item.getBeschreibung()).toLowerCase(),
+									(item.getTitel()
+											+ item.getBeschreibung())
+											.toLowerCase(),
 									qArray
 							)
 					)
@@ -82,8 +79,10 @@ public class AusleihServiceController {
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
 							   String query, //For titel or beschreibung
-							   @RequestParam(defaultValue = "2147483647") int tagessatzMax,
-							   @RequestParam(defaultValue = "2147483647") int kautionswertMax,
+							   @RequestParam(defaultValue = "2147483647")
+										   int tagessatzMax,
+							   @RequestParam(defaultValue = "2147483647")
+										   int kautionswertMax,
 							   String availableMin, //YYYY-MM-DD
 							   String availableMax
 	) {

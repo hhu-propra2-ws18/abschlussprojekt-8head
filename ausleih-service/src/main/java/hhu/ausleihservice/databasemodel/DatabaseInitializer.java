@@ -3,14 +3,11 @@ package hhu.ausleihservice.databasemodel;
 import hhu.ausleihservice.dataaccess.AbholortRepository;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,7 +18,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	private ItemRepository itemRepository;
 	private AbholortRepository abholortRepository;
 
-	public DatabaseInitializer(PersonRepository perRepository, ItemRepository iRepository, AbholortRepository abhRepository){
+	public DatabaseInitializer(PersonRepository perRepository,
+							   ItemRepository iRepository,
+							   AbholortRepository abhRepository) {
 		this.personRepository = perRepository;
 		this.itemRepository = iRepository;
 		this.abholortRepository = abhRepository;

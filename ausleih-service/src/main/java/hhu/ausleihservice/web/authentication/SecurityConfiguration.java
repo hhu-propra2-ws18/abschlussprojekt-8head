@@ -18,7 +18,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
 	@Bean
-	public PasswordEncoder encoder(){
+	public PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
 	}
 
@@ -28,6 +28,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers("/register").permitAll()
+				.antMatchers("/img/8head.jpg").permitAll()
 				.antMatchers("/admin").hasRole(Rolle.ADMIN.name())
 				.anyRequest().authenticated()
 				.and().formLogin().permitAll()
