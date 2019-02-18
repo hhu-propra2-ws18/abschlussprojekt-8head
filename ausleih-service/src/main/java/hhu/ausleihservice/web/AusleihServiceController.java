@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 @Controller
 public class AusleihServiceController {
 
+	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 	private PersonService personService;
 	private ItemService itemService;
 
@@ -30,8 +31,6 @@ public class AusleihServiceController {
 		this.personService = perService;
 		this.itemService = iService;
 	}
-
-	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 
 	//Checks if a string contains all strings in an array
 	private boolean containsArray(String string, String[] array) {
@@ -70,25 +69,8 @@ public class AusleihServiceController {
 							   String availableMin, //YYYY-MM-DD
 							   String availableMax
 	) {
-		Stream<Item> listStream = itemService.findAll().stream();
+		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
 
-		if (query != null && !query.equals("")) {
-			//Ignores Case
-			String[] qArray = query.toLowerCase().split(" ");
-			listStream = listStream.filter(
-					item -> containsArray(
-							(item.getTitel() + item.getBeschreibung()).toLowerCase(),
-							qArray));
-		}
-
-		listStream = listStream.filter(item -> item.getTagessatz() <= tagessatzMax);
-		listStream = listStream.filter(item -> item.getKautionswert() <= kautionswertMax);
-
-		listStream = listStream.filter(
-				item -> itemService.isAvailableFromTill(item, availableMin, availableMax)
-		);
-
-		List<Item> list = listStream.collect(Collectors.toList());
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
 

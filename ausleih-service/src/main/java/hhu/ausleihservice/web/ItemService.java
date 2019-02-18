@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ItemService {
@@ -102,6 +103,34 @@ public class ItemService {
 					)
 					.collect(Collectors.toList());
 		}
+
+		return list;
+	}
+
+	public List<Item> extendedSearch(String query,
+									 int tagessatzMax,
+									 int kautionswertMax,
+									 String availableMin,
+									 String availableMax) {
+		Stream<Item> listStream = findAll().stream();
+
+		if (query != null && !query.equals("")) {
+			//Ignores Case
+			String[] qArray = query.toLowerCase().split(" ");
+			listStream = listStream.filter(
+					item -> containsArray(
+							(item.getTitel() + item.getBeschreibung()).toLowerCase(),
+							qArray));
+		}
+
+		listStream = listStream.filter(item -> item.getTagessatz() <= tagessatzMax);
+		listStream = listStream.filter(item -> item.getKautionswert() <= kautionswertMax);
+
+		listStream = listStream.filter(
+				item -> isAvailableFromTill(item, availableMin, availableMax)
+		);
+
+		List<Item> list = listStream.collect(Collectors.toList());
 
 		return list;
 	}
