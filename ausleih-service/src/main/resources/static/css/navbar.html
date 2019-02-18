@@ -52,22 +52,18 @@
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="/register">Konto Eröffnen</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/login">Login</a>
-				</li>
-				<li class="nav-item">
 					<a class="nav-link" href="/benutzersuche">Benutzersuche</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/profil">Profil</a>
+					<a class="nav-link" th:if="${person == null}" href="/register">Konto Eröffnen</a>
+					<a class="nav-link" th:unless="${person == null}" href="/profil">Profil</a>
 				</li>
-				<li class="nav-item">
+				<li class="nav-item" th:if="${person != null and person.rolle.name() == 'ADMIN'}">
 					<a class="nav-link" href="/admin">Admin</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/logout">Logout</a>
+					<a class="nav-link" th:if="${person == null}" href="/login">Login</a>
+					<a class="nav-link" th:unless="${person == null}" href="/logout">Logout</a>
 				</li>
 			</ul>
 		</div>
