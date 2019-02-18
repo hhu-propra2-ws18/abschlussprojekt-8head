@@ -58,6 +58,7 @@ public class ItemTests {
 		burak.setUsername("bumar100");
 
 		Item fahrrad = new Item();
+		fahrrad.setId(1L);
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setAusleiher(burak);
 		fahrrad.addAusleihe(ausleihe);
