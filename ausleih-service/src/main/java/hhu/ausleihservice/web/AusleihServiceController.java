@@ -170,12 +170,18 @@ public class AusleihServiceController {
 	@GetMapping("/register")
 	public String register(Model model) {
 		Person person = new Person();
+		model.addAttribute("usernameTaken", false);
 		model.addAttribute("person", person);
 		return "register";
 	}
 
 	@PostMapping("/register")
-	public String added(Person person, Model model) {
+	public String added(Model model, Person person) {
+		if (personService.findByUsername(person.getUsername()).isPresent()) {
+			model.addAttribute("usernameTaken", true);
+			model.addAttribute("person", person);
+			return "register";
+		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		person.setPassword(encoder.encode(person.getPassword()));
 		person.setRolle(Rolle.USER);

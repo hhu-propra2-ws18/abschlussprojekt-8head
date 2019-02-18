@@ -37,6 +37,10 @@ public class PersonService implements UserDetailsService {
 		throw new UsernameNotFoundException("Invalid Username");
 	}
 
+	public Optional<Person> findByUsername(String username) {
+		return users.findByUsername(username);
+	}
+
 	Person get(Principal p) {
 		if (p == null) {
 			System.out.println("Null Principal");
