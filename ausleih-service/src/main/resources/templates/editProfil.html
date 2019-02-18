@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="../static/css/style :: formatting">
+	<meta charset="UTF-8">
+	<title th:text="|Profil von ${person.username}|">Profil von xxx</title>
+</head>
+<body>
+<nav th:replace="../static/css/style :: main-menu">menu</nav>
+<h1>
+	<div th:text="|Profil von ${person.username}|">siker102</div>
+</h1>
+<form method="post" th:action="@{/editProfil} + '?' + ${_csrf.parameterName} + '=' + ${_csrf.token}"
+		  id="editProfil"></form>
+<h4>
+	<input type="text" form="editProfil" th:field="${person.username}">
+	<input type="text" form="editProfil" th:field="${person.vorname}">
+	<input type="text" form="editProfil" th:field="${person.nachname}">
+	<input type="text" form="editProfil" id="passwort">
+	<div th:text="|Name: ${person.vorname} ${person.nachname}|">Simon Kerkmann</div>
+</h4>
+<a th:if="${IsOwnProfile}" href="/cool" th:text="edit"></a>
+</body>
+</html>
