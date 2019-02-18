@@ -48,6 +48,14 @@ public class PersonService implements UserDetailsService {
 		return person.get();
 	}
 
+	Person getById(Long id) {
+		Optional<Person> person = users.findById(id);
+		if (!person.isPresent()) {
+			throw new PersonNichtVorhanden();
+		}
+		return person.get();
+	}
+
 	void save(Person person) {
 		users.save(person);
 	}

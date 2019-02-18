@@ -1,11 +1,16 @@
-<html xmlns:th="http://www.w3.org/1999/xhtml">
-<header>
-	<title>Hello</title>
-</header>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="../static/css/style :: formatting">
+	<meta charset="UTF-8">
+	<title th:text="|Profil von ${person.username}|">Profil von xxx</title>
+</head>
 <body>
-<h1>Hello, <span th:text="${username}">User</span>!</h1>
-<a href="/">Home</a>
-<a href="/admin">Admin</a>
-<a href="logout">Logout</a>
+<nav th:replace="../static/css/style :: main-menu">menu</nav>
+<h1>
+	<div th:text="|Profil von ${person.username}|">siker102</div>
+</h1>
+<h4>
+	<div th:text="|Name: ${person.vorname} ${person.nachname}|">Simon Kerkmann</div>
+</h4>
 </body>
 </html>

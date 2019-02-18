@@ -16,16 +16,4 @@ public class RolleEnumTests {
 		Rolle rolle = Rolle.USER;
 		Assert.assertEquals("USER", rolle.name());
 	}
-
-	@Test
-	public void enumStringGuest() {
-		Rolle rolle = Rolle.GUEST;
-		Assert.assertEquals("GUEST", rolle.name());
-	}
-
-	@Test
-	public void enumClass() {
-		Rolle rolle = Rolle.GUEST;
-		Assert.assertEquals("Rolle", rolle.getClass().getSimpleName());
-	}
 }
