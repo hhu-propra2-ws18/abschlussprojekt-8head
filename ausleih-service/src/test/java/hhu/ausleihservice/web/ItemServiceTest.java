@@ -1,5 +1,6 @@
 package hhu.ausleihservice.web;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
@@ -21,11 +22,12 @@ import static org.junit.Assert.*;
 
 public class ItemServiceTest {
 
+	//This field is required for the tests to work and will cause spotBugs to detect dodgy code
 	@Rule
+	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	@Mock
 	ItemRepository itemRepository;
-
 	ItemService itemService = new ItemService(null);
 	List<Item> repository = new ArrayList<>();
 
