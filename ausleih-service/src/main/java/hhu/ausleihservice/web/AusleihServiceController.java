@@ -210,9 +210,10 @@ public class AusleihServiceController {
 
 	@PostMapping("/editProfil")
 	public String editProfilPost(Model model, Principal p, Person person) {
+		person.setId(personService.get(p).getId());
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		person.setPassword(encoder.encode(person.getPassword()));
-		person.setRolle(Rolle.USER);
+		person.setRolle(personService.get(p).getRolle());
 		personService.save(person);
 		return "editProfil";
 	}
