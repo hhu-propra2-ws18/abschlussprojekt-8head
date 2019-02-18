@@ -1,7 +1,6 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.dataaccess.ItemRepository;
-import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class ItemService {
@@ -42,21 +40,9 @@ public class ItemService {
 	}
 
 	boolean isAvailable(Item item, LocalDate date) {
-		LocalDate availableFrom = item.getAvailableFrom();
-		LocalDate availableTill = item.getAvailableTill();
-		Set<Ausleihe> ausleihen = item.getAusleihen();
-
-		if (!isInPeriod(date, availableFrom, availableTill)) {
-			return false;
-		}
-		for (Ausleihe ausleihe : ausleihen) {
-			LocalDate startDatum = ausleihe.getStartDatum();
-			LocalDate endDatum = ausleihe.getEndDatum();
-			if (isInPeriod(date, startDatum, endDatum)) {
-				return false;
-			}
-		}
-		return true;
+		return isInPeriod(date, item.getAvailableFrom(), item.getAvailableTill())
+				&& item.getAusleihen().stream().noneMatch((ausleihe)
+				-> isInPeriod(date, ausleihe.getStartDatum(), ausleihe.getEndDatum()));
 	}
 
 	//Format of input is "YYYY-MM-DD"
