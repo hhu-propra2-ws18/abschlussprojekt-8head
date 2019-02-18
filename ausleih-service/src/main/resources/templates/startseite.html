@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:replace="../static/css/style :: formatting">
+<head th:replace="../static/css/navbar :: style">
 	<meta charset="UTF-8">
 	<title>Startseite</title>
 </head>
 <body>
-<nav th:replace="../static/css/style :: main-menu">menu</nav>
+<nav th:replace="../static/css/navbar :: main-menu">menu</nav>
 <div th:text="${person?.vorname} ?: 'Bitte loggen sie sich ein oder registrieren sie sich.'">Bitte loggen sie sich ein oder registrieren sie sich.</div>
 <a class="btn btn-primary" href="/admin" role="button">Admin</a>
 </body>
