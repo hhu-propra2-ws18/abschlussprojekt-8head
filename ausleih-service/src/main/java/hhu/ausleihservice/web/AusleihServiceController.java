@@ -191,12 +191,37 @@ public class AusleihServiceController {
 	@GetMapping("/profil/{id}")
 	public String otheruser(Model model, @PathVariable Long id) {
 		model.addAttribute("person", personService.getById(id));
+		model.addAttribute("isOwnProfile", false);
 		return "profil";
 	}
 
 	@GetMapping("/profil")
 	public String user(Model model, Principal p) {
 		model.addAttribute("person", personService.get(p));
+		model.addAttribute("isOwnProfile", true);
 		return "profil";
+	}
+
+	@GetMapping("/editProfil")
+	public String editProfilGet(Model model, Principal p){
+		model.addAttribute("person", personService.get(p));
+		return "editProfil";
+	}
+
+	@PostMapping("/editProfil")
+	public String editProfilPost(Model model, Principal p){
+		Person neuePerson = new Person();
+		Person altePerson = personService.get(p);
+
+		model.addAttribute("person", neuePerson);
+		altePerson.setVorname(neuePerson.getVorname());
+		altePerson.setNachname(neuePerson.getNachname());
+		altePerson.setUsername(neuePerson.getUsername());
+		altePerson.setEmail(neuePerson.getEmail());
+		altePerson.setPassword(neuePerson.getPassword());
+
+		personService.save(altePerson);
+
+		return "editProfil";
 	}
 }
