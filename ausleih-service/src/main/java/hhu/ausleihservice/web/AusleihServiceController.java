@@ -1,19 +1,18 @@
 package hhu.ausleihservice.web;
 
+import hhu.ausleihservice.databasemodel.Abholort;
+import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.databasemodel.Rolle;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import hhu.ausleihservice.databasemodel.Item;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -25,10 +24,12 @@ public class AusleihServiceController {
 
 	private PersonService personService;
 	private ItemService itemService;
+	private AbholortService abholortService;
 
-	public AusleihServiceController(PersonService perService, ItemService iService) {
+	public AusleihServiceController(PersonService perService, ItemService iService, AbholortService abholortService) {
 		this.personService = perService;
 		this.itemService = iService;
+		this.abholortService = abholortService;
 	}
 
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -198,5 +199,35 @@ public class AusleihServiceController {
 	public String user(Model model, Principal p) {
 		model.addAttribute("person", personService.get(p));
 		return "profil";
+	}
+
+	@GetMapping("/newitem")
+	public String createItem(Model model, Principal p) {
+		Person person = personService.get(p);
+		//Dummy
+		Abholort abholort = new Abholort();
+		abholort.setBeschreibung("Dummy");
+		abholortService.save(abholort);
+		person.getAbholorte().add(abholort);
+		personService.save(person);
+
+
+		model.addAttribute("newitem", new Item());
+		model.addAttribute("abholorte", person.getAbholorte());
+		return "neuerArtikel";
+	}
+
+	@PostMapping("/newitem")
+	public String addItem(@ModelAttribute Item newItem, Principal p, @RequestParam("file") MultipartFile picture) {
+		Person besitzer = personService.get(p);
+		try {
+			newItem.setPicture(picture.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		itemService.save(newItem);
+		besitzer.addItem(newItem);
+		personService.save(besitzer);
+		return "redirect:/";
 	}
 }
