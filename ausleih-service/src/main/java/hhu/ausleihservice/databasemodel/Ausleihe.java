@@ -24,19 +24,19 @@ public class Ausleihe {
 
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return "Ausleihe("
-				+ "id=" + ((id==null) ? "null" : id.toString()) + ", "
+				+ "id=" + ((id == null) ? "null" : id.toString()) + ", "
 				+ "item="
-					+ ((item==null) ? "null" :
-						"Item("
+				+ ((item == null) ? "null" :
+				"Item("
 						+ "id=" + item.getId() + ", "
-						+ "titel=" + item.getTitel() )
+						+ "titel=" + item.getTitel())
 				+ "), "
-				+ "ausleiher=" + ((ausleiher==null) ? "null" : ausleiher.getName()) + ", "
-				+ "startDatum=" + ((startDatum==null) ? "null" : startDatum.toString()) + ", "
-				+ "endDatum=" + ((endDatum==null) ? "null" : endDatum.toString()) + ", "
-				+ "reservationId=" + ((reservationId==null) ? "null" : reservationId.toString())
+				+ "ausleiher=" + ((ausleiher == null) ? "null" : ausleiher.getName()) + ", "
+				+ "startDatum=" + ((startDatum == null) ? "null" : startDatum.toString()) + ", "
+				+ "endDatum=" + ((endDatum == null) ? "null" : endDatum.toString()) + ", "
+				+ "reservationId=" + ((reservationId == null) ? "null" : reservationId.toString())
 				+ ")";
 	}
 }

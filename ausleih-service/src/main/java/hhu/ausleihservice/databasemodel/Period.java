@@ -13,16 +13,20 @@ public class Period {
 	private final LocalDate start;
 	private final LocalDate end;
 
-	Period(LocalDate start, LocalDate end){
+	Period(LocalDate start, LocalDate end) {
 		this.start = start;
 		this.end = end;
 	}
 
 
-	public String toString(){
+	public String toString() {
 
-		if(start.isAfter(end)){return "Invalid";}
-		if(start.equals(end)){return start.format(DATEFORMAT);}
+		if (start.isAfter(end)) {
+			return "Invalid";
+		}
+		if (start.equals(end)) {
+			return start.format(DATEFORMAT);
+		}
 
 		return start.format(DATEFORMAT) + " - " + end.format(DATEFORMAT);
 	}
