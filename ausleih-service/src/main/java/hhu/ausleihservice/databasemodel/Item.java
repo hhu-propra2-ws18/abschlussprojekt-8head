@@ -60,6 +60,7 @@ public class Item {
 	public boolean isAvailable() {
 		return isAvailable(LocalDate.now());
 	}
+
 	boolean isAvailable(LocalDate date) {
 		if (!isInPeriod(date, availableFrom, availableTill)) {
 			return false;
