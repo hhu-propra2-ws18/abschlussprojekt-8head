@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -58,6 +59,22 @@ public class PersonService implements UserDetailsService {
 
 	void save(Person person) {
 		users.save(person);
+	}
+	
+	void update(Person updatedPerson, Principal principal) {
+		Person altePerson = this.get(principal);
+		updatedPerson.setId(altePerson.getId());
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+		if (updatedPerson.getPassword() != null && !updatedPerson.getPassword().isEmpty()) {
+			updatedPerson.setPassword(encoder.encode(updatedPerson.getPassword()));
+		} else {
+			updatedPerson.setPassword(encoder.encode(altePerson.getPassword()));
+		}
+
+		updatedPerson.setRolle(altePerson.getRolle());
+		this.save(updatedPerson);
+
 	}
 
 	List<Person> findAll() {
