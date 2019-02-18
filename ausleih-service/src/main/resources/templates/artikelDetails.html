@@ -37,7 +37,6 @@
 	</tr>
 	<tr>
 		<td th:each="periods: ${artikel.getAvailablePeriods()}" th:text="${periods}"></td>
-		<td th:each="periods: ${artikel.ausleihen}" th:text="${periods?.startDatum}"></td>
 	</tr>
 </table>
 <br>
