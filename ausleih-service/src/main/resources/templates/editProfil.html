@@ -15,14 +15,13 @@
 	<h4>
 		<table>
 			<tr>
-				<th>Username</th>
+				<th>Username (nicht änderbar)</th>
 				<th>Vorname</th>
 				<th>Nachname</th>
 				<th>Passwort</th>
 			</tr>
 			<tr>
-				<td><input type="text" form="editProfil"
-					th:field="${person.username}"></td>
+				<td th:text="${person.username}"></td>
 				<td><input type="text" form="editProfil"
 					th:field="${person.vorname}"></td>
 				<td><input type="text" form="editProfil"
