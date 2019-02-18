@@ -4,6 +4,7 @@ import hhu.ausleihservice.dataaccess.AbholortRepository;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
@@ -64,6 +65,16 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person1.setUsername("Miner4lwasser");
 		person2.setUsername("Kawumms");
 		person3.setUsername("Kautschkartoffel3000");
+
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+		person1.setPassword(encoder.encode("pl4tsh"));
+		person2.setPassword(encoder.encode("rumbl7"));
+		person3.setPassword(encoder.encode("ichwillschlafen123"));
+
+		person1.setRolle(Rolle.ADMIN);
+		person2.setRolle(Rolle.USER);
+		person3.setRolle(Rolle.USER);
 
 		person1.setEmail("sleeping@home.com");
 		person2.setEmail("notWorking@uni.com");
