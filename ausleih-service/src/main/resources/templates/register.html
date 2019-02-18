@@ -13,7 +13,8 @@
 		<div><input name="vorname" type="text" th:value="*{vorname}">Vorname</div>
 		<div><input name="nachname" type="text" th:value="*{nachname}">Nachname</div>
 		<div><input name="username" type="text" th:value="*{username}">Username</div>
-		<div><input name="password" type="text" th:value="*{password}">Password</div>
+		<div th:if="${usernameTaken}" th:text="DIESER USERNAME IST SCHON VERGEBEN BITTE WAEHLE EINEN ANDEREN!" style="color:red;"></div>
+		<div><input name="password" type="password" th:value="*{password}">Password</div>
 		<div>
 			<button type="submit" class="btn btn-primary">Erstellen</button>
 		</div>
