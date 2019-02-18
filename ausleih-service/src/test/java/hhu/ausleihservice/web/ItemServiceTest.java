@@ -33,30 +33,30 @@ public class ItemServiceTest {
 	public void prepareTestData() {
 		repository = new ArrayList<>();
 
-		Item item_1 = new Item();
-		item_1.setId(1L);
-		item_1.setTitel("Fahrrad");
-		item_1.setBeschreibung("Hammer Fahrrad mit Dynamo");
+		Item item1 = new Item();
+		item1.setId(1L);
+		item1.setTitel("Fahrrad");
+		item1.setBeschreibung("Hammer Fahrrad mit Dynamo");
 
-		Item item_2 = new Item();
-		item_2.setId(2L);
-		item_2.setTitel("Würfelset");
-		item_2.setBeschreibung("Acht hellgürne Würfel. Sie leuchten im dunkeln");
+		Item item2 = new Item();
+		item2.setId(2L);
+		item2.setTitel("Würfelset");
+		item2.setBeschreibung("Acht hellgürne Würfel. Sie leuchten im dunkeln");
 
-		Item item_3 = new Item();
-		item_3.setId(3L);
-		item_3.setTitel("Rosa Fahrrad");
-		item_3.setBeschreibung("Rosafarbendes Fahrrad ohne Hinterrad");
+		Item item3 = new Item();
+		item3.setId(3L);
+		item3.setTitel("Rosa Fahrrad");
+		item3.setBeschreibung("Rosafarbendes Fahrrad ohne Hinterrad");
 
-		Item item_4 = new Item();
-		item_4.setId(4L);
-		item_4.setTitel("Hammer");
-		item_4.setBeschreibung("Ein großer Vorschlaghammer");
+		Item item4 = new Item();
+		item4.setId(4L);
+		item4.setTitel("Hammer");
+		item4.setBeschreibung("Ein großer Vorschlaghammer");
 
-		repository.add(item_1);
-		repository.add(item_2);
-		repository.add(item_3);
-		repository.add(item_4);
+		repository.add(item1);
+		repository.add(item2);
+		repository.add(item3);
+		repository.add(item4);
 
 		itemService = new ItemService(itemRepository);
 
