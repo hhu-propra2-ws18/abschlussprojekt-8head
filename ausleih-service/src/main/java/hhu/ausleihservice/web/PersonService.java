@@ -30,7 +30,7 @@ public class PersonService implements UserDetailsService {
 			return User.builder()
 					.username(u.getUsername())
 					.password(u.getPassword())
-					.authorities(u.getRolle().name())
+					.authorities(u.getRole().name())
 					.build();
 		}
 		throw new UsernameNotFoundException("Invalid Username");
@@ -62,5 +62,13 @@ public class PersonService implements UserDetailsService {
 
 	List<Person> findAll() {
 		return users.findAll();
+	}
+
+	public Person getByUsername(String username) {
+		Optional<Person> person = users.findByUsername(username);
+		if (!person.isPresent()) {
+			return null;
+		}
+		return person.get();
 	}
 }

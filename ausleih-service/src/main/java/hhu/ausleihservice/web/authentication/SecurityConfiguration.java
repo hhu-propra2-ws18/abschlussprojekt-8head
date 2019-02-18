@@ -1,6 +1,5 @@
 package hhu.ausleihservice.web.authentication;
 
-import hhu.ausleihservice.databasemodel.Rolle;
 import hhu.ausleihservice.web.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +28,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/").permitAll()
 				.antMatchers("/register").permitAll()
 				.antMatchers("/img/8head.jpg").permitAll()
-				.antMatchers("/admin").hasRole(Rolle.ADMIN.name())
+				//.antMatchers("/admin").hasRole("ADMIN")
+				.antMatchers("/bearbeiten**").hasRole("ADMIN")
+				.antMatchers("/admin**").access("hasAuthority('ADMIN')")
 				.anyRequest().authenticated()
 				.and().formLogin().permitAll()
 				.and().logout().permitAll();

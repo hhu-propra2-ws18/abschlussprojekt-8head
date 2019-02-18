@@ -1,7 +1,6 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Person;
-import hhu.ausleihservice.databasemodel.Rolle;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import hhu.ausleihservice.databasemodel.Item;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 import java.time.LocalDateTime;
@@ -120,7 +120,8 @@ public class AusleihServiceController {
 
 	@PostMapping("/benutzersuche")
 	public String benutzerSuche(Model model,
-								String query //For nachname, vorname, username
+								String query, //For nachname, vorname, username
+								Principal p
 	) {
 
 		Stream<Person> listStream = personService.findAll().stream();
@@ -138,6 +139,7 @@ public class AusleihServiceController {
 		}
 
 		List<Person> list = listStream.collect(Collectors.toList());
+		model.addAttribute("user", personService.get(p));
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("benutzerListe", list);
 
@@ -175,12 +177,15 @@ public class AusleihServiceController {
 	}
 
 	@PostMapping("/register")
-	public String added(Person person, Model model) {
+	public String added(@Valid Person person, Model model) {
+		if (this.personService.getByUsername(person.getUsername()) != null) {
+			//To-Do: Popup für fehlgeschlagene Registrierung
+			return "register";
+		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		person.setPassword(encoder.encode(person.getPassword()));
-		person.setRolle(Rolle.USER);
 		personService.save(person);
-		return startseite(model, null);
+		return "startseite";
 	}
 
 	@GetMapping("/admin")

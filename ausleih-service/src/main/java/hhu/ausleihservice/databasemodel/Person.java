@@ -17,7 +17,7 @@ public class Person {
 
 	private String username;
 	private String password;
-	private Rolle rolle;
+	private Role role = Role.USER;
 
 	private String email;
 
@@ -46,5 +46,12 @@ public class Person {
 	public void removeItem(Item item) {
 		items.remove(item);
 		item.setBesitzer(null);
+	}
+
+	public boolean isAdmin() {
+		if (this.getRole().equals(Role.ADMIN)) {
+			return true;
+		}
+		return false;
 	}
 }

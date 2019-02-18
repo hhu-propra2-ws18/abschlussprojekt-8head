@@ -4,6 +4,7 @@ import hhu.ausleihservice.dataaccess.AbholortRepository;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
@@ -53,6 +54,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		Person person1 = new Person();
 		Person person2 = new Person();
 		Person person3 = new Person();
+		Person person4 = new Person();
+		Person person5 = new Person();
 
 		person1.setVorname("Gerold");
 		person1.setNachname("Steiner");
@@ -60,14 +63,28 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person2.setNachname("Racho");
 		person3.setVorname("Wilma");
 		person3.setNachname("Pause");
+		person4.setVorname("Simon");
+		person4.setNachname("Kerkmann");
+		person5.setVorname("asdffsdag");
+		person5.setNachname("sbsbsew");
 
 		person1.setUsername("Miner4lwasser");
 		person2.setUsername("Kawumms");
 		person3.setUsername("Kautschkartoffel3000");
+		person4.setUsername("siker102");
+		person5.setUsername("hi");
 
 		person1.setEmail("sleeping@home.com");
 		person2.setEmail("notWorking@uni.com");
 		person3.setEmail("screaming@computer.de");
+		person4.setEmail("siker102@uni-dusseldorf.de");
+		person5.setEmail("asdf");
+
+		person4.setEmail("siker102@uni-dusseldorf.de");
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		person4.setPassword(encoder.encode("123"));
+		person4.setRole(Role.ADMIN);
+		person5.setPassword(encoder.encode("123"));
 
 		person1.setAbholorte(orte1);
 		person2.setAbholorte(orte2);
@@ -118,6 +135,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.personRepository.save(person1);
 		this.personRepository.save(person2);
 		this.personRepository.save(person3);
+		this.personRepository.save(person4);
+		this.personRepository.save(person5);
 
 		this.itemRepository.save(item1);
 		this.itemRepository.save(item2);
