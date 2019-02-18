@@ -1,6 +1,7 @@
 package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude="ausleihen")
 public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,6 +24,7 @@ public class Item {
 	private int kautionswert;
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+	@JoinColumn
 	private Abholort abholort;
 
 	private LocalDate availableFrom;
@@ -83,7 +86,6 @@ public class Item {
 	}
 
 	public ArrayList<Period> getAvailablePeriods(){
-
 		ArrayList<Period> out = new ArrayList<>();
 
 		if(ausleihen.isEmpty()){
@@ -93,6 +95,7 @@ public class Item {
 
 		Ausleihe[] sortierteAusleihen = getSortierteAusleihen();
 		int length = sortierteAusleihen.length;
+		System.err.println(sortierteAusleihen[0]);
 
 		LocalDate start = availableFrom;
 		LocalDate end = sortierteAusleihen[0].getStartDatum();

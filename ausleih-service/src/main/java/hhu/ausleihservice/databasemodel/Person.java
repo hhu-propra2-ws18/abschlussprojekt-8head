@@ -1,12 +1,14 @@
 package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude="ausleihen")
 public class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
