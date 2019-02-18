@@ -16,6 +16,7 @@
 	<input type="text" form="editProfil" th:field="${person.vorname}">
 	<input type="text" form="editProfil" th:field="${person.nachname}">
 	<input type="text" form="editProfil" id="passwort">
+	<input form="editProfil" type="submit" value="Speichern">
 	<div th:text="|Name: ${person.vorname} ${person.nachname}|">Simon Kerkmann</div>
 </h4>
 <a th:if="${IsOwnProfile}" href="/cool" th:text="edit"></a>
