@@ -29,14 +29,28 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarResponsive">
-			<ul class="navbar-nav ml-auto">
-				<li class="nav-item" active>
-					<a class="nav-link" href="/">Home</a>
-				</li>
-				<form method="get" action="/liste" id="search"></form>
+			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a href="/artikelsuche">Erweiterte Artikelsuche</a>
+					<div class="navbarsuche">
+						<form class="form-inline" method="get" action="/liste" id="search">
+							<div class="form-group">
+								<div class="col-xs-10">
+									<input class="form-control" type="text" name="q" placeholder="Artikel suchen...">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-xs-offset-2 col-xs-10">
+									<button type="submit" class="btn btn-primary" value="Suche">Suche</button>
+								</div>
+							</div>
+						</form>
+					</div>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/artikelsuche">Erweiterte Artikelsuche</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
 					<a class="nav-link" href="/register">Konto Eröffnen</a>
 				</li>
@@ -48,6 +62,9 @@
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="/profil">Profil</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/admin">Admin</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="/logout">Logout</a>
