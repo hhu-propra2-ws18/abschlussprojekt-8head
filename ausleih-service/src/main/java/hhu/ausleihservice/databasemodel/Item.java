@@ -49,50 +49,13 @@ public class Item {
 		}
 		picture = new byte[in.length];
 		System.arraycopy(in, 0, picture, 0, in.length);
-
 	}
 
-	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
-		return (!date.isBefore(start) && !date.isAfter(end));
-	}
-
-	public boolean isAvailable() {
-		return isAvailable(LocalDate.now());
-	}
-
-	boolean isAvailable(LocalDate date) {
-		if (!isInPeriod(date, availableFrom, availableTill)) {
-			return false;
+	public void addAusleihe(Ausleihe ausleihe) {
+		if (ausleihe != null) {
+			ausleihen.add(ausleihe);
+			ausleihe.setItem(this);
 		}
-		for (Ausleihe ausleihe : ausleihen) {
-			LocalDate startDatum = ausleihe.getStartDatum();
-			LocalDate endDatum = ausleihe.getEndDatum();
-			if (isInPeriod(date, startDatum, endDatum)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	//Format of input is "YYYY-MM-DD"
-	public boolean isAvailableFromTill(String from, String till) {
-		LocalDate temp = LocalDate.parse(from);
-		LocalDate end = LocalDate.parse(till);
-		while (!temp.equals(end.plusDays(1))) {
-			if (!isAvailable(temp)) {
-				return false;
-			}
-			temp = temp.plusDays(1);
-		}
-		return true;
-	}
-
-	void addAusleihe(Ausleihe ausleihe) {
-		if (ausleihe == null) {
-			return;
-		}
-		ausleihen.add(ausleihe);
-		ausleihe.setItem(this);
 	}
 
 	public void removeAusleihe(Ausleihe ausleihe) {
