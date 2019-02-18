@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PersonService implements UserDetailsService {
@@ -62,5 +64,35 @@ public class PersonService implements UserDetailsService {
 
 	List<Person> findAll() {
 		return users.findAll();
+	}
+
+	//Checks if a string contains all strings in an array
+	private boolean containsArray(String string, String[] array) {
+		for (String entry : array) {
+			if (!string.contains(entry)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	List<Person> searchByNames(String query) {
+		Stream<Person> listStream = findAll().stream();
+
+		if (query != null && !query.equals("")) {
+			//Ignores Case
+			String[] qArray = query.toLowerCase().split(" ");
+			listStream = listStream.filter(
+					person -> containsArray(
+							(person.getVorname() + " " +
+									person.getNachname() + " " +
+									person.getUsername())
+									.toLowerCase(),
+							qArray));
+		}
+
+		List<Person> list = listStream.collect(Collectors.toList());
+
+		return list;
 	}
 }

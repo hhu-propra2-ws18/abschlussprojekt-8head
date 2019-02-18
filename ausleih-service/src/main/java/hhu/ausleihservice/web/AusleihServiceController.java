@@ -17,8 +17,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 public class AusleihServiceController {
@@ -30,16 +28,6 @@ public class AusleihServiceController {
 	public AusleihServiceController(PersonService perService, ItemService iService) {
 		this.personService = perService;
 		this.itemService = iService;
-	}
-
-	//Checks if a string contains all strings in an array
-	private boolean containsArray(String string, String[] array) {
-		for (String entry : array) {
-			if (!string.contains(entry)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	@GetMapping("/liste")
@@ -86,22 +74,7 @@ public class AusleihServiceController {
 	public String benutzerSuche(Model model,
 								String query //For nachname, vorname, username
 	) {
-
-		Stream<Person> listStream = personService.findAll().stream();
-
-		if (query != null && !query.equals("")) {
-			//Ignores Case
-			String[] qArray = query.toLowerCase().split(" ");
-			listStream = listStream.filter(
-					person -> containsArray(
-							(person.getVorname() + " " +
-									person.getNachname() + " " +
-									person.getUsername())
-									.toLowerCase(),
-							qArray));
-		}
-
-		List<Person> list = listStream.collect(Collectors.toList());
+		List<Person> list = personService.searchByNames(query);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("benutzerListe", list);
 
