@@ -210,20 +210,25 @@ public class AusleihServiceController {
 		abholortService.save(abholort);
 		person.getAbholorte().add(abholort);
 		personService.save(person);
-
-
+		//Dummy Ende
+		if (person.getAbholorte().isEmpty()) {
+			model.addAttribute("message", "Bitte Abholorte hinzufügen");
+			return "errorMessage";
+		}
 		model.addAttribute("newitem", new Item());
 		model.addAttribute("abholorte", person.getAbholorte());
 		return "neuerArtikel";
 	}
 
 	@PostMapping("/newitem")
-	public String addItem(@ModelAttribute Item newItem, Principal p, @RequestParam("file") MultipartFile picture) {
+	public String addItem(@ModelAttribute Item newItem, Principal p,
+						  @RequestParam("file") MultipartFile picture, Model model) {
 		Person besitzer = personService.get(p);
 		try {
 			newItem.setPicture(picture.getBytes());
 		} catch (IOException e) {
-			e.printStackTrace();
+			model.addAttribute("message", "Datei konnte nicht gespeichert werden");
+			return "errorMessage";
 		}
 		itemService.save(newItem);
 		besitzer.addItem(newItem);

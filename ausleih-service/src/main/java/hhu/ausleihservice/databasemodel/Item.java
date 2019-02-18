@@ -66,7 +66,7 @@ public class Item {
 		ausleihe.setItem(null);
 	}
 
-	public String getBase64EncodedString(){
+	public String getBase64EncodedString() {
 		return this.getPicture() != null ? Base64.getEncoder().encodeToString(this.getPicture()) : null;
 	}
 }
