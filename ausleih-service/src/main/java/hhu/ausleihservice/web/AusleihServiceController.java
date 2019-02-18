@@ -209,19 +209,8 @@ public class AusleihServiceController {
 	}
 
 	@PostMapping("/editProfil")
-	public String editProfilPost(Model model, Principal p) {
-		Person neuePerson = new Person();
-		Person altePerson = personService.get(p);
-
-		model.addAttribute("person", neuePerson);
-		altePerson.setVorname(neuePerson.getVorname());
-		altePerson.setNachname(neuePerson.getNachname());
-		altePerson.setUsername(neuePerson.getUsername());
-		altePerson.setEmail(neuePerson.getEmail());
-		altePerson.setPassword(neuePerson.getPassword());
-
-		personService.save(altePerson);
-
+	public String editProfilPost(Model model, Principal p, Person person) {
+		personService.save(person);
 		return "editProfil";
 	}
 }
