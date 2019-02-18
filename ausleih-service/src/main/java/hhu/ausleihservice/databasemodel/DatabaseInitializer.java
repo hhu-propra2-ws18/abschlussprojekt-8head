@@ -116,9 +116,11 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		byte[] in = {byt};
 		item3.setPicture(in);
 
-		Set<Ausleihe> ausleihen = new HashSet<>();
+		Set<Ausleihe> ausleihen1 = new HashSet<>();
+		Set<Ausleihe> ausleihen2 = new HashSet<>();
 
-		item3.setAusleihen(ausleihen);
+		item3.setAusleihen(ausleihen1);
+		item1.setAusleihen(ausleihen2);
 
 		this.abholortRepository.save(ort1);
 		this.abholortRepository.save(ort2);
@@ -133,18 +135,29 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.itemRepository.save(item2);
 		this.itemRepository.save(item3);
 
-		Ausleihe ausleihe = new Ausleihe();
-		ausleihe.setReservationId(0L);
-		ausleihe.setStartDatum(ersterMai.plusDays(4));
-		ausleihe.setEndDatum(ersterMai.plusDays(6));
-		ausleihe.setAusleiher(person2);
-		ausleihe.setItem(item3);
+		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setReservationId(0L);
+		ausleihe1.setStartDatum(ersterMai.plusDays(4));
+		ausleihe1.setEndDatum(ersterMai.plusDays(6));
+		ausleihe1.setAusleiher(person2);
+		ausleihe1.setItem(item3);
 
-		ausleihen.add(ausleihe);
+		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setReservationId(1L);
+		ausleihe2.setStartDatum(ersterMai.plusDays(2));
+		ausleihe2.setEndDatum(ersterMai.plusDays(3));
+		ausleihe2.setAusleiher(person3);
+		ausleihe2.setItem(item1);
 
-		item3.setAusleihen(ausleihen);
+		ausleihen1.add(ausleihe1);
+		ausleihen2.add(ausleihe2);
 
-		this.ausleiheRepository.save(ausleihe);
+		item3.setAusleihen(ausleihen1);
+		item1.setAusleihen(ausleihen2);
+
+		this.ausleiheRepository.save(ausleihe1);
+		this.ausleiheRepository.save(ausleihe2);
 		this.itemRepository.save(item3);
+		this.itemRepository.save(item1);
 	}
 }
