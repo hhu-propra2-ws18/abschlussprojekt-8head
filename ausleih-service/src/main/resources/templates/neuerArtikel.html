@@ -4,22 +4,66 @@
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 	<title>Artikeldetails</title>
 </head>
 <body>
-<nav th:replace="../static/css/style :: main-menu">menu</nav>
-<form method="POST"></form>
-<div id="items">
-	<div>
-		<h1 th:text="${artikel.titel}">Titel</h1>
-		<p>Beschreibung:</p>
-		<p>Verfügbarkeit:</p>
-		<p th:text="${artikel.verfuegbarkeit}">Verfügbarkeit</p>
-		<!--TODO: Wie speichert man die Verfügbarkeit?-->
-		<p>Tagessatz:</p>
-		<p>Kaution:</p>
-		<p>Standort:</p>
+<div class="container-fluid">
+	<div class="row mt-3">
+		<div class="col-md-3">
+			<h2>Neues Item hinzufügen:</h2>
+			<form action="#" th:action="@{/newitem}" th:object="${newitem}" method="post" enctype="multipart/form-data">
+				<div class="form-group">
+					<label for="titel">Titel:</label>
+					<input type="text" th:field="*{titel}" class="form-control" id="titel">
+				</div>
+
+				<div class="form-group">
+					<label for="beschreibung">Beschreibung: </label>
+					<input type="text" th:field="*{beschreibung}" class="form-control" id="beschreibung">
+				</div>
+
+				<div class="form-group">
+					<label for="tagessatz">Tagessatz: </label>
+					<input type="number" th:field="*{tagessatz}" step="1" min="0.00"
+						   class="form-control" id="tagessatz">
+				</div>
+
+				<div class="form-group">
+					<label for="kautionswert">Kautionswert: </label>
+					<input type="number" th:field="*{kautionswert}" step="1" min="0.00"
+						   class="form-control" id="kautionswert">
+				</div>
+
+				<div class="form-group">
+					<label for="abholort">Abholort: </label>
+					<select class="form-control" id="abholort" name="abholort">
+						<option th:each="abholort: ${abholorte}"
+								th:value="${abholort.id}"
+								th:text="${abholort.beschreibung}"></option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label for="availableFrom">Verfügbar ab: </label>
+					<input type="date" th:field="*{availableFrom}" class="form-control" id="availableFrom">
+				</div>
+
+				<div class="form-group">
+					<label for="availableTill">Verfügbar bis: </label>
+					<input type="date" th:field="*{availableTill}" class="form-control" id="availableTill">
+				</div>
+
+				<div class="form-group">
+					<label for="file">Bild: </label>
+					<input type="file" id="file" class="form-control" name="file">
+				</div>
+
+				<button type="submit" class="btn btn-primary">Hinzufügen</button>
+				<button type="reset" class="btn btn-primary">Zurücksetzen</button>
+			</form>
+		</div>
 	</div>
 </div>
 
