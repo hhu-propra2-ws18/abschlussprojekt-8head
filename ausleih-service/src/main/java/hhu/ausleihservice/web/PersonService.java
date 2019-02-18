@@ -69,10 +69,11 @@ public class PersonService implements UserDetailsService {
 		if (updatedPerson.getPassword() != null && !updatedPerson.getPassword().isEmpty()) {
 			updatedPerson.setPassword(encoder.encode(updatedPerson.getPassword()));
 		} else {
-			updatedPerson.setPassword(encoder.encode(altePerson.getPassword()));
+			updatedPerson.setPassword(altePerson.getPassword());
 		}
 
 		updatedPerson.setRolle(altePerson.getRolle());
+		updatedPerson.setUsername(altePerson.getUsername());
 		this.save(updatedPerson);
 
 	}
