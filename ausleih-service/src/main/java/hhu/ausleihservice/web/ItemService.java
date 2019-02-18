@@ -58,4 +58,7 @@ public class ItemService {
 		return true;
 	}
 
+	public void save(Item newItem) {
+		items.save(newItem);
+	}
 }
