@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(exclude="ausleihen")
+@EqualsAndHashCode(exclude = "ausleihen")
 public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,6 +40,9 @@ public class Item {
 	// data leaking outside by storing/giving the reference to the array
 	@Lob
 	public byte[] getPicture() {
+		if (picture == null) {
+			return null;
+		}
 		byte[] out = new byte[picture.length];
 		System.arraycopy(picture, 0, out, 0, picture.length);
 		return out;
@@ -85,39 +88,39 @@ public class Item {
 		return true;
 	}
 
-	public ArrayList<Period> getAvailablePeriods(){
+	public ArrayList<Period> getAvailablePeriods() {
+
 		ArrayList<Period> out = new ArrayList<>();
 
-		if(ausleihen.isEmpty()){
+		if (ausleihen.isEmpty()) {
 			out.add(new Period(availableFrom, availableTill));
 			return out;
 		}
 
 		Ausleihe[] sortierteAusleihen = getSortierteAusleihen();
 		int length = sortierteAusleihen.length;
-		System.err.println(sortierteAusleihen[0]);
 
 		LocalDate start = availableFrom;
 		LocalDate end = sortierteAusleihen[0].getStartDatum();
 
-		if(!start.equals(end)){
+		if (!start.equals(end)) {
 			out.add(new Period(start, end.minusDays(1)));
 		}
 
-		for(int i = 0; i < length-1; i++){
+		for (int i = 0; i < length - 1; i++) {
 
 			start = sortierteAusleihen[i].getEndDatum();
-			end = sortierteAusleihen[i+1].getStartDatum();
+			end = sortierteAusleihen[i + 1].getStartDatum();
 
-			if(!start.equals(end)){
+			if (!start.equals(end)) {
 				out.add(new Period(start.plusDays(1), end.minusDays(1)));
 			}
 		}
 
-		start = sortierteAusleihen[length-1].getEndDatum();
+		start = sortierteAusleihen[length - 1].getEndDatum();
 		end = availableTill;
 
-		if(!start.equals(end)){
+		if (!start.equals(end)) {
 			out.add(new Period(start.plusDays(1), end));
 		}
 
@@ -129,14 +132,14 @@ public class Item {
 		Ausleihe[] sortierteAusleihen = new Ausleihe[ausleihen.size()];
 		List<Ausleihe> tempAusleihen = new ArrayList<>(ausleihen);
 
-		for(int i = 0; i < ausleihen.size(); i++) {
+		for (int i = 0; i < ausleihen.size(); i++) {
 
 			Ausleihe smallest = tempAusleihen.get(0);
 			LocalDate smallestDate = smallest.getStartDatum();
 
 			for (Ausleihe test : tempAusleihen) {
 				LocalDate testDate = test.getStartDatum();
-				if(testDate.isBefore(smallestDate)){
+				if (testDate.isBefore(smallestDate)) {
 					smallest = test;
 					smallestDate = smallest.getStartDatum();
 				}
@@ -149,13 +152,17 @@ public class Item {
 	}
 
 	void addAusleihe(Ausleihe ausleihe) {
-		if(ausleihe == null){return;}
+		if (ausleihe == null) {
+			return;
+		}
 		ausleihen.add(ausleihe);
 		ausleihe.setItem(this);
 	}
 
 	public void removeAusleihe(Ausleihe ausleihe) {
-		if(ausleihe == null){return;}
+		if (ausleihe == null) {
+			return;
+		}
 		ausleihen.remove(ausleihe);
 		ausleihe.setItem(null);
 	}

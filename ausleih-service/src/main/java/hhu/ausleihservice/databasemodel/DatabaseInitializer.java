@@ -19,13 +19,13 @@ import hhu.ausleihservice.dataaccess.PersonRepository;
 public class DatabaseInitializer implements ServletContextInitializer {
 
 	@Autowired
-	private ItemRepository itemRepository;
-	@Autowired
-	private PersonRepository personRepository;
-	@Autowired
 	private AbholortRepository abholortRepository;
 	@Autowired
 	private AusleiheRepository ausleiheRepository;
+	@Autowired
+	private ItemRepository itemRepository;
+	@Autowired
+	private PersonRepository personRepository;
 
 	@Override
 	public void onStartup(ServletContext servletContext) {
@@ -99,52 +99,53 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item2.setAbholort(ort3);
 		item3.setAbholort(ort4);
 
-		item1.setAvailableFrom(LocalDate.now().plusDays(1));
-		item2.setAvailableFrom(LocalDate.now().plusDays(3));
-		item3.setAvailableFrom(LocalDate.now().plusDays(4));
+		LocalDate ersterMai = LocalDate.of(2019, 5, 1);
 
-		item1.setAvailableTill(LocalDate.now().plusDays(13));
-		item2.setAvailableTill(LocalDate.now().plusDays(35));
-		item3.setAvailableTill(LocalDate.now().plusDays(46));
+		item1.setAvailableFrom(ersterMai.plusDays(1));
+		item2.setAvailableFrom(ersterMai.plusDays(3));
+		item3.setAvailableFrom(ersterMai.plusDays(4));
+
+		item1.setAvailableTill(ersterMai.plusDays(8));
+		item2.setAvailableTill(ersterMai.plusDays(10));
+		item3.setAvailableTill(ersterMai.plusDays(11));
 
 		item1.setBesitzer(person1);
 		item2.setBesitzer(person2);
 		item3.setBesitzer(person3);
-		
+
 		Byte byt = new Byte("100");
 		byte[] in = {byt};
 		item3.setPicture(in);
-		
+
 		Set<Ausleihe> ausleihen = new HashSet<>();
-		
+
 		item3.setAusleihen(ausleihen);
-		
+
 		this.abholortRepository.save(ort1);
 		this.abholortRepository.save(ort2);
 		this.abholortRepository.save(ort3);
 		this.abholortRepository.save(ort4);
-		
+
 		this.personRepository.save(person1);
 		this.personRepository.save(person2);
 		this.personRepository.save(person3);
-		
+
 		this.itemRepository.save(item1);
 		this.itemRepository.save(item2);
 		this.itemRepository.save(item3);
-		
+
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setReservationId(0L);
-		ausleihe.setStartDatum(LocalDate.now());
-		ausleihe.setEndDatum(LocalDate.now().plusDays(3L));
+		ausleihe.setStartDatum(ersterMai.plusDays(4));
+		ausleihe.setEndDatum(ersterMai.plusDays(6));
 		ausleihe.setAusleiher(person2);
 		ausleihe.setItem(item3);
-		
+
 		ausleihen.add(ausleihe);
-		
+
 		item3.setAusleihen(ausleihen);
-		
+
 		this.ausleiheRepository.save(ausleihe);
 		this.itemRepository.save(item3);
-		
 	}
 }
