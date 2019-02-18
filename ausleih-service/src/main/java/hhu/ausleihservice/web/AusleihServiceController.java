@@ -80,13 +80,13 @@ public class AusleihServiceController {
 
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
-							   String query, //For titel or beschreibung
-							   @RequestParam(defaultValue = "2147483647")
-									   int tagessatzMax,
-							   @RequestParam(defaultValue = "2147483647")
-									   int kautionswertMax,
-							   String availableMin, //YYYY-MM-DD
-							   String availableMax
+	                           String query, //For titel or beschreibung
+	                           @RequestParam(defaultValue = "2147483647")
+			                           int tagessatzMax,
+	                           @RequestParam(defaultValue = "2147483647")
+			                           int kautionswertMax,
+	                           String availableMin, //YYYY-MM-DD
+	                           String availableMax
 	) {
 		Stream<Item> listStream = itemService.findAll().stream();
 
@@ -120,7 +120,7 @@ public class AusleihServiceController {
 
 	@PostMapping("/benutzersuche")
 	public String benutzerSuche(Model model,
-								String query //For nachname, vorname, username
+	                            String query //For nachname, vorname, username
 	) {
 
 		Stream<Person> listStream = personService.findAll().stream();
@@ -203,13 +203,13 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/editProfil")
-	public String editProfilGet(Model model, Principal p){
+	public String editProfilGet(Model model, Principal p) {
 		model.addAttribute("person", personService.get(p));
 		return "editProfil";
 	}
 
 	@PostMapping("/editProfil")
-	public String editProfilPost(Model model, Principal p){
+	public String editProfilPost(Model model, Principal p) {
 		Person neuePerson = new Person();
 		Person altePerson = personService.get(p);
 
