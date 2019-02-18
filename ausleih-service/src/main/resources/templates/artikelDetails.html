@@ -36,7 +36,8 @@
 		<th>Noch verfügbar zu folgenden Zeiten</th>
 	</tr>
 	<tr>
-		<td th:each="periods: ${artikel.availablePeriods}" th:text="${periods}"></td>
+		<td th:each="periods: ${artikel.getAvailablePeriods()}" th:text="${periods}"></td>
+		<td th:each="periods: ${artikel.ausleihen}" th:text="${periods?.startDatum}"></td>
 	</tr>
 </table>
 <br>
