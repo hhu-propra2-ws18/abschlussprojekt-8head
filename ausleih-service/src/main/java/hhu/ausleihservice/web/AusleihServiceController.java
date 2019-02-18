@@ -44,27 +44,9 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/liste")
-	public String artikelListe(Model model, @RequestParam(required = false) String q) {
+	public String artikelListe(Model model, @RequestParam(required = false) String query) {
 
-		List<Item> list;
-
-		if (q == null || q.isEmpty()) {
-			list = itemService.findAll();
-		} else {
-			//Ignores case
-			String[] qArray = q.toLowerCase().split(" ");
-			list = itemService.findAll()
-					.stream()
-					.filter(
-							item -> containsArray(
-									(item.getTitel()
-											+ item.getBeschreibung())
-											.toLowerCase(),
-									qArray
-							)
-					)
-					.collect(Collectors.toList());
-		}
+		List<Item> list = itemService.simpleSearch(query);
 
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);

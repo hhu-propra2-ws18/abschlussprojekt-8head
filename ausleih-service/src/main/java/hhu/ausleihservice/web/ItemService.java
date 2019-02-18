@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
@@ -70,6 +71,39 @@ public class ItemService {
 			temp = temp.plusDays(1);
 		}
 		return true;
+	}
+
+	private boolean containsArray(String string, String[] array) {
+		for (String entry : array) {
+			if (!string.contains(entry)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public List<Item> simpleSearch(String query) {
+		List<Item> list;
+
+		if (query == null || query.isEmpty()) {
+			list = findAll();
+		} else {
+			//Ignores case
+			String[] qArray = query.toLowerCase().split(" ");
+			list = findAll()
+					.stream()
+					.filter(
+							item -> containsArray(
+									(item.getTitel()
+											+ item.getBeschreibung())
+											.toLowerCase(),
+									qArray
+							)
+					)
+					.collect(Collectors.toList());
+		}
+
+		return list;
 	}
 
 }
