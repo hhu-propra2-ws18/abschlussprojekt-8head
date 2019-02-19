@@ -195,9 +195,9 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/profil/{id}")
-	public String otheruser(Model model, @PathVariable Long id) {
+	public String otheruser(Model model, @PathVariable Long id, Principal p) {
 		model.addAttribute("person", personService.getById(id));
-		model.addAttribute("isOwnProfile", false);
+		model.addAttribute("isOwnProfile", personService.get(p).getId().equals(id));
 		return "profil";
 	}
 
