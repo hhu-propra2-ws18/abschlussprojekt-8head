@@ -1,5 +1,6 @@
 package hhu.ausleihservice.databasemodel;
 
+import hhu.ausleihservice.web.ItemService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -71,6 +72,7 @@ public class ItemTests {
 		Item fahrrad = new Item();
 		fahrrad.setId(1L);
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setId(0L);
 		ausleihe.setAusleiher(burak);
 		fahrrad.addAusleihe(ausleihe);
 		Assert.assertEquals(fahrrad, ausleihe.getItem());
@@ -87,113 +89,125 @@ public class ItemTests {
 	@Test
 	public void isAvaibleInItemPeriod() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		item.setAusleihen(new HashSet<>());
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-		assertTrue(item.isAvailable(LocalDate.of(2000, 2, 2)));
+		assertTrue(itemService.isAvailable(item,LocalDate.of(2000, 2, 2)));
 	}
 
 	@Test
 	public void isNotAvaibleOutsideItemPeriod() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		item.setAusleihen(new HashSet<>());
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-		assertFalse(item.isAvailable(LocalDate.of(2222, 2, 2)));
+		assertFalse(itemService.isAvailable(item, LocalDate.of(2222, 2, 2)));
 	}
 
 	@Test
 	public void isNotAvaibleInItemPeriod() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setId(0L);
 		ausleihe.setStartDatum(LocalDate.of(2000, 1, 5));
 		ausleihe.setEndDatum(LocalDate.of(2000, 1, 5));
 		item.setAusleihen(Collections.singleton(ausleihe));
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-		assertFalse(item.isAvailable(LocalDate.of(2000, 1, 5)));
+		assertFalse(itemService.isAvailable(item, LocalDate.of(2000, 1, 5)));
 	}
 
 
 	@Test
 	public void isAvailableFromTillPeriodInside() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		String from = "2000-06-01";
 		String till = "2000-07-01";
 
-		assertTrue(item.isAvailableFromTill(from, till));
+		assertTrue(itemService.isAvailableFromTill(item, from, till));
 	}
 
 	@Test
 	public void isAvailableFromTillPeriodOnLeftEdge() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		String from = "2000-01-01";
 		String till = "2000-07-01";
 
-		assertTrue(item.isAvailableFromTill(from, till));
+		assertTrue(itemService.isAvailableFromTill(item, from, till));
 	}
 
 	@Test
 	public void isAvailableFromTillPeriodOnRightEdge() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		String from = "2000-06-01";
 		String till = "2001-01-01";
 
-		assertTrue(item.isAvailableFromTill(from, till));
+		assertTrue(itemService.isAvailableFromTill(item, from, till));
 	}
 
 	@Test
 	public void isAvailableFromTillPeriodOverLeftEdge() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		String from = "1999-06-01";
 		String till = "2000-07-01";
 
-		assertFalse(item.isAvailableFromTill(from, till));
+		assertFalse(itemService.isAvailableFromTill(item, from, till));
 	}
 
 	@Test
 	public void isAvailableFromTillPeriodOverRightEdge() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		String from = "2000-06-01";
 		String till = "2001-07-01";
 
-		assertFalse(item.isAvailableFromTill(from, till));
+		assertFalse(itemService.isAvailableFromTill(item, from, till));
 	}
 
 	@Test
 	public void isAvailableFromTillPeriodOverRightEdgeSmallPeriod() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2000, 1, 10));
 
 		String from = "2000-01-01";
 		String till = "2000-02-01";
 
-		assertFalse(item.isAvailableFromTill(from, till));
+		assertFalse(itemService.isAvailableFromTill(item, from, till));
 	}
 
 	@Test
 	public void isAvailableFromTillWithAusleiheNoConflict() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setId(0L);
 		ausleihe.setStartDatum(LocalDate.of(2000, 1, 5));
 		ausleihe.setEndDatum(LocalDate.of(2000, 1, 10));
 		item.addAusleihe(ausleihe);
@@ -201,16 +215,18 @@ public class ItemTests {
 		String from = "2000-06-01";
 		String till = "2000-07-01";
 
-		assertTrue(item.isAvailableFromTill(from, till));
+		assertTrue(itemService.isAvailableFromTill(item, from, till));
 	}
 
 	@Test
 	public void isAvailableFromTillWithAusleiheWithConflictInside() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setId(0L);
 		ausleihe.setStartDatum(LocalDate.of(2000, 6, 5));
 		ausleihe.setEndDatum(LocalDate.of(2000, 6, 10));
 		item.addAusleihe(ausleihe);
@@ -218,16 +234,18 @@ public class ItemTests {
 		String from = "2000-06-01";
 		String till = "2000-07-01";
 
-		assertFalse(item.isAvailableFromTill(from, till));
+		assertFalse(itemService.isAvailableFromTill(item, from, till));
 	}
 
 	@Test
 	public void isAvailableFromTillWithAusleiheWithConflictOnLeftEdge() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setId(0L);
 		ausleihe.setStartDatum(LocalDate.of(2000, 6, 1));
 		ausleihe.setEndDatum(LocalDate.of(2000, 6, 1));
 		item.addAusleihe(ausleihe);
@@ -235,16 +253,18 @@ public class ItemTests {
 		String from = "2000-06-01";
 		String till = "2000-07-01";
 
-		assertFalse(item.isAvailableFromTill(from, till));
+		assertFalse(itemService.isAvailableFromTill(item, from, till));
 	}
 
 	@Test
 	public void isAvailableFromTillWithAusleiheWithConflictOnRightEdge() {
 		Item item = new Item();
+		ItemService itemService = new ItemService(null);
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setId(0L);
 		ausleihe.setStartDatum(LocalDate.of(2000, 7, 1));
 		ausleihe.setEndDatum(LocalDate.of(2000, 7, 1));
 		item.addAusleihe(ausleihe);
@@ -252,7 +272,7 @@ public class ItemTests {
 		String from = "2000-06-01";
 		String till = "2000-07-01";
 
-		assertFalse(item.isAvailableFromTill(from, till));
+		assertFalse(itemService.isAvailableFromTill(item, from, till));
 	}
 
 
@@ -274,6 +294,7 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setId(0L);
 		ausleihe.setStartDatum(LocalDate.of(2000, 7, 1));
 		ausleihe.setEndDatum(LocalDate.of(2000, 7, 1));
 		item.addAusleihe(ausleihe);
@@ -291,11 +312,13 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 7, 1));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 7, 1));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 8, 1));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 8, 1));
 		item.addAusleihe(ausleihe2);
@@ -314,11 +337,13 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 8, 1));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 8, 1));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 7, 1));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 7, 1));
 		item.addAusleihe(ausleihe2);
@@ -337,16 +362,19 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 7, 1));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 7, 1));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 8, 1));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 8, 1));
 		item.addAusleihe(ausleihe2);
 
 		Ausleihe ausleihe3 = new Ausleihe();
+		ausleihe3.setId(2L);
 		ausleihe3.setStartDatum(LocalDate.of(2000, 9, 1));
 		ausleihe3.setEndDatum(LocalDate.of(2000, 9, 1));
 		item.addAusleihe(ausleihe3);
@@ -366,16 +394,19 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 8, 1));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 8, 1));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 7, 1));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 7, 1));
 		item.addAusleihe(ausleihe2);
 
 		Ausleihe ausleihe3 = new Ausleihe();
+		ausleihe3.setId(2L);
 		ausleihe3.setStartDatum(LocalDate.of(2000, 9, 1));
 		ausleihe3.setEndDatum(LocalDate.of(2000, 9, 1));
 		item.addAusleihe(ausleihe3);
@@ -395,16 +426,19 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 4, 1));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 5, 1));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 2, 1));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 3, 1));
 		item.addAusleihe(ausleihe2);
 
 		Ausleihe ausleihe3 = new Ausleihe();
+		ausleihe3.setId(2L);
 		ausleihe3.setStartDatum(LocalDate.of(2000, 9, 1));
 		ausleihe3.setEndDatum(LocalDate.of(2000, 10, 1));
 		item.addAusleihe(ausleihe3);
@@ -438,6 +472,7 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setId(0L);
 		ausleihe.setStartDatum(LocalDate.of(2000, 7, 5));
 		ausleihe.setEndDatum(LocalDate.of(2000, 7, 5));
 		item.addAusleihe(ausleihe);
@@ -458,6 +493,7 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setId(0L);
 		ausleihe.setStartDatum(LocalDate.of(2000, 7, 5));
 		ausleihe.setEndDatum(LocalDate.of(2000, 7, 10));
 		item.addAusleihe(ausleihe);
@@ -478,11 +514,13 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 7, 5));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 7, 5));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 8, 14));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 8, 14));
 		item.addAusleihe(ausleihe2);
@@ -505,11 +543,13 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 8, 14));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 8, 14));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 7, 5));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 7, 5));
 		item.addAusleihe(ausleihe2);
@@ -532,11 +572,13 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 7, 5));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 7, 10));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 8, 14));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 8, 20));
 		item.addAusleihe(ausleihe2);
@@ -559,11 +601,13 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 8, 14));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 8, 20));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 7, 5));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 7, 10));
 		item.addAusleihe(ausleihe2);
@@ -586,16 +630,19 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 7, 5));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 7, 5));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 8, 14));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 8, 14));
 		item.addAusleihe(ausleihe2);
 
 		Ausleihe ausleihe3 = new Ausleihe();
+		ausleihe3.setId(2L);
 		ausleihe3.setStartDatum(LocalDate.of(2000, 9, 17));
 		ausleihe3.setEndDatum(LocalDate.of(2000, 9, 17));
 		item.addAusleihe(ausleihe3);
@@ -620,16 +667,19 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 8, 14));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 8, 14));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 7, 5));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 7, 5));
 		item.addAusleihe(ausleihe2);
 
 		Ausleihe ausleihe3 = new Ausleihe();
+		ausleihe3.setId(2L);
 		ausleihe3.setStartDatum(LocalDate.of(2000, 9, 17));
 		ausleihe3.setEndDatum(LocalDate.of(2000, 9, 17));
 		item.addAusleihe(ausleihe3);
@@ -654,16 +704,19 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 7, 5));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 7, 10));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 8, 14));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 8, 20));
 		item.addAusleihe(ausleihe2);
 
 		Ausleihe ausleihe3 = new Ausleihe();
+		ausleihe3.setId(2L);
 		ausleihe3.setStartDatum(LocalDate.of(2000, 9, 17));
 		ausleihe3.setEndDatum(LocalDate.of(2000, 9, 23));
 		item.addAusleihe(ausleihe3);
@@ -688,16 +741,19 @@ public class ItemTests {
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
 		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setId(0L);
 		ausleihe1.setStartDatum(LocalDate.of(2000, 8, 14));
 		ausleihe1.setEndDatum(LocalDate.of(2000, 8, 20));
 		item.addAusleihe(ausleihe1);
 
 		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setId(1L);
 		ausleihe2.setStartDatum(LocalDate.of(2000, 9, 17));
 		ausleihe2.setEndDatum(LocalDate.of(2000, 9, 23));
 		item.addAusleihe(ausleihe2);
 
 		Ausleihe ausleihe3 = new Ausleihe();
+		ausleihe3.setId(2L);
 		ausleihe3.setStartDatum(LocalDate.of(2000, 7, 5));
 		ausleihe3.setEndDatum(LocalDate.of(2000, 7, 10));
 		item.addAusleihe(ausleihe3);
