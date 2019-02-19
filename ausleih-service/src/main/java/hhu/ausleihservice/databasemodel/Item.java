@@ -3,8 +3,6 @@ package hhu.ausleihservice.databasemodel;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.File;
-import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;

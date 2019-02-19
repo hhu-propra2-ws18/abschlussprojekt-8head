@@ -7,7 +7,6 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
-import java.io.File;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
