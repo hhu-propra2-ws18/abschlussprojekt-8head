@@ -1,19 +1,14 @@
 
 package hhu.ausleihservice.databasemodel;
 
-import hhu.ausleihservice.web.ItemService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @SpringBootTest
 public class ItemTests {
@@ -105,195 +100,6 @@ public class ItemTests {
 		Assert.assertEquals(0, item.getAusleihen().size());
 		Assert.assertNull(ausleihe.getItem());
 	}
-	@Test
-	public void isAvaibleInItemPeriod() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		item.setAusleihen(new HashSet<>());
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-		assertTrue(itemService.isAvailable(item, LocalDate.of(2000, 2, 2)));
-	}
-
-	@Test
-	public void isNotAvaibleOutsideItemPeriod() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		item.setAusleihen(new HashSet<>());
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-		assertFalse(itemService.isAvailable(item, LocalDate.of(2222, 2, 2)));
-	}
-
-	@Test
-	public void isNotAvaibleInItemPeriod() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		Ausleihe ausleihe = new Ausleihe();
-		ausleihe.setId(0L);
-		ausleihe.setStartDatum(LocalDate.of(2000, 1, 5));
-		ausleihe.setEndDatum(LocalDate.of(2000, 1, 5));
-		item.setAusleihen(Collections.singleton(ausleihe));
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-		assertFalse(itemService.isAvailable(item, LocalDate.of(2000, 1, 5)));
-	}
-
-
-	@Test
-	public void isAvailableFromTillPeriodInside() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-
-		String from = "2000-06-01";
-		String till = "2000-07-01";
-
-		assertTrue(itemService.isAvailableFromTill(item, from, till));
-	}
-
-	@Test
-	public void isAvailableFromTillPeriodOnLeftEdge() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-
-		String from = "2000-01-01";
-		String till = "2000-07-01";
-
-		assertTrue(itemService.isAvailableFromTill(item, from, till));
-	}
-
-	@Test
-	public void isAvailableFromTillPeriodOnRightEdge() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-
-		String from = "2000-06-01";
-		String till = "2001-01-01";
-
-		assertTrue(itemService.isAvailableFromTill(item, from, till));
-	}
-
-	@Test
-	public void isAvailableFromTillPeriodOverLeftEdge() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-
-		String from = "1999-06-01";
-		String till = "2000-07-01";
-
-		assertFalse(itemService.isAvailableFromTill(item, from, till));
-	}
-
-	@Test
-	public void isAvailableFromTillPeriodOverRightEdge() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-
-		String from = "2000-06-01";
-		String till = "2001-07-01";
-
-		assertFalse(itemService.isAvailableFromTill(item, from, till));
-	}
-
-	@Test
-	public void isAvailableFromTillPeriodOverRightEdgeSmallPeriod() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2000, 1, 10));
-
-		String from = "2000-01-01";
-		String till = "2000-02-01";
-
-		assertFalse(itemService.isAvailableFromTill(item, from, till));
-	}
-
-	@Test
-	public void isAvailableFromTillWithAusleiheNoConflict() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-
-		Ausleihe ausleihe = new Ausleihe();
-		ausleihe.setId(0L);
-		ausleihe.setStartDatum(LocalDate.of(2000, 1, 5));
-		ausleihe.setEndDatum(LocalDate.of(2000, 1, 10));
-		item.addAusleihe(ausleihe);
-
-		String from = "2000-06-01";
-		String till = "2000-07-01";
-
-		assertTrue(itemService.isAvailableFromTill(item, from, till));
-	}
-
-	@Test
-	public void isAvailableFromTillWithAusleiheWithConflictInside() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-
-		Ausleihe ausleihe = new Ausleihe();
-		ausleihe.setId(0L);
-		ausleihe.setStartDatum(LocalDate.of(2000, 6, 5));
-		ausleihe.setEndDatum(LocalDate.of(2000, 6, 10));
-		item.addAusleihe(ausleihe);
-
-		String from = "2000-06-01";
-		String till = "2000-07-01";
-
-		assertFalse(itemService.isAvailableFromTill(item, from, till));
-	}
-
-	@Test
-	public void isAvailableFromTillWithAusleiheWithConflictOnLeftEdge() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-
-		Ausleihe ausleihe = new Ausleihe();
-		ausleihe.setId(0L);
-		ausleihe.setStartDatum(LocalDate.of(2000, 6, 1));
-		ausleihe.setEndDatum(LocalDate.of(2000, 6, 1));
-		item.addAusleihe(ausleihe);
-
-		String from = "2000-06-01";
-		String till = "2000-07-01";
-
-		assertFalse(itemService.isAvailableFromTill(item, from, till));
-	}
-
-	@Test
-	public void isAvailableFromTillWithAusleiheWithConflictOnRightEdge() {
-		Item item = new Item();
-		ItemService itemService = new ItemService(null);
-		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
-		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-
-		Ausleihe ausleihe = new Ausleihe();
-		ausleihe.setId(0L);
-		ausleihe.setStartDatum(LocalDate.of(2000, 7, 1));
-		ausleihe.setEndDatum(LocalDate.of(2000, 7, 1));
-		item.addAusleihe(ausleihe);
-
-		String from = "2000-06-01";
-		String till = "2000-07-01";
-
-		assertFalse(itemService.isAvailableFromTill(item, from, till));
-	}
-
 
 	@Test
 	public void getSortierteAusleihenWithNoAusleihen() {

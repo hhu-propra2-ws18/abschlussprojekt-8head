@@ -93,4 +93,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testCompile group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '2.1.0.RELEASE'
+    compile 'com.github.spotbugs:spotbugs:3.1.11'
+    compileOnly 'com.github.spotbugs:spotbugs-annotations:3.1.11'
 }
