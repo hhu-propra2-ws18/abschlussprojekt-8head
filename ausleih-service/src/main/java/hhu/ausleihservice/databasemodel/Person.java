@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,6 +18,7 @@ public class Person {
 	private String nachname;
 	private String vorname;
 
+	@EqualsAndHashCode.Include
 	private String username;
 	private String password;
 	private Rolle rolle;
@@ -24,11 +26,11 @@ public class Person {
 	private String email;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Item> items;
+	private Set<Item> items = new HashSet<>();
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Ausleihe> ausleihen;
+	private Set<Ausleihe> ausleihen = new HashSet<>();
 	@OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
-	private Set<Abholort> abholorte;
+	private Set<Abholort> abholorte = new HashSet<>();
 
 	public void addAusleihe(Ausleihe ausleihe) {
 		ausleihen.add(ausleihe);
