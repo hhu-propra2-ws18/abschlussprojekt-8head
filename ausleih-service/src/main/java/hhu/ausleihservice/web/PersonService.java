@@ -7,11 +7,14 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PersonService implements UserDetailsService {
@@ -34,6 +37,10 @@ public class PersonService implements UserDetailsService {
 					.build();
 		}
 		throw new UsernameNotFoundException("Invalid Username");
+	}
+
+	public Optional<Person> findByUsername(String username) {
+		return users.findByUsername(username);
 	}
 
 	Person get(Principal p) {
@@ -59,8 +66,55 @@ public class PersonService implements UserDetailsService {
 	void save(Person person) {
 		users.save(person);
 	}
+	
+	void update(Person updatedPerson, Principal principal) {
+		Person altePerson = this.get(principal);
+		updatedPerson.setId(altePerson.getId());
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+		if (updatedPerson.getPassword() != null && !updatedPerson.getPassword().isEmpty()) {
+			updatedPerson.setPassword(encoder.encode(updatedPerson.getPassword()));
+		} else {
+			updatedPerson.setPassword(altePerson.getPassword());
+		}
+
+		updatedPerson.setRolle(altePerson.getRolle());
+		updatedPerson.setUsername(altePerson.getUsername());
+		this.save(updatedPerson);
+
+	}
 
 	List<Person> findAll() {
 		return users.findAll();
+	}
+
+	//Checks if a string contains all strings in an array
+	private boolean containsArray(String string, String[] array) {
+		for (String entry : array) {
+			if (!string.contains(entry)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	List<Person> searchByNames(String query) {
+		Stream<Person> listStream = findAll().stream();
+
+		if (query != null && !query.equals("")) {
+			//Ignores Case
+			String[] qArray = query.toLowerCase().split(" ");
+			listStream = listStream.filter(
+					person -> containsArray(
+							(person.getVorname() + " " +
+									person.getNachname() + " " +
+									person.getUsername())
+									.toLowerCase(),
+							qArray));
+		}
+
+		List<Person> list = listStream.collect(Collectors.toList());
+
+		return list;
 	}
 }
