@@ -105,7 +105,7 @@ public class AusleihServiceController {
 		listStream = listStream.filter(item -> item.getKautionswert() <= kautionswertMax);
 
 		listStream = listStream.filter(
-				item -> item.isAvailableFromTill(availableMin, availableMax)
+				item -> itemService.isAvailableFromTill(item, availableMin, availableMax)
 		);
 
 		List<Item> list = listStream.collect(Collectors.toList());

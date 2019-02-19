@@ -1,6 +1,7 @@
 package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,9 +11,11 @@ import java.time.LocalDate;
 
 @Data
 @Entity
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Ausleihe {
 	@Id
 	@GeneratedValue
+	@EqualsAndHashCode.Include
 	private Long id;
 	@ManyToOne
 	private Item item;
@@ -21,4 +24,5 @@ public class Ausleihe {
 	private LocalDate startDatum;
 	private LocalDate endDatum;
 	private Long reservationId;
+
 }
