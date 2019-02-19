@@ -63,27 +63,26 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person2.setNachname("Racho");
 		person3.setVorname("Wilma");
 		person3.setNachname("Pause");
-		person4.setVorname("Simon");
-		person4.setNachname("Kerkmann");
+		person4.setVorname("AdminVorname");
+		person4.setNachname("AdminNachname");
 		person5.setVorname("asdffsdag");
 		person5.setNachname("sbsbsew");
 
 		person1.setUsername("Miner4lwasser");
 		person2.setUsername("Kawumms");
 		person3.setUsername("Kautschkartoffel3000");
-		person4.setUsername("siker102");
-		person5.setUsername("hi");
+		person4.setUsername("admin");
+		person5.setUsername("user");
 
 		person1.setEmail("sleeping@home.com");
 		person2.setEmail("notWorking@uni.com");
 		person3.setEmail("screaming@computer.de");
-		person4.setEmail("siker102@uni-dusseldorf.de");
+		person4.setEmail("admin@uni-dusseldorf.de");
 		person5.setEmail("asdf");
 
-		person4.setEmail("siker102@uni-dusseldorf.de");
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		person4.setPassword(encoder.encode("123"));
-		person4.setRole(Role.ADMIN);
+		person4.setRole(Role.ADMIN); //Role.USER is automatically set
 		person5.setPassword(encoder.encode("123"));
 
 		person1.setAbholorte(orte1);
