@@ -40,6 +40,18 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		ort3.setBeschreibung("Haus");
 		ort4.setBeschreibung("Verloren");
 
+		ort1.setLatitude(51.227741);
+		ort1.setLongitude(6.773456);
+
+		ort2.setLatitude(51.227741);
+		ort2.setLongitude(6.773456);
+
+		ort3.setLatitude(51.227741);
+		ort3.setLongitude(6.773456);
+
+		ort4.setLatitude(51.227741);
+		ort4.setLongitude(6.773456);
+
 		Set<Abholort> orte1 = new HashSet<>();
 		Set<Abholort> orte2 = new HashSet<>();
 		Set<Abholort> orte3 = new HashSet<>();

@@ -13,6 +13,7 @@ public class Abholort {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
+	private double longitude;
+	private double latitude;
 	private String beschreibung;
 }
