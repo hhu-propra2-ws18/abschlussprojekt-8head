@@ -12,10 +12,11 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(exclude = "ausleihen")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@EqualsAndHashCode.Include
 	private Long id;
 
 	private String titel;

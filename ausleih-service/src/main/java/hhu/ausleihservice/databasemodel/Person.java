@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(exclude = "ausleihen")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,6 +18,7 @@ public class Person {
 	private String nachname;
 	private String vorname;
 
+	@EqualsAndHashCode.Include
 	private String username;
 	private String password;
 	private Rolle rolle;
