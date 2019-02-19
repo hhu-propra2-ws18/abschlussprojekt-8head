@@ -30,6 +30,28 @@ public class Item {
 	private Set<Ausleihe> ausleihen = new HashSet<>();
 
 	private String image;
+	@Lob
+	private byte[] picture;
+
+	//Getter and Setter are copying the array to prevent
+	// data leaking outside by storing/giving the reference to the array
+	@Lob
+	public byte[] getPicture() {
+		if (picture == null) {
+			return null;
+		}
+		byte[] out = new byte[picture.length];
+		System.arraycopy(picture, 0, out, 0, picture.length);
+		return out;
+	}
+
+	public void setPicture(byte[] in) {
+		if (in == null) {
+			return;
+		}
+		picture = new byte[in.length];
+		System.arraycopy(in, 0, picture, 0, in.length);
+	}
 
 	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
 		return (!date.isBefore(start) && !date.isAfter(end));

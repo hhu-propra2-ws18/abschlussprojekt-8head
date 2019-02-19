@@ -19,7 +19,9 @@
 				</div>
 
 				<div class="product-middle">
-					<img th:src="@{${'img/' + artikel.image + '?sw=580&sh=580&sm=fit'}}" alt="produkt" width="50"
+					<img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}" alt="produkt" width="50"
+						 height="50"/>
+					<img th:unless="${artikel.picture == null}" th:src="@{${'img/' + artikel.picture}}" alt="produkt" width="50"
 						 height="50"/>
 				</div>
 
