@@ -6,12 +6,6 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>Artikeldetails</title>
-	<link rel="stylesheet" th:href="@{https://unpkg.com/leaflet@1.4.0/dist/leaflet.css}"
-		  integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-		  crossorigin=""/>
-	<script th:src="@{https://unpkg.com/leaflet@1.4.0/dist/leaflet.js}"
-			integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-			crossorigin=""></script>
 </head>
 <body>
 <nav th:replace="../static/css/style :: main-menu">menu</nav>
@@ -44,7 +38,7 @@
 	/*<![CDATA[*/
 		var longitude = /*[[${artikel.abholort.longitude}]]*/;
 		var latitude = /*[[${artikel.abholort.latitude}]]*/;
-        var map = L.map('mapid').setView([longitude, latitude], 13);
+        var map = L.map('mapid').setView([latitude, longitude], 13);
         mapLink =
             '<a href="http://openstreetmap.org">OpenStreetMap</a>';
         L.tileLayer(
@@ -52,8 +46,8 @@
             attribution: '&copy; ' + mapLink + ' Contributors',
             maxZoom: 18,
             }).addTo(map);
-
-		L.marker([longitude, latitude]).addTo(mymap)
+		var message = /*[[${artikel.abholort.beschreibung}]]*/
+		L.marker([latitude, longitude]).addTo(map)
 			.bindPopup(message).openPopup();
 	/*]]>*/
 
