@@ -2,7 +2,6 @@ package hhu.ausleihservice.web;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hhu.ausleihservice.dataaccess.ItemRepository;
-import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,8 +13,6 @@ import org.mockito.junit.MockitoRule;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -32,9 +29,9 @@ public class ItemServiceTest {
 	List<Item> repository = new ArrayList<>();
 
 	private boolean testItemEquality(Item base, Item toTest) {
-		return base.getId() == toTest.getId() &&
-				base.getTitel() == toTest.getTitel() &&
-				base.getBeschreibung() == toTest.getBeschreibung() &&
+		return base.getId().longValue() == toTest.getId().longValue() &&
+				base.getTitel().equals(toTest.getTitel()) &&
+				base.getBeschreibung().equals(toTest.getBeschreibung()) &&
 				base.getKautionswert() == toTest.getKautionswert() &&
 				base.getTagessatz() == toTest.getTagessatz() &&
 				base.getAvailableFrom() == toTest.getAvailableFrom() &&
