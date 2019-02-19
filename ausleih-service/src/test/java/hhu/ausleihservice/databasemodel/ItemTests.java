@@ -93,7 +93,7 @@ public class ItemTests {
 		item.setAusleihen(new HashSet<>());
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
-		assertTrue(itemService.isAvailable(item,LocalDate.of(2000, 2, 2)));
+		assertTrue(itemService.isAvailable(item, LocalDate.of(2000, 2, 2)));
 	}
 
 	@Test
