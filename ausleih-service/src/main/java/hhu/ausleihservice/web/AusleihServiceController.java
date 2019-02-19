@@ -44,7 +44,7 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/liste")
-	public String artikelListe(Model model, @RequestParam(required = false) String q) {
+	public String artikelListe(Model model, @RequestParam(required = false) String q, Principal p) {
 
 		List<Item> list;
 
@@ -68,6 +68,7 @@ public class AusleihServiceController {
 
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
+		model.addAttribute("user", personService.get(p));
 
 		return "artikelListe";
 	}
@@ -86,7 +87,8 @@ public class AusleihServiceController {
 							   @RequestParam(defaultValue = "2147483647")
 									   int kautionswertMax,
 							   String availableMin, //YYYY-MM-DD
-							   String availableMax
+							   String availableMax,
+							   Principal p
 	) {
 		Stream<Item> listStream = itemService.findAll().stream();
 
@@ -109,6 +111,8 @@ public class AusleihServiceController {
 		List<Item> list = listStream.collect(Collectors.toList());
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
+		System.out.println(personService.get(p).getUsername());
+		model.addAttribute("user", personService.get(p));
 
 		return "artikelListe";
 	}
@@ -148,43 +152,42 @@ public class AusleihServiceController {
 
 
 	@GetMapping("/details")
-	public String artikelDetails(Model model, @RequestParam long id) {
+	public String artikelDetails(Model model, @RequestParam long id, Principal p) {
 
 		try {
-			Item artikel = itemService.findByID(id);
+			Item artikel = itemService.findById(id);
 			model.addAttribute("artikel", artikel);
 		} catch (ItemNichtVorhanden a) {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
 		}
 		model.addAttribute("dateformat", DATEFORMAT);
+		model.addAttribute("user", personService.get(p));
 		return "artikelDetails";
 	}
 
 	@GetMapping("/")
 	public String startseite(Model model, Principal p) {
-		Person person = personService.get(p);
-		model.addAttribute("person", person);
-
+		model.addAttribute("user", personService.get(p));
 		return "startseite";
 	}
 
 	@GetMapping("/register")
 	public String register(Model model) {
-		Person person = new Person();
-		model.addAttribute("person", person);
+		Person userForm = new Person();
+		model.addAttribute("userForm", userForm);
 		return "register";
 	}
 
 	@PostMapping("/register")
-	public String added(@Valid Person person, Model model) {
-		if (this.personService.getByUsername(person.getUsername()) != null) {
+	public String added(@Valid Person userForm, Model model) {
+		if (this.personService.getByUsername(userForm.getUsername()) != null) {
 			//To-Do: Popup für fehlgeschlagene Registrierung
 			return "register";
 		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		person.setPassword(encoder.encode(person.getPassword()));
-		personService.save(person);
+		userForm.setPassword(encoder.encode(userForm.getPassword()));
+		personService.save(userForm);
 		return "startseite";
 	}
 
@@ -195,7 +198,7 @@ public class AusleihServiceController {
 
 	@GetMapping("/profil/{id}")
 	public String otheruser(Model model, @PathVariable Long id) {
-		model.addAttribute("person", personService.getById(id));
+		model.addAttribute("person", personService.findById(id));
 		return "profil";
 	}
 
@@ -203,5 +206,17 @@ public class AusleihServiceController {
 	public String user(Model model, Principal p) {
 		model.addAttribute("person", personService.get(p));
 		return "profil";
+	}
+
+	@GetMapping("/bearbeiten/artikel/{id}")
+	public String adminEditItem(Model model, @PathVariable Long id) {
+		model.addAttribute("artikel", itemService.findById(id));
+		return "artikelBearbeitenAdmin";
+	}
+
+	@GetMapping("/bearbeiten/benutzer/{id}")
+	public String adminEditUser(Model model, @PathVariable Long id) {
+		model.addAttribute("benutzer", personService.findById(id));
+		return "benutzerBearbeitenAdmin";
 	}
 }

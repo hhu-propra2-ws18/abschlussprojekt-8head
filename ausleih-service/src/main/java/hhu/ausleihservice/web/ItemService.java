@@ -17,7 +17,7 @@ public class ItemService {
 		this.items = itemRep;
 	}
 
-	Item findByID(long id) {
+	Item findById(long id) {
 		Optional<Item> item = items.findById(id);
 		if (!item.isPresent()) {
 			throw new ItemNichtVorhanden();

@@ -23,7 +23,7 @@
 			<td th:text="|${benutzer.vorname} ${benutzer.nachname}|"></td>
 			<td th:text="${benutzer.username}"></td>
 			<td><a th:href="@{profil/{benutzerID} (benutzerID=${benutzer.id})}">Anzeigen</a></td>
-			<td th:if="${user.isAdmin()}"><a href="benutzerBearbeiten.html" th:href="@{bearbeiten/{personID} (personID=${benutzer.getId()})}">Bearbeiten</a></td>
+			<td th:if="${user.isAdmin()}"><a href="artikelBearbeitenAdmin.html" th:href="@{bearbeiten/benutzer/{personID} (personID=${benutzer.getId()})}">Bearbeiten</a></td>
 		</tr>
 	</th:block>
 </table>
