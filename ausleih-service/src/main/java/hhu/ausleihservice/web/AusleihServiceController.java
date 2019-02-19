@@ -1,8 +1,6 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Abholort;
-import hhu.ausleihservice.dataaccess.ItemRepository;
-import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.databasemodel.Rolle;
