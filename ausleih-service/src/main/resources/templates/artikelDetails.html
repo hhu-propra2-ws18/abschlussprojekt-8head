@@ -31,6 +31,14 @@
 		</td>
 	</tr>
 </table>
+<table id="items">
+	<tr>
+		<th>Noch verfügbar zu folgenden Zeiten</th>
+	</tr>
+	<tr th:each="periods: ${artikel.availablePeriods}">
+		<td th:text="${periods}"></td>
+	</tr>
+</table>
 <br>
 <a href="/liste">Zurück</a>
 
