@@ -96,4 +96,7 @@ public class ItemService {
 		return list;
 	}
 
+	public void save(Item newItem) {
+		items.save(newItem);
+	}
 }

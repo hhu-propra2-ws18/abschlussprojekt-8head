@@ -41,6 +41,8 @@
 </table>
 <br>
 <a href="/liste">Zurück</a>
+<img th:if="${artikel.getBase64EncodedString()!=null}"
+	 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/>
 <div id="mapid" style="width: 600px; height: 400px;"></div>
 <script th:inline="javascript">
 	/*<![CDATA[*/
@@ -60,7 +62,6 @@
 	/*]]>*/
 
 </script>
-
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

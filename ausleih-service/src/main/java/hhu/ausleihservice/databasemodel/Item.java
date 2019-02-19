@@ -1,10 +1,12 @@
 package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,8 +29,9 @@ public class Item {
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
 	@JoinColumn
 	private Abholort abholort;
-
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate availableFrom;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate availableTill;
 	@ManyToOne
 	private Person besitzer;
@@ -67,6 +70,10 @@ public class Item {
 	public void removeAusleihe(Ausleihe ausleihe) {
 		ausleihen.remove(ausleihe);
 		ausleihe.setItem(null);
+	}
+
+	public String getBase64EncodedString() {
+		return this.getPicture() != null ? Base64.getEncoder().encodeToString(this.getPicture()) : null;
 	}
 
 	public ArrayList<Period> getAvailablePeriods() {
