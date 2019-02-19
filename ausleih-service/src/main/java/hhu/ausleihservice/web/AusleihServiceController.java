@@ -4,12 +4,18 @@ import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
-import org.springframework.beans.factory.annotation.Autowired;
+import hhu.ausleihservice.databasemodel.Rolle;
+import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import hhu.ausleihservice.databasemodel.Item;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.security.Principal;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,13 +27,20 @@ import java.util.stream.Stream;
 @Controller
 public class AusleihServiceController {
 
+	private PersonService personService;
+	private ItemService itemService;
+
+	public AusleihServiceController(PersonService perService, ItemService iService) {
+		this.personService = perService;
+		this.itemService = iService;
+	}
+
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 
 	@Autowired
 	private ItemRepository itemRepository;
 	@Autowired
 	private PersonRepository personRepository;
-
 
 	//Checks if a string contains all strings in an array
 	private boolean containsArray(String string, String[] array) {
@@ -45,11 +58,11 @@ public class AusleihServiceController {
 		List<Item> list;
 
 		if (q == null || q.isEmpty()) {
-			list = itemRepository.findAll();
+			list = itemService.findAll();
 		} else {
 			//Ignores case
 			String[] qArray = q.toLowerCase().split(" ");
-			list = itemRepository.findAll()
+			list = itemService.findAll()
 					.stream()
 					.filter(
 							item -> containsArray(
@@ -78,13 +91,13 @@ public class AusleihServiceController {
 	public String artikelSuche(Model model,
 							   String query, //For titel or beschreibung
 							   @RequestParam(defaultValue = "2147483647")
-										   int tagessatzMax,
+									   int tagessatzMax,
 							   @RequestParam(defaultValue = "2147483647")
-										   int kautionswertMax,
+									   int kautionswertMax,
 							   String availableMin, //YYYY-MM-DD
 							   String availableMax
 	) {
-		Stream<Item> listStream = itemRepository.findAll().stream();
+		Stream<Item> listStream = itemService.findAll().stream();
 
 		if (query != null && !query.equals("")) {
 			//Ignores Case
@@ -99,7 +112,7 @@ public class AusleihServiceController {
 		listStream = listStream.filter(item -> item.getKautionswert() <= kautionswertMax);
 
 		listStream = listStream.filter(
-				item -> item.isAvailableFromTill(availableMin, availableMax)
+				item -> itemService.isAvailableFromTill(item, availableMin, availableMax)
 		);
 
 		List<Item> list = listStream.collect(Collectors.toList());
@@ -119,14 +132,17 @@ public class AusleihServiceController {
 								String query //For nachname, vorname, username
 	) {
 
-		Stream<Person> listStream = personRepository.findAll().stream();
+		Stream<Person> listStream = personService.findAll().stream();
 
 		if (query != null && !query.equals("")) {
 			//Ignores Case
 			String[] qArray = query.toLowerCase().split(" ");
 			listStream = listStream.filter(
 					person -> containsArray(
-							(person.getName() + " " + person.getUsername()).toLowerCase(),
+							(person.getVorname() + " " +
+									person.getNachname() + " " +
+									person.getUsername())
+									.toLowerCase(),
 							qArray));
 		}
 
@@ -141,22 +157,55 @@ public class AusleihServiceController {
 	@GetMapping("/details")
 	public String artikelDetails(Model model, @RequestParam long id) {
 
-		Optional<Item> artikel = itemRepository.findById(id);
-		model.addAttribute("dateformat", DATEFORMAT);
-
-		if (artikel.isPresent()) {
-			model.addAttribute("artikel", artikel.get());
-			return "artikelDetails";
-		} else {
+		try {
+			Item artikel = itemService.findByID(id);
+			model.addAttribute("artikel", artikel);
+		} catch (ItemNichtVorhanden a) {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
 		}
+		model.addAttribute("dateformat", DATEFORMAT);
+		return "artikelDetails";
 	}
 
 	@GetMapping("/")
-	public String startseite(Model model) {
+	public String startseite(Model model, Principal p) {
+		Person person = personService.get(p);
+		model.addAttribute("person", person);
+
 		return "startseite";
 	}
 
+	@GetMapping("/register")
+	public String register(Model model) {
+		Person person = new Person();
+		model.addAttribute("person", person);
+		return "register";
+	}
 
+	@PostMapping("/register")
+	public String added(Person person, Model model) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		person.setPassword(encoder.encode(person.getPassword()));
+		person.setRolle(Rolle.USER);
+		personService.save(person);
+		return startseite(model, null);
+	}
+
+	@GetMapping("/admin")
+	public String admin(Model model) {
+		return "admin";
+	}
+
+	@GetMapping("/profil/{id}")
+	public String otheruser(Model model, @PathVariable Long id) {
+		model.addAttribute("person", personService.getById(id));
+		return "profil";
+	}
+
+	@GetMapping("/profil")
+	public String user(Model model, Principal p) {
+		model.addAttribute("person", personService.get(p));
+		return "profil";
+	}
 }

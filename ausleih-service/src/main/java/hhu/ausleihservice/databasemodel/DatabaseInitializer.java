@@ -1,5 +1,12 @@
 package hhu.ausleihservice.databasemodel;
 
+import hhu.ausleihservice.dataaccess.AbholortRepository;
+import hhu.ausleihservice.dataaccess.ItemRepository;
+import hhu.ausleihservice.dataaccess.PersonRepository;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.ServletContext;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,26 +25,30 @@ import hhu.ausleihservice.dataaccess.PersonRepository;
 @Component
 public class DatabaseInitializer implements ServletContextInitializer {
 
-	@Autowired
-	private AbholortRepository abholortRepository;
-	@Autowired
-	private AusleiheRepository ausleiheRepository;
-	@Autowired
-	private ItemRepository itemRepository;
-	@Autowired
 	private PersonRepository personRepository;
+	private ItemRepository itemRepository;
+	private AbholortRepository abholortRepository;
+
+	public DatabaseInitializer(PersonRepository perRepository,
+							   ItemRepository iRepository,
+							   AbholortRepository abhRepository) {
+		this.personRepository = perRepository;
+		this.itemRepository = iRepository;
+		this.abholortRepository = abhRepository;
+	}
 
 	@Override
 	public void onStartup(ServletContext servletContext) {
 		System.out.println("Populating the database");
 
 		Abholort ort1 = new Abholort();
-		ort1.setBeschreibung("Höhle");
 		Abholort ort2 = new Abholort();
-		ort2.setBeschreibung("Garage");
 		Abholort ort3 = new Abholort();
-		ort3.setBeschreibung("Haus");
 		Abholort ort4 = new Abholort();
+
+		ort1.setBeschreibung("Höhle");
+		ort2.setBeschreibung("Garage");
+		ort3.setBeschreibung("Haus");
 		ort4.setBeschreibung("Verloren");
 
 		Set<Abholort> orte1 = new HashSet<>();

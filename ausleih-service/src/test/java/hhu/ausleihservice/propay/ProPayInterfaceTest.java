@@ -1,20 +1,19 @@
 package hhu.ausleihservice.propay;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
 
 import static org.junit.Assert.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
+@RunWith(SpringRunner.class)
 @AutoConfigureWireMock(port = 8888)
 public class ProPayInterfaceTest {
 
-	@Rule
-	public WireMockRule wireMockRule = new WireMockRule(8888);
 
 	@Test
 	public void testGetAccountInfo_CorrectUrl() {
@@ -23,7 +22,8 @@ public class ProPayInterfaceTest {
 		stubFor(get(urlEqualTo("/account/John"))
 				.willReturn(aResponse().withStatus(200)));
 
-		ProPayAccount john = proPayInterface.getAccountInfo("John");
+
+		proPayInterface.getAccountInfo("John");
 
 		verify(getRequestedFor(urlEqualTo("/account/John")));
 	}
@@ -53,7 +53,8 @@ public class ProPayInterfaceTest {
 				.willReturn(aResponse()
 						.withStatus(200)
 						.withHeader("Content-Type", "application/json")
-						.withBody("{\"account\":\"John\",\"amount\":1025.0,\"reservations\":[{\"id\":1,\"amount\":64.0},{\"id\":3,\"amount\":11.0},{\"id\":4,\"amount\":625.0}]}")));
+						.withBody("{\"account\":\"John\",\"amount\":1025.0,\"reservations\":[{\"id\":1,\"" +
+								"amount\":64.0},{\"id\":3,\"amount\":11.0},{\"id\":4,\"amount\":625.0}]}")));
 
 		ProPayAccount john = proPayInterface.getAccountInfo("John");
 
@@ -62,10 +63,15 @@ public class ProPayInterfaceTest {
 		assertEquals(3, john.getReservations().size());
 
 		for (ProPayReservation proPayReservation : john.getReservations()) {
-			if (proPayReservation.getId() == 1) assertEquals(64.0, proPayReservation.getAmount(), 0.001);
-			else if (proPayReservation.getId() == 3) assertEquals(11.0, proPayReservation.getAmount(), 0.001);
-			else if (proPayReservation.getId() == 4) assertEquals(625.0, proPayReservation.getAmount(), 0.001);
-			else assertEquals(true, false);
+			if (proPayReservation.getId() == 1) {
+				assertEquals(64.0, proPayReservation.getAmount(), 0.001);
+			} else if (proPayReservation.getId() == 3) {
+				assertEquals(11.0, proPayReservation.getAmount(), 0.001);
+			} else if (proPayReservation.getId() == 4) {
+				assertEquals(625.0, proPayReservation.getAmount(), 0.001);
+			} else {
+				assertEquals(true, false);
+			}
 		}
 	}
 
@@ -77,7 +83,7 @@ public class ProPayInterfaceTest {
 				.withQueryParam("amount", equalTo("413.0"))
 				.willReturn(aResponse().withStatus(200)));
 
-		ProPayAccount john = proPayInterface.addFunds("John", 413.0);
+		proPayInterface.addFunds("John", 413.0);
 
 		verify(postRequestedFor(urlEqualTo("/account/John?amount=413.0"))
 				.withQueryParam("amount", equalTo("413.0")));
@@ -123,7 +129,7 @@ public class ProPayInterfaceTest {
 				.withQueryParam("amount", equalTo("413.0"))
 				.willReturn(aResponse().withStatus(200)));
 
-		ProPayReservation johnToJade = proPayInterface.createReservation("John", "Jade", 413.0);
+		proPayInterface.createReservation("John", "Jade", 413.0);
 
 		verify(postRequestedFor(urlEqualTo("/reservation/reserve/John/Jade?amount=413.0"))
 				.withQueryParam("amount", equalTo("413.0")));
@@ -154,7 +160,7 @@ public class ProPayInterfaceTest {
 				.withQueryParam("reservationId", equalTo("1"))
 				.willReturn(aResponse().withStatus(200)));
 
-		ProPayAccount john = proPayInterface.releaseReservation(1, "John");
+		proPayInterface.releaseReservation(1, "John");
 
 		verify(postRequestedFor(urlEqualTo("/reservation/release/John?reservationId=1"))
 				.withQueryParam("reservationId", equalTo("1")));
@@ -186,7 +192,7 @@ public class ProPayInterfaceTest {
 				.withQueryParam("reservationId", equalTo("1"))
 				.willReturn(aResponse().withStatus(200)));
 
-		ProPayAccount john = proPayInterface.punishReservation(1, "John");
+		proPayInterface.punishReservation(1, "John");
 
 		verify(postRequestedFor(urlEqualTo("/reservation/punish/John?reservationId=1"))
 				.withQueryParam("reservationId", equalTo("1")));

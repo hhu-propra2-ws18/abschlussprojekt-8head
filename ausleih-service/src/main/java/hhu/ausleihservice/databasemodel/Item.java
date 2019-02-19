@@ -49,120 +49,21 @@ public class Item {
 	}
 
 	public void setPicture(byte[] in) {
+		if (in == null) {
+			return;
+		}
 		picture = new byte[in.length];
 		System.arraycopy(in, 0, picture, 0, in.length);
 	}
 
-	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
-		return (!date.isBefore(start) && !date.isAfter(end));
-	}
-
-	public boolean isAvailable() {
-		return isAvailable(LocalDate.now());
-	}
-
-	boolean isAvailable(LocalDate date) {
-		if (!isInPeriod(date, availableFrom, availableTill)) {
-			return false;
+	public void addAusleihe(Ausleihe ausleihe) {
+		if (ausleihe != null) {
+			ausleihen.add(ausleihe);
+			ausleihe.setItem(this);
 		}
-		for (Ausleihe ausleihe : ausleihen) {
-			LocalDate startDatum = ausleihe.getStartDatum();
-			LocalDate endDatum = ausleihe.getEndDatum();
-			if (isInPeriod(date, startDatum, endDatum)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	//Format of input is "YYYY-MM-DD"
-	public boolean isAvailableFromTill(String from, String till) {
-		LocalDate temp = LocalDate.parse(from);
-		LocalDate end = LocalDate.parse(till);
-		while (!temp.equals(end.plusDays(1))) {
-			if (!isAvailable(temp)) {
-				return false;
-			}
-			temp = temp.plusDays(1);
-		}
-		return true;
-	}
-
-	public ArrayList<Period> getAvailablePeriods() {
-
-		ArrayList<Period> out = new ArrayList<>();
-
-		if (ausleihen.isEmpty()) {
-			out.add(new Period(availableFrom, availableTill));
-			return out;
-		}
-
-		Ausleihe[] sortierteAusleihen = getSortierteAusleihen();
-		int length = sortierteAusleihen.length;
-
-		LocalDate start = availableFrom;
-		LocalDate end = sortierteAusleihen[0].getStartDatum();
-
-		if (!start.equals(end)) {
-			out.add(new Period(start, end.minusDays(1)));
-		}
-
-		for (int i = 0; i < length - 1; i++) {
-
-			start = sortierteAusleihen[i].getEndDatum();
-			end = sortierteAusleihen[i + 1].getStartDatum();
-
-			if (!start.equals(end)) {
-				out.add(new Period(start.plusDays(1), end.minusDays(1)));
-			}
-		}
-
-		start = sortierteAusleihen[length - 1].getEndDatum();
-		end = availableTill;
-
-		if (!start.equals(end)) {
-			out.add(new Period(start.plusDays(1), end));
-		}
-
-		return out;
-	}
-
-	Ausleihe[] getSortierteAusleihen() {
-
-		Ausleihe[] sortierteAusleihen = new Ausleihe[ausleihen.size()];
-		List<Ausleihe> tempAusleihen = new ArrayList<>(ausleihen);
-
-		for (int i = 0; i < ausleihen.size(); i++) {
-
-			Ausleihe smallest = tempAusleihen.get(0);
-			LocalDate smallestDate = smallest.getStartDatum();
-
-			for (Ausleihe test : tempAusleihen) {
-				LocalDate testDate = test.getStartDatum();
-				if (testDate.isBefore(smallestDate)) {
-					smallest = test;
-					smallestDate = smallest.getStartDatum();
-				}
-			}
-			sortierteAusleihen[i] = smallest;
-			tempAusleihen.remove(smallest);
-		}
-
-		return sortierteAusleihen;
-	}
-
-	void addAusleihe(Ausleihe ausleihe) {
-		if (ausleihe == null) {
-			return;
-		}
-		ausleihen.add(ausleihe);
-		ausleihe.setItem(this);
 	}
 
 	public void removeAusleihe(Ausleihe ausleihe) {
-		if (ausleihe == null) {
-			return;
-		}
 		ausleihen.remove(ausleihe);
 		ausleihe.setItem(null);
 	}

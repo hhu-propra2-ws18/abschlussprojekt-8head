@@ -16,5 +16,3 @@ public class Abholort {
 
 	private String beschreibung;
 }
-
-

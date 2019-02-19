@@ -40,7 +40,10 @@ spotbugs {
 	reportsDir = file("$project.buildDir/reports/spotbugs")
 	effort = "max"
 }
-
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+	reports.xml.enabled = false
+	reports.html.enabled = true
+}
 group = 'hhu'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
