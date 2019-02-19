@@ -27,7 +27,7 @@
 		<td th:text="${artikel.tagessatz} + &euro;">Tagessatz</td>
 		<td th:text="${artikel.kautionswert} + &euro;">Kaution</td>
 		<td th:text="${artikel.abholort.beschreibung}">Standort</td>
-		<td><a th:href="@{/profil(id=${artikel.besitzer.id})}" th:text="${artikel.besitzer.vorname + ' ' + artikel.besitzer.nachname}"><p>Name</p></a>
+		<td><a th:href="${'/profil/' + artikel.besitzer.id}" th:text="${artikel.besitzer.vorname + ' ' + artikel.besitzer.nachname}"><p>Name</p></a>
 		</td>
 	</tr>
 </table>
