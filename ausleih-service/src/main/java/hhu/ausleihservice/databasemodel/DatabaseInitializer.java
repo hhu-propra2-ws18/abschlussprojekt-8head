@@ -7,6 +7,7 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
+import java.io.File;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -109,6 +110,10 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item1.setBesitzer(person1);
 		item2.setBesitzer(person2);
 		item3.setBesitzer(person3);
+
+		item1.setImage("stift.jpg");
+		item2.setImage("fahrrad.jpg");
+		item3.setImage("pfeil.jpg");
 
 		this.abholortRepository.save(ort1);
 		this.abholortRepository.save(ort2);

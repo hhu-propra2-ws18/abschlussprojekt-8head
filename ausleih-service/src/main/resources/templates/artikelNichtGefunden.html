@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="../static/css/style :: formatting">
+<head th:replace="../static/css/navbar :: style">
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -8,7 +8,7 @@
 	<title>Artikel nicht gefunden</title>
 </head>
 <body>
-<nav th:replace="../static/css/style :: main-menu">menu</nav>
+<nav th:replace="../static/css/navbar :: main-menu">menu</nav>
 <h1 th:text="${'Artikel mit ID ' + id + ' nicht gefunden'}">Artikel nicht gefunden</h1>
 <a href="/liste">Zurück</a>
 
