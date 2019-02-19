@@ -16,6 +16,7 @@ public class ItemService {
 	private ItemRepository items;
 	private ItemAvailabilityService itemAvailabilityService;
 
+
 	ItemService(ItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
 		this.items = itemRep;
 		this.itemAvailabilityService = itemAvailabilityService;

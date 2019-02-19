@@ -2,10 +2,12 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Set;
 
+@Service
 public class ItemAvailabilityService {
 
 	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
