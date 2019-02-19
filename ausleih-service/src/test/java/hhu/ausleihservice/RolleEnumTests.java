@@ -1,8 +1,8 @@
 package hhu.ausleihservice;
 
+import hhu.ausleihservice.databasemodel.Rolle;
 import org.junit.Assert;
 import org.junit.Test;
-import hhu.ausleihservice.databasemodel.Rolle;
 
 public class RolleEnumTests {
 	@Test

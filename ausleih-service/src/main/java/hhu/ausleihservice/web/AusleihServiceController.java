@@ -1,10 +1,13 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Abholort;
+import hhu.ausleihservice.dataaccess.ItemRepository;
+import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.databasemodel.Rolle;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +36,11 @@ public class AusleihServiceController {
 	}
 
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
+
+	@Autowired
+	private ItemRepository itemRepository;
+	@Autowired
+	private PersonRepository personRepository;
 
 	//Checks if a string contains all strings in an array
 	private boolean containsArray(String string, String[] array) {
@@ -81,13 +89,13 @@ public class AusleihServiceController {
 
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
-							   String query, //For titel or beschreibung
-							   @RequestParam(defaultValue = "2147483647")
-									   int tagessatzMax,
-							   @RequestParam(defaultValue = "2147483647")
-									   int kautionswertMax,
-							   String availableMin, //YYYY-MM-DD
-							   String availableMax
+	                           String query, //For titel or beschreibung
+	                           @RequestParam(defaultValue = "2147483647")
+			                           int tagessatzMax,
+	                           @RequestParam(defaultValue = "2147483647")
+			                           int kautionswertMax,
+	                           String availableMin, //YYYY-MM-DD
+	                           String availableMax
 	) {
 		Stream<Item> listStream = itemService.findAll().stream();
 
@@ -121,7 +129,7 @@ public class AusleihServiceController {
 
 	@PostMapping("/benutzersuche")
 	public String benutzerSuche(Model model,
-								String query //For nachname, vorname, username
+	                            String query //For nachname, vorname, username
 	) {
 
 		Stream<Person> listStream = personService.findAll().stream();
@@ -171,12 +179,18 @@ public class AusleihServiceController {
 	@GetMapping("/register")
 	public String register(Model model) {
 		Person person = new Person();
+		model.addAttribute("usernameTaken", false);
 		model.addAttribute("person", person);
 		return "register";
 	}
 
 	@PostMapping("/register")
-	public String added(Person person, Model model) {
+	public String added(Model model, Person person) {
+		if (personService.findByUsername(person.getUsername()).isPresent()) {
+			model.addAttribute("usernameTaken", true);
+			model.addAttribute("person", person);
+			return "register";
+		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		person.setPassword(encoder.encode(person.getPassword()));
 		person.setRolle(Rolle.USER);
@@ -190,14 +204,16 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/profil/{id}")
-	public String otheruser(Model model, @PathVariable Long id) {
+	public String otheruser(Model model, @PathVariable Long id, Principal p) {
 		model.addAttribute("person", personService.getById(id));
+		model.addAttribute("isOwnProfile", personService.get(p).getId().equals(id));
 		return "profil";
 	}
 
 	@GetMapping("/profil")
 	public String user(Model model, Principal p) {
 		model.addAttribute("person", personService.get(p));
+		model.addAttribute("isOwnProfile", true);
 		return "profil";
 	}
 
@@ -234,5 +250,16 @@ public class AusleihServiceController {
 		besitzer.addItem(newItem);
 		personService.save(besitzer);
 		return "redirect:/";
+    
+	@GetMapping("/editProfil")
+	public String editProfilGet(Model model, Principal p) {
+		model.addAttribute("person", personService.get(p));
+		return "editProfil";
+	}
+
+	@PostMapping("/editProfil")
+	public String editProfilPost(Model model, Principal p, Person person) {
+		personService.update(person, p);
+		return "editProfil";
 	}
 }

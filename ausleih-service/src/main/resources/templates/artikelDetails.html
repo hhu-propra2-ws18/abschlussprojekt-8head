@@ -27,14 +27,23 @@
 		<td th:text="${artikel.tagessatz} + &euro;">Tagessatz</td>
 		<td th:text="${artikel.kautionswert} + &euro;">Kaution</td>
 		<td th:text="${artikel.abholort.beschreibung}">Standort</td>
-		<td><a th:href="@{/profile(id=${artikel.besitzer.id})}" th:text="|${artikel.besitzer.vorname} ${artikel.besitzer.nachname}|"><p>Name</p></a>
+		<td><a th:href="${'/profil/' + artikel.besitzer.id}" th:text="${artikel.besitzer.vorname + ' ' + artikel.besitzer.nachname}"><p>Name</p></a>
 		</td>
 	</tr>
 </table>
-<img th:if="${artikel.getBase64EncodedString()!=null}"
-	 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/>
+<table id="items">
+	<tr>
+		<th>Noch verfügbar zu folgenden Zeiten</th>
+	</tr>
+	<tr th:each="periods: ${artikel.availablePeriods}">
+		<td th:text="${periods}"></td>
+	</tr>
+</table>
 <br>
 <a href="/liste">Zurück</a>
+  
+<img th:if="${artikel.getBase64EncodedString()!=null}"
+	 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

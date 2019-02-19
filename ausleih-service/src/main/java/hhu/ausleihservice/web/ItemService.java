@@ -14,7 +14,7 @@ public class ItemService {
 
 	private ItemRepository items;
 
-	ItemService(ItemRepository itemRep) {
+	public ItemService(ItemRepository itemRep) {
 		this.items = itemRep;
 	}
 
@@ -32,14 +32,14 @@ public class ItemService {
 	}
 
 	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
-		return (!date.isBefore(start) && !date.isAfter(end));
+		return !date.isBefore(start) && !date.isAfter(end);
 	}
 
 	public boolean isAvailable(Item item) {
 		return isAvailable(item, LocalDate.now());
 	}
 
-	boolean isAvailable(Item item, LocalDate date) {
+	public boolean isAvailable(Item item, LocalDate date) {
 		return isInPeriod(date, item.getAvailableFrom(), item.getAvailableTill())
 				&& item.getAusleihen().stream().noneMatch((ausleihe)
 				-> isInPeriod(date, ausleihe.getStartDatum(), ausleihe.getEndDatum()));
