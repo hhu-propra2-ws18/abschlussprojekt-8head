@@ -1,6 +1,7 @@
 package hhu.ausleihservice.databasemodel;
 
 import hhu.ausleihservice.dataaccess.AbholortRepository;
+import hhu.ausleihservice.dataaccess.AusleiheRepository;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -11,30 +12,22 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.stereotype.Component;
-
-import hhu.ausleihservice.dataaccess.AbholortRepository;
-import hhu.ausleihservice.dataaccess.AusleiheRepository;
-import hhu.ausleihservice.dataaccess.ItemRepository;
-import hhu.ausleihservice.dataaccess.PersonRepository;
-
 @Component
 public class DatabaseInitializer implements ServletContextInitializer {
 
 	private PersonRepository personRepository;
 	private ItemRepository itemRepository;
 	private AbholortRepository abholortRepository;
+	private AusleiheRepository ausleiheRepository;
 
 	public DatabaseInitializer(PersonRepository perRepository,
 							   ItemRepository iRepository,
-							   AbholortRepository abhRepository) {
+							   AbholortRepository abhRepository,
+							   AusleiheRepository ausleiheRepository) {
 		this.personRepository = perRepository;
 		this.itemRepository = iRepository;
 		this.abholortRepository = abhRepository;
+		this.ausleiheRepository = ausleiheRepository;
 	}
 
 	@Override
@@ -123,7 +116,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item2.setBesitzer(person2);
 		item3.setBesitzer(person3);
 
-		Byte byt = new Byte("100");
+		Byte byt = Byte.parseByte("100");
 		byte[] in = {byt};
 		item3.setPicture(in);
 
