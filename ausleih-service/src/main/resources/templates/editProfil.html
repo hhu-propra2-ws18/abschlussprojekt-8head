@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="../static/css/style :: formatting">
+<meta charset="UTF-8">
+<title th:text="${'Profil von ' + person.username}">Profil</title>
+</head>
+<body>
+	<nav th:replace="../static/css/style :: main-menu">menu</nav>
+	<h1>
+		<div th:text="${'Profil von ' + person.username}">username</div>
+	</h1>
+	<form method="post"
+		th:action="@{/editProfil} + '?' + ${_csrf.parameterName} + '=' + ${_csrf.token}"
+		id="editProfil"></form>
+	<h4>
+		<table>
+			<tr>
+				<th>Username (nicht änderbar)</th>
+				<th>Vorname</th>
+				<th>Nachname</th>
+				<th>Passwort</th>
+			</tr>
+			<tr>
+				<td th:text="${person.username}"></td>
+				<td><input type="text" form="editProfil"
+					th:field="${person.vorname}"></td>
+				<td><input type="text" form="editProfil"
+					th:field="${person.nachname}"></td>
+				<td><input type="password" form="editProfil" th:name="password" th:id="password"></td>
+				<td><input form="editProfil" type="submit" value="Speichern"></td>
+			</tr>
+		</table>
+	</h4>
+</body>
+</html>

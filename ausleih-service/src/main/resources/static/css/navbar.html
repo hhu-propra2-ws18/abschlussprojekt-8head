@@ -58,7 +58,7 @@
 					<a class="nav-link" th:if="${person == null}" href="/register">Konto Eröffnen</a>
 					<a class="nav-link" th:unless="${person == null}" href="/profil">Profil</a>
 				</li>
-				<li class="nav-item" th:if="${person != null and person.rolle.name() == 'ADMIN'}">
+				<li class="nav-item" th:if="${person != null and person.role.name() == 'ADMIN'}">
 					<a class="nav-link" href="/admin">Admin</a>
 				</li>
 				<li class="nav-item">

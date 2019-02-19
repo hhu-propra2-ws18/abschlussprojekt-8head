@@ -1,6 +1,7 @@
 package hhu.ausleihservice.databasemodel;
 
 import hhu.ausleihservice.dataaccess.AbholortRepository;
+import hhu.ausleihservice.dataaccess.AusleiheRepository;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -18,13 +19,16 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	private PersonRepository personRepository;
 	private ItemRepository itemRepository;
 	private AbholortRepository abholortRepository;
+	private AusleiheRepository ausleiheRepository;
 
 	public DatabaseInitializer(PersonRepository perRepository,
 							   ItemRepository iRepository,
-							   AbholortRepository abhRepository) {
+							   AbholortRepository abhRepository,
+							   AusleiheRepository ausleiheRepository) {
 		this.personRepository = perRepository;
 		this.itemRepository = iRepository;
 		this.abholortRepository = abhRepository;
+		this.ausleiheRepository = ausleiheRepository;
 	}
 
 	@Override
@@ -40,6 +44,18 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		ort2.setBeschreibung("Garage");
 		ort3.setBeschreibung("Haus");
 		ort4.setBeschreibung("Verloren");
+
+		ort1.setLatitude(51.227741);
+		ort1.setLongitude(6.773456);
+
+		ort2.setLatitude(51.227741);
+		ort2.setLongitude(6.773456);
+
+		ort3.setLatitude(51.227741);
+		ort3.setLongitude(6.773456);
+
+		ort4.setLatitude(51.227741);
+		ort4.setLongitude(6.773456);
 
 		Set<Abholort> orte1 = new HashSet<>();
 		Set<Abholort> orte2 = new HashSet<>();
@@ -74,16 +90,22 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person4.setUsername("admin");
 		person5.setUsername("user");
 
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+		person1.setPassword(encoder.encode("pl4tsh"));
+		person2.setPassword(encoder.encode("rumbl7"));
+		person3.setPassword(encoder.encode("ichwillschlafen123"));
+		person4.setPassword(encoder.encode("123"));
+		person5.setPassword(encoder.encode("123"));
+
+		person1.setRole(Role.ADMIN); //Role.USER is automatically set in constructor
+		person4.setRole(Role.ADMIN);
+
 		person1.setEmail("sleeping@home.com");
 		person2.setEmail("notWorking@uni.com");
 		person3.setEmail("screaming@computer.de");
 		person4.setEmail("admin@uni-dusseldorf.de");
 		person5.setEmail("asdf");
-
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		person4.setPassword(encoder.encode("123"));
-		person4.setRole(Role.ADMIN); //Role.USER is automatically set
-		person5.setPassword(encoder.encode("123"));
 
 		person1.setAbholorte(orte1);
 		person2.setAbholorte(orte2);
@@ -114,17 +136,29 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item2.setAbholort(ort3);
 		item3.setAbholort(ort4);
 
-		item1.setAvailableFrom(LocalDate.now().plusDays(1));
-		item2.setAvailableFrom(LocalDate.now().plusDays(3));
-		item3.setAvailableFrom(LocalDate.now().plusDays(4));
+		LocalDate ersterMai = LocalDate.of(2019, 5, 1);
 
-		item1.setAvailableTill(LocalDate.now().plusDays(13));
-		item2.setAvailableTill(LocalDate.now().plusDays(35));
-		item3.setAvailableTill(LocalDate.now().plusDays(46));
+		item1.setAvailableFrom(ersterMai.plusDays(1));
+		item2.setAvailableFrom(ersterMai.plusDays(3));
+		item3.setAvailableFrom(ersterMai.plusDays(4));
+
+		item1.setAvailableTill(ersterMai.plusDays(8));
+		item2.setAvailableTill(ersterMai.plusDays(10));
+		item3.setAvailableTill(ersterMai.plusDays(11));
 
 		item1.setBesitzer(person1);
 		item2.setBesitzer(person2);
 		item3.setBesitzer(person3);
+
+		Byte byt = Byte.parseByte("100");
+		byte[] in = {byt};
+		item3.setPicture(in);
+
+		Set<Ausleihe> ausleihen1 = new HashSet<>();
+		Set<Ausleihe> ausleihen2 = new HashSet<>();
+
+		item3.setAusleihen(ausleihen1);
+		item1.setAusleihen(ausleihen2);
 
 		this.abholortRepository.save(ort1);
 		this.abholortRepository.save(ort2);
@@ -141,6 +175,29 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.itemRepository.save(item2);
 		this.itemRepository.save(item3);
 
+		Ausleihe ausleihe1 = new Ausleihe();
+		ausleihe1.setReservationId(0L);
+		ausleihe1.setStartDatum(ersterMai.plusDays(4));
+		ausleihe1.setEndDatum(ersterMai.plusDays(6));
+		ausleihe1.setAusleiher(person2);
+		ausleihe1.setItem(item3);
 
+		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setReservationId(1L);
+		ausleihe2.setStartDatum(ersterMai.plusDays(2));
+		ausleihe2.setEndDatum(ersterMai.plusDays(3));
+		ausleihe2.setAusleiher(person3);
+		ausleihe2.setItem(item1);
+
+		ausleihen1.add(ausleihe1);
+		ausleihen2.add(ausleihe2);
+
+		item3.setAusleihen(ausleihen1);
+		item1.setAusleihen(ausleihen2);
+
+		this.ausleiheRepository.save(ausleihe1);
+		this.ausleiheRepository.save(ausleihe2);
+		this.itemRepository.save(item3);
+		this.itemRepository.save(item1);
 	}
 }

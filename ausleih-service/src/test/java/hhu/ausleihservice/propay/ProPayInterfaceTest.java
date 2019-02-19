@@ -7,8 +7,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
 
-import static org.junit.Assert.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureWireMock(port = 8888)
@@ -216,3 +216,4 @@ public class ProPayInterfaceTest {
 		assertEquals(new HashSet<ProPayReservation>(), john.getReservations());
 	}
 }
+
