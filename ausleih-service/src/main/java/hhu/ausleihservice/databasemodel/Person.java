@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(exclude = {"items"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
