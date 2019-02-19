@@ -74,6 +74,8 @@ public class Item {
 
 	public String getBase64EncodedString() {
 		return this.getPicture() != null ? Base64.getEncoder().encodeToString(this.getPicture()) : null;
+	}
+
 	public ArrayList<Period> getAvailablePeriods() {
 
 		ArrayList<Period> out = new ArrayList<>();

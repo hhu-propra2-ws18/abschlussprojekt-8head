@@ -250,6 +250,7 @@ public class AusleihServiceController {
 		besitzer.addItem(newItem);
 		personService.save(besitzer);
 		return "redirect:/";
+	}
     
 	@GetMapping("/editProfil")
 	public String editProfilGet(Model model, Principal p) {
