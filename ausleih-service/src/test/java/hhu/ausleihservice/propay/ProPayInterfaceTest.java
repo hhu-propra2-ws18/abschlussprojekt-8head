@@ -216,3 +216,4 @@ public class ProPayInterfaceTest {
 		assertEquals(new HashSet<ProPayReservation>(), john.getReservations());
 	}
 }
+
