@@ -160,7 +160,7 @@ public class AusleihServiceController {
 
 	@GetMapping("/profil")
 	public String user(Model model, Principal p) {
-		return otheruser(model, personService.get(p).getId(), p);
+		return otherUser(model, personService.get(p).getId(), p);
 	}
 
 	@GetMapping("/newitem")
