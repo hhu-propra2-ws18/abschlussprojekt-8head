@@ -70,6 +70,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		Person person1 = new Person();
 		Person person2 = new Person();
 		Person person3 = new Person();
+		Person person4 = new Person();
+		Person person5 = new Person();
 
 		person1.setVorname("Gerold");
 		person1.setNachname("Steiner");
@@ -77,24 +79,33 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person2.setNachname("Racho");
 		person3.setVorname("Wilma");
 		person3.setNachname("Pause");
+		person4.setVorname("AdminVorname");
+		person4.setNachname("AdminNachname");
+		person5.setVorname("asdffsdag");
+		person5.setNachname("sbsbsew");
 
 		person1.setUsername("Miner4lwasser");
 		person2.setUsername("Kawumms");
 		person3.setUsername("Kautschkartoffel3000");
+		person4.setUsername("admin");
+		person5.setUsername("user");
 
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 		person1.setPassword(encoder.encode("pl4tsh"));
 		person2.setPassword(encoder.encode("rumbl7"));
 		person3.setPassword(encoder.encode("ichwillschlafen123"));
+		person4.setPassword(encoder.encode("123"));
+		person5.setPassword(encoder.encode("123"));
 
-		person1.setRolle(Rolle.ADMIN);
-		person2.setRolle(Rolle.USER);
-		person3.setRolle(Rolle.USER);
+		person1.setRole(Role.ADMIN); //Role.USER is automatically set in constructor
+		person4.setRole(Role.ADMIN);
 
 		person1.setEmail("sleeping@home.com");
 		person2.setEmail("notWorking@uni.com");
 		person3.setEmail("screaming@computer.de");
+		person4.setEmail("admin@uni-dusseldorf.de");
+		person5.setEmail("asdf");
 
 		person1.setAbholorte(orte1);
 		person2.setAbholorte(orte2);
@@ -139,6 +150,10 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item2.setBesitzer(person2);
 		item3.setBesitzer(person3);
 
+		item1.setImage("stift.jpg");
+		item2.setImage("fahrrad.jpg");
+		item3.setImage("pfeil.jpg");
+
 		Byte byt = Byte.parseByte("100");
 		byte[] in = {byt};
 		item3.setPicture(in);
@@ -157,6 +172,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.personRepository.save(person1);
 		this.personRepository.save(person2);
 		this.personRepository.save(person3);
+		this.personRepository.save(person4);
+		this.personRepository.save(person5);
 
 		this.itemRepository.save(item1);
 		this.itemRepository.save(item2);

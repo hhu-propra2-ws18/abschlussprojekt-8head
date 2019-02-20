@@ -21,7 +21,7 @@ public class Person {
 	@EqualsAndHashCode.Include
 	private String username;
 	private String password;
-	private Rolle rolle;
+	private Role role = Role.USER;
 
 	private String email;
 
@@ -62,5 +62,12 @@ public class Person {
 		}
 		items.remove(item);
 		item.setBesitzer(null);
+	}
+
+	public boolean isAdmin() {
+		if (this != null && this.getRole().equals(Role.ADMIN)) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -37,6 +37,8 @@ public class Item {
 	private Person besitzer;
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Ausleihe> ausleihen = new HashSet<>();
+
+	private String image;
 	@Lob
 	private byte[] picture;
 

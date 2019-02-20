@@ -3,7 +3,6 @@ package hhu.ausleihservice.web;
 import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
-import hhu.ausleihservice.databasemodel.Rolle;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -32,18 +31,19 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/liste")
-	public String artikelListe(Model model, @RequestParam(required = false) String query) {
+	public String artikelListe(Model model, @RequestParam(required = false) String query, Principal p) {
+		model.addAttribute("person", personService.get(p));
 
 		List<Item> list = itemService.simpleSearch(query);
-
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
-
+		model.addAttribute("user", personService.get(p));
 		return "artikelListe";
 	}
 
 	@GetMapping("/artikelsuche")
-	public String artikelSuche(Model model) {
+	public String artikelSuche(Model model, Principal p) {
+		model.addAttribute("person", personService.get(p));
 		model.addAttribute("datum", LocalDateTime.now().format(DATEFORMAT));
 		return "artikelSuche";
 	}
@@ -56,85 +56,95 @@ public class AusleihServiceController {
 							   @RequestParam(defaultValue = "2147483647")
 									   int kautionswertMax,
 							   String availableMin, //YYYY-MM-DD
-							   String availableMax
-	) {
+							   String availableMax,
+							   Principal p) {
+		model.addAttribute("person", personService.get(p));
+
 		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
 
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
+		System.out.println(personService.get(p).getUsername());
+		model.addAttribute("user", personService.get(p));
 
 		return "artikelListe";
 	}
 
 	@GetMapping("/benutzersuche")
-	public String benutzerSuche(Model model) {
+	public String benutzerSuche(Model model, Principal p) {
+		model.addAttribute("person", personService.get(p));
 		return "benutzerSuche";
 	}
 
 	@PostMapping("/benutzersuche")
 	public String benutzerSuche(Model model,
-								String query //For nachname, vorname, username
+								String query, //For nachname, vorname, username
+								Principal p
 	) {
+		model.addAttribute("person", personService.get(p));
+
 		List<Person> list = personService.searchByNames(query);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("benutzerListe", list);
-
+		model.addAttribute("user", personService.get(p));
 		return "benutzerListe";
 	}
 
 
 	@GetMapping("/details")
-	public String artikelDetails(Model model, @RequestParam long id) {
+	public String artikelDetails(Model model, @RequestParam long id, Principal p) {
+		model.addAttribute("person", personService.get(p));
 
 		try {
-			Item artikel = itemService.findByID(id);
+			Item artikel = itemService.findById(id);
 			model.addAttribute("artikel", artikel);
 		} catch (ItemNichtVorhanden a) {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
 		}
 		model.addAttribute("dateformat", DATEFORMAT);
+		model.addAttribute("user", personService.get(p));
 		return "artikelDetails";
 	}
 
 	@GetMapping("/")
 	public String startseite(Model model, Principal p) {
-		Person person = personService.get(p);
-		model.addAttribute("person", person);
-
+		model.addAttribute("person", personService.get(p));
+		model.addAttribute("user", personService.get(p));
 		return "startseite";
 	}
 
 	@GetMapping("/register")
 	public String register(Model model) {
-		Person person = new Person();
+		Person userForm = new Person();
+		model.addAttribute("userForm", userForm);
 		model.addAttribute("usernameTaken", false);
-		model.addAttribute("person", person);
+		model.addAttribute("userForm", userForm);
 		return "register";
 	}
 
 	@PostMapping("/register")
-	public String added(Model model, Person person) {
-		if (personService.findByUsername(person.getUsername()).isPresent()) {
+	public String added(Model model, Person userForm) {
+		if (personService.findByUsername(userForm.getUsername()).isPresent()) {
 			model.addAttribute("usernameTaken", true);
-			model.addAttribute("person", person);
+			model.addAttribute("userForm", userForm);
 			return "register";
 		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		person.setPassword(encoder.encode(person.getPassword()));
-		person.setRolle(Rolle.USER);
-		personService.save(person);
-		return startseite(model, null);
+		userForm.setPassword(encoder.encode(userForm.getPassword()));
+		personService.save(userForm);
+		return "startseite";
 	}
 
 	@GetMapping("/admin")
-	public String admin(Model model) {
+	public String admin(Model model, Principal p) {
+		model.addAttribute("person", personService.get(p));
 		return "admin";
 	}
 
 	@GetMapping("/profil/{id}")
 	public String otheruser(Model model, @PathVariable Long id, Principal p) {
-		model.addAttribute("person", personService.getById(id));
+		model.addAttribute("person", personService.findById(id));
 		model.addAttribute("isOwnProfile", personService.get(p).getId().equals(id));
 		return "profil";
 	}
@@ -146,6 +156,20 @@ public class AusleihServiceController {
 		return "profil";
 	}
 
+	@GetMapping("/bearbeiten/artikel/{id}")
+	public String adminEditItem(Model model, @PathVariable Long id, Principal p) {
+		model.addAttribute("person", personService.get(p));
+		model.addAttribute("artikel", itemService.findById(id));
+		return "artikelBearbeitenAdmin";
+	}
+
+	@GetMapping("/bearbeiten/benutzer/{id}")
+	public String adminEditUser(Model model, @PathVariable Long id, Principal p) {
+		model.addAttribute("person", personService.get(p));
+		model.addAttribute("benutzer", personService.findById(id));
+		return "benutzerBearbeitenAdmin";
+	}
+
 	@GetMapping("/newitem")
 	public String createItem(Model model, Principal p) {
 		Person person = personService.get(p);
@@ -153,6 +177,7 @@ public class AusleihServiceController {
 			model.addAttribute("message", "Bitte Abholorte hinzufügen");
 			return "errorMessage";
 		}
+		model.addAttribute("person", personService.get(p));
 		model.addAttribute("newitem", new Item());
 		model.addAttribute("abholorte", person.getAbholorte());
 		return "neuerArtikel";
@@ -182,6 +207,7 @@ public class AusleihServiceController {
 
 	@PostMapping("/editProfil")
 	public String editProfilPost(Model model, Principal p, Person person) {
+		model.addAttribute("person", personService.get(p));
 		personService.update(person, p);
 		return "editProfil";
 	}
