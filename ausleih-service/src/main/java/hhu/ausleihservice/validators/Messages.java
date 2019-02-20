@@ -10,4 +10,5 @@ public class Messages {
 	public static String sizeLocationDescription = "Beschreibung muss zwischen 6 und 400 Zeichen lang sein.";
 	public static String sizeTitle = "Titel muss zwischen 6 und 40 Zeichen lang sein.";
 	public static String sizeItemDescription = "Beschreibung muss zwischen 6 und 4000 Zeichen lang sein.";
+	public static String negativeValue = "Der Wert muss mindestens 1 betragen";
 }

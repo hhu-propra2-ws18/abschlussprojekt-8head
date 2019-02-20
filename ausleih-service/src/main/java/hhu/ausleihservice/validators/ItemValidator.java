@@ -18,15 +18,19 @@ public class ItemValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		Item item = (Item) target;
 
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "titel", "NotEmpty");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "titel", Messages.notEmpty);
 		if (item.getTitel().length() < 6 || item.getTitel().length() > 40) {
-			errors.rejectValue("titel", "Size.itemForm.title");
+			errors.rejectValue("titel", Messages.sizeTitle);
 		}
 
-
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "beschreibung", "NotEmpty");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "beschreibung", Messages.notEmpty);
 		if (item.getBeschreibung().length() < 6 || item.getBeschreibung().length() > 4000) {
-			errors.rejectValue("beschreibung", "Size.itemForm.description");
+			errors.rejectValue("beschreibung", Messages.sizeTitle);
 		}
+
+		if (item.getKautionswert() <= 0) {
+			errors.rejectValue("kautionswert", Messages.negativeValue);
+		}
+
 	}
 }
