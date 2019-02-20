@@ -9,6 +9,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -139,13 +143,17 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item2.setBesitzer(person2);
 		item3.setBesitzer(person3);
 
-		item1.setImage("stift.jpg");
-		item2.setImage("fahrrad.jpg");
-		item3.setImage("pfeil.jpg");
-    
-		Byte byt = Byte.parseByte("100");
-		byte[] in = {byt};
-		item3.setPicture(in);
+		Path pwd = Paths.get("").toAbsolutePath();
+		Path files = Paths.get("/src/main/resources/static/img");
+		String path = pwd.toString() + files.toString();
+
+		try {
+			item1.setPicture(Files.readAllBytes(Paths.get(path + "/stift.jpg")));
+			item2.setPicture(Files.readAllBytes(Paths.get(path + "/fahrrad.jpg")));
+			item3.setPicture(Files.readAllBytes(Paths.get(path + "/pfeil.jpg")));
+		} catch (IOException e) {
+			System.out.println("Files could not be stored");
+		}
 
 		Set<Ausleihe> ausleihen1 = new HashSet<>();
 		Set<Ausleihe> ausleihen2 = new HashSet<>();
