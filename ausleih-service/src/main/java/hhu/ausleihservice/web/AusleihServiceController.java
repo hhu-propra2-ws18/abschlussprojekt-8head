@@ -4,6 +4,7 @@ import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.databasemodel.Rolle;
+import hhu.ausleihservice.validators.ItemValidator;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,12 +28,15 @@ public class AusleihServiceController {
 	private ItemService itemService;
 	private AbholortService abholortService;
 	private PersonValidator personValidator;
+	private ItemValidator itemValidator;
 
-	public AusleihServiceController(PersonService perService, ItemService iService, AbholortService abholortService, PersonValidator personValidator) {
+	public AusleihServiceController(PersonService perService, ItemService iService, AbholortService abholortService,
+			PersonValidator personValidator, ItemValidator itemValidator) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
 		this.personValidator = personValidator;
+		this.itemValidator = itemValidator;
 	}
 
 	@GetMapping("/liste")
@@ -53,15 +57,10 @@ public class AusleihServiceController {
 	}
 
 	@PostMapping("/artikelsuche")
-	public String artikelSuche(Model model,
-	                           String query, //For titel or beschreibung
-	                           @RequestParam(defaultValue = "2147483647")
-			                           int tagessatzMax,
-	                           @RequestParam(defaultValue = "2147483647")
-			                           int kautionswertMax,
-	                           String availableMin, //YYYY-MM-DD
-	                           String availableMax
-	) {
+	public String artikelSuche(Model model, String query, // For titel or beschreibung
+			@RequestParam(defaultValue = "2147483647") int tagessatzMax,
+			@RequestParam(defaultValue = "2147483647") int kautionswertMax, String availableMin, // YYYY-MM-DD
+			String availableMax) {
 		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
 
 		model.addAttribute("dateformat", DATEFORMAT);
@@ -76,8 +75,7 @@ public class AusleihServiceController {
 	}
 
 	@PostMapping("/benutzersuche")
-	public String benutzerSuche(Model model,
-	                            String query //For nachname, vorname, username
+	public String benutzerSuche(Model model, String query // For nachname, vorname, username
 	) {
 		List<Person> list = personService.searchByNames(query);
 		model.addAttribute("dateformat", DATEFORMAT);
@@ -85,7 +83,6 @@ public class AusleihServiceController {
 
 		return "benutzerListe";
 	}
-
 
 	@GetMapping("/details")
 	public String artikelDetails(Model model, @RequestParam long id) {
@@ -120,7 +117,7 @@ public class AusleihServiceController {
 	@PostMapping("/register")
 	public String added(Model model, Person person, BindingResult bindingResult) {
 		personValidator.validate(person, bindingResult);
-		if(bindingResult.hasErrors()) {
+		if (bindingResult.hasErrors()) {
 			model.addAttribute(person);
 			model.addAttribute("errors", bindingResult.getAllErrors());
 			return "register";
@@ -154,13 +151,13 @@ public class AusleihServiceController {
 	@GetMapping("/newitem")
 	public String createItem(Model model, Principal p) {
 		Person person = personService.get(p);
-		//Dummy
+		// Dummy
 		Abholort abholort = new Abholort();
 		abholort.setBeschreibung("Dummy");
 		abholortService.save(abholort);
 		person.getAbholorte().add(abholort);
 		personService.save(person);
-		//Dummy Ende
+		// Dummy Ende
 		if (person.getAbholorte().isEmpty()) {
 			model.addAttribute("message", "Bitte Abholorte hinzufügen");
 			return "errorMessage";
@@ -171,8 +168,14 @@ public class AusleihServiceController {
 	}
 
 	@PostMapping("/newitem")
-	public String addItem(@ModelAttribute Item newItem, Principal p,
-						  @RequestParam("file") MultipartFile picture, Model model) {
+	public String addItem(@ModelAttribute Item newItem, Principal p, @RequestParam("file") MultipartFile picture,
+			BindingResult bindingResult, Model model) {
+		itemValidator.validate(newItem, bindingResult);
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("newitem", newItem);
+			model.addAttribute("errors", bindingResult.getAllErrors());
+			return "neuerArtikel";
+		}
 		Person besitzer = personService.get(p);
 		try {
 			newItem.setPicture(picture.getBytes());
@@ -185,7 +188,7 @@ public class AusleihServiceController {
 		personService.save(besitzer);
 		return "redirect:/";
 	}
-    
+
 	@GetMapping("/editProfil")
 	public String editProfilGet(Model model, Principal p) {
 		model.addAttribute("person", personService.get(p));
