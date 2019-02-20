@@ -33,7 +33,9 @@ public class PersonValidator implements Validator {
 		if (person.getPassword().length() < 8 || person.getPassword().length() >= 255) {
 			errors.rejectValue("password", "Passwort muss mehr als 8 und weniger als 255 Zeichen beinhalten");
 		}
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "rolle", "NotEmpty");
+		if(person.getRolle() == null) {
+			errors.rejectValue("rolle", "Die Rolle darf nicht null sein");
+		}
 		if(person.getRolle() != Rolle.ADMIN && person.getRolle() != Rolle.USER) {
 			errors.rejectValue("rolle", "Diese Rolle existiert nicht");
 		}
