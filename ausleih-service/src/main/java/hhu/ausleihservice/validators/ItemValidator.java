@@ -28,8 +28,13 @@ public class ItemValidator implements Validator {
 			errors.rejectValue("beschreibung", Messages.sizeItemDescription);
 		}
 
-		if (item.getKautionswert() <= 0) {
-			errors.rejectValue("kautionswert", Messages.negativeValue);
+		if (item.getKautionswert() != null) {
+
+			if (item.getKautionswert() <= 0) {
+				errors.rejectValue("kautionswert", Messages.negativeValue);
+			}
+		} else {
+			errors.rejectValue("kautionswert", Messages.notEmpty);
 		}
 
 	}
