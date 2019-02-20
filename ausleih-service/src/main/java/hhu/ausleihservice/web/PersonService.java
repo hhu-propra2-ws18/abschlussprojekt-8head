@@ -3,7 +3,8 @@ package hhu.ausleihservice.web;
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.web.responsestatus.PersonNichtVorhanden;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,8 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,11 +33,18 @@ public class PersonService implements UserDetailsService {
 		Optional<Person> user = users.findByUsername(username);
 		if (user.isPresent()) {
 			Person u = user.get();
-			return User.builder()
-					.username(u.getUsername())
-					.password(u.getPassword())
-					.authorities(u.getRolle().name())
-					.build();
+			System.out.println(u.getRole().name());
+			Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+
+			grantedAuthorities.add(new SimpleGrantedAuthority("GUEST"));
+			if (u.isAdmin()) {
+				grantedAuthorities.add(new SimpleGrantedAuthority("ADMIN"));
+			}
+
+			return new org.springframework.security.core.userdetails.User(
+					u.getUsername(),
+					u.getPassword(),
+					grantedAuthorities);
 		}
 		throw new UsernameNotFoundException("Invalid Username");
 	}
@@ -55,7 +65,7 @@ public class PersonService implements UserDetailsService {
 		return person.get();
 	}
 
-	Person getById(Long id) {
+	Person findById(Long id) {
 		Optional<Person> person = users.findById(id);
 		if (!person.isPresent()) {
 			throw new PersonNichtVorhanden();
@@ -78,7 +88,7 @@ public class PersonService implements UserDetailsService {
 			updatedPerson.setPassword(altePerson.getPassword());
 		}
 
-		updatedPerson.setRolle(altePerson.getRolle());
+		updatedPerson.setRole(altePerson.getRole());
 		updatedPerson.setUsername(altePerson.getUsername());
 		this.save(updatedPerson);
 

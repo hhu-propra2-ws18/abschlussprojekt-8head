@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
-<head th:replace="../static/css/style :: formatting">
-<meta charset="UTF-8">
-<title>Register</title>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../static/css/navbar :: style">
+	<meta charset="UTF-8">
+	<title>Register</title>
 </head>
 <body>
-	<nav th:replace="../static/css/style :: main-menu">menu</nav>
-	<h1>Neues Konto Erstellen</h1>
+<nav th:replace="../static/css/navbar :: main-menu">menu</nav>
+<h1>Neues Konto Erstellen</h1>
 
 	<table id="items">
-		<form th:action="@{/register}" th:object="${person}" method="post">
+		<form th:action="@{/register}" th:object="${userForm}" method="post">
 			<div>
 				<input name="vorname" type="text" th:value="*{vorname}">Vorname
 				<div th:text="${vornameErrors?.code}"></div>

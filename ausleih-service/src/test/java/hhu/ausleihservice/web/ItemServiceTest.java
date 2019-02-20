@@ -3,6 +3,7 @@ package hhu.ausleihservice.web;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.Item;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,8 +26,8 @@ public class ItemServiceTest {
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	@Mock
 	ItemRepository itemRepository;
-	ItemService itemService = new ItemService(null, new ItemAvailabilityService());
-	List<Item> repository = new ArrayList<>();
+	private ItemService itemService = new ItemService(null, new ItemAvailabilityService());
+	private List<Item> repository = new ArrayList<>();
 
 	private boolean testItemEquality(Item base, Item toTest) {
 		return base.getId().longValue() == toTest.getId().longValue() &&
@@ -96,15 +97,15 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
-				assertEquals(true, testItemEquality(repository.get(1), searchedItem));
+				assertTrue(testItemEquality(repository.get(1), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				assertTrue(false);
 			}
 		}
 	}
@@ -117,15 +118,15 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
-				assertEquals(true, testItemEquality(repository.get(1), searchedItem));
+				assertTrue(testItemEquality(repository.get(1), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -139,11 +140,11 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -157,9 +158,9 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -180,9 +181,9 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -200,15 +201,15 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
-				assertEquals(true, testItemEquality(repository.get(1), searchedItem));
+				assertTrue(testItemEquality(repository.get(1), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -226,15 +227,15 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
-				assertEquals(true, testItemEquality(repository.get(1), searchedItem));
+				assertTrue(testItemEquality(repository.get(1), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -252,13 +253,13 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
-				assertEquals(true, testItemEquality(repository.get(1), searchedItem));
+				assertTrue(testItemEquality(repository.get(1), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else {
-				assertEquals(true, false);
+				Assert.fail();
 			}
 		}
 	}
@@ -276,11 +277,11 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -298,11 +299,11 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -320,9 +321,9 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -340,11 +341,11 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -362,11 +363,11 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}

@@ -69,7 +69,7 @@ public class PersonTest {
 		person.setNachname("Martin");
 		person.setVorname("Burak");
 		person.setPassword("123");    //Top secret
-		person.setRolle(Rolle.ADMIN);
+		person.setRole(Role.ADMIN);
 		person.setEmail("mail");
 		person.setAbholorte(abholort);
 
@@ -77,7 +77,7 @@ public class PersonTest {
 		Assert.assertEquals("Burak", person.getVorname());
 		Assert.assertEquals("Martin", person.getNachname());
 		Assert.assertEquals("123", person.getPassword());
-		Assert.assertEquals(Rolle.ADMIN, person.getRolle());
+		Assert.assertEquals(Role.ADMIN, person.getRole());
 		Assert.assertEquals("mail", person.getEmail());
 		Assert.assertEquals(ort, person.getAbholorte().iterator().next());
 	}

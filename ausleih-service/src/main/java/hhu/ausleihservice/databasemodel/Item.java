@@ -1,16 +1,12 @@
 package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Base64;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Data
@@ -37,6 +33,7 @@ public class Item {
 	private Person besitzer;
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Ausleihe> ausleihen = new HashSet<>();
+
 	@Lob
 	private byte[] picture;
 
