@@ -23,10 +23,10 @@ public class Item {
 
 	private String titel;
 	private String beschreibung;
-	private int tagessatz;
-	private int kautionswert;
+	private Integer tagessatz;
+	private Integer kautionswert;
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER)
 	@JoinColumn
 	private Abholort abholort;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -40,7 +40,7 @@ public class Item {
 	@Lob
 	private byte[] picture;
 
-	//Getter and Setter are copying the array to prevent
+	// Getter and Setter are copying the array to prevent
 	// data leaking outside by storing/giving the reference to the array
 	@Lob
 	public byte[] getPicture() {
