@@ -13,18 +13,17 @@
 	<div class="row mt-3">
 		<div class="col-md-3">
 			<h2>Neues Item hinzufügen:</h2>
-			<div th:if="|${errors} != null|" th:each="error: ${errors}">
-				<div th:text="${error}"></div>
-			</div>
 			<form action="#" th:action="@{/newitem}" th:object="${newitem}" method="post" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="titel">Titel:</label>
 					<input type="text" th:field="*{titel}" class="form-control" id="titel">
+					<div th:text="${titelErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
 					<label for="beschreibung">Beschreibung: </label>
 					<input type="text" th:field="*{beschreibung}" class="form-control" id="beschreibung">
+					<div th:text="${beschreibungErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
@@ -35,8 +34,9 @@
 
 				<div class="form-group">
 					<label for="kautionswert">Kautionswert: </label>
-					<input type="number" th:field="*{kautionswert}" step="1" min="0.00"
+					<input type="number" th:field="*{kautionswert}" step="1" 
 						   class="form-control" id="kautionswert">
+					<div th:text="${kautionswertErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
