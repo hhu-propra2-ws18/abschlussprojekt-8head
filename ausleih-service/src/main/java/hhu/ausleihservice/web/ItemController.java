@@ -4,7 +4,7 @@ import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import hhu.ausleihservice.web.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,25 +17,31 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
-public class AusleihServiceController {
+public class ItemController {
 
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
-	private PersonService personService;
+	private final PersonService personService;
 	private ItemService itemService;
 	private AbholortService abholortService;
 
-	public AusleihServiceController(PersonService perService, ItemService iService, AbholortService abholortService) {
+	public ItemController(PersonService perService, ItemService iService, AbholortService abholortService) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
 	}
 
+
+	@GetMapping("/")
+	public String startseite(Model model, Principal p) {
+		model.addAttribute("user", personService.get(p));
+		return "startseite";
+	}
+
 	@GetMapping("/liste")
-	public String artikelListe(Model model, @RequestParam(required = false) String query, Principal p) {
+	public String artikelListe(Model model, @RequestParam(required = false) String query) {
 		List<Item> list = itemService.simpleSearch(query);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
-		model.addAttribute("user", personService.get(p));
 		return "artikelListe";
 	}
 
@@ -59,29 +65,9 @@ public class AusleihServiceController {
 
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
-		System.out.println(personService.get(p).getUsername());
-		model.addAttribute("user", personService.get(p));
 
 		return "artikelListe";
 	}
-
-	@GetMapping("/benutzersuche")
-	public String benutzerSuche(Model model) {
-		return "benutzerSuche";
-	}
-
-	@PostMapping("/benutzersuche")
-	public String benutzerSuche(Model model,
-								String query, //For nachname, vorname, username
-								Principal p
-	) {
-		List<Person> list = personService.searchByNames(query);
-		model.addAttribute("dateformat", DATEFORMAT);
-		model.addAttribute("benutzerListe", list);
-		model.addAttribute("user", personService.get(p));
-		return "benutzerListe";
-	}
-
 
 	@GetMapping("/details/{id}")
 	public String artikelDetails(Model model,
@@ -119,50 +105,6 @@ public class AusleihServiceController {
 		return "artikelDetails";
 	}
 
-	@GetMapping("/")
-	public String startseite(Model model, Principal p) {
-		model.addAttribute("user", personService.get(p));
-		return "startseite";
-	}
-
-	@GetMapping("/register")
-	public String register(Model model) {
-		Person userForm = new Person();
-		model.addAttribute("usernameTaken", false);
-		model.addAttribute("userForm", userForm);
-		return "register";
-	}
-
-	@PostMapping("/register")
-	public String added(Model model, Person userForm) {
-		if (personService.findByUsername(userForm.getUsername()).isPresent()) {
-			model.addAttribute("usernameTaken", true);
-			model.addAttribute("userForm", userForm);
-			return "register";
-		}
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		userForm.setPassword(encoder.encode(userForm.getPassword()));
-		personService.save(userForm);
-		return "startseite";
-	}
-
-	@GetMapping("/admin")
-	public String admin(Model model) {
-		return "admin";
-	}
-
-	@GetMapping("/profil/{id}")
-	public String otheruser(Model model, @PathVariable Long id, Principal p) {
-		model.addAttribute("person", personService.findById(id));
-		model.addAttribute("user", personService.get(p));
-		return "profil";
-	}
-
-	@GetMapping("/profil")
-	public String user(Model model, Principal p) {
-		return otheruser(model, personService.get(p).getId(), p);
-	}
-
 	@GetMapping("/newitem")
 	public String createItem(Model model, Principal p) {
 		Person person = personService.get(p);
@@ -196,17 +138,5 @@ public class AusleihServiceController {
 		besitzer.addItem(newItem);
 		personService.save(besitzer);
 		return "redirect:/";
-	}
-
-	@GetMapping("/editProfil")
-	public String editProfilGet(Model model, Principal p) {
-		model.addAttribute("person", personService.get(p));
-		return "editProfil";
-	}
-
-	@PostMapping("/editProfil")
-	public String editProfilPost(Model model, Principal p, Person person) {
-		personService.update(person, p);
-		return "editProfil";
 	}
 }

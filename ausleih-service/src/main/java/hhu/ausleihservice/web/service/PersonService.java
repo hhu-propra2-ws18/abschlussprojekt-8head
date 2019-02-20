@@ -1,4 +1,4 @@
-package hhu.ausleihservice.web;
+package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Person;
@@ -24,7 +24,7 @@ public class PersonService implements UserDetailsService {
 
 	private PersonRepository users;
 
-	PersonService(PersonRepository userRep) {
+	public PersonService(PersonRepository userRep) {
 		this.users = userRep;
 	}
 
@@ -53,7 +53,7 @@ public class PersonService implements UserDetailsService {
 		return users.findByUsername(username);
 	}
 
-	Person get(Principal p) {
+	public Person get(Principal p) {
 		if (p == null) {
 			System.out.println("Null Principal");
 			return null;
@@ -65,7 +65,7 @@ public class PersonService implements UserDetailsService {
 		return person.get();
 	}
 
-	Person findById(Long id) {
+	public Person findById(Long id) {
 		Optional<Person> person = users.findById(id);
 		if (!person.isPresent()) {
 			throw new PersonNichtVorhanden();
@@ -73,12 +73,11 @@ public class PersonService implements UserDetailsService {
 		return person.get();
 	}
 
-	void save(Person person) {
+	public void save(Person person) {
 		users.save(person);
 	}
 	
-	void update(Person updatedPerson, Principal principal) {
-		Person altePerson = this.get(principal);
+	public void update(Person updatedPerson, Person altePerson) {
 		updatedPerson.setId(altePerson.getId());
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -108,7 +107,7 @@ public class PersonService implements UserDetailsService {
 		return true;
 	}
 
-	List<Person> searchByNames(String query) {
+	public List<Person> searchByNames(String query) {
 		Stream<Person> listStream = findAll().stream();
 
 		if (query != null && !query.equals("")) {
