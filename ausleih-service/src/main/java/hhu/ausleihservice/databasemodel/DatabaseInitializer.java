@@ -105,7 +105,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person2.setEmail("notWorking@uni.com");
 		person3.setEmail("screaming@computer.de");
 		person4.setEmail("admin@uni-dusseldorf.de");
-		person5.setEmail("asdf");
+		person5.setEmail("asdf@gmail.com");
 
 		person1.setAbholorte(orte1);
 		person2.setAbholorte(orte2);

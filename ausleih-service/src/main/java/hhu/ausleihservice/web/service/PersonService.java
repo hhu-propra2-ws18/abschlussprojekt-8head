@@ -74,23 +74,9 @@ public class PersonService implements UserDetailsService {
 	}
 
 	public void save(Person person) {
-		users.save(person);
-	}
-	
-	public void update(Person updatedPerson, Person altePerson) {
-		updatedPerson.setId(altePerson.getId());
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-		if (updatedPerson.getPassword() != null && !updatedPerson.getPassword().isEmpty()) {
-			updatedPerson.setPassword(encoder.encode(updatedPerson.getPassword()));
-		} else {
-			updatedPerson.setPassword(altePerson.getPassword());
-		}
-
-		updatedPerson.setRole(altePerson.getRole());
-		updatedPerson.setUsername(altePerson.getUsername());
-		this.save(updatedPerson);
-
+		person.setPassword(encoder.encode(person.getPassword()));
+		users.save(person);
 	}
 
 	List<Person> findAll() {
@@ -125,5 +111,16 @@ public class PersonService implements UserDetailsService {
 		List<Person> list = listStream.collect(Collectors.toList());
 
 		return list;
+	}
+
+	public void updateById(Long id, Person newPerson) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		newPerson.setPassword(encoder.encode(newPerson.getPassword()));
+		Person toUpdate = this.findById(id);
+		toUpdate.setUsername(newPerson.getUsername());
+		toUpdate.setVorname(newPerson.getVorname());
+		toUpdate.setNachname(newPerson.getNachname());
+		toUpdate.setEmail(newPerson.getEmail());
+		users.save(toUpdate);
 	}
 }

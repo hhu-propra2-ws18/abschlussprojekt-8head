@@ -12,6 +12,44 @@
 <h4>
 	<div th:text="${'Name: ' + person.vorname + ' ' + person.nachname}">Simon Kerkmann</div>
 </h4>
-<a th:if="${user.isAdmin() or user.isHimself(person)}" href="/editProfil" th:text="edit"></a>
+
+<table th:if="${user.isAdmin() or user.isHimself(person)}" id="items">
+	<tr>
+		<th>Username</th>
+		<th>Vorname</th>
+		<th>Nachname</th>
+		<th>E-Mail</th>
+		<th>Passwort</th>
+	</tr>
+	<form th:action="@{/profil/{PersonId} (PersonId=${person.getId()})}" th:object="${person}" method="post">
+		<tr>
+			<td th:text="${person.username}">MaMus</td>
+			<td th:text="${person.vorname}">Max</td>
+			<td th:text="${person.nachname}">Mustermann</td>
+			<td th:text="${person.email}">mamus@gmail.com</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>
+				<input th:if="${user.isAdmin() and !(user.isHimself(person))}" name="newUsername" type="text" th:field="*{username}">
+			</td>
+			<td>
+				<input name="newVorname" type="text" th:field="*{vorname}">
+			</td>
+			<td>
+				<input name="newNachname" type="text" th:field="*{nachname}">
+			</td>
+			<td>
+				<input name="newEMail" type="email" th:field="*{email}">
+			</td>
+			<td>
+				<input name="newPassword" type="password" th:field="*{password}" th:id="password">
+			</td>
+			<td>
+				<button type="submit" value="true" name="editPerson">Nutzer Ändern</button>
+			</td>
+		</tr>
+	</form>
+</table>
 </body>
 </html>

@@ -2,12 +2,9 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.web.service.PersonService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -21,15 +18,40 @@ public class PersonController {
 	}
 
 	@GetMapping("/profil/{id}")
-	public String otheruser(Model model, @PathVariable Long id, Principal p) {
+	public String otherUser(Model model, @PathVariable Long id, Principal p) {
 		model.addAttribute("person", personService.findById(id));
 		model.addAttribute("user", personService.get(p));
 		return "profil";
 	}
 
+	@PostMapping("/profil/{id}")
+	public String editUser(Model model,
+						   @PathVariable Long id,
+						   Principal p,
+						   @RequestParam(name = "editPerson", defaultValue = "false") final boolean changePerson,
+						   @ModelAttribute("person") Person person
+	) {
+		System.out.println("Post triggered at /profil/" + id);
+		if (changePerson) {
+			personService.updateById(id, person);
+		}
+		model.addAttribute("person", personService.findById(id));
+		model.addAttribute("user", personService.get(p));
+		return "profil";
+
+	}
+
 	@GetMapping("/profil")
 	public String user(Model model, Principal p) {
-		return otheruser(model, personService.get(p).getId(), p);
+		return otherUser(model, personService.get(p).getId(), p);
+	}
+
+	@PostMapping("/profil")
+	public String editUser(Model model,
+						   Principal p,
+						   @RequestParam(name = "editPerson", defaultValue = "false") final boolean changePerson
+	) {
+		return editUser(model, personService.get(p).getId(), p, changePerson, personService.get(p));
 	}
 
 	@GetMapping("/benutzersuche")
@@ -48,18 +70,6 @@ public class PersonController {
 		return "benutzerListe";
 	}
 
-	@GetMapping("/editProfil")
-	public String editProfilGet(Model model, Principal p) {
-		model.addAttribute("person", personService.get(p));
-		return "editProfil";
-	}
-
-	@PostMapping("/editProfil")
-	public String editProfilPost(Model model, Principal p, Person person) {
-		personService.update(person, personService.get(p));
-		return "editProfil";
-	}
-
 	@GetMapping("/register")
 	public String register(Model model) {
 		Person userForm = new Person();
@@ -75,8 +85,6 @@ public class PersonController {
 			model.addAttribute("userForm", userForm);
 			return "register";
 		}
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		userForm.setPassword(encoder.encode(userForm.getPassword()));
 		personService.save(userForm);
 		return "startseite";
 	}

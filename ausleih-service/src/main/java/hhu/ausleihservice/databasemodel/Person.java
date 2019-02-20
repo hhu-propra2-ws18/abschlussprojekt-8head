@@ -71,4 +71,8 @@ public class Person {
 	public boolean isOwner(Item artikel) {
 		return this.getId().equals(artikel.getBesitzer().getId());
 	}
+
+	public boolean isHimself(Person person) {
+	return this.getId().equals(person.getId());
+	}
 }
