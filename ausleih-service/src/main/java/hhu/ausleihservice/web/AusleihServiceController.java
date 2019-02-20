@@ -152,7 +152,7 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/profil/{id}")
-	public String otheruser(Model model, @PathVariable Long id, Principal p) {
+	public String otherUser(Model model, @PathVariable Long id, Principal p) {
 		model.addAttribute("person", personService.findById(id));
 		model.addAttribute("user", personService.get(p));
 		return "profil";
