@@ -119,7 +119,10 @@ public class AusleihServiceController {
 		personValidator.validate(person, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute(person);
-			model.addAttribute("errors", bindingResult.getAllErrors());
+			model.addAttribute("usernameErrors", bindingResult.getFieldError("username").getCode());
+			model.addAttribute("vornameErrors", bindingResult.getFieldError("vorname").getCode());
+			model.addAttribute("nachnameErrors", bindingResult.getFieldError("nachname").getCode());
+			model.addAttribute("passwordErrors", bindingResult.getFieldError("password").getCode());
 			return "register";
 		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

@@ -1,28 +1,36 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head th:replace="../static/css/style :: formatting">
-	<meta charset="UTF-8">
-	<title>Register</title>
+<meta charset="UTF-8">
+<title>Register</title>
 </head>
 <body>
-<nav th:replace="../static/css/style :: main-menu">menu</nav>
-<h1>Neues Konto Erstellen</h1>
+	<nav th:replace="../static/css/style :: main-menu">menu</nav>
+	<h1>Neues Konto Erstellen</h1>
 
-<table id="items">
-	<form th:action="@{/register}" th:object="${person}" method="post">
-		<div th:if="|${errors} != null|" th:each="error : ${errors}">
-			<div th:text="${error}"></div>
-		</div>
-		<div><input name="vorname" type="text" th:value="*{vorname}">Vorname</div>
-		<div><input name="nachname" type="text" th:value="*{nachname}">Nachname</div>
-		<div><input name="username" type="text" th:value="*{username}">Username</div>
-		<div th:if="${usernameTaken}" style="color:red;">Username vergeben</div>
-		<div><input name="password" type="password" th:value="*{password}">Password</div>
-		<div>
-			<button type="submit" class="btn btn-primary">Erstellen</button>
-		</div>
-	</form>
-</table>
+	<table id="items">
+		<form th:action="@{/register}" th:object="${person}" method="post">
+			<div>
+				<input name="vorname" type="text" th:value="*{vorname}">Vorname
+				<div th:text="${vornameErrors?.toString()}"></div>
+			</div>
+			<div>
+				<input name="nachname" type="text" th:value="*{nachname}">Nachname
+				<div th:text="${nachnameErrors?.toString()}"></div>
+			</div>
+			<div>
+				<input name="username" type="text" th:value="*{username}">Username
+				<div th:text="${usernameErrors?.toString()}"></div>
+			</div>
+				<input name="password" type="password" th:value="*{password}">Password
+				<div th:text="${passwordErrors?.toString()}"></div>
+			</div>
+			<div>
+				<button type="submit" class="btn btn-primary">Erstellen</button>
+			</div>
+		</form>
+	</table>
 
 </body>
 </html>
