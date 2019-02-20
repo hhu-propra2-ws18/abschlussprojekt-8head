@@ -32,7 +32,7 @@
 		</td>
 	</tr>
 	<tr th:if="${user.isAdmin() or user.isOwner(artikel)}">
-		<form th:object="${artikel}">
+		<form th:action="@{/details/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}" method="post">
 			<td><input name="newBeschreibung" type="text" th:field="*{beschreibung}"></td>
 			<td></td>
 			<td></td>
@@ -41,7 +41,7 @@
 			<td></td>
 			<td><input name="newTitle" type="text" th:field="*{titel}"></td>
 			<td>
-				<button type="submit" value="true" name="editArtikel" formmethod="post">Artikel Ändern</button>
+				<button type="submit" value="true" name="editArtikel" >Artikel Ändern</button>
 			</td>
 		</form>
 	</tr>
