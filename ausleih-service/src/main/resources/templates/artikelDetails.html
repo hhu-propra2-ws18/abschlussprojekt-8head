@@ -32,14 +32,14 @@
 		</td>
 	</tr>
 	<tr th:if="${user.isAdmin() or user.isOwner(artikel)}">
-		<form th:object="${artikelBearbeitenForm}">
-			<td><input name="newBeschreibung" type="text" th:field="*{newBeschreibung}"></td>
+		<form th:object="${artikel}">
+			<td><input name="newBeschreibung" type="text" th:field="*{beschreibung}"></td>
 			<td></td>
 			<td></td>
-			<td><input name="newTagessatz" type="number" step="0.1" min="0" th:field="*{newTagessatz}"></td>
-			<td><input name="newKautionswert" type="number" step="0.1" min="0" th:field="*{newKautionswert}"></td>
+			<td><input name="newTagessatz" type="number" step="0.1" min="0" th:field="*{tagessatz}"></td>
+			<td><input name="newKautionswert" type="number" step="0.1" min="0" th:field="*{kautionswert}"></td>
 			<td></td>
-			<td><input name="newTitle" type="text" th:field="*{newTitel}"></td>
+			<td><input name="newTitle" type="text" th:field="*{titel}"></td>
 			<td>
 				<button type="submit" value="true" name="editArtikel" formmethod="post">Artikel Ändern</button>
 			</td>

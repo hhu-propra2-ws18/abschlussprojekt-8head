@@ -3,7 +3,6 @@ package hhu.ausleihservice.web;
 import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
-import hhu.ausleihservice.web.form.ArtikelBearbeitenForm;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -87,8 +86,7 @@ public class AusleihServiceController {
 	@GetMapping("/details/{id}")
 	public String artikelDetails(Model model,
 								 @PathVariable long id,
-								 Principal p,
-								 @ModelAttribute("artikelBearbeitenForm") ArtikelBearbeitenForm artikelBearbeitenForm) {
+								 Principal p) {
 		try {
 			model.addAttribute("artikel", itemService.findById(id));
 		} catch (ItemNichtVorhanden a) {
@@ -102,22 +100,23 @@ public class AusleihServiceController {
 
 	@PostMapping("/details/{id}")
 	public String bearbeiteArtikel(Model model,
-							 @PathVariable long id,
-							 Principal p,
-							 @RequestParam(name = "editArtikel", defaultValue = "false") final boolean changeNameDescription,
-							 @ModelAttribute("artikelBearbeitenForm") ArtikelBearbeitenForm artikelBearbeitenForm) {
-		System.out.println("Post triggered at /details?id=" + id);
-		System.out.println("changeNameDescription? " + changeNameDescription);
+								   @PathVariable long id,
+								   Principal p,
+								   @RequestParam(name = "editArtikel", defaultValue = "false") final boolean changeArticleDetails,
+								   @ModelAttribute("artikel") Item artikel
+	) {
+		System.out.println("Post triggered at /details/" + id);
+		System.out.println("changeNameDescription? " + changeArticleDetails);
 
-		if (changeNameDescription) {
-			itemService.updateById(id, artikelBearbeitenForm);
+		if (changeArticleDetails) {
+			itemService.updateById(id, artikel);
 		}
 
 		model.addAttribute("artikel", itemService.findById(id));
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("user", personService.get(p));
 
-		return "redirect:http://localhost:8080/details/"+id;
+		return "artikelDetails";
 	}
 
 	@GetMapping("/")

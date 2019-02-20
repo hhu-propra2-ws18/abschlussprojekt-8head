@@ -2,7 +2,6 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.Item;
-import hhu.ausleihservice.web.form.ArtikelBearbeitenForm;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;
 
@@ -101,19 +100,19 @@ public class ItemService {
 		items.save(newItem);
 	}
 
-	public void updateById(Long id, ArtikelBearbeitenForm artikelBearbeitenForm) {
+	public void updateById(Long id, Item newItem) {
 		Item toUpdate = this.findById(id);
-		if (!(artikelBearbeitenForm.getNewTitel().equals(""))) {
-			toUpdate.setTitel(artikelBearbeitenForm.getNewTitel());
+		if (!(newItem.getTitel().equals(""))) {
+			toUpdate.setTitel(newItem.getTitel());
 		}
-		if (!(artikelBearbeitenForm.getNewBeschreibung().equals(""))) {
-			toUpdate.setBeschreibung(artikelBearbeitenForm.getNewBeschreibung());
+		if (!(newItem.getBeschreibung().equals(""))) {
+			toUpdate.setBeschreibung(newItem.getBeschreibung());
 		}
-		if (!(artikelBearbeitenForm.getNewKautionswert()==0)) {
-			toUpdate.setKautionswert(artikelBearbeitenForm.getNewKautionswert());
+		if (!(newItem.getKautionswert()==0)) {
+			toUpdate.setKautionswert(newItem.getKautionswert());
 		}
-		if (!(artikelBearbeitenForm.getNewTagessatz()==0)) {
-			toUpdate.setTagessatz(artikelBearbeitenForm.getNewTagessatz());
+		if (!(newItem.getTagessatz()==0)) {
+			toUpdate.setTagessatz(newItem.getTagessatz());
 		}
 		items.save(toUpdate);
 	}
