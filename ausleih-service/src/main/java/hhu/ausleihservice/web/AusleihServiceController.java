@@ -50,13 +50,13 @@ public class AusleihServiceController {
 
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
-	                           String query, //For titel or beschreibung
-	                           @RequestParam(defaultValue = "2147483647")
-			                           int tagessatzMax,
-	                           @RequestParam(defaultValue = "2147483647")
-			                           int kautionswertMax,
-	                           String availableMin, //YYYY-MM-DD
-	                           String availableMax
+							   String query, //For titel or beschreibung
+							   @RequestParam(defaultValue = "2147483647")
+									   int tagessatzMax,
+							   @RequestParam(defaultValue = "2147483647")
+									   int kautionswertMax,
+							   String availableMin, //YYYY-MM-DD
+							   String availableMax
 	) {
 		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
 
@@ -73,7 +73,7 @@ public class AusleihServiceController {
 
 	@PostMapping("/benutzersuche")
 	public String benutzerSuche(Model model,
-	                            String query //For nachname, vorname, username
+								String query //For nachname, vorname, username
 	) {
 		List<Person> list = personService.searchByNames(query);
 		model.addAttribute("dateformat", DATEFORMAT);
@@ -173,7 +173,7 @@ public class AusleihServiceController {
 		personService.save(besitzer);
 		return "redirect:/";
 	}
-    
+
 	@GetMapping("/editProfil")
 	public String editProfilGet(Model model, Principal p) {
 		model.addAttribute("person", personService.get(p));
@@ -187,7 +187,8 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/newlocation")
-	public String createNewLocation(Model model) {
+	public String createNewLocation(Model model, Principal p) {
+		model.addAttribute("person", personService.get(p));
 		Abholort abholort = new Abholort();
 		abholort.setLatitude(51.227741);
 		abholort.setLongitude(6.773456);
