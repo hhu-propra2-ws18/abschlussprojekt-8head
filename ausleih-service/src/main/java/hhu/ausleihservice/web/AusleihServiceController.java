@@ -32,7 +32,9 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/liste")
-	public String artikelListe(Model model, @RequestParam(required = false) String query) {
+	public String artikelListe(Model model, @RequestParam(required = false) String query, Principal p) {
+		Person person = personService.get(p);
+		model.addAttribute("person", person);
 
 		List<Item> list = itemService.simpleSearch(query);
 
@@ -43,21 +45,25 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/artikelsuche")
-	public String artikelSuche(Model model) {
+	public String artikelSuche(Model model, Principal p) {
+		Person person = personService.get(p);
+		model.addAttribute("person", person);
 		model.addAttribute("datum", LocalDateTime.now().format(DATEFORMAT));
 		return "artikelSuche";
 	}
 
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
-	                           String query, //For titel or beschreibung
-	                           @RequestParam(defaultValue = "2147483647")
-			                           int tagessatzMax,
-	                           @RequestParam(defaultValue = "2147483647")
-			                           int kautionswertMax,
-	                           String availableMin, //YYYY-MM-DD
-	                           String availableMax
-	) {
+							   String query, //For titel or beschreibung
+							   @RequestParam(defaultValue = "2147483647")
+									   int tagessatzMax,
+							   @RequestParam(defaultValue = "2147483647")
+									   int kautionswertMax,
+							   String availableMin, //YYYY-MM-DD
+							   String availableMax,
+							   Principal p) {
+		Person person = personService.get(p);
+		model.addAttribute("person", person);
 		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
 
 		model.addAttribute("dateformat", DATEFORMAT);
@@ -67,14 +73,19 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/benutzersuche")
-	public String benutzerSuche(Model model) {
+	public String benutzerSuche(Model model, Principal p) {
+		Person person = personService.get(p);
+		model.addAttribute("person", person);
 		return "benutzerSuche";
 	}
 
 	@PostMapping("/benutzersuche")
 	public String benutzerSuche(Model model,
-	                            String query //For nachname, vorname, username
-	) {
+								String query, //For nachname, vorname, username
+								Principal p) {
+		Person person = personService.get(p);
+		model.addAttribute("person", person);
+
 		List<Person> list = personService.searchByNames(query);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("benutzerListe", list);
@@ -84,7 +95,9 @@ public class AusleihServiceController {
 
 
 	@GetMapping("/details")
-	public String artikelDetails(Model model, @RequestParam long id) {
+	public String artikelDetails(Model model, @RequestParam long id, Principal p) {
+		Person person = personService.get(p);
+		model.addAttribute("person", person);
 
 		try {
 			Item artikel = itemService.findByID(id);
@@ -128,7 +141,9 @@ public class AusleihServiceController {
 	}
 
 	@GetMapping("/admin")
-	public String admin(Model model) {
+	public String admin(Model model, Principal p) {
+		Person person = personService.get(p);
+		model.addAttribute("person", person);
 		return "admin";
 	}
 
@@ -180,7 +195,7 @@ public class AusleihServiceController {
 		personService.save(besitzer);
 		return "redirect:/";
 	}
-    
+
 	@GetMapping("/editProfil")
 	public String editProfilGet(Model model, Principal p) {
 		model.addAttribute("person", personService.get(p));

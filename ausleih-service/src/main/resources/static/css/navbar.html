@@ -15,7 +15,7 @@
 			integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 			crossorigin="anonymous"></script>
 	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-	<link href="style.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
 </head>
 <body>
 
@@ -42,12 +42,12 @@
 								<div class="col-xs-offset-2 col-xs-10">
 									<button type="submit" class="btn btn-primary" value="Suche">Suche</button>
 								</div>
+								<div class="nav-item">
+									<a class="nav-link" href="/artikelsuche">Erweiterte Artikelsuche</a>
+								</div>
 							</div>
 						</form>
 					</div>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/artikelsuche">Erweiterte Artikelsuche</a>
 				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
@@ -58,7 +58,8 @@
 					<a class="nav-link" th:if="${person == null}" href="/register">Konto Eröffnen</a>
 					<a class="nav-link" th:unless="${person == null}" href="/profil">Profil</a>
 				</li>
-				<li class="nav-item" th:if="${person != null and person.rolle.name() == 'ADMIN'}">
+				<li class="nav-item"
+					th:if="${person != null and person.rolle != null and person.rolle.name() == 'ADMIN'}">
 					<a class="nav-link" href="/admin">Admin</a>
 				</li>
 				<li class="nav-item">
