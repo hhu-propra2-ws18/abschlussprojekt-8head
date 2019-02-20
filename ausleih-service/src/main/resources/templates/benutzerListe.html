@@ -16,12 +16,16 @@
 		<th>Name</th>
 		<th>Username</th>
 		<th>Profil anzeigen</th>
+		<th th:if="${user.isAdmin()}">Nutzer bearbeiten (Nur Admins)</th>
 	</tr>
 	<th:block th:each="benutzer : ${benutzerListe}">
 		<tr>
-			<td th:text="${benutzer.vorname + ' ' + benutzer.nachname}"></td>
+			<td th:text="|${benutzer.vorname} ${benutzer.nachname}|"></td>
 			<td th:text="${benutzer.username}"></td>
-			<td><a th:href="@{profil/{benutzerID} (benutzerID=${benutzer.id})}">anzeigen</a></td>
+			<td><a th:href="@{profil/{benutzerID} (benutzerID=${benutzer.id})}">Anzeigen</a></td>
+			<td th:if="${user.isAdmin()}"><a href="artikelBearbeitenAdmin.html"
+											 th:href="@{bearbeiten/benutzer/{personID} (personID=${benutzer.getId()})}">Bearbeiten</a>
+			</td>
 		</tr>
 	</th:block>
 </table>
