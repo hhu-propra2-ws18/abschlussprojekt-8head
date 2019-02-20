@@ -102,11 +102,11 @@ public class AusleihServiceController {
 	public String bearbeiteArtikel(Model model,
 								   @PathVariable long id,
 								   Principal p,
-								   @RequestParam(name = "editArtikel", defaultValue = "false") final boolean changeArticleDetails,
+								   @RequestParam(name = "editArtikel", defaultValue = "false")
+									   final boolean changeArticleDetails,
 								   @ModelAttribute("artikel") Item artikel
 	) {
 		System.out.println("Post triggered at /details/" + id);
-		System.out.println("changeNameDescription? " + changeArticleDetails);
 
 		if (changeArticleDetails) {
 			itemService.updateById(id, artikel);
@@ -154,27 +154,13 @@ public class AusleihServiceController {
 	@GetMapping("/profil/{id}")
 	public String otheruser(Model model, @PathVariable Long id, Principal p) {
 		model.addAttribute("person", personService.findById(id));
-		model.addAttribute("isOwnProfile", personService.get(p).getId().equals(id));
+		model.addAttribute("user", personService.get(p));
 		return "profil";
 	}
 
 	@GetMapping("/profil")
 	public String user(Model model, Principal p) {
-		model.addAttribute("person", personService.get(p));
-		model.addAttribute("isOwnProfile", true);
-		return "profil";
-	}
-
-	@GetMapping("/bearbeiten/artikel/{id}")
-	public String adminEditItem(Model model, @PathVariable Long id) {
-		model.addAttribute("artikel", itemService.findById(id));
-		return "artikelBearbeitenAdmin";
-	}
-
-	@GetMapping("/bearbeiten/benutzer/{id}")
-	public String adminEditUser(Model model, @PathVariable Long id) {
-		model.addAttribute("benutzer", personService.findById(id));
-		return "benutzerBearbeitenAdmin";
+		return otheruser(model, personService.get(p).getId(), p);
 	}
 
 	@GetMapping("/newitem")

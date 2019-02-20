@@ -68,7 +68,7 @@ public class Person {
 		return this != null && this.getRole().equals(Role.ADMIN);
 	}
 
-	public boolean isOwner(Item artikel){
+	public boolean isOwner(Item artikel) {
 		return this.getId().equals(artikel.getBesitzer().getId());
 	}
 }

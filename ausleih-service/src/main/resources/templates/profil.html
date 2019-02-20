@@ -12,6 +12,6 @@
 <h4>
 	<div th:text="${'Name: ' + person.vorname + ' ' + person.nachname}">Simon Kerkmann</div>
 </h4>
-<a th:if="${isOwnProfile}" href="/editProfil" th:text="edit"></a>
+<a th:if="${user.isAdmin() or user.isHimself(person)}" href="/editProfil" th:text="edit"></a>
 </body>
 </html>

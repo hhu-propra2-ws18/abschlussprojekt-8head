@@ -102,18 +102,13 @@ public class ItemService {
 
 	public void updateById(Long id, Item newItem) {
 		Item toUpdate = this.findById(id);
-		if (!(newItem.getTitel().equals(""))) {
-			toUpdate.setTitel(newItem.getTitel());
-		}
-		if (!(newItem.getBeschreibung().equals(""))) {
-			toUpdate.setBeschreibung(newItem.getBeschreibung());
-		}
-		if (!(newItem.getKautionswert()==0)) {
-			toUpdate.setKautionswert(newItem.getKautionswert());
-		}
-		if (!(newItem.getTagessatz()==0)) {
-			toUpdate.setTagessatz(newItem.getTagessatz());
-		}
+		toUpdate.setTitel(newItem.getTitel());
+		toUpdate.setBeschreibung(newItem.getBeschreibung());
+		toUpdate.setAvailableFrom(newItem.getAvailableFrom());
+		toUpdate.setAvailableTill(newItem.getAvailableTill());
+		toUpdate.setTagessatz(newItem.getTagessatz());
+		toUpdate.setKautionswert(newItem.getKautionswert());
+		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
 		items.save(toUpdate);
 	}
 }

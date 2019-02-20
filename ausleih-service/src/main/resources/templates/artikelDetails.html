@@ -27,18 +27,22 @@
 		<td th:text="${artikel.tagessatz} + &euro;">Tagessatz</td>
 		<td th:text="${artikel.kautionswert} + &euro;">Kaution</td>
 		<td th:text="${artikel.abholort.beschreibung}">Standort</td>
-		<td><a th:href="@{/profil/{besitzerId} (besitzerId=${artikel.besitzer.getId()})}"
+		<td><a th:href="@{/profil/{besitzerId} (besitzerId=${artikel.getBesitzer().getId()})}"
 			   th:text="|${artikel.besitzer.getVorname()} ${artikel.besitzer.getNachname()}|"><p>Name</p></a>
 		</td>
 	</tr>
 	<tr th:if="${user.isAdmin() or user.isOwner(artikel)}">
 		<form th:action="@{/details/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}" method="post">
 			<td><input name="newBeschreibung" type="text" th:field="*{beschreibung}"></td>
-			<td></td>
-			<td></td>
+			<td>
+				<input name="newAvailableFrom" type="date" th:field="*{availableFrom}" id="availableFrom">
+			</td>
+			<td>
+				<input name="newAvailableTill" type="date" th:field="*{availableTill}" id="availableTill">
+			</td>
 			<td><input name="newTagessatz" type="number" step="0.1" min="0" th:field="*{tagessatz}"></td>
 			<td><input name="newKautionswert" type="number" step="0.1" min="0" th:field="*{kautionswert}"></td>
-			<td></td>
+			<td><input name="newAbholortBeschreibung" type="text" th:field="*{abholort.beschreibung}"></td>
 			<td><input name="newTitle" type="text" th:field="*{titel}"></td>
 			<td>
 				<button type="submit" value="true" name="editArtikel" >Artikel Ändern</button>
