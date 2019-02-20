@@ -11,7 +11,7 @@ import java.util.Set;
 public class ItemAvailabilityService {
 
 	private boolean isInPeriod(LocalDate date, LocalDate start, LocalDate end) {
-		return (!date.isBefore(start) && !date.isAfter(end));
+		return !date.isBefore(start) && !date.isAfter(end);
 	}
 
 	public boolean isAvailable(Item item) {
