@@ -98,14 +98,6 @@ public class PersonService implements UserDetailsService {
 		return users.findAll();
 	}
 
-	/*Person getByUsername(String username) {
-		Optional<Person> person = users.findByUsername(username);
-		if (!person.isPresent()) {
-			return null;
-		}
-		return person.get();
-	}*/
-
 	//Checks if a string contains all strings in an array
 	private boolean containsArray(String string, String[] array) {
 		for (String entry : array) {
