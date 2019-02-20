@@ -25,7 +25,7 @@ public class ItemValidator implements Validator {
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "beschreibung", Messages.notEmpty);
 		if (item.getBeschreibung().length() < 6 || item.getBeschreibung().length() > 4000) {
-			errors.rejectValue("beschreibung", Messages.sizeTitle);
+			errors.rejectValue("beschreibung", Messages.sizeItemDescription);
 		}
 
 		if (item.getKautionswert() <= 0) {
