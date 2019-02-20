@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -143,14 +142,14 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item2.setBesitzer(person2);
 		item3.setBesitzer(person3);
 
-		Path pwd = Paths.get("").toAbsolutePath();
-		Path files = Paths.get("/src/main/resources/static/img");
-		String path = pwd.toString() + files.toString();
 
 		try {
-			item1.setPicture(Files.readAllBytes(Paths.get(path + "/stift.jpg")));
-			item2.setPicture(Files.readAllBytes(Paths.get(path + "/fahrrad.jpg")));
-			item3.setPicture(Files.readAllBytes(Paths.get(path + "/pfeil.jpg")));
+			item1.setPicture(Files.readAllBytes(
+					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/stift.jpg")));
+			item2.setPicture(Files.readAllBytes(
+					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/fahrrad.jpg")));
+			item3.setPicture(Files.readAllBytes(
+					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/pfeil.jpg")));
 		} catch (IOException e) {
 			System.out.println("Files could not be stored");
 		}
