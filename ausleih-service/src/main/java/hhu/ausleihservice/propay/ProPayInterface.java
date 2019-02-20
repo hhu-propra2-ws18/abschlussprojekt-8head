@@ -3,137 +3,100 @@ package hhu.ausleihservice.propay;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
+import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class ProPayInterface {
 
-	public ProPayAccount getAccountInfo(String proPayName) {
-		try {
-			final Mono<ProPayAccount> mono
-					= WebClient
-					.create()
-					.get()
-					.uri(builder -> builder.scheme("http")
-							.host("localhost")
-							.port(8888)
-							.pathSegment("account", proPayName)
-							.build())
-					.accept(MediaType.APPLICATION_JSON_UTF8)
-					.retrieve()
-					.bodyToMono(ProPayAccount.class);
-			return mono.block();
-		} catch (Exception e) {
-			System.out.println("getAccountInfo failed");
-		}
-		return new ProPayAccount();
+	private static final String HOST = "localhost";
+	private static final int PORT = 8888;
+	private static final String SCHEME = "http";
+	private static final MediaType MIME_TYPE = MediaType.APPLICATION_JSON_UTF8;
+
+	public ProPayAccount getAccountInfo(final String proPayName) {
+		final Mono<ProPayAccount> mono
+				= WebClient
+				.create()
+				.get()
+				.uri(builder -> builder.scheme(SCHEME)
+						.host(HOST)
+						.port(PORT)
+						.pathSegment("account", proPayName)
+						.build())
+				.accept(MIME_TYPE)
+				.retrieve()
+				.bodyToMono(ProPayAccount.class);
+		return mono.block();
 	}
 
-	public ProPayAccount addFunds(String proPayName, double amount) {
-		try {
-			final Mono<ProPayAccount> mono
-					= WebClient
-					.create()
-					.post()
-					.uri(builder -> builder.scheme("http")
-							.host("localhost")
-							.port(8888)
-							.pathSegment("account", proPayName)
-							.queryParam("amount", amount)
-							.build())
-					.accept(MediaType.APPLICATION_JSON_UTF8)
-					.retrieve()
-					.bodyToMono(ProPayAccount.class);
-			return mono.block();
-		} catch (Exception e) {
-			System.out.println("addFunds failed");
-		}
-		return new ProPayAccount();
+	public ProPayAccount addFunds(final String proPayName, final double amount) {
+		String[] path = {"account", proPayName};
+		Map<String, String> query = new HashMap<>();
+		query.put("amount", String.valueOf(amount));
+		return post(path, query, ProPayAccount.class);
 	}
 
-	public void transferFunds(String sourceAccount, String targetAccount, double amount) {
-		try {
-			WebClient
-					.create()
-					.post()
-					.uri(builder -> builder.scheme("http")
-							.host("localhost")
-							.port(8888)
-							.pathSegment("account", sourceAccount, "transfer", targetAccount)
-							.queryParam("amount", amount)
-							.build())
-					.accept(MediaType.APPLICATION_JSON_UTF8)
-					.retrieve()
-					.bodyToMono(String.class)
-					.block();
-		} catch (Exception e) {
-			System.out.println("trnsferFunds failed");
-		}
+	public void transferFunds(final String sourceAccount, final String targetAccount, final double amount) {
+		String[] path = {"account", sourceAccount, "transfer", targetAccount};
+		Map<String, String> query = new HashMap<>();
+		query.put("amount", String.valueOf(amount));
+		post(path, query, String.class);
 	}
 
-	public ProPayReservation createReservation(String account, String targetAccount, double amount) {
-		try {
-			final Mono<ProPayReservation> mono
-					= WebClient
-					.create()
-					.post()
-					.uri(builder -> builder.scheme("http")
-							.host("localhost")
-							.port(8888)
-							.pathSegment("reservation", "reserve", account, targetAccount)
-							.queryParam("amount", amount)
-							.build())
-					.accept(MediaType.APPLICATION_JSON_UTF8)
-					.retrieve()
-					.bodyToMono(ProPayReservation.class);
-			return mono.block();
-		} catch (Exception e) {
-			System.out.println("createReservation failed");
-		}
-		return new ProPayReservation();
+	public ProPayReservation createReservation(final String account, final String targetAccount, final double amount) {
+		String[] path = {"reservation", "reserve", account, targetAccount};
+		Map<String, String> query = new HashMap<>();
+		query.put("amount", String.valueOf(amount));
+		return post(path, query, ProPayReservation.class);
 	}
 
-	public ProPayAccount releaseReservation(long reservationId, String account) {
-		try {
-			final Mono<ProPayAccount> mono
-					= WebClient
-					.create()
-					.post()
-					.uri(builder -> builder.scheme("http")
-							.host("localhost")
-							.port(8888)
-							.pathSegment("reservation", "release", account)
-							.queryParam("reservationId", reservationId)
-							.build())
-					.accept(MediaType.APPLICATION_JSON_UTF8)
-					.retrieve()
-					.bodyToMono(ProPayAccount.class);
-			return mono.block();
-		} catch (Exception e) {
-			System.out.println("releaseReservation failed");
-		}
-		return new ProPayAccount();
+	public ProPayAccount releaseReservation(final long reservationId, final String account) {
+		String[] path = {"reservation", "release", account};
+		Map<String, String> query = new HashMap<>();
+		query.put("reservationId", String.valueOf(reservationId));
+		return post(path, query, ProPayAccount.class);
 	}
 
-	public ProPayAccount punishReservation(long reservationId, String account) {
-		try {
-			final Mono<ProPayAccount> mono
-					= WebClient
-					.create()
-					.post()
-					.uri(builder -> builder.scheme("http")
-							.host("localhost")
-							.port(8888)
-							.pathSegment("reservation", "punish", account)
-							.queryParam("reservationId", reservationId)
-							.build())
-					.accept(MediaType.APPLICATION_JSON_UTF8)
-					.retrieve()
-					.bodyToMono(ProPayAccount.class);
-			return mono.block();
-		} catch (Exception e) {
-			System.out.println("punishReservation failed");
+	public ProPayAccount punishReservation(final long reservationId, final String account) throws WebClientException {
+		String[] path = {"reservation", "punish", account};
+		Map<String, String> query = new HashMap<>();
+		query.put("reservationId", String.valueOf(reservationId));
+		return post(path, query, ProPayAccount.class);
+	}
+
+
+	private <T> T post(final String[] path, final Map<String, String> query, final Class<T> monoClass) {
+		final Mono<T> mono
+				= WebClient
+				.create()
+				.post()
+				.uri(genProPayUri(query, path))
+				.accept(MIME_TYPE)
+				.retrieve()
+				.bodyToMono(monoClass);
+		return mono.block();
+	}
+
+	private URI genProPayUri(final Map<String, String> query, final String[] path) {
+		UriBuilder uriBuilder = new DefaultUriBuilderFactory()
+				.builder()
+				.scheme(SCHEME)
+				.host(HOST)
+				.port(PORT)
+				.pathSegment(path);
+		return setQueryParam(uriBuilder, query).build();
+	}
+
+	private UriBuilder setQueryParam(final UriBuilder builder, final Map<String, String> query) {
+		for (Map.Entry<String, String> entry : query.entrySet()) {
+			builder.queryParam(entry.getKey(), entry.getValue());
 		}
-		return new ProPayAccount();
+		return builder;
 	}
 }
