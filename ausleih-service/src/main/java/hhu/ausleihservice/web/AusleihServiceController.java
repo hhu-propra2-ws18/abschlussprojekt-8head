@@ -119,10 +119,11 @@ public class AusleihServiceController {
 		personValidator.validate(person, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute(person);
-			model.addAttribute("usernameErrors", bindingResult.getFieldError("username").getCode());
-			model.addAttribute("vornameErrors", bindingResult.getFieldError("vorname").getCode());
-			model.addAttribute("nachnameErrors", bindingResult.getFieldError("nachname").getCode());
-			model.addAttribute("passwordErrors", bindingResult.getFieldError("password").getCode());
+			model.addAttribute("usernameErrors", bindingResult.getFieldError("username"));
+			model.addAttribute("vornameErrors", bindingResult.getFieldError("vorname"));
+			model.addAttribute("nachnameErrors", bindingResult.getFieldError("nachname"));
+			model.addAttribute("passwordErrors", bindingResult.getFieldError("password"));
+			model.addAttribute("emailErrors", bindingResult.getFieldError("email"));
 			return "register";
 		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -176,7 +177,9 @@ public class AusleihServiceController {
 		itemValidator.validate(newItem, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("newitem", newItem);
-			model.addAttribute("errors", bindingResult.getAllErrors());
+			model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
+			model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
+			model.addAttribute("kautionswertErrors", bindingResult.getFieldError("kautionswert"));
 			return "neuerArtikel";
 		}
 		Person besitzer = personService.get(p);
