@@ -4,10 +4,12 @@ import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.databasemodel.Rolle;
+import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,11 +26,13 @@ public class AusleihServiceController {
 	private PersonService personService;
 	private ItemService itemService;
 	private AbholortService abholortService;
+	private PersonValidator personValidator;
 
-	public AusleihServiceController(PersonService perService, ItemService iService, AbholortService abholortService) {
+	public AusleihServiceController(PersonService perService, ItemService iService, AbholortService abholortService, PersonValidator personValidator) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
+		this.personValidator = personValidator;
 	}
 
 	@GetMapping("/liste")
@@ -114,10 +118,11 @@ public class AusleihServiceController {
 	}
 
 	@PostMapping("/register")
-	public String added(Model model, Person person) {
-		if (personService.findByUsername(person.getUsername()).isPresent()) {
-			model.addAttribute("usernameTaken", true);
-			model.addAttribute("person", person);
+	public String added(Model model, Person person, BindingResult bindingResult) {
+		personValidator.validate(person, bindingResult);
+		if(bindingResult.hasErrors()) {
+			model.addAttribute(person);
+			model.addAttribute("errors", bindingResult.getAllErrors());
 			return "register";
 		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
