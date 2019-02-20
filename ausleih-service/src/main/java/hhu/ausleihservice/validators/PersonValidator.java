@@ -41,7 +41,7 @@ public class PersonValidator implements Validator {
 		}
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "rolle", "NotEmpty");
-		if(person.getRolle() != Rolle.ADMIN && person.getRolle() != Rolle.USER) {
+		if (person.getRolle() != Rolle.ADMIN && person.getRolle() != Rolle.USER) {
 			errors.rejectValue("rolle", "Invalid.personForm.role");
 		}
 

@@ -18,7 +18,7 @@ public class AbholortValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		Abholort abholort = (Abholort) target;
 
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors,"beschreibung","NotEmpty");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "beschreibung", "NotEmpty");
 		if (abholort.getBeschreibung().length() < 6 || abholort.getBeschreibung().length() > 400) {
 			errors.rejectValue("beschreibung", "Size.locationForm.description");
 		}
