@@ -65,9 +65,10 @@ public class Person {
 	}
 
 	public boolean isAdmin() {
-		if (this != null && this.getRole().equals(Role.ADMIN)) {
-			return true;
-		}
-		return false;
+		return this != null && this.getRole().equals(Role.ADMIN);
+	}
+
+	public boolean isOwner(Item artikel){
+		return this.getId().equals(artikel.getBesitzer().getId());
 	}
 }

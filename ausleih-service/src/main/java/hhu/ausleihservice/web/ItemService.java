@@ -2,6 +2,7 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.Item;
+import hhu.ausleihservice.web.form.ArtikelBearbeitenForm;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;
 
@@ -98,5 +99,22 @@ public class ItemService {
 
 	public void save(Item newItem) {
 		items.save(newItem);
+	}
+
+	public void updateById(Long id, ArtikelBearbeitenForm artikelBearbeitenForm) {
+		Item toUpdate = this.findById(id);
+		if (!(artikelBearbeitenForm.getNewTitel().equals(""))) {
+			toUpdate.setTitel(artikelBearbeitenForm.getNewTitel());
+		}
+		if (!(artikelBearbeitenForm.getNewBeschreibung().equals(""))) {
+			toUpdate.setBeschreibung(artikelBearbeitenForm.getNewBeschreibung());
+		}
+		if (!(artikelBearbeitenForm.getNewKautionswert()==0)) {
+			toUpdate.setKautionswert(artikelBearbeitenForm.getNewKautionswert());
+		}
+		if (!(artikelBearbeitenForm.getNewTagessatz()==0)) {
+			toUpdate.setTagessatz(artikelBearbeitenForm.getNewTagessatz());
+		}
+		items.save(toUpdate);
 	}
 }

@@ -19,7 +19,6 @@
 		<th>Kaution</th>
 		<th>Standort</th>
 		<th>Verleihender</th>
-		<th th:if="${user.isAdmin()}">Artikel bearbeiten (Nur Admins)</th>
 	</tr>
 	<tr>
 		<td th:text="${artikel.beschreibung}">Beschreibung</td>
@@ -31,9 +30,20 @@
 		<td><a th:href="@{/profil/{besitzerId} (besitzerId=${artikel.besitzer.getId()})}"
 			   th:text="|${artikel.besitzer.getVorname()} ${artikel.besitzer.getNachname()}|"><p>Name</p></a>
 		</td>
-		<td th:if="${user.isAdmin()}"><a href="artikelBearbeitenAdmin.html"
-										 th:href="@{bearbeiten/artikel/{artikelID} (artikelID=${artikel.getId()})}">Bearbeiten</a>
-		</td>
+	</tr>
+	<tr th:if="${user.isAdmin() or user.isOwner(artikel)}">
+		<form th:object="${artikelBearbeitenForm}">
+			<td><input name="newBeschreibung" type="text" th:field="*{newBeschreibung}"></td>
+			<td></td>
+			<td></td>
+			<td><input name="newTagessatz" type="number" step="0.1" min="0" th:field="*{newTagessatz}"></td>
+			<td><input name="newKautionswert" type="number" step="0.1" min="0" th:field="*{newKautionswert}"></td>
+			<td></td>
+			<td><input name="newTitle" type="text" th:field="*{newTitel}"></td>
+			<td>
+				<button type="submit" value="true" name="editArtikel" formmethod="post">Artikel Ändern</button>
+			</td>
+		</form>
 	</tr>
 </table>
 <table id="items">
@@ -50,21 +60,21 @@
 	 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/>
 <div id="mapid" style="width: 600px; height: 400px;"></div>
 <script th:inline="javascript">
-	/*<![CDATA[*/
-		var longitude = /*[[${artikel.abholort.longitude}]]*/;
-		var latitude = /*[[${artikel.abholort.latitude}]]*/;
-        var map = L.map('mapid').setView([latitude, longitude], 13);
-        mapLink =
-            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-        L.tileLayer(
-            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    /*<![CDATA[*/
+    var longitude = /*[[${artikel.abholort.longitude}]]*/;
+    var latitude = /*[[${artikel.abholort.latitude}]]*/;
+    var map = L.map('mapid').setView([latitude, longitude], 13);
+    mapLink =
+        '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+    L.tileLayer(
+        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; ' + mapLink + ' Contributors',
             maxZoom: 18,
-            }).addTo(map);
-		var message = /*[[${artikel.abholort.beschreibung}]]*/
-		L.marker([latitude, longitude]).addTo(map)
-			.bindPopup(message).openPopup();
-	/*]]>*/
+        }).addTo(map);
+    var message = /*[[${artikel.abholort.beschreibung}]]*/
+        L.marker([latitude, longitude]).addTo(map)
+            .bindPopup(message).openPopup();
+    /*]]>*/
 
 </script>
 

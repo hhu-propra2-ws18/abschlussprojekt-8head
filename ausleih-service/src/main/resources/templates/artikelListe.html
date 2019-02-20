@@ -18,6 +18,7 @@
 		<th>Tagessatz</th>
 		<th>Kaution</th>
 		<th>Standort</th>
+		<th th:if="${user.isAdmin()}"> </th>
 		<th th:if="${user.isAdmin()}">Artikel bearbeiten (Nur Admins)</th>
 	</tr>
 	<th:block th:each="artikel : ${artikelListe}">
@@ -27,7 +28,7 @@
 			<td th:text="${artikel.tagessatz} + &euro;"></td>
 			<td th:text="${artikel.kautionswert} + &euro;"></td>
 			<td th:text="${artikel.abholort.beschreibung}"></td>
-			<td><a th:href="@{/details(id=${artikel.id})}">anzeigen</a></td>
+			<td><a th:href="@{/details/{artikelId} (artikelId=${artikel.getId()})}">anzeigen</a></td>
 			<td th:if="${user.isAdmin()}"><a href="artikelBearbeitenAdmin.html"
 											 th:href="@{bearbeiten/artikel/{artikelID} (artikelID=${artikel.getId()})}">Bearbeiten</a>
 			</td>

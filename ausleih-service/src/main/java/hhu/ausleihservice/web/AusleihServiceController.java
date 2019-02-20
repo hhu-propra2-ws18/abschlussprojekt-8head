@@ -3,6 +3,7 @@ package hhu.ausleihservice.web;
 import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.web.form.ArtikelBearbeitenForm;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -83,12 +84,13 @@ public class AusleihServiceController {
 	}
 
 
-	@GetMapping("/details")
-	public String artikelDetails(Model model, @RequestParam long id, Principal p) {
-
+	@GetMapping("/details/{id}")
+	public String artikelDetails(Model model,
+								 @PathVariable long id,
+								 Principal p,
+								 @ModelAttribute("artikelBearbeitenForm") ArtikelBearbeitenForm artikelBearbeitenForm) {
 		try {
-			Item artikel = itemService.findById(id);
-			model.addAttribute("artikel", artikel);
+			model.addAttribute("artikel", itemService.findById(id));
 		} catch (ItemNichtVorhanden a) {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
@@ -96,6 +98,26 @@ public class AusleihServiceController {
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("user", personService.get(p));
 		return "artikelDetails";
+	}
+
+	@PostMapping("/details/{id}")
+	public String bearbeiteArtikel(Model model,
+							 @PathVariable long id,
+							 Principal p,
+							 @RequestParam(name = "editArtikel", defaultValue = "false") final boolean changeNameDescription,
+							 @ModelAttribute("artikelBearbeitenForm") ArtikelBearbeitenForm artikelBearbeitenForm) {
+		System.out.println("Post triggered at /details?id=" + id);
+		System.out.println("changeNameDescription? " + changeNameDescription);
+
+		if (changeNameDescription) {
+			itemService.updateById(id, artikelBearbeitenForm);
+		}
+
+		model.addAttribute("artikel", itemService.findById(id));
+		model.addAttribute("dateformat", DATEFORMAT);
+		model.addAttribute("user", personService.get(p));
+
+		return "redirect:http://localhost:8080/details/"+id;
 	}
 
 	@GetMapping("/")
@@ -107,7 +129,6 @@ public class AusleihServiceController {
 	@GetMapping("/register")
 	public String register(Model model) {
 		Person userForm = new Person();
-		model.addAttribute("userForm", userForm);
 		model.addAttribute("usernameTaken", false);
 		model.addAttribute("userForm", userForm);
 		return "register";

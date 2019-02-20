@@ -36,7 +36,7 @@ public class PersonService implements UserDetailsService {
 			System.out.println(u.getRole().name());
 			Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
-			grantedAuthorities.add(new SimpleGrantedAuthority("GUEST"));
+			grantedAuthorities.add(new SimpleGrantedAuthority("USER"));
 			if (u.isAdmin()) {
 				grantedAuthorities.add(new SimpleGrantedAuthority("ADMIN"));
 			}
