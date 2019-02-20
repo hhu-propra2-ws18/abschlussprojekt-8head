@@ -180,6 +180,7 @@ public class AusleihServiceController {
 			model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
 			model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
 			model.addAttribute("kautionswertErrors", bindingResult.getFieldError("kautionswert"));
+			model.addAttribute("availableFromErrors", bindingResult.getFieldError("availableFrom"));
 			return "neuerArtikel";
 		}
 		Person besitzer = personService.get(p);

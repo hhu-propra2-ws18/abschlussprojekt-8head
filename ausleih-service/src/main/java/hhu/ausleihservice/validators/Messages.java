@@ -11,4 +11,6 @@ class Messages {
 	static String sizeTitle = "Titel muss zwischen 6 und 40 Zeichen lang sein.";
 	static String sizeItemDescription = "Beschreibung muss zwischen 6 und 4000 Zeichen lang sein.";
 	static String negativeValue = "Der Wert muss mindestens 1 betragen";
+	static String invalidPeriod = "Das Anfangsdatum muss vor dem Enddatum liegen!";
+	static String invalidAvailableFrom = "Das Anfangsdatum muss mindestens heute sein";
 }

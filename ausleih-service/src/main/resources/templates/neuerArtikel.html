@@ -34,7 +34,7 @@
 
 				<div class="form-group">
 					<label for="kautionswert">Kautionswert: </label>
-					<input type="number" th:field="*{kautionswert}" step="1" 
+					<input type="number" th:field="*{kautionswert}" step="1" min="0.00"
 						   class="form-control" id="kautionswert">
 					<div th:text="${kautionswertErrors?.code}"></div>
 				</div>
@@ -51,6 +51,7 @@
 				<div class="form-group">
 					<label for="availableFrom">Verfügbar ab: </label>
 					<input type="date" th:field="*{availableFrom}" class="form-control" id="availableFrom">
+					<div th:text="${availableFromErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">

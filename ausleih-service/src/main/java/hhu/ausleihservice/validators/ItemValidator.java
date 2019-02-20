@@ -1,6 +1,9 @@
 package hhu.ausleihservice.validators;
 
 import hhu.ausleihservice.databasemodel.Item;
+
+import java.time.LocalDate;
+
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -35,6 +38,27 @@ public class ItemValidator implements Validator {
 			}
 		} else {
 			errors.rejectValue("kautionswert", Messages.notEmpty);
+		}
+
+		if (item.getTagessatz() != null) {
+
+			if (item.getTagessatz() <= 0) {
+				errors.rejectValue("tagessatz", Messages.negativeValue);
+			}
+		} else {
+			errors.rejectValue("tagessatz", Messages.notEmpty);
+		}
+		if (item.getAvailableFrom() == null || item.getAvailableTill() != null) {
+			if (item.getAvailableFrom().isAfter(item.getAvailableTill())) {
+				errors.rejectValue("availableFrom", Messages.invalidPeriod);
+			}
+			if (item.getAvailableFrom().isBefore(LocalDate.now())) {
+				errors.rejectValue("availableFrom", Messages.invalidAvailableFrom);
+			}
+		}
+		else {
+			errors.rejectValue("availableFrom", Messages.notEmpty);
+			errors.rejectValue("availableTill", Messages.notEmpty);
 		}
 
 	}
