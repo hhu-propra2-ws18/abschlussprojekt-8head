@@ -13,6 +13,9 @@
 	<div class="row mt-3">
 		<div class="col-md-3">
 			<h2>Neues Item hinzufügen:</h2>
+			<div th:if="|${errors} != null|" th:each="error: ${errors}">
+				<div th:text="${error}"></div>
+			</div>
 			<form action="#" th:action="@{/newitem}" th:object="${newitem}" method="post" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="titel">Titel:</label>
