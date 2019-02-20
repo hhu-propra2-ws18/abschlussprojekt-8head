@@ -9,7 +9,7 @@
 <h1>Neues Konto Erstellen</h1>
 
 <table id="items">
-	<form th:action="@{/register}" th:object="${person}" method="post">
+	<form th:action="@{/register}" th:object="${userForm}" method="post">
 		<div><input name="vorname" type="text" th:value="*{vorname}">Vorname</div>
 		<div><input name="nachname" type="text" th:value="*{nachname}">Nachname</div>
 		<div><input name="username" type="text" th:value="*{username}">Username</div>
