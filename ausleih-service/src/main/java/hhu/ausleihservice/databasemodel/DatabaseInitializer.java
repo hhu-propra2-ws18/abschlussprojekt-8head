@@ -153,7 +153,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item1.setImage("stift.jpg");
 		item2.setImage("fahrrad.jpg");
 		item3.setImage("pfeil.jpg");
-    
+
 		Byte byt = Byte.parseByte("100");
 		byte[] in = {byt};
 		item3.setPicture(in);

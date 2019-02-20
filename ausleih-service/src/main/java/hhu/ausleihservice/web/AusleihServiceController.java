@@ -59,7 +59,7 @@ public class AusleihServiceController {
 							   String availableMax,
 							   Principal p) {
 		model.addAttribute("person", personService.get(p));
-    
+
 		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
 
 		model.addAttribute("dateformat", DATEFORMAT);
@@ -82,7 +82,7 @@ public class AusleihServiceController {
 								Principal p
 	) {
 		model.addAttribute("person", personService.get(p));
-    
+
 		List<Person> list = personService.searchByNames(query);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("benutzerListe", list);
@@ -109,7 +109,7 @@ public class AusleihServiceController {
 
 	@GetMapping("/")
 	public String startseite(Model model, Principal p) {
-  	model.addAttribute("person", personService.get(p));
+		model.addAttribute("person", personService.get(p));
 		model.addAttribute("user", personService.get(p));
 		return "startseite";
 	}
@@ -158,14 +158,14 @@ public class AusleihServiceController {
 
 	@GetMapping("/bearbeiten/artikel/{id}")
 	public String adminEditItem(Model model, @PathVariable Long id, Principal p) {
-    model.addAttribute("person", personService.get(p));
+		model.addAttribute("person", personService.get(p));
 		model.addAttribute("artikel", itemService.findById(id));
 		return "artikelBearbeitenAdmin";
 	}
 
 	@GetMapping("/bearbeiten/benutzer/{id}")
 	public String adminEditUser(Model model, @PathVariable Long id, Principal p) {
-    model.addAttribute("person", personService.get(p));
+		model.addAttribute("person", personService.get(p));
 		model.addAttribute("benutzer", personService.findById(id));
 		return "benutzerBearbeitenAdmin";
 	}
@@ -184,7 +184,7 @@ public class AusleihServiceController {
 			model.addAttribute("message", "Bitte Abholorte hinzufügen");
 			return "errorMessage";
 		}
-    model.addAttribute("person", personService.get(p));
+		model.addAttribute("person", personService.get(p));
 		model.addAttribute("newitem", new Item());
 		model.addAttribute("abholorte", person.getAbholorte());
 		return "neuerArtikel";
@@ -214,7 +214,7 @@ public class AusleihServiceController {
 
 	@PostMapping("/editProfil")
 	public String editProfilPost(Model model, Principal p, Person person) {
-    model.addAttribute("person", personService.get(p));
+		model.addAttribute("person", personService.get(p));
 		personService.update(person, p);
 		return "editProfil";
 	}
