@@ -3,7 +3,7 @@ package hhu.ausleihservice.web;
 import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
-import hhu.ausleihservice.databasemodel.Rolle;
+import hhu.ausleihservice.databasemodel.Role;
 import hhu.ausleihservice.validators.ItemValidator;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
@@ -144,7 +144,7 @@ public class AusleihServiceController {
 		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		person.setPassword(encoder.encode(person.getPassword()));
-		person.setRolle(Rolle.USER);
+		person.setRole(Role.USER);
 		personService.save(person);
 		return startseite(model, null);
 	}

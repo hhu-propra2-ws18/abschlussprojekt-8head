@@ -55,8 +55,7 @@ public class ItemValidator implements Validator {
 			if (item.getAvailableFrom().isBefore(LocalDate.now())) {
 				errors.rejectValue("availableFrom", Messages.invalidAvailableFrom);
 			}
-		}
-		else {
+		} else {
 			errors.rejectValue("availableFrom", Messages.notEmpty);
 			errors.rejectValue("availableTill", Messages.notEmpty);
 		}
