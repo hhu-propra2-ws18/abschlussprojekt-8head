@@ -13,7 +13,8 @@
 <table class="product-details">
 	<tr>
 		<td><h2 th:text="${artikel.titel}">ITEM</h2></td>
-		<td><img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}" th:width="60px" th:height="60px"/>
+		<td><img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}" th:width="60px"
+				 th:height="60px"/>
 			<img th:if="${artikel.picture != null and artikel.getBase64EncodedString()!=null}"
 				 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/></td>
 	</tr>
@@ -61,21 +62,21 @@
 <a href="/liste"> Zurück</a>
 <div id="mapid" style="width: 600px; height: 400px;"></div>
 <script th:inline="javascript">
-	/*<![CDATA[*/
-		var longitude = /*[[${artikel.abholort.longitude}]]*/;
-		var latitude = /*[[${artikel.abholort.latitude}]]*/;
-        var map = L.map('mapid').setView([latitude, longitude], 13);
-        mapLink =
-            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-        L.tileLayer(
-            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    /*<![CDATA[*/
+    var longitude = /*[[${artikel.abholort.longitude}]]*/;
+    var latitude = /*[[${artikel.abholort.latitude}]]*/;
+    var map = L.map('mapid').setView([latitude, longitude], 13);
+    mapLink =
+        '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+    L.tileLayer(
+        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; ' + mapLink + ' Contributors',
             maxZoom: 18,
-            }).addTo(map);
-		var message = /*[[${artikel.abholort.beschreibung}]]*/
-		L.marker([latitude, longitude]).addTo(map)
-			.bindPopup(message).openPopup();
-	/*]]>*/
+        }).addTo(map);
+    var message = /*[[${artikel.abholort.beschreibung}]]*/
+        L.marker([latitude, longitude]).addTo(map)
+            .bindPopup(message).openPopup();
+    /*]]>*/
 
 </script>
 
