@@ -5,6 +5,8 @@ import hhu.ausleihservice.databasemodel.Item;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -47,5 +49,18 @@ public class ItemAvailabilityService {
 			temp = temp.plusDays(1);
 		}
 		return true;
+	}
+
+	public List<String> getUnavailableDates(Item item) {
+		LocalDate temp = item.getAvailableFrom();
+		LocalDate end = item.getAvailableTill();
+		List<String> unavailabeDates = new ArrayList<>();
+		while (!temp.isAfter(end)) {
+			if (!isAvailable(item, temp)) {
+				unavailabeDates.add(temp.toString());
+			}
+			temp = temp.plusDays(1);
+		}
+		return unavailabeDates;
 	}
 }
