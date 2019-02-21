@@ -51,9 +51,9 @@
 .product-details {
     margin: 10px;
     border-radius: 4px;
-    max-width: 500px;
+    max-width: 600px;
     min-height: 500px;
-    background: darkgrey;
+    /*background: darkgrey;*/
     padding: 15px 15px 15px 15px;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -62,7 +62,7 @@
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
-    box-shadow: 0 2px 55px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0 2px 55px rgba(0, 0, 0, 0.1);*/
 }
 
 .product-details tr:nth-child(odd) {
@@ -80,6 +80,14 @@
 .product-details td {
     border: 1px solid #ddd;
     padding: 8px;
+}
+
+.product-details-map div {
+    max-width: 500px;
+    max-height: 600px;
+    margin: 10px;
+    border-radius: 4px;
+    padding: 15px 15px 15px 15px;
 }
 
 .product-top {

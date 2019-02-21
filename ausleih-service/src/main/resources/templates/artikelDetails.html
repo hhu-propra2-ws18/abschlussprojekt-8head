@@ -10,64 +10,72 @@
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
 
-<table class="product-details">
-	<tr>
-		<td><h2 th:text="${artikel.titel}">ITEM</h2></td>
-		<td><img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}" th:width="60px"
-				 th:height="60px"/>
-			<img th:if="${artikel.picture != null and artikel.getBase64EncodedString()!=null}"
-				 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/></td>
-	</tr>
-	<tr>
-		<td>Beschreibung</td>
-		<td th:text="${artikel.beschreibung}"></td>
-	</tr>
-	<tr>
-		<td>Verfügbarkeit ab</td>
-		<td th:text="${artikel.availableFrom.format(dateformat)}"></td>
-	</tr>
-	<tr>
-		<td>Verfügbar bis</td>
-		<td th:text="${artikel.availableTill.format(dateformat)}"></td>
-	</tr>
-	<tr>
-		<td>Noch verfügbar zu folgenden Zeiten</td>
-		<td>
-			<table class="table-striped">
-				<tr th:each="periods: ${artikel.availablePeriods}">
-					<td th:text="${periods}">from now to then</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<tr>
-		<td>Tagessatz</td>
-		<td th:text="${artikel.tagessatz} + &euro;"></td>
-	</tr>
-	<tr>
-		<td>Kaution</td>
-		<td th:text="${artikel.kautionswert} + &euro;"></td>
-	</tr>
-	<tr>
-		<td>Standort</td>
-		<td th:text="${artikel.abholort.beschreibung}"></td>
-	</tr>
-	<tr>
-		<td>Verleihender</td>
-		<td th:href="${'/profil/' + artikel.besitzer.id}" th:text="${artikel.besitzer.vorname +
-		 ' ' + artikel.besitzer.nachname}"></td>
-	</tr>
-</table>
+<container class="container-fluid">
+	<div class="row">
+	<div class="col-md-auto">
+		<table class="product-details">
+			<tr>
+				<td><h2 th:text="${artikel.titel}">ITEM</h2></td>
+				<td><img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}" th:width="60px"
+						 th:height="60px"/>
+					<img th:if="${artikel.picture != null and artikel.getBase64EncodedString()!=null}"
+						 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/></td>
+			</tr>
+			<tr>
+				<td>Beschreibung</td>
+				<td th:text="${artikel.beschreibung}"></td>
+			</tr>
+			<tr>
+				<td>Verfügbarkeit ab</td>
+				<td th:text="${artikel.availableFrom.format(dateformat)}"></td>
+			</tr>
+			<tr>
+				<td>Verfügbar bis</td>
+				<td th:text="${artikel.availableTill.format(dateformat)}"></td>
+			</tr>
+			<tr>
+				<td>Noch verfügbar zu folgenden Zeiten</td>
+				<td>
+					<table class="table-striped">
+						<tr th:each="periods: ${artikel.availablePeriods}">
+							<td th:text="${periods}">from now to then</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>Tagessatz</td>
+				<td th:text="${artikel.tagessatz} + &euro;"></td>
+			</tr>
+			<tr>
+				<td>Kaution</td>
+				<td th:text="${artikel.kautionswert} + &euro;"></td>
+			</tr>
+			<tr>
+				<td>Standort</td>
+				<td th:text="${artikel.abholort.beschreibung}"></td>
+			</tr>
+			<tr>
+				<td>Verleihender</td>
+				<td th:href="${'/profil/' + artikel.besitzer.id}" th:text="${artikel.besitzer.vorname +
+				 ' ' + artikel.besitzer.nachname}"></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<div id="mapid">is the mapid div here?</div>
+	</div>
+	</div>
+</container>
 
-<a href="/liste"> Zurück</a>
-<div id="mapid" style="width: 600px; height: 400px;"></div>
+<a href="/liste">Zurück</a>
+
 <script th:inline="javascript">
     /*<![CDATA[*/
     var longitude = /*[[${artikel.abholort.longitude}]]*/;
     var latitude = /*[[${artikel.abholort.latitude}]]*/;
     var map = L.map('mapid').setView([latitude, longitude], 13);
-    mapLink =
-        '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+    mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
     L.tileLayer(
         'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; ' + mapLink + ' Contributors',
@@ -77,7 +85,6 @@
         L.marker([latitude, longitude]).addTo(map)
             .bindPopup(message).openPopup();
     /*]]>*/
-
 </script>
 
 <!-- Optional JavaScript -->
