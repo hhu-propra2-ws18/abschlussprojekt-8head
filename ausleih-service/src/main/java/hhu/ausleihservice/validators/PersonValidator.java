@@ -41,9 +41,9 @@ public class PersonValidator implements Validator {
 			errors.rejectValue("password", Messages.passwordSize);
 		}
 
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "rolle", Messages.notEmpty);
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "role", Messages.notEmpty);
 		if (person.getRole() != Role.ADMIN && person.getRole() != Role.USER) {
-			errors.rejectValue("rolle", Messages.invalidRole);
+			errors.rejectValue("role", Messages.invalidRole);
 		}
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", Messages.invalidEmail);
