@@ -164,6 +164,12 @@ public class AusleihServiceController {
 		return "profil";
 	}
 
+	@PostMapping("/profil")
+	public String chargeProPay(@RequestParam("moneten") double moneten, Principal p){
+		proPayService.addFunds(personService.get(p), moneten);
+		return "redirect:/profil/";
+	}
+
 	@GetMapping("/bearbeiten/artikel/{id}")
 	public String adminEditItem(Model model, @PathVariable Long id, Principal p) {
 		model.addAttribute("person", personService.get(p));
