@@ -164,10 +164,10 @@ public class AusleihServiceController {
 		return "profil";
 	}
 
-	@PostMapping("/profil")
-	public String chargeProPay(@RequestParam("moneten") double moneten, Principal p){
-		proPayService.addFunds(personService.get(p), moneten);
-		return "redirect:/profil/";
+	@PostMapping("/profil/{id}")
+	public String chargeProPayById(@RequestParam("moneten") double moneten, @PathVariable Long id){
+		proPayService.addFunds(personService.findById(id), moneten);
+		return "redirect:/profil/" + id;
 	}
 
 	@GetMapping("/bearbeiten/artikel/{id}")

@@ -17,7 +17,7 @@
 	<div th:text="${moneten}"></div>
 </h1>
 
-<form th:if="${isOwnProfile}" action="#" th:action="@{/profil}" method="post">
+<form th:if="${isOwnProfile}" action="#" th:action="@{/profil/{personID} (personID=${person.getId()})}" method="post">
 	<input type="number" name="moneten" min="0">
 	<button type="submit">€ Aufladen</button>
 </form>
