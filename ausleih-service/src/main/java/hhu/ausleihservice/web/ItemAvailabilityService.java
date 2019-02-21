@@ -23,17 +23,9 @@ public class ItemAvailabilityService {
 		LocalDate availableTill = item.getAvailableTill();
 		Set<Ausleihe> ausleihen = item.getAusleihen();
 
-		if (!isInPeriod(date, availableFrom, availableTill)) {
-			return false;
-		}
-		for (Ausleihe ausleihe : ausleihen) {
-			LocalDate startDatum = ausleihe.getStartDatum();
-			LocalDate endDatum = ausleihe.getEndDatum();
-			if (isInPeriod(date, startDatum, endDatum)) {
-				return false;
-			}
-		}
-		return true;
+		return isInPeriod(date, availableFrom, availableTill)
+				&& ausleihen.stream().noneMatch((ausleihe)
+				-> isInPeriod(date, ausleihe.getStartDatum(), ausleihe.getEndDatum()));
 	}
 
 	//Format of input is "YYYY-MM-DD"
