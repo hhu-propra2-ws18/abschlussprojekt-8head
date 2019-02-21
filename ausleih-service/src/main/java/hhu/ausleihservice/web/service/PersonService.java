@@ -115,7 +115,7 @@ public class PersonService implements UserDetailsService {
 		Person toUpdate = this.findById(id);
 		System.out.println("Person found in database.");
 		System.out.println(newPerson.getUsername() + "is the new persons username");
-		if(newPerson.getUsername() != null) {
+		if (newPerson.getUsername() != null) {
 			toUpdate.setUsername(newPerson.getUsername());
 			System.out.println("Username set.");
 		}
@@ -125,7 +125,7 @@ public class PersonService implements UserDetailsService {
 		System.out.println("Nachname set.");
 		toUpdate.setEmail(newPerson.getEmail());
 		System.out.println("EMail set.");
-		if(!newPerson.getPassword().equals("")) {
+		if (!newPerson.getPassword().equals("")) {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			newPerson.setPassword(encoder.encode(newPerson.getPassword()));
 			toUpdate.setPassword(newPerson.getPassword());
