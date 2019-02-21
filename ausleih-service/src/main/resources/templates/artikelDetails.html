@@ -18,7 +18,6 @@
 		<th>Kaution</th>
 		<th>Standort</th>
 		<th>Verleihender</th>
-		<th th:if="${user.isAdmin()}">Artikel bearbeiten (Nur Admins)</th>
 	</tr>
 	<tr>
 		<td th:text="${artikel.beschreibung}">Beschreibung</td>
@@ -30,11 +29,27 @@
 		<td><a th:href="@{/profil/{besitzerId} (besitzerId=${artikel.besitzer.getId()})}"
 			   th:text="|${artikel.besitzer.getVorname()} ${artikel.besitzer.getNachname()}|"><p>Name</p></a>
 		</td>
-		<td th:if="${user.isAdmin()}"><a href="artikelBearbeitenAdmin.html"
-										 th:href="@{bearbeiten/artikel/{artikelID} (artikelID=${artikel.getId()})}">Bearbeiten</a>
-		</td>
+	</tr>
+	<tr th:if="${user.isAdmin() or user.isOwner(artikel)}">
+		<form th:action="@{/details/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}" method="post">
+			<td><input name="newBeschreibung" type="text" th:field="*{beschreibung}"></td>
+			<td>
+				<input name="newAvailableFrom" type="date" th:field="*{availableFrom}" id="availableFrom">
+			</td>
+			<td>
+				<input name="newAvailableTill" type="date" th:field="*{availableTill}" id="availableTill">
+			</td>
+			<td><input name="newTagessatz" type="number" step="0.1" min="0" th:field="*{tagessatz}"></td>
+			<td><input name="newKautionswert" type="number" step="0.1" min="0" th:field="*{kautionswert}"></td>
+			<td><input name="newAbholortBeschreibung" type="text" th:field="*{abholort.beschreibung}"></td>
+			<td><input name="newTitle" type="text" th:field="*{titel}"></td>
+			<td>
+				<button type="submit" value="true" name="editArtikel" >Artikel Ändern</button>
+			</td>
+		</form>
 	</tr>
 </table>
+
 <br>
 <a href="/liste">Zurück</a>
 <br>

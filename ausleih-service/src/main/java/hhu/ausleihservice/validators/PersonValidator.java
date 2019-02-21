@@ -1,14 +1,12 @@
 package hhu.ausleihservice.validators;
 
+import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.databasemodel.Role;
+import hhu.ausleihservice.web.service.PersonService;
 import org.springframework.stereotype.Component;
-
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
-import hhu.ausleihservice.databasemodel.Person;
-import hhu.ausleihservice.web.PersonService;
 
 @Component
 public class PersonValidator implements Validator {

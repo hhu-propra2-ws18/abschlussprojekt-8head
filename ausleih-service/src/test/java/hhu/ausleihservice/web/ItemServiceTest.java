@@ -3,6 +3,8 @@ package hhu.ausleihservice.web;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.Item;
+import hhu.ausleihservice.web.service.ItemAvailabilityService;
+import hhu.ausleihservice.web.service.ItemService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,7 +27,7 @@ public class ItemServiceTest {
 	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	@Mock
-	ItemRepository itemRepository;
+	private ItemRepository itemRepository;
 	private ItemService itemService = new ItemService(null, new ItemAvailabilityService());
 	private List<Item> repository = new ArrayList<>();
 

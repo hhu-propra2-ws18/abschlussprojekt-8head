@@ -3,6 +3,7 @@ package hhu.ausleihservice.web;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.web.service.PersonService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,9 +24,9 @@ public class PersonServiceTest {
 	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	@Mock
-	PersonRepository personRepository;
-	PersonService personService = new PersonService(null);
-	List<Person> repository = new ArrayList<>();
+	private PersonRepository personRepository;
+	private PersonService personService = new PersonService(null);
+	private List<Person> repository = new ArrayList<>();
 
 	private boolean testPersonEquality(Person base, Person toTest) {
 		return base.getId().longValue() == toTest.getId().longValue() &&
