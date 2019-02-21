@@ -48,7 +48,7 @@ public class ItemValidator implements Validator {
 		} else {
 			errors.rejectValue("tagessatz", Messages.notEmpty);
 		}
-		if (item.getAvailableFrom() != null || item.getAvailableTill() != null) {
+		if (item.getAvailableFrom() != null && item.getAvailableTill() != null) {
 			if (item.getAvailableFrom().isAfter(item.getAvailableTill())) {
 				errors.rejectValue("availableFrom", Messages.invalidPeriod);
 			}
