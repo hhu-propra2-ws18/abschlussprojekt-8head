@@ -8,7 +8,6 @@ import hhu.ausleihservice.validators.AbholortValidator;
 import hhu.ausleihservice.validators.ItemValidator;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,8 +31,13 @@ public class AusleihServiceController {
 	private ItemValidator itemValidator;
 	private AbholortValidator abholortValidator;
 
-	public AusleihServiceController(PersonService perService, ItemService iService, AbholortService abholortService,
-	                                PersonValidator personValidator, ItemValidator itemValidator, AbholortValidator abholortValidator) {
+	public AusleihServiceController(PersonService perService,
+	                                ItemService iService,
+	                                AbholortService abholortService,
+	                                PersonValidator personValidator,
+	                                ItemValidator itemValidator,
+	                                AbholortValidator abholortValidator
+	) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
@@ -46,7 +50,9 @@ public class AusleihServiceController {
 	public String artikelListe(Model model, @RequestParam(required = false) String query, Principal p) {
 		model.addAttribute("person", personService.get(p));
 
-		if (query != null) query = query.trim();
+		if (query != null) {
+			query = query.trim();
+		}
 
 		List<Item> list = itemService.simpleSearch(query);
 		model.addAttribute("dateformat", DATEFORMAT);
@@ -74,7 +80,9 @@ public class AusleihServiceController {
 	                           Principal p) {
 		model.addAttribute("person", personService.get(p));
 
-		if (query != null) query = query.trim();
+		if (query != null) {
+			query = query.trim();
+		}
 
 		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
 
@@ -98,7 +106,9 @@ public class AusleihServiceController {
 	) {
 		model.addAttribute("person", personService.get(p));
 
-		query = query.trim();
+		if (query != null) {
+			query = query.trim();
+		}
 		List<Person> list = personService.searchByNames(query);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("benutzerListe", list);
@@ -252,7 +262,10 @@ public class AusleihServiceController {
 	}
 
 	@PostMapping("/newlocation")
-	public String saveNewLocation(@ModelAttribute Abholort abholort, Principal p, BindingResult bindingResult, Model model) {
+	public String saveNewLocation(@ModelAttribute Abholort abholort,
+	                              Principal p,
+	                              BindingResult bindingResult,
+	                              Model model) {
 		abholortValidator.validate(abholort, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("abholort", abholort);
