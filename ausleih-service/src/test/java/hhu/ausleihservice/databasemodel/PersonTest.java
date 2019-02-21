@@ -2,6 +2,7 @@ package hhu.ausleihservice.databasemodel;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -87,7 +88,7 @@ public class PersonTest {
 
 	//Tests for setNachname(String s)
 	@Test
-	public void setNachnameToNull(){
+	public void setNachnameToNull() {
 		Person person = new Person();
 		person.setNachname(null);
 
@@ -137,7 +138,7 @@ public class PersonTest {
 
 	//Tests for setVorname(String s)
 	@Test
-	public void setVornameToNull(){
+	public void setVornameToNull() {
 		Person person = new Person();
 		person.setVorname(null);
 
@@ -187,7 +188,7 @@ public class PersonTest {
 
 	//Tests for setUsername(String s)
 	@Test
-	public void setUsernameToNull(){
+	public void setUsernameToNull() {
 		Person person = new Person();
 		person.setUsername(null);
 
@@ -237,7 +238,7 @@ public class PersonTest {
 
 	//Tests for setEmail(String s)
 	@Test
-	public void setEmailToNull(){
+	public void setEmailToNull() {
 		Person person = new Person();
 		person.setEmail(null);
 

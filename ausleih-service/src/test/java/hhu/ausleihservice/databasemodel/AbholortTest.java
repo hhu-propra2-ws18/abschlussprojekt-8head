@@ -8,7 +8,7 @@ public class AbholortTest {
 
 	//Tests for setBeschreibung(String s)
 	@Test
-	public void setBeschreibungToNull(){
+	public void setBeschreibungToNull() {
 		Abholort abholort = new Abholort();
 		abholort.setBeschreibung(null);
 

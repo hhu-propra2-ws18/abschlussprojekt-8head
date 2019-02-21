@@ -599,7 +599,7 @@ public class ItemTests {
 
 	//Tests for setTitel(String s)
 	@Test
-	public void setTitelToNull(){
+	public void setTitelToNull() {
 		Item item = new Item();
 		item.setTitel(null);
 
