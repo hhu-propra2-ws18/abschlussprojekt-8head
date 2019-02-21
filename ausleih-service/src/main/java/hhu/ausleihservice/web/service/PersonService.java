@@ -108,19 +108,22 @@ public class PersonService implements UserDetailsService {
 							qArray));
 		}
 
-		List<Person> list = listStream.collect(Collectors.toList());
-
-		return list;
+		return listStream.collect(Collectors.toList());
 	}
 
 	public void updateById(Long id, Person newPerson) {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		newPerson.setPassword(encoder.encode(newPerson.getPassword()));
 		Person toUpdate = this.findById(id);
-		toUpdate.setUsername(newPerson.getUsername());
+		if(!newPerson.getUsername().equals("")) {
+			toUpdate.setUsername(newPerson.getUsername());
+		}
 		toUpdate.setVorname(newPerson.getVorname());
 		toUpdate.setNachname(newPerson.getNachname());
 		toUpdate.setEmail(newPerson.getEmail());
+		if(!newPerson.getPassword().equals("")) {
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			newPerson.setPassword(encoder.encode(newPerson.getPassword()));
+			toUpdate.setPassword(newPerson.getPassword());
+		}
 		users.save(toUpdate);
 	}
 }
