@@ -2,7 +2,6 @@ package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -69,9 +68,12 @@ public class Person {
 		return this.getRole().equals(Role.ADMIN);
 	}
 
-	public void encryptPassword() {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		password = encoder.encode(password);
+	public boolean isOwner(Item artikel) {
+		return this.getId().equals(artikel.getBesitzer().getId());
+	}
+
+	public boolean isHimself(Person person) {
+		return this.getId().equals(person.getId());
 	}
 
 	public void setNachname(String s) {

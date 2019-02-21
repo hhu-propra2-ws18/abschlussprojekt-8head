@@ -1,4 +1,4 @@
-package hhu.ausleihservice.web;
+package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
@@ -18,11 +18,10 @@ public class ItemAvailabilityService {
 		return isAvailable(item, LocalDate.now());
 	}
 
-	boolean isAvailable(Item item, LocalDate date) {
+	public boolean isAvailable(Item item, LocalDate date) {
 		LocalDate availableFrom = item.getAvailableFrom();
 		LocalDate availableTill = item.getAvailableTill();
 		Set<Ausleihe> ausleihen = item.getAusleihen();
-
 		return isInPeriod(date, availableFrom, availableTill)
 				&& ausleihen.stream().noneMatch((ausleihe)
 				-> isInPeriod(date, ausleihe.getStartDatum(), ausleihe.getEndDatum()));

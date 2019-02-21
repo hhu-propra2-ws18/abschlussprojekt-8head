@@ -1,4 +1,4 @@
-package hhu.ausleihservice.web;
+package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.Item;
@@ -17,12 +17,12 @@ public class ItemService {
 	private ItemAvailabilityService itemAvailabilityService;
 
 
-	ItemService(ItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
+	public ItemService(ItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
 		this.items = itemRep;
 		this.itemAvailabilityService = itemAvailabilityService;
 	}
 
-	Item findById(long id) {
+	public Item findById(long id) {
 		Optional<Item> item = items.findById(id);
 		if (!item.isPresent()) {
 			throw new ItemNichtVorhanden();
@@ -98,5 +98,17 @@ public class ItemService {
 
 	public void save(Item newItem) {
 		items.save(newItem);
+	}
+
+	public void updateById(Long id, Item newItem) {
+		Item toUpdate = this.findById(id);
+		toUpdate.setTitel(newItem.getTitel());
+		toUpdate.setBeschreibung(newItem.getBeschreibung());
+		toUpdate.setAvailableFrom(newItem.getAvailableFrom());
+		toUpdate.setAvailableTill(newItem.getAvailableTill());
+		toUpdate.setTagessatz(newItem.getTagessatz());
+		toUpdate.setKautionswert(newItem.getKautionswert());
+		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
+		items.save(toUpdate);
 	}
 }

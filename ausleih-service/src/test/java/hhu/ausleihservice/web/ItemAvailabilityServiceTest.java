@@ -2,6 +2,7 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
+import hhu.ausleihservice.web.service.ItemAvailabilityService;
 import org.junit.Test;
 
 import java.time.LocalDate;

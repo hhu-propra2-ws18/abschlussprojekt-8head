@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Bean
-	public PasswordEncoder encoder() {
+	protected PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
 	}
 
@@ -22,7 +22,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/").permitAll()
 				.antMatchers("/register").permitAll()
 				.antMatchers("/img/8head.jpg").permitAll()
-				.antMatchers("/bearbeiten**").hasRole("ADMIN")
+				.antMatchers("/details").access("hasAuthority('USER')")
 				.antMatchers("/admin**").access("hasAuthority('ADMIN')")
 				.antMatchers("/style.css").permitAll()
 				.anyRequest().authenticated()
