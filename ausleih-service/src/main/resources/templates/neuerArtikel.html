@@ -18,26 +18,27 @@
 				<div class="form-group">
 					<label for="titel">Titel:</label>
 					<input type="text" th:field="*{titel}" class="form-control" id="titel">
-					<div th:text="${titelErrors?.code}"></div>
+					<div id="error" th:text="${titelErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
 					<label for="beschreibung">Beschreibung: </label>
 					<input type="text" th:field="*{beschreibung}" class="form-control" id="beschreibung">
-					<div th:text="${beschreibungErrors?.code}"></div>
+					<div id="error" th:text="${beschreibungErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
 					<label for="tagessatz">Tagessatz: </label>
 					<input type="number" th:field="*{tagessatz}" step="1" min="0.00"
 						   class="form-control" id="tagessatz">
+					<div id="error" th:text="${tagessatzErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
 					<label for="kautionswert">Kautionswert: </label>
 					<input type="number" th:field="*{kautionswert}" step="1" min="0.00"
 						   class="form-control" id="kautionswert">
-					<div th:text="${kautionswertErrors?.code}"></div>
+					<div id="error" th:text="${kautionswertErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
@@ -47,22 +48,25 @@
 								th:value="${abholort.id}"
 								th:text="${abholort.beschreibung}"></option>
 					</select>
+					<div id="error" th:text="${abholortErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
 					<label for="availableFrom">Verfügbar ab: </label>
 					<input type="date" th:field="*{availableFrom}" class="form-control" id="availableFrom">
-					<div th:text="${availableFromErrors?.code}"></div>
+					<div id="error" th:text="${availableFromErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
 					<label for="availableTill">Verfügbar bis: </label>
 					<input type="date" th:field="*{availableTill}" class="form-control" id="availableTill">
+					<div id="error" th:text="${availableTillErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
 					<label for="file">Bild: </label>
 					<input type="file" id="file" class="form-control" accept=".png, .jpg, .jpeg" name="file">
+					<div id="error" th:text="${fileErrors?.code}"></div>
 				</div>
 
 				<button type="submit" class="btn btn-primary">Hinzufügen</button>
