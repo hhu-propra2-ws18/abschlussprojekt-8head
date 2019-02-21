@@ -38,16 +38,17 @@ public class ItemController {
 	}
 
 	@GetMapping("/liste")
-	public String artikelListe(Model model, @RequestParam(required = false) String query) {
+	public String artikelListe(Model model, @RequestParam(required = false) String query, Principal p) {
 		List<Item> list = itemService.simpleSearch(query);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
+		model.addAttribute("user", personService.get(p));
 		return "artikelListe";
 	}
 
 	@GetMapping("/artikelsuche")
 	public String artikelSuche(Model model, Principal p) {
-		model.addAttribute("person", personService.get(p));
+		model.addAttribute("user", personService.get(p));
 		model.addAttribute("datum", LocalDateTime.now().format(DATEFORMAT));
 		return "artikelSuche";
 	}
@@ -62,7 +63,7 @@ public class ItemController {
 							   String availableMin, //YYYY-MM-DD
 							   String availableMax,
 							   Principal p) {
-		model.addAttribute("person", personService.get(p));
+		model.addAttribute("user", personService.get(p));
 
 		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
 
@@ -114,7 +115,7 @@ public class ItemController {
 			model.addAttribute("message", "Bitte Abholorte hinzufügen");
 			return "errorMessage";
 		}
-		model.addAttribute("person", personService.get(p));
+		model.addAttribute("user", personService.get(p));
 		model.addAttribute("newitem", new Item());
 		model.addAttribute("abholorte", person.getAbholorte());
 		return "neuerArtikel";
@@ -138,7 +139,7 @@ public class ItemController {
 
 	@GetMapping("/newlocation")
 	public String createNewLocation(Model model, Principal p) {
-		model.addAttribute("person", personService.get(p));
+		model.addAttribute("user", personService.get(p));
 		Abholort abholort = new Abholort();
 		abholort.setLatitude(51.227741);
 		abholort.setLongitude(6.773456);

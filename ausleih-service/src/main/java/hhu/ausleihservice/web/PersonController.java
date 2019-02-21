@@ -33,6 +33,7 @@ public class PersonController {
 	) {
 		System.out.println("Post triggered at /profil/" + id);
 		if (changePerson) {
+			System.out.println("Now updating..");
 			personService.updateById(id, person);
 		}
 		model.addAttribute("person", personService.findById(id));
@@ -55,7 +56,8 @@ public class PersonController {
 	}
 
 	@GetMapping("/benutzersuche")
-	public String benutzerSuche(Model model) {
+	public String benutzerSuche(Model model, Principal p) {
+		model.addAttribute(personService.get(p));
 		return "benutzerSuche";
 	}
 
