@@ -27,11 +27,9 @@ public class ItemAvailabilityService {
 				-> isInPeriod(date, ausleihe.getStartDatum(), ausleihe.getEndDatum()));
 	}
 
-	//Format of input is "YYYY-MM-DD"
-	public boolean isAvailableFromTill(Item item, String from, String till) {
-		LocalDate temp = LocalDate.parse(from);
-		LocalDate end = LocalDate.parse(till);
-		while (!temp.equals(end.plusDays(1))) {
+	public boolean isAvailableFromTill(Item item, LocalDate from, LocalDate till) {
+		LocalDate temp = from;
+		while (!temp.equals(till.plusDays(1))) {
 			if (!isAvailable(item, temp)) {
 				return false;
 			}
