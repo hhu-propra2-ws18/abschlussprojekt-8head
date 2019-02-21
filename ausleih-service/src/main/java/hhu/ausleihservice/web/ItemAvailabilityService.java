@@ -1,12 +1,15 @@
 package hhu.ausleihservice.web;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+package hhu.ausleihservice.web;
+
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -25,17 +28,9 @@ public class ItemAvailabilityService {
 		LocalDate availableTill = item.getAvailableTill();
 		Set<Ausleihe> ausleihen = item.getAusleihen();
 
-		if (!isInPeriod(date, availableFrom, availableTill)) {
-			return false;
-		}
-		for (Ausleihe ausleihe : ausleihen) {
-			LocalDate startDatum = ausleihe.getStartDatum();
-			LocalDate endDatum = ausleihe.getEndDatum();
-			if (isInPeriod(date, startDatum, endDatum)) {
-				return false;
-			}
-		}
-		return true;
+		return isInPeriod(date, availableFrom, availableTill)
+				&& ausleihen.stream().noneMatch((ausleihe)
+				-> isInPeriod(date, ausleihe.getStartDatum(), ausleihe.getEndDatum()));
 	}
 
 	//Format of input is "YYYY-MM-DD"
@@ -50,8 +45,8 @@ public class ItemAvailabilityService {
 		}
 		return true;
 	}
-
-	public List<String> getUnavailableDates(Item item) {
+  
+  public List<String> getUnavailableDates(Item item) {
 		LocalDate temp = item.getAvailableFrom();
 		LocalDate end = item.getAvailableTill();
 		List<String> unavailabeDates = new ArrayList<>();
