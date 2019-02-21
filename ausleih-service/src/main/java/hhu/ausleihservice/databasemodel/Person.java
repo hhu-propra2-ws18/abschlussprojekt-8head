@@ -2,6 +2,7 @@ package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,15 +16,15 @@ public class Person {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private String nachname;
-	private String vorname;
+	private String nachname = "";
+	private String vorname = "";
 
 	@EqualsAndHashCode.Include
-	private String username;
-	private String password;
+	private String username = "";
+	private String password = "";
 	private Role role = Role.USER;
 
-	private String email;
+	private String email = "";
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Item> items = new HashSet<>();
@@ -65,9 +66,34 @@ public class Person {
 	}
 
 	public boolean isAdmin() {
-		if (this != null && this.getRole().equals(Role.ADMIN)) {
-			return true;
-		}
-		return false;
+		return this.getRole().equals(Role.ADMIN);
+	}
+
+	public void trimWhitespace() {
+		vorname = vorname.trim();
+		nachname = nachname.trim();
+		username = username.trim();
+		email = email.trim();
+	}
+
+	public void encryptPassword() {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		password = encoder.encode(password);
+	}
+
+	public void setNachname(String s) {
+		if (s != null) nachname = s.trim();
+	}
+
+	public void setVorname(String s) {
+		if (s != null) vorname = s.trim();
+	}
+
+	public void setUsername(String s) {
+		if (s != null) username = s.trim();
+	}
+
+	public void setEmail(String s) {
+		if (s != null) email = s.trim();
 	}
 }

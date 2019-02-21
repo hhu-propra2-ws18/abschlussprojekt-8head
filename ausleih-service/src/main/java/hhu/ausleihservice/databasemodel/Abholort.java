@@ -15,5 +15,13 @@ public class Abholort {
 	private Long id;
 	private Double longitude;
 	private Double latitude;
-	private String beschreibung;
+	private String beschreibung = "";
+
+	public void trimWhitespace() {
+		beschreibung = beschreibung.trim();
+	}
+
+	public void setBeschreibung(String s) {
+		if (s != null) beschreibung = s.trim();
+	}
 }
