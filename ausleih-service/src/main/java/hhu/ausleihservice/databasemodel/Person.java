@@ -19,7 +19,7 @@ public class Person {
 	private String vorname;
 
 	@EqualsAndHashCode.Include
-	private String username;
+	private String username = "";
 	private String password;
 	private Role role = Role.USER;
 
@@ -73,6 +73,6 @@ public class Person {
 	}
 
 	public boolean isHimself(Person person) {
-	return this.getId().equals(person.getId());
+		return this.getId().equals(person.getId());
 	}
 }

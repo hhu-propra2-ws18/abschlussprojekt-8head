@@ -115,7 +115,7 @@ public class PersonService implements UserDetailsService {
 		Person toUpdate = this.findById(id);
 		System.out.println("Person found in database.");
 		System.out.println(newPerson.getUsername() + "is the new persons username");
-		if (newPerson.getUsername() != null) {
+		if (newPerson.getUsername().equals("")) {
 			toUpdate.setUsername(newPerson.getUsername());
 			System.out.println("Username set.");
 		}
