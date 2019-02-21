@@ -24,8 +24,7 @@ public class PersonServiceTest {
 	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	@Mock
-	private
-	PersonRepository personRepository;
+	private PersonRepository personRepository;
 	private PersonService personService = new PersonService(null);
 	private List<Person> repository = new ArrayList<>();
 
