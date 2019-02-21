@@ -17,11 +17,9 @@ public class Abholort {
 	private Double latitude;
 	private String beschreibung = "";
 
-	public void trimWhitespace() {
-		beschreibung = beschreibung.trim();
-	}
-
 	public void setBeschreibung(String s) {
-		if (s != null) beschreibung = s.trim();
+		if (s != null) {
+			beschreibung = s.trim();
+		}
 	}
 }

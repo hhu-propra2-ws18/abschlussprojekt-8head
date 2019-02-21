@@ -69,31 +69,32 @@ public class Person {
 		return this.getRole().equals(Role.ADMIN);
 	}
 
-	public void trimWhitespace() {
-		vorname = vorname.trim();
-		nachname = nachname.trim();
-		username = username.trim();
-		email = email.trim();
-	}
-
 	public void encryptPassword() {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		password = encoder.encode(password);
 	}
 
 	public void setNachname(String s) {
-		if (s != null) nachname = s.trim();
+		if (s != null) {
+			nachname = s.trim();
+		}
 	}
 
 	public void setVorname(String s) {
-		if (s != null) vorname = s.trim();
+		if (s != null) {
+			vorname = s.trim();
+		}
 	}
 
 	public void setUsername(String s) {
-		if (s != null) username = s.trim();
+		if (s != null) {
+			username = s.trim();
+		}
 	}
 
 	public void setEmail(String s) {
-		if (s != null) email = s.trim();
+		if (s != null) {
+			email = s.trim();
+		}
 	}
 }

@@ -595,4 +595,114 @@ public class ItemTests {
 		assertEquals("2000-09-24", periods.get(3).getStart().toString());
 		assertEquals("2001-01-01", periods.get(3).getEnd().toString());
 	}
+
+
+	//Tests for setTitel(String s)
+	@Test
+	public void setTitelToNull(){
+		Item item = new Item();
+		item.setTitel(null);
+
+		assertEquals("", item.getTitel());
+	}
+
+	@Test
+	public void setTitelWithNoWhiteSpace() {
+		Item item = new Item();
+		item.setTitel("Uganda");
+
+		assertEquals("Uganda", item.getTitel());
+	}
+
+	@Test
+	public void setTitelWithWhiteSpaceLeft() {
+		Item item = new Item();
+		item.setTitel("                          Uganda");
+
+		assertEquals("Uganda", item.getTitel());
+	}
+
+	@Test
+	public void setTitelWithWhiteSpaceRight() {
+		Item item = new Item();
+		item.setTitel("Uganda                            ");
+
+		assertEquals("Uganda", item.getTitel());
+	}
+
+	@Test
+	public void setTitelWithWhiteSpaceBothSides() {
+		Item item = new Item();
+		item.setTitel("                    Uganda                  ");
+
+		assertEquals("Uganda", item.getTitel());
+	}
+
+	@Test
+	public void setTitelWithWhiteSpaceInside() {
+		Item item = new Item();
+		item.setTitel("Uga nda");
+
+		assertEquals("Uga nda", item.getTitel());
+	}
+
+
+	//Tests for setBeschreibung(String s)
+	@Test
+	public void setBeschreibungToNull(){
+		Item item = new Item();
+		item.setBeschreibung(null);
+
+		assertEquals("", item.getBeschreibung());
+	}
+
+	@Test
+	public void setBeschreibungWithNoWhiteSpace() {
+		Item item = new Item();
+		item.setBeschreibung("Uganda");
+
+		assertEquals("Uganda", item.getBeschreibung());
+	}
+
+	@Test
+	public void setBeschreibungWithWhiteSpaceLeft() {
+		Item item = new Item();
+		item.setBeschreibung("                          Uganda");
+
+		assertEquals("Uganda", item.getBeschreibung());
+	}
+
+	@Test
+	public void setBeschreibungWithWhiteSpaceRight() {
+		Item item = new Item();
+		item.setBeschreibung("Uganda                            ");
+
+		assertEquals("Uganda", item.getBeschreibung());
+	}
+
+	@Test
+	public void setBeschreibungWithWhiteSpaceBothSides() {
+		Item item = new Item();
+		item.setBeschreibung("                    Uganda                  ");
+
+		assertEquals("Uganda", item.getBeschreibung());
+	}
+
+	@Test
+	public void setBeschreibungWithWhiteSpaceInside() {
+		Item item = new Item();
+		item.setBeschreibung("Uga nda");
+
+		assertEquals("Uga nda", item.getBeschreibung());
+	}
+
+
+	//Tests for setAbholort(Abholort a)
+	@Test
+	public void setAbholortToNull(){
+		Item item = new Item();
+		item.setAbholort(null);
+
+		assertEquals(new Abholort(), item.getAbholort());
+	}
 }

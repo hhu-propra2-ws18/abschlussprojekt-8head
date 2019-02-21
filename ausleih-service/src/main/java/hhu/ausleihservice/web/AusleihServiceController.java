@@ -33,7 +33,7 @@ public class AusleihServiceController {
 	private AbholortValidator abholortValidator;
 
 	public AusleihServiceController(PersonService perService, ItemService iService, AbholortService abholortService,
-			PersonValidator personValidator, ItemValidator itemValidator, AbholortValidator abholortValidator) {
+	                                PersonValidator personValidator, ItemValidator itemValidator, AbholortValidator abholortValidator) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
@@ -140,7 +140,6 @@ public class AusleihServiceController {
 
 	@PostMapping("/register")
 	public String added(Model model, Person person, BindingResult bindingResult) {
-		person.trimWhitespace();
 		personValidator.validate(person, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("userForm", person);
@@ -207,7 +206,6 @@ public class AusleihServiceController {
 	@PostMapping("/newitem")
 	public String addItem(@ModelAttribute Item newItem, Principal p, @RequestParam("file") MultipartFile picture,
 	                      BindingResult bindingResult, Model model) {
-		newItem.trimWhitespace();
 		itemValidator.validate(newItem, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("newitem", newItem);
@@ -238,7 +236,6 @@ public class AusleihServiceController {
 
 	@PostMapping("/editProfil")
 	public String editProfilPost(Model model, Principal p, Person person) {
-		person.trimWhitespace();
 		model.addAttribute("person", personService.get(p));
 		personService.update(person, p);
 		return "editProfil";
@@ -256,7 +253,6 @@ public class AusleihServiceController {
 
 	@PostMapping("/newlocation")
 	public String saveNewLocation(@ModelAttribute Abholort abholort, Principal p, BindingResult bindingResult, Model model) {
-		abholort.trimWhitespace();
 		abholortValidator.validate(abholort, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("abholort", abholort);

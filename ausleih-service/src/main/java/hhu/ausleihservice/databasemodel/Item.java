@@ -136,21 +136,21 @@ public class Item {
 		return sortierteAusleihen;
 	}
 
-	public void trimWhitespace() {
-		titel = titel.trim();
-		beschreibung = beschreibung.trim();
-		abholort.trimWhitespace();
-	}
-
 	public void setTitel(String s) {
-		if (s != null) titel = s.trim();
+		if (s != null) {
+			titel = s.trim();
+		}
 	}
 
 	public void setBeschreibung(String s) {
-		if (s != null) beschreibung = s.trim();
+		if (s != null) {
+			beschreibung = s.trim();
+		}
 	}
 
 	public void setAbholort(Abholort a) {
-		if (a != null) abholort = a;
+		if (a != null) {
+			abholort = a;
+		}
 	}
 }

@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
+
 public class PersonTest {
 
 	@Test
@@ -80,5 +82,205 @@ public class PersonTest {
 		Assert.assertEquals(Role.ADMIN, person.getRole());
 		Assert.assertEquals("mail", person.getEmail());
 		Assert.assertEquals(ort, person.getAbholorte().iterator().next());
+	}
+
+
+	//Tests for setNachname(String s)
+	@Test
+	public void setNachnameToNull(){
+		Person person = new Person();
+		person.setNachname(null);
+
+		assertEquals("", person.getNachname());
+	}
+
+	@Test
+	public void setNachnameWithNoWhiteSpace() {
+		Person person = new Person();
+		person.setNachname("Uganda");
+
+		assertEquals("Uganda", person.getNachname());
+	}
+
+	@Test
+	public void setNachnameWithWhiteSpaceLeft() {
+		Person person = new Person();
+		person.setNachname("                          Uganda");
+
+		assertEquals("Uganda", person.getNachname());
+	}
+
+	@Test
+	public void setNachnameWithWhiteSpaceRight() {
+		Person person = new Person();
+		person.setNachname("Uganda                            ");
+
+		assertEquals("Uganda", person.getNachname());
+	}
+
+	@Test
+	public void setNachnameWithWhiteSpaceBothSides() {
+		Person person = new Person();
+		person.setNachname("                    Uganda                  ");
+
+		assertEquals("Uganda", person.getNachname());
+	}
+
+	@Test
+	public void setNachnameWithWhiteSpaceInside() {
+		Person person = new Person();
+		person.setNachname("Uga nda");
+
+		assertEquals("Uga nda", person.getNachname());
+	}
+
+
+	//Tests for setVorname(String s)
+	@Test
+	public void setVornameToNull(){
+		Person person = new Person();
+		person.setVorname(null);
+
+		assertEquals("", person.getVorname());
+	}
+
+	@Test
+	public void setVornameWithNoWhiteSpace() {
+		Person person = new Person();
+		person.setVorname("Uganda");
+
+		assertEquals("Uganda", person.getVorname());
+	}
+
+	@Test
+	public void setVornameWithWhiteSpaceLeft() {
+		Person person = new Person();
+		person.setVorname("                          Uganda");
+
+		assertEquals("Uganda", person.getVorname());
+	}
+
+	@Test
+	public void setVornameWithWhiteSpaceRight() {
+		Person person = new Person();
+		person.setVorname("Uganda                            ");
+
+		assertEquals("Uganda", person.getVorname());
+	}
+
+	@Test
+	public void setVornameWithWhiteSpaceBothSides() {
+		Person person = new Person();
+		person.setVorname("                    Uganda                  ");
+
+		assertEquals("Uganda", person.getVorname());
+	}
+
+	@Test
+	public void setVornameWithWhiteSpaceInside() {
+		Person person = new Person();
+		person.setVorname("Uga nda");
+
+		assertEquals("Uga nda", person.getVorname());
+	}
+
+
+	//Tests for setUsername(String s)
+	@Test
+	public void setUsernameToNull(){
+		Person person = new Person();
+		person.setUsername(null);
+
+		assertEquals("", person.getUsername());
+	}
+
+	@Test
+	public void setUsernameWithNoWhiteSpace() {
+		Person person = new Person();
+		person.setUsername("Uganda");
+
+		assertEquals("Uganda", person.getUsername());
+	}
+
+	@Test
+	public void setUsernameWithWhiteSpaceLeft() {
+		Person person = new Person();
+		person.setUsername("                          Uganda");
+
+		assertEquals("Uganda", person.getUsername());
+	}
+
+	@Test
+	public void setUsernameWithWhiteSpaceRight() {
+		Person person = new Person();
+		person.setUsername("Uganda                            ");
+
+		assertEquals("Uganda", person.getUsername());
+	}
+
+	@Test
+	public void setUsernameWithWhiteSpaceBothSides() {
+		Person person = new Person();
+		person.setUsername("                    Uganda                  ");
+
+		assertEquals("Uganda", person.getUsername());
+	}
+
+	@Test
+	public void setUsernameWithWhiteSpaceInside() {
+		Person person = new Person();
+		person.setUsername("Uga nda");
+
+		assertEquals("Uga nda", person.getUsername());
+	}
+
+
+	//Tests for setEmail(String s)
+	@Test
+	public void setEmailToNull(){
+		Person person = new Person();
+		person.setEmail(null);
+
+		assertEquals("", person.getEmail());
+	}
+
+	@Test
+	public void setEmailWithNoWhiteSpace() {
+		Person person = new Person();
+		person.setEmail("Uganda");
+
+		assertEquals("Uganda", person.getEmail());
+	}
+
+	@Test
+	public void setEmailWithWhiteSpaceLeft() {
+		Person person = new Person();
+		person.setEmail("                          Uganda");
+
+		assertEquals("Uganda", person.getEmail());
+	}
+
+	@Test
+	public void setEmailWithWhiteSpaceRight() {
+		Person person = new Person();
+		person.setEmail("Uganda                            ");
+
+		assertEquals("Uganda", person.getEmail());
+	}
+
+	@Test
+	public void setEmailWithWhiteSpaceBothSides() {
+		Person person = new Person();
+		person.setEmail("                    Uganda                  ");
+
+		assertEquals("Uganda", person.getEmail());
+	}
+
+	@Test
+	public void setEmailWithWhiteSpaceInside() {
+		Person person = new Person();
+		person.setEmail("Uga nda");
+
+		assertEquals("Uga nda", person.getEmail());
 	}
 }
