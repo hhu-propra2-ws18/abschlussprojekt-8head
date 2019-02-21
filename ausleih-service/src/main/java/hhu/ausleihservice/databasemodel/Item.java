@@ -17,14 +17,14 @@ public class Item {
 	@EqualsAndHashCode.Include
 	private Long id;
 
-	private String titel;
-	private String beschreibung;
-	private int tagessatz;
-	private int kautionswert;
+	private String titel = "";
+	private String beschreibung = "";
+	private Integer tagessatz;
+	private Integer kautionswert;
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
 	@JoinColumn
-	private Abholort abholort;
+	private Abholort abholort = new Abholort();
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate availableFrom;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -37,7 +37,7 @@ public class Item {
 	@Lob
 	private byte[] picture;
 
-	//Getter and Setter are copying the array to prevent
+	// Getter and Setter are copying the array to prevent
 	// data leaking outside by storing/giving the reference to the array
 	@Lob
 	public byte[] getPicture() {
@@ -134,5 +134,23 @@ public class Item {
 		}
 
 		return sortierteAusleihen;
+	}
+
+	public void setTitel(String s) {
+		if (s != null) {
+			titel = s.trim();
+		}
+	}
+
+	public void setBeschreibung(String s) {
+		if (s != null) {
+			beschreibung = s.trim();
+		}
+	}
+
+	public void setAbholort(Abholort a) {
+		if (a != null) {
+			abholort = a;
+		}
 	}
 }

@@ -33,8 +33,8 @@ public class ItemServiceTest {
 		return base.getId().longValue() == toTest.getId().longValue() &&
 				base.getTitel().equals(toTest.getTitel()) &&
 				base.getBeschreibung().equals(toTest.getBeschreibung()) &&
-				base.getKautionswert() == toTest.getKautionswert() &&
-				base.getTagessatz() == toTest.getTagessatz() &&
+				base.getKautionswert().equals(toTest.getKautionswert()) &&
+				base.getTagessatz().equals(toTest.getTagessatz()) &&
 				base.getAvailableFrom() == toTest.getAvailableFrom() &&
 				base.getAvailableTill() == toTest.getAvailableTill();
 	}

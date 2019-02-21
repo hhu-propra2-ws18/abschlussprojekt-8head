@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -76,14 +75,13 @@ public class PersonService implements UserDetailsService {
 	void save(Person person) {
 		users.save(person);
 	}
-	
+
 	void update(Person updatedPerson, Principal principal) {
 		Person altePerson = this.get(principal);
 		updatedPerson.setId(altePerson.getId());
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 		if (updatedPerson.getPassword() != null && !updatedPerson.getPassword().isEmpty()) {
-			updatedPerson.setPassword(encoder.encode(updatedPerson.getPassword()));
+			updatedPerson.encryptPassword();
 		} else {
 			updatedPerson.setPassword(altePerson.getPassword());
 		}
@@ -123,8 +121,6 @@ public class PersonService implements UserDetailsService {
 							qArray));
 		}
 
-		List<Person> list = listStream.collect(Collectors.toList());
-
-		return list;
+		return listStream.collect(Collectors.toList());
 	}
 }

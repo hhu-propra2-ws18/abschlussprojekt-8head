@@ -121,3 +121,6 @@
     color: #f00;
     text-decoration: line-through;
 }
+#error {
+	color: red;
+}
