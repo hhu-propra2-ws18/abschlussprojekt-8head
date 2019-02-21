@@ -31,7 +31,7 @@ public class AusleihServiceController {
 	private ItemValidator itemValidator;
 
 	public AusleihServiceController(PersonService perService, ItemService iService, AbholortService abholortService,
-			PersonValidator personValidator, ItemValidator itemValidator) {
+	                                PersonValidator personValidator, ItemValidator itemValidator) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
@@ -42,6 +42,8 @@ public class AusleihServiceController {
 	@GetMapping("/liste")
 	public String artikelListe(Model model, @RequestParam(required = false) String query, Principal p) {
 		model.addAttribute("person", personService.get(p));
+
+		if (query != null) query = query.trim();
 
 		List<Item> list = itemService.simpleSearch(query);
 		model.addAttribute("dateformat", DATEFORMAT);
@@ -59,15 +61,17 @@ public class AusleihServiceController {
 
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
-							   String query, //For titel or beschreibung
-							   @RequestParam(defaultValue = "2147483647")
-									   int tagessatzMax,
-							   @RequestParam(defaultValue = "2147483647")
-									   int kautionswertMax,
-							   String availableMin, //YYYY-MM-DD
-							   String availableMax,
-							   Principal p) {
+	                           String query, //For titel or beschreibung
+	                           @RequestParam(defaultValue = "2147483647")
+			                           int tagessatzMax,
+	                           @RequestParam(defaultValue = "2147483647")
+			                           int kautionswertMax,
+	                           String availableMin, //YYYY-MM-DD
+	                           String availableMax,
+	                           Principal p) {
 		model.addAttribute("person", personService.get(p));
+
+		if (query != null) query = query.trim();
 
 		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
 
@@ -86,11 +90,12 @@ public class AusleihServiceController {
 
 	@PostMapping("/benutzersuche")
 	public String benutzerSuche(Model model,
-								String query, //For nachname, vorname, username
-								Principal p
+	                            String query, //For nachname, vorname, username
+	                            Principal p
 	) {
 		model.addAttribute("person", personService.get(p));
 
+		query = query.trim();
 		List<Person> list = personService.searchByNames(query);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("benutzerListe", list);
@@ -132,6 +137,7 @@ public class AusleihServiceController {
 
 	@PostMapping("/register")
 	public String added(Model model, Person person, BindingResult bindingResult) {
+		person.trimWhitespace();
 		personValidator.validate(person, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("userForm", person);
@@ -142,8 +148,7 @@ public class AusleihServiceController {
 			model.addAttribute("emailErrors", bindingResult.getFieldError("email"));
 			return "register";
 		}
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		person.setPassword(encoder.encode(person.getPassword()));
+		person.encryptPassword();
 		person.setRole(Role.USER);
 		personService.save(person);
 		return startseite(model, null);
@@ -198,7 +203,8 @@ public class AusleihServiceController {
 
 	@PostMapping("/newitem")
 	public String addItem(@ModelAttribute Item newItem, Principal p, @RequestParam("file") MultipartFile picture,
-			BindingResult bindingResult, Model model) {
+	                      BindingResult bindingResult, Model model) {
+		newItem.trimWhitespace();
 		itemValidator.validate(newItem, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("newitem", newItem);
@@ -229,6 +235,7 @@ public class AusleihServiceController {
 
 	@PostMapping("/editProfil")
 	public String editProfilPost(Model model, Principal p, Person person) {
+		person.trimWhitespace();
 		model.addAttribute("person", personService.get(p));
 		personService.update(person, p);
 		return "editProfil";
@@ -246,6 +253,7 @@ public class AusleihServiceController {
 
 	@PostMapping("/newlocation")
 	public String saveNewLocation(@ModelAttribute Abholort abholort, Principal p) {
+		abholort.trimWhitespace();
 		Person aktuellerNutzer = personService.get(p);
 		abholortService.save(abholort);
 		aktuellerNutzer.getAbholorte().add(abholort);

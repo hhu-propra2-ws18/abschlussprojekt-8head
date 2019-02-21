@@ -17,14 +17,14 @@ public class Item {
 	@EqualsAndHashCode.Include
 	private Long id;
 
-	private String titel;
-	private String beschreibung;
+	private String titel = "";
+	private String beschreibung = "";
 	private Integer tagessatz;
 	private Integer kautionswert;
 
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
 	@JoinColumn
-	private Abholort abholort;
+	private Abholort abholort = new Abholort();
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate availableFrom;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -134,5 +134,11 @@ public class Item {
 		}
 
 		return sortierteAusleihen;
+	}
+
+	public void trimWhitespace() {
+		titel = titel.trim();
+		beschreibung = beschreibung.trim();
+		abholort.trimWhitespace();
 	}
 }
