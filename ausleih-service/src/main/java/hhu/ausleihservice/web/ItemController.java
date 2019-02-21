@@ -110,7 +110,9 @@ public class ItemController {
 	public String bearbeiteArtikel(Model model,
 	                               @PathVariable long id,
 	                               Principal p,
-	                               @RequestParam(name = "editArtikel", defaultValue = "false") final boolean changeArticleDetails,
+	                               @RequestParam(
+			                               name = "editArtikel", defaultValue = "false"
+	                               ) final boolean changeArticleDetails,
 	                               @ModelAttribute("artikel") Item artikel
 	) {
 		System.out.println("Post triggered at /details/" + id);
