@@ -4,6 +4,7 @@ import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.databasemodel.Role;
+import hhu.ausleihservice.validators.AbholortValidator;
 import hhu.ausleihservice.validators.ItemValidator;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
@@ -29,14 +30,16 @@ public class AusleihServiceController {
 	private AbholortService abholortService;
 	private PersonValidator personValidator;
 	private ItemValidator itemValidator;
+	private AbholortValidator abholortValidator;
 
 	public AusleihServiceController(PersonService perService, ItemService iService, AbholortService abholortService,
-			PersonValidator personValidator, ItemValidator itemValidator) {
+			PersonValidator personValidator, ItemValidator itemValidator, AbholortValidator abholortValidator) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
 		this.personValidator = personValidator;
 		this.itemValidator = itemValidator;
+		this.abholortValidator = abholortValidator;
 	}
 
 	@GetMapping("/liste")
@@ -58,15 +61,10 @@ public class AusleihServiceController {
 	}
 
 	@PostMapping("/artikelsuche")
-	public String artikelSuche(Model model,
-							   String query, //For titel or beschreibung
-							   @RequestParam(defaultValue = "2147483647")
-									   int tagessatzMax,
-							   @RequestParam(defaultValue = "2147483647")
-									   int kautionswertMax,
-							   String availableMin, //YYYY-MM-DD
-							   String availableMax,
-							   Principal p) {
+	public String artikelSuche(Model model, String query, // For titel or beschreibung
+			@RequestParam(defaultValue = "2147483647") int tagessatzMax,
+			@RequestParam(defaultValue = "2147483647") int kautionswertMax, String availableMin, // YYYY-MM-DD
+			String availableMax, Principal p) {
 		model.addAttribute("person", personService.get(p));
 
 		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
@@ -85,10 +83,8 @@ public class AusleihServiceController {
 	}
 
 	@PostMapping("/benutzersuche")
-	public String benutzerSuche(Model model,
-								String query, //For nachname, vorname, username
-								Principal p
-	) {
+	public String benutzerSuche(Model model, String query, // For nachname, vorname, username
+			Principal p) {
 		model.addAttribute("person", personService.get(p));
 
 		List<Person> list = personService.searchByNames(query);
@@ -245,7 +241,15 @@ public class AusleihServiceController {
 	}
 
 	@PostMapping("/newlocation")
-	public String saveNewLocation(@ModelAttribute Abholort abholort, Principal p) {
+	public String saveNewLocation(@ModelAttribute Abholort abholort, Principal p, BindingResult bindingResult, Model model) {
+		abholortValidator.validate(abholort, bindingResult);
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("abholort", abholort);
+			model.addAttribute("longitudeErrors", bindingResult.getFieldError("longitude"));
+			model.addAttribute("latitudeErrors", bindingResult.getFieldError("latitude"));
+			model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
+			return "neuerAbholort";
+		}
 		Person aktuellerNutzer = personService.get(p);
 		abholortService.save(abholort);
 		aktuellerNutzer.getAbholorte().add(abholort);
