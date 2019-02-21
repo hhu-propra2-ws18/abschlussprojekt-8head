@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -27,7 +26,8 @@ public class AusleihServiceController {
 	private ProPayService proPayService;
 
 	public AusleihServiceController
-			(PersonService perService, ItemService iService, AbholortService abholortService, ProPayService proPayService) {
+			(PersonService perService, ItemService iService,
+			 AbholortService abholortService, ProPayService proPayService) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
@@ -165,7 +165,7 @@ public class AusleihServiceController {
 	}
 
 	@PostMapping("/profil/{id}")
-	public String chargeProPayById(@RequestParam("moneten") double moneten, @PathVariable Long id){
+	public String chargeProPayById(@RequestParam("moneten") double moneten, @PathVariable Long id) {
 		proPayService.addFunds(personService.findById(id), moneten);
 		return "redirect:/profil/" + id;
 	}
