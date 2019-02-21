@@ -23,11 +23,16 @@ public class AusleihServiceController {
 	private PersonService personService;
 	private ItemService itemService;
 	private AbholortService abholortService;
+	private ItemAvailabilityService itemAvailabilityService;
 
-	public AusleihServiceController(PersonService perService, ItemService iService, AbholortService abholortService) {
+	public AusleihServiceController(PersonService perService,
+									ItemService iService,
+									AbholortService abholortService,
+									ItemAvailabilityService itemAvailabilityService) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
+		this.itemAvailabilityService = itemAvailabilityService;
 	}
 
 	@GetMapping("/liste")
@@ -98,6 +103,8 @@ public class AusleihServiceController {
 		try {
 			Item artikel = itemService.findById(id);
 			model.addAttribute("artikel", artikel);
+			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
+
 		} catch (ItemNichtVorhanden a) {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
