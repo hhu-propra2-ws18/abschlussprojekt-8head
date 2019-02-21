@@ -67,7 +67,7 @@ public class PersonController {
 
 	@GetMapping("/benutzersuche")
 	public String benutzerSuche(Model model, Principal p) {
-		model.addAttribute(personService.get(p));
+		model.addAttribute("user", personService.get(p));
 		return "benutzerSuche";
 	}
 
