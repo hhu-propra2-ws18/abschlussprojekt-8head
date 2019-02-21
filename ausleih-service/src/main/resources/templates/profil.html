@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:replace="../static/css/navbar :: style">
+<head th:replace="../static/css/style :: formatting">
 	<meta charset="UTF-8">
-	<title th:text="${'Profil von ' + person.username}">Profil von xxx</title>
+	<title th:text="${'Profil von ' + benutzer.username}">Profil von xxx</title>
 </head>
 <body>
-<nav th:replace="../static/css/navbar :: main-menu">menu</nav>
+<nav th:replace="../static/css/style :: main-menu">menu</nav>
 <h1>
-	<div th:text="${'Profil von ' + person.username}">siker102</div>
+	<div th:text="${'Profil von ' + benutzer.username}">siker102</div>
 </h1>
 <h4>
-	<div th:text="${'Name: ' + person.vorname + ' ' + person.nachname}">Simon Kerkmann</div>
+	<div th:text="${'Name: ' + benutzer.vorname + ' ' + benutzer.nachname}">Simon Kerkmann</div>
 </h4>
 
-<table th:if="${user.isAdmin() or user.isHimself(person)}" id="items">
+<table th:if="${user.isAdmin() or user.isHimself(benutzer)}" id="items">
 	<tr>
 		<th>Username</th>
 		<th>Vorname</th>
@@ -21,17 +21,17 @@
 		<th>E-Mail</th>
 		<th>Passwort</th>
 	</tr>
-	<form th:action="@{/profil/{PersonId} (PersonId=${person.getId()})}" th:object="${person}" method="post">
+	<form th:action="@{/profil/{PersonId} (PersonId=${benutzer.getId()})}" th:object="${benutzer}" method="post">
 		<tr>
-			<td th:text="${person.username}">MaMus</td>
-			<td th:text="${person.vorname}">Max</td>
-			<td th:text="${person.nachname}">Mustermann</td>
-			<td th:text="${person.email}">mamus@gmail.com</td>
+			<td th:text="${benutzer.username}">MaMus</td>
+			<td th:text="${benutzer.vorname}">Max</td>
+			<td th:text="${benutzer.nachname}">Mustermann</td>
+			<td th:text="${benutzer.email}">mamus@gmail.com</td>
 			<td></td>
 		</tr>
 		<tr>
 			<td>
-				<input th:if="${user.isAdmin() and !(user.isHimself(person))}" name="newUsername" type="text" th:field="*{username}">
+				<input th:if="${user.isAdmin() and !(user.isHimself(benutzer))}" name="newUsername" type="text" th:field="*{username}">
 			</td>
 			<td>
 				<input name="newVorname" type="text" th:field="*{vorname}">

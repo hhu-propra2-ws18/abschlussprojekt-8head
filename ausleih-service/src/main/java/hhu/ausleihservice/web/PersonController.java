@@ -19,9 +19,14 @@ public class PersonController {
 
 	@GetMapping("/profil/{id}")
 	public String otherUser(Model model, @PathVariable Long id, Principal p) {
-		model.addAttribute("person", personService.findById(id));
+		model.addAttribute("benutzer", personService.findById(id));
 		model.addAttribute("user", personService.get(p));
 		return "profil";
+	}
+
+	@GetMapping("/profil")
+	public String user(Model model, Principal p) {
+		return otherUser(model, personService.get(p).getId(), p);
 	}
 
 	@PostMapping("/profil/{id}")
@@ -36,15 +41,10 @@ public class PersonController {
 			System.out.println("Now updating..");
 			personService.updateById(id, person);
 		}
-		model.addAttribute("person", personService.findById(id));
+		model.addAttribute("benutzer", personService.findById(id));
 		model.addAttribute("user", personService.get(p));
 		return "profil";
 
-	}
-
-	@GetMapping("/profil")
-	public String user(Model model, Principal p) {
-		return otherUser(model, personService.get(p).getId(), p);
 	}
 
 	@PostMapping("/profil")
@@ -73,7 +73,10 @@ public class PersonController {
 	}
 
 	@GetMapping("/register")
-	public String register(Model model) {
+	public String register(Model model, Principal p) {
+		if (personService.get(p) != null) {
+			return "redirect:/";
+		}
 		Person userForm = new Person();
 		model.addAttribute("usernameTaken", false);
 		model.addAttribute("userForm", userForm);
