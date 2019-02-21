@@ -23,7 +23,7 @@
 <nav th:fragment="main-menu" class="navbar navbar-expand-md navbar-light bg-light sticky-top">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="/">
-			<img th:src="@{img/8head.jpg}" alt="8head" width="50" height="50"/>
+			<img th:src="@{/img/8head.jpg}" alt="8head" width="50" height="50"/>
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
 			<span class="navbar-toggler-icon"></span>
@@ -40,7 +40,9 @@
 							</div>
 							<div class="form-group">
 								<div class="col-xs-offset-2 col-xs-10">
-									<button type="submit" class="btn btn-primary" value="Suche">Suche</button>
+									<button type="submit" class="btn btn-primary" value="Suche">
+										<span class="glyphicon glyphicon-search"></span>Suche
+									</button>
 								</div>
 								<div class="nav-item">
 									<a class="nav-link" href="/artikelsuche">Erweiterte Artikelsuche</a>
@@ -55,16 +57,16 @@
 					<a class="nav-link" href="/benutzersuche">Benutzersuche</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" th:if="${person == null}" href="/register">Konto Eröffnen</a>
-					<a class="nav-link" th:unless="${person == null}" href="/profil">Profil</a>
+					<a class="nav-link" th:if="${user == null}" href="/register">Konto Eröffnen</a>
+					<a class="nav-link" th:unless="${user == null}" href="/profil">Profil</a>
 				</li>
 				<li class="nav-item"
-					th:if="${person != null and person.rolle != null and person.rolle.name() == 'ADMIN'}">
+					th:if="${user != null and user.rolle != null and user.rolle.name() == 'ADMIN'}">
 					<a class="nav-link" href="/admin">Admin</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" th:if="${person == null}" href="/login">Login</a>
-					<a class="nav-link" th:unless="${person == null}" href="/logout">Logout</a>
+					<a class="nav-link" th:if="${user == null}" href="/login">Login</a>
+					<a class="nav-link" th:unless="${user == null}" href="/logout">Logout</a>
 				</li>
 			</ul>
 		</div>

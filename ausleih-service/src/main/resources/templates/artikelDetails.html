@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <!-- TODO th:replace entfernen und marker-->
-<head th:replace="../static/css/style :: formatting">
+<head th:replace="../static/css/navbar :: style">
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,40 +9,56 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<h1 th:text="${artikel.titel}">Titel</h1>
-<table id="items">
+
+<table class="product-details">
 	<tr>
-		<th>Beschreibung</th>
-		<th>Verfügbarkeit ab</th>
-		<th>Verfügbar bis</th>
-		<th>Tagessatz</th>
-		<th>Kaution</th>
-		<th>Standort</th>
-		<th>Verleihender</th>
+		<td><h2 th:text="${artikel.titel}">ITEM</h2></td>
+		<td><img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}" th:width="60px" th:height="60px"/>
+			<img th:if="${artikel.picture != null and artikel.getBase64EncodedString()!=null}"
+				 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/></td>
 	</tr>
 	<tr>
-		<td th:text="${artikel.beschreibung}">Beschreibung</td>
-		<td th:text="${artikel.availableFrom.format(dateformat)}">Verfügbar ab</td>
-		<td th:text="${artikel.availableTill.format(dateformat)}">Verfügbar bis</td>
-		<td th:text="${artikel.tagessatz} + &euro;">Tagessatz</td>
-		<td th:text="${artikel.kautionswert} + &euro;">Kaution</td>
-		<td th:text="${artikel.abholort.beschreibung}">Standort</td>
-		<td><a th:href="${'/profil/' + artikel.besitzer.id}" th:text="${artikel.besitzer.vorname + ' ' + artikel.besitzer.nachname}"><p>Name</p></a>
+		<td>Beschreibung</td>
+		<td th:text="${artikel.beschreibung}"></td>
+	</tr>
+	<tr>
+		<td>Verfügbarkeit ab</td>
+		<td th:text="${artikel.availableFrom.format(dateformat)}"></td>
+	</tr>
+	<tr>
+		<td>Verfügbar bis</td>
+		<td th:text="${artikel.availableTill.format(dateformat)}"></td>
+	</tr>
+	<tr>
+		<td>Noch verfügbar zu folgenden Zeiten</td>
+		<td>
+			<table class="table-striped">
+				<tr th:each="periods: ${artikel.availablePeriods}">
+					<td th:text="${periods}">from now to then</td>
+				</tr>
+			</table>
 		</td>
 	</tr>
-</table>
-<table id="items">
 	<tr>
-		<th>Noch verfügbar zu folgenden Zeiten</th>
+		<td>Tagessatz</td>
+		<td th:text="${artikel.tagessatz} + &euro;"></td>
 	</tr>
-	<tr th:each="periods: ${artikel.availablePeriods}">
-		<td th:text="${periods}"></td>
+	<tr>
+		<td>Kaution</td>
+		<td th:text="${artikel.kautionswert} + &euro;"></td>
+	</tr>
+	<tr>
+		<td>Standort</td>
+		<td th:text="${artikel.abholort.beschreibung}"></td>
+	</tr>
+	<tr>
+		<td>Verleihender</td>
+		<td th:href="${'/profil/' + artikel.besitzer.id}" th:text="${artikel.besitzer.vorname +
+		 ' ' + artikel.besitzer.nachname}"></td>
 	</tr>
 </table>
-<br>
-<a href="/liste">Zurück</a>
-<img th:if="${artikel.getBase64EncodedString()!=null}"
-	 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/>
+
+<a href="/liste"> Zurück</a>
 <div id="mapid" style="width: 600px; height: 400px;"></div>
 <script th:inline="javascript">
 	/*<![CDATA[*/
