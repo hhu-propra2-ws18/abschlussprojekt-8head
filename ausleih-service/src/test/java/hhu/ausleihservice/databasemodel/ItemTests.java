@@ -649,7 +649,7 @@ public class ItemTests {
 
 	//Tests for setBeschreibung(String s)
 	@Test
-	public void setBeschreibungToNull(){
+	public void setBeschreibungToNull() {
 		Item item = new Item();
 		item.setBeschreibung(null);
 
@@ -699,7 +699,7 @@ public class ItemTests {
 
 	//Tests for setAbholort(Abholort a)
 	@Test
-	public void setAbholortToNull(){
+	public void setAbholortToNull() {
 		Item item = new Item();
 		item.setAbholort(null);
 
