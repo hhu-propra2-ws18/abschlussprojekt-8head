@@ -32,6 +32,7 @@
 		<tr>
 			<td>
 				<input th:if="${user.isAdmin() and !(user.isHimself(benutzer))}" name="newUsername" type="text" th:field="*{username}">
+				<div id="error" th:text="${availableTillErrors?.code}"></div>
 			</td>
 			<td>
 				<input name="newVorname" type="text" th:field="*{vorname}">

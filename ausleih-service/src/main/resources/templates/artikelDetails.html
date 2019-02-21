@@ -22,8 +22,8 @@
 	</tr>
 	<tr>
 		<td th:text="${artikel.beschreibung}">Beschreibung</td>
-		<td th:text="${artikel.availableFrom.format(dateformat)}">Verfügbar ab</td>
-		<td th:text="${artikel.availableTill.format(dateformat)}">Verfügbar bis</td>
+		<td th:text="${artikel.getAvailableFrom().format(dateformat)}">Verfügbar ab</td>
+		<td th:text="${artikel.getAvailableTill().format(dateformat)}">Verfügbar bis</td>
 		<td th:text="${artikel.tagessatz} + &euro;">Tagessatz</td>
 		<td th:text="${artikel.kautionswert} + &euro;">Kaution</td>
 		<td th:text="${artikel.abholort.beschreibung}">Standort</td>
@@ -33,17 +33,34 @@
 	</tr>
 	<tr th:if="${user.isAdmin() or user.isOwner(artikel)}">
 		<form th:action="@{/details/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}" method="post">
-			<td><input name="newBeschreibung" type="text" th:field="*{beschreibung}"></td>
+			<td>
+				<input name="newBeschreibung" type="text" th:field="*{beschreibung}" id="beschreibung">
+				<div id="error" th:text="${beschreibungErrors?.code}"></div>
+			</td>
 			<td>
 				<input name="newAvailableFrom" type="date" th:field="*{availableFrom}" id="availableFrom">
+				<div id="error" th:text="${availableFromErrors?.code}"></div>
 			</td>
 			<td>
 				<input name="newAvailableTill" type="date" th:field="*{availableTill}" id="availableTill">
+				<div id="error" th:text="${availableTillErrors?.code}"></div>
 			</td>
-			<td><input name="newTagessatz" type="number" step="0.1" min="0" th:field="*{tagessatz}"></td>
-			<td><input name="newKautionswert" type="number" step="0.1" min="0" th:field="*{kautionswert}"></td>
-			<td><input name="newAbholortBeschreibung" type="text" th:field="*{abholort.beschreibung}"></td>
-			<td><input name="newTitle" type="text" th:field="*{titel}"></td>
+			<td>
+				<input name="newTagessatz" type="number" step="1" min="0" th:field="*{tagessatz}" id="tagessatz">
+				<div id="error" th:text="${tagessatzErrors?.code}"></div>
+			</td>
+			<td>
+				<input name="newKautionswert" type="number" step="1" min="0" th:field="*{kautionswert}" id="kautionswert">
+				<div id="error" th:text="${kautionswertErrors?.code}"></div>
+			</td>
+			<td>
+				<input name="newAbholortBeschreibung" type="text" th:field="*{abholort.beschreibung}" id="abholort">
+				<div id="error" th:text="${abholortErrors?.code}"></div>
+			</td>
+			<td>
+				<input name="newTitle" type="text" th:field="*{titel}" id="titel">
+				<div id="error" th:text="${titelErrors?.code}"></div>
+			</td>
 			<td>
 				<button type="submit" value="true" name="editArtikel" >Artikel Ändern</button>
 			</td>
