@@ -20,4 +20,8 @@ public class Abholort {
 	public void trimWhitespace() {
 		beschreibung = beschreibung.trim();
 	}
+
+	public void setBeschreibung(String s) {
+		if (s != null) beschreibung = s.trim();
+	}
 }

@@ -141,4 +141,16 @@ public class Item {
 		beschreibung = beschreibung.trim();
 		abholort.trimWhitespace();
 	}
+
+	public void setTitel(String s) {
+		if (s != null) titel = s.trim();
+	}
+
+	public void setBeschreibung(String s) {
+		if (s != null) beschreibung = s.trim();
+	}
+
+	public void setAbholort(Abholort a) {
+		if (a != null) abholort = a;
+	}
 }

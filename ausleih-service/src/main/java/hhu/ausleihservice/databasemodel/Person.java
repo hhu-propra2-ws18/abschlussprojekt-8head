@@ -81,7 +81,6 @@ public class Person {
 		password = encoder.encode(password);
 	}
 
-
 	public void setNachname(String s) {
 		if (s != null) nachname = s.trim();
 	}
