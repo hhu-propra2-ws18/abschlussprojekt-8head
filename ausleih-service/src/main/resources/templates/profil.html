@@ -13,5 +13,9 @@
 	<div th:text="${'Name: ' + person.vorname + ' ' + person.nachname}">Simon Kerkmann</div>
 </h4>
 <a th:if="${isOwnProfile}" href="/editProfil" th:text="edit"></a>
+<h1 th:if="${isOwnProfile}">
+	<div th:text="${moneten}"></div>
+</h1>
+
 </body>
 </html>
