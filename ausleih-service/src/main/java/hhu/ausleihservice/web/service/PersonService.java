@@ -1,4 +1,4 @@
-package hhu.ausleihservice.web;
+package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Person;
@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -23,7 +24,7 @@ public class PersonService implements UserDetailsService {
 
 	private PersonRepository users;
 
-	PersonService(PersonRepository userRep) {
+	public PersonService(PersonRepository userRep) {
 		this.users = userRep;
 	}
 
@@ -35,7 +36,7 @@ public class PersonService implements UserDetailsService {
 			System.out.println(u.getRole().name());
 			Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
-			grantedAuthorities.add(new SimpleGrantedAuthority("GUEST"));
+			grantedAuthorities.add(new SimpleGrantedAuthority("USER"));
 			if (u.isAdmin()) {
 				grantedAuthorities.add(new SimpleGrantedAuthority("ADMIN"));
 			}
@@ -52,7 +53,7 @@ public class PersonService implements UserDetailsService {
 		return users.findByUsername(username);
 	}
 
-	Person get(Principal p) {
+	public Person get(Principal p) {
 		if (p == null) {
 			System.out.println("Null Principal");
 			return null;
@@ -64,7 +65,7 @@ public class PersonService implements UserDetailsService {
 		return person.get();
 	}
 
-	Person findById(Long id) {
+	public Person findById(Long id) {
 		Optional<Person> person = users.findById(id);
 		if (!person.isPresent()) {
 			throw new PersonNichtVorhanden();
@@ -72,24 +73,10 @@ public class PersonService implements UserDetailsService {
 		return person.get();
 	}
 
-	void save(Person person) {
+	public void save(Person person) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		person.setPassword(encoder.encode(person.getPassword()));
 		users.save(person);
-	}
-
-	void update(Person updatedPerson, Principal principal) {
-		Person altePerson = this.get(principal);
-		updatedPerson.setId(altePerson.getId());
-
-		if (updatedPerson.getPassword() != null && !updatedPerson.getPassword().isEmpty()) {
-			updatedPerson.encryptPassword();
-		} else {
-			updatedPerson.setPassword(altePerson.getPassword());
-		}
-
-		updatedPerson.setRole(altePerson.getRole());
-		updatedPerson.setUsername(altePerson.getUsername());
-		this.save(updatedPerson);
-
 	}
 
 	List<Person> findAll() {
@@ -106,7 +93,7 @@ public class PersonService implements UserDetailsService {
 		return true;
 	}
 
-	List<Person> searchByNames(String query) {
+	public List<Person> searchByNames(String query) {
 		Stream<Person> listStream = findAll().stream();
 
 		if (query != null && !query.equals("")) {
@@ -122,5 +109,28 @@ public class PersonService implements UserDetailsService {
 		}
 
 		return listStream.collect(Collectors.toList());
+	}
+
+	public void updateById(Long id, Person newPerson) {
+		Person toUpdate = this.findById(id);
+		System.out.println("Person found in database.");
+		System.out.println(newPerson.getUsername() + "is the new persons username");
+		if (!newPerson.getUsername().equals("")) {
+			toUpdate.setUsername(newPerson.getUsername());
+			System.out.println("Username set.");
+		}
+		toUpdate.setVorname(newPerson.getVorname());
+		System.out.println("Vorname set.");
+		toUpdate.setNachname(newPerson.getNachname());
+		System.out.println("Nachname set.");
+		toUpdate.setEmail(newPerson.getEmail());
+		System.out.println("EMail set.");
+		if (!newPerson.getPassword().equals("")) {
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			newPerson.setPassword(encoder.encode(newPerson.getPassword()));
+			toUpdate.setPassword(newPerson.getPassword());
+			System.out.println("Password set.");
+		}
+		users.save(toUpdate);
 	}
 }

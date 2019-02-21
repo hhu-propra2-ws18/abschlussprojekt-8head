@@ -32,7 +32,6 @@ public class ItemValidator implements Validator {
 		}
 
 		if (item.getKautionswert() != null) {
-
 			if (item.getKautionswert() <= 0) {
 				errors.rejectValue("kautionswert", Messages.negativeValue);
 			}

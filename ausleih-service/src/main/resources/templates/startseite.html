@@ -9,8 +9,5 @@
 <div th:text="${user?.vorname} ?: 'Bitte loggen sie sich ein oder registrieren sie sich.'">Bitte loggen sie sich ein
 	oder registrieren sie sich.
 </div>
-<th th:if="${user.isAdmin()}">
-	<a class="btn btn-primary" href="/admin" role="button">Admin</a>
-</th>
 </body>
 </html>
