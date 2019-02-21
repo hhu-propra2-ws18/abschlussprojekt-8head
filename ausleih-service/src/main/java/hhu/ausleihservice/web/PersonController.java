@@ -1,9 +1,11 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.service.PersonService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -12,9 +14,17 @@ import java.util.List;
 @Controller
 public class PersonController {
 	private PersonService personService;
+	private PersonValidator personValidator;
 
-	PersonController(PersonService perService) {
-		this.personService = perService;
+	PersonController(PersonService personService, PersonValidator personValidator) {
+		this.personService = personService;
+		this.personValidator = personValidator;
+	}
+
+	@GetMapping("/")
+	public String startseite(Model model, Principal p) {
+		model.addAttribute("user", personService.get(p));
+		return "startseite";
 	}
 
 	@GetMapping("/profil/{id}")
@@ -66,6 +76,9 @@ public class PersonController {
 								String query, //For nachname, vorname, username
 								Principal p
 	) {
+		if (query != null) {
+			query = query.trim();
+		}
 		List<Person> list = personService.searchByNames(query);
 		model.addAttribute("benutzerListe", list);
 		model.addAttribute("user", personService.get(p));
@@ -84,14 +97,19 @@ public class PersonController {
 	}
 
 	@PostMapping("/register")
-	public String added(Model model, Person userForm) {
-		if (personService.findByUsername(userForm.getUsername()).isPresent()) {
-			model.addAttribute("usernameTaken", true);
+	public String added(Model model, Person userForm, BindingResult bindingResult) {
+		personValidator.validate(userForm, bindingResult);
+		if (bindingResult.hasErrors()) {
 			model.addAttribute("userForm", userForm);
+			model.addAttribute("usernameErrors", bindingResult.getFieldError("username"));
+			model.addAttribute("vornameErrors", bindingResult.getFieldError("vorname"));
+			model.addAttribute("nachnameErrors", bindingResult.getFieldError("nachname"));
+			model.addAttribute("passwordErrors", bindingResult.getFieldError("password"));
+			model.addAttribute("emailErrors", bindingResult.getFieldError("email"));
 			return "register";
 		}
 		personService.save(userForm);
-		return "startseite";
+		return startseite(model, null);
 	}
 
 	@GetMapping("/admin")

@@ -3,10 +3,13 @@ package hhu.ausleihservice.web;
 import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.validators.AbholortValidator;
+import hhu.ausleihservice.validators.ItemValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import hhu.ausleihservice.web.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,24 +24,29 @@ public class ItemController {
 
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 	private final PersonService personService;
-	private ItemService itemService;
-	private AbholortService abholortService;
+	private final ItemService itemService;
+	private final AbholortService abholortService;
+	private ItemValidator itemValidator;
+	private AbholortValidator abholortValidator;
 
-	public ItemController(PersonService perService, ItemService iService, AbholortService abholortService) {
+	public ItemController(PersonService perService,
+						  ItemService iService,
+						  AbholortService abholortService,
+						  ItemValidator itemValidator,
+						  AbholortValidator abholortValidator
+	) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
-	}
-
-
-	@GetMapping("/")
-	public String startseite(Model model, Principal p) {
-		model.addAttribute("user", personService.get(p));
-		return "startseite";
+		this.itemValidator = itemValidator;
+		this.abholortValidator = abholortValidator;
 	}
 
 	@GetMapping("/liste")
 	public String artikelListe(Model model, @RequestParam(required = false) String query, Principal p) {
+		if (query != null) {
+			query = query.trim();
+		}
 		List<Item> list = itemService.simpleSearch(query);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
@@ -64,6 +72,10 @@ public class ItemController {
 							   String availableMax,
 							   Principal p) {
 		model.addAttribute("user", personService.get(p));
+
+		if (query != null) {
+			query = query.trim();
+		}
 
 		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
 
@@ -122,8 +134,17 @@ public class ItemController {
 	}
 
 	@PostMapping("/newitem")
-	public String addItem(@ModelAttribute Item newItem, Principal p,
-						  @RequestParam("file") MultipartFile picture, Model model) {
+	public String addItem(@ModelAttribute Item newItem, Principal p, @RequestParam("file") MultipartFile picture,
+						  BindingResult bindingResult, Model model) {
+		itemValidator.validate(newItem, bindingResult);
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("newitem", newItem);
+			model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
+			model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
+			model.addAttribute("kautionswertErrors", bindingResult.getFieldError("kautionswert"));
+			model.addAttribute("availableFromErrors", bindingResult.getFieldError("availableFrom"));
+			return "neuerArtikel";
+		}
 		Person besitzer = personService.get(p);
 		try {
 			newItem.setPicture(picture.getBytes());
@@ -148,7 +169,18 @@ public class ItemController {
 	}
 
 	@PostMapping("/newlocation")
-	public String saveNewLocation(@ModelAttribute Abholort abholort, Principal p) {
+	public String saveNewLocation(@ModelAttribute Abholort abholort,
+								  Principal p,
+								  BindingResult bindingResult,
+								  Model model) {
+		abholortValidator.validate(abholort, bindingResult);
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("abholort", abholort);
+			model.addAttribute("longitudeErrors", bindingResult.getFieldError("longitude"));
+			model.addAttribute("latitudeErrors", bindingResult.getFieldError("latitude"));
+			model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
+			return "neuerAbholort";
+		}
 		Person aktuellerNutzer = personService.get(p);
 		abholortService.save(abholort);
 		aktuellerNutzer.getAbholorte().add(abholort);

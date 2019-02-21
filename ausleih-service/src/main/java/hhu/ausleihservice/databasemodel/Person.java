@@ -15,15 +15,15 @@ public class Person {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private String nachname;
-	private String vorname;
+	private String nachname = "";
+	private String vorname = "";
 
 	@EqualsAndHashCode.Include
 	private String username = "";
-	private String password;
+	private String password = "";
 	private Role role = Role.USER;
 
-	private String email;
+	private String email = "";
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Item> items = new HashSet<>();
@@ -65,7 +65,7 @@ public class Person {
 	}
 
 	public boolean isAdmin() {
-		return this != null && this.getRole().equals(Role.ADMIN);
+		return this.getRole().equals(Role.ADMIN);
 	}
 
 	public boolean isOwner(Item artikel) {
@@ -74,5 +74,29 @@ public class Person {
 
 	public boolean isHimself(Person person) {
 		return this.getId().equals(person.getId());
+	}
+
+	public void setNachname(String s) {
+		if (s != null) {
+			nachname = s.trim();
+		}
+	}
+
+	public void setVorname(String s) {
+		if (s != null) {
+			vorname = s.trim();
+		}
+	}
+
+	public void setUsername(String s) {
+		if (s != null) {
+			username = s.trim();
+		}
+	}
+
+	public void setEmail(String s) {
+		if (s != null) {
+			email = s.trim();
+		}
 	}
 }
