@@ -46,7 +46,8 @@ public class ItemController {
 	}
 
 	@GetMapping("/artikelsuche")
-	public String artikelSuche(Model model) {
+	public String artikelSuche(Model model, Principal p) {
+		model.addAttribute("person", personService.get(p));
 		model.addAttribute("datum", LocalDateTime.now().format(DATEFORMAT));
 		return "artikelSuche";
 	}
@@ -61,6 +62,8 @@ public class ItemController {
 							   String availableMin, //YYYY-MM-DD
 							   String availableMax,
 							   Principal p) {
+		model.addAttribute("person", personService.get(p));
+
 		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
 
 		model.addAttribute("dateformat", DATEFORMAT);
@@ -97,7 +100,6 @@ public class ItemController {
 		if (changeArticleDetails) {
 			itemService.updateById(id, artikel);
 		}
-
 		model.addAttribute("artikel", itemService.findById(id));
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("user", personService.get(p));
@@ -108,17 +110,11 @@ public class ItemController {
 	@GetMapping("/newitem")
 	public String createItem(Model model, Principal p) {
 		Person person = personService.get(p);
-		//Dummy
-		Abholort abholort = new Abholort();
-		abholort.setBeschreibung("Dummy");
-		abholortService.save(abholort);
-		person.getAbholorte().add(abholort);
-		personService.save(person);
-		//Dummy Ende
 		if (person.getAbholorte().isEmpty()) {
 			model.addAttribute("message", "Bitte Abholorte hinzufügen");
 			return "errorMessage";
 		}
+		model.addAttribute("person", personService.get(p));
 		model.addAttribute("newitem", new Item());
 		model.addAttribute("abholorte", person.getAbholorte());
 		return "neuerArtikel";
@@ -137,6 +133,25 @@ public class ItemController {
 		itemService.save(newItem);
 		besitzer.addItem(newItem);
 		personService.save(besitzer);
+		return "redirect:/";
+	}
+
+	@GetMapping("/newlocation")
+	public String createNewLocation(Model model, Principal p) {
+		model.addAttribute("person", personService.get(p));
+		Abholort abholort = new Abholort();
+		abholort.setLatitude(51.227741);
+		abholort.setLongitude(6.773456);
+		model.addAttribute("abholort", abholort);
+		return "neuerAbholort";
+	}
+
+	@PostMapping("/newlocation")
+	public String saveNewLocation(@ModelAttribute Abholort abholort, Principal p) {
+		Person aktuellerNutzer = personService.get(p);
+		abholortService.save(abholort);
+		aktuellerNutzer.getAbholorte().add(abholort);
+		personService.save(aktuellerNutzer);
 		return "redirect:/";
 	}
 }
