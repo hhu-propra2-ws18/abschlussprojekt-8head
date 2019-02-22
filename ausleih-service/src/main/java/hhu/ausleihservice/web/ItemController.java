@@ -14,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -145,7 +146,7 @@ public class ItemController {
 
 	//2019-05-02 - 2019-05-09
 	@PostMapping("/ausleihen/{id}")
-	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p) {
+	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p, Model model) {
 		Item artikel = itemService.findById(id);
 		Ausleihe ausleihe = new Ausleihe();
 		Person user = personService.get(p);
@@ -156,6 +157,24 @@ public class ItemController {
 
 		ausleihe.setStartDatum(LocalDate.parse(startDatum));
 		ausleihe.setEndDatum(LocalDate.parse(endDatum));
+		ausleihe.setAusleiher(user);
+		ausleihe.setItem(artikel);
+		
+		DataBinder dataBinder = new DataBinder(ausleihe);
+		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.validate();
+		BindingResult bindingResult = dataBinder.getBindingResult();
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("startDatumErrors", bindingResult.getFieldError("startDatum"));
+			model.addAttribute("endDatumErrors", bindingResult.getFieldError("endDatum"));
+			model.addAttribute("ausleiherErrors", bindingResult.getFieldError("ausleiher"));
+			model.addAttribute("artikel", artikel);
+			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
+			model.addAttribute("ausleihForm", new AusleihForm());
+			model.addAttribute("dateformat", DATEFORMAT);
+			model.addAttribute("user", user);
+			return "artikelDetails";
+		}
 
 		user.addAusleihe(ausleihe);
 		artikel.addAusleihe(ausleihe);
@@ -234,32 +253,5 @@ public class ItemController {
 		aktuellerNutzer.getAbholorte().add(abholort);
 		personService.save(aktuellerNutzer);
 		return "redirect:/";
-	}
-
-	@GetMapping("/ausleihen/{id}")
-	public String getAusleihen(Model model, Principal p, @PathVariable long id) {
-		Item item = itemService.findById(id);
-		Ausleihe ausleihe = new Ausleihe();
-		ausleihe.setItem(item);
-		ausleihe.setAusleiher(personService.get(p));
-		model.addAttribute("ausleihe", ausleihe);
-		return "ausleihen";
-	}
-
-	@PostMapping("/ausleihen/{id}")
-	public String postAusleihen(@ModelAttribute Ausleihe ausleihe, Principal p, @PathVariable long id,
-			BindingResult bindingResult, Model model) {
-		Person user = personService.get(p);
-		ausleihe.setAusleiher(user);
-		ausleihe.setItem(itemService.findById(id));
-		ausleiheValidator.validate(ausleihe, bindingResult);
-		if (bindingResult.hasErrors()) {
-			model.addAttribute("startDatumErrors", bindingResult.getFieldError("startDatum"));
-			model.addAttribute("endDatumErrors", bindingResult.getFieldError("endDatum"));
-			model.addAttribute("ausleiherErrors", bindingResult.getFieldError("ausleiher"));
-			return "ausleihen";
-		}
-		model.addAttribute("item", itemService.findById(id));
-		return "redirect:/details/" + id;
 	}
 }
