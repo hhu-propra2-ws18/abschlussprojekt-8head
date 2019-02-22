@@ -68,8 +68,9 @@ public class PersonController {
 	}
 
 	@PostMapping("/profiladdmoney/{id}")
-	public String chargeProPayById(Model model, @RequestParam("moneten") double moneten, @PathVariable Long id, Principal p) {
-		if(personService.get(p).isHimself(personService.findById(id))){
+	public String chargeProPayById
+			(Model model, @RequestParam("moneten") double moneten, @PathVariable Long id, Principal p) {
+		if (personService.get(p).isHimself(personService.findById(id))) {
 			proPayService.addFunds(personService.findById(id), moneten);
 			return "redirect:/profil/" + id;
 		} else {
