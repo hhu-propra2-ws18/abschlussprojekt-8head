@@ -51,7 +51,6 @@
 		</tr>
 	</form>
 </table>
-<a th:if="${user.isHimself(benutzer)}" href="/editProfil" th:text="edit"></a>
 <h1 th:if="${user.isHimself(benutzer)}">
 	<div th:text="${moneten}"></div>
 </h1>
