@@ -26,5 +26,5 @@ public class Ausleihe {
 	private LocalDate startDatum;
 	private LocalDate endDatum;
 	private Long reservationId;
-
+	private boolean konflikt = false;
 }
