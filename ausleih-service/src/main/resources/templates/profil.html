@@ -56,7 +56,8 @@
 	<div th:text="${moneten}"></div>
 </h1>
 
-<form th:if="${user.isHimself(benutzer)}" action="#" th:action="@{/profiladdmoney/{benutzerID} (benutzerID=${benutzer.getId()})}" method="post">
+<form th:if="${user.isHimself(benutzer)}" action="#"
+	  th:action="@{/profiladdmoney/{benutzerID} (benutzerID=${benutzer.getId()})}" method="post">
 	<input type="number" name="moneten" min="0">
 	<button type="submit">€ Aufladen</button>
 </form>
