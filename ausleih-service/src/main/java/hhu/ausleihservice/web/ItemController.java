@@ -1,9 +1,11 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Abholort;
+import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.validators.AbholortValidator;
+import hhu.ausleihservice.validators.AusleiheValidator;
 import hhu.ausleihservice.validators.ItemValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import hhu.ausleihservice.web.service.*;
@@ -193,5 +195,35 @@ public class ItemController {
 		aktuellerNutzer.getAbholorte().add(abholort);
 		personService.save(aktuellerNutzer);
 		return "redirect:/";
+	}
+
+	@GetMapping("/ausleihen/{id}")
+	public String getAusleihen(Model model, Principal p, @PathVariable long id) {
+		Person user = personService.get(p);
+		Item item = itemService.findById(id);
+		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setItem(item);
+		ausleihe.setAusleiher(personService.get(p));
+		model.addAttribute("ausleihe", ausleihe);
+		return "ausleihen";
+	}
+
+	@PostMapping("/ausleihen/{id}")
+	public String postAusleihen(@ModelAttribute Ausleihe ausleihe, Principal p, @PathVariable long id,
+			BindingResult bindingResult, Model model) {
+		Person user = personService.get(p);
+		ausleihe.setAusleiher(user);
+		ausleihe.setItem(itemService.findById(id));
+		ItemAvailabilityService available = new ItemAvailabilityService();
+		AusleiheValidator valid = new AusleiheValidator(available);
+		valid.validate(ausleihe, bindingResult);
+		
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("startDatumErrors", bindingResult.getFieldError("startDatum"));
+			model.addAttribute("endDatumErrors", bindingResult.getFieldError("endDatum"));
+			return "ausleihen";
+		}
+		model.addAttribute("item", itemService.findById(id));
+		return "redirect:/details/" + id;
 	}
 }
