@@ -44,7 +44,8 @@ public class ItemController {
 						  AbholortService abholortService,
 						  ItemAvailabilityService itemAvailabilityService,
 						  ItemValidator itemValidator,
-						  AbholortValidator abholortValidator
+						  AbholortValidator abholortValidator,
+						  AusleiheValidator ausleiheValidator
 	) {
 		this.personService = perService;
 		this.itemService = iService;
