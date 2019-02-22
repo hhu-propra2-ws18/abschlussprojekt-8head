@@ -56,10 +56,7 @@ public class PersonController {
 			System.out.println("Now updating..");
 			personService.updateById(id, person);
 		}
-		model.addAttribute("benutzer", personService.findById(id));
-		model.addAttribute("user", personService.get(p));
-		return "profil";
-
+		return "redirect:/profil/" + id;
 	}
 
 	@PostMapping("/profil")
