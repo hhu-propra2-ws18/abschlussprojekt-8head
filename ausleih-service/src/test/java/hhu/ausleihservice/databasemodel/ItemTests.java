@@ -3,14 +3,12 @@ package hhu.ausleihservice.databasemodel;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-@SpringBootTest
 public class ItemTests {
 	@Test
 	public void testGetPictureReturnsByteArrayWithSameLength() {
