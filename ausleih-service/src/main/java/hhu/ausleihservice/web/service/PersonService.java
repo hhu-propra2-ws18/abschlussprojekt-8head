@@ -74,8 +74,6 @@ public class PersonService implements UserDetailsService {
 	}
 
 	public void save(Person person) {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		person.setPassword(encoder.encode(person.getPassword()));
 		users.save(person);
 	}
 
@@ -132,5 +130,11 @@ public class PersonService implements UserDetailsService {
 			System.out.println("Password set.");
 		}
 		users.save(toUpdate);
+	}
+
+	public void encrypteAndSave(Person person) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		person.setPassword(encoder.encode(person.getPassword()));
+		users.save(person);
 	}
 }
