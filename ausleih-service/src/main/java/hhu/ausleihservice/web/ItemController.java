@@ -4,14 +4,12 @@ import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.form.AusleihForm;
 import hhu.ausleihservice.validators.AbholortValidator;
 import hhu.ausleihservice.validators.AusleiheValidator;
 import hhu.ausleihservice.validators.ItemValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
-import hhu.ausleihservice.web.service.AbholortService;
-import hhu.ausleihservice.web.service.ItemAvailabilityService;
-import hhu.ausleihservice.web.service.ItemService;
-import hhu.ausleihservice.web.service.PersonService;
+import hhu.ausleihservice.web.service.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,9 +35,10 @@ public class ItemController {
 	private ItemValidator itemValidator;
 	private AbholortValidator abholortValidator;
 	private AusleiheValidator ausleiheValidator;
+	private AusleiheService ausleiheService;
 
-
-	public ItemController(PersonService perService,
+	public ItemController(AusleiheService ausleiheService,
+						  PersonService perService,
 						  ItemService iService,
 						  AbholortService abholortService,
 						  ItemAvailabilityService itemAvailabilityService,
@@ -47,6 +46,7 @@ public class ItemController {
 						  AbholortValidator abholortValidator,
 						  AusleiheValidator ausleiheValidator
 	) {
+		this.ausleiheService = ausleiheService;
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
@@ -115,6 +115,8 @@ public class ItemController {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
 		}
+
+		model.addAttribute("ausleihForm", new AusleihForm());
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("user", personService.get(p));
 		return "artikelDetails";
@@ -140,6 +142,31 @@ public class ItemController {
 
 		return "artikelDetails";
 	}
+
+	//2019-05-02 - 2019-05-09
+	@PostMapping("/ausleihen/{id}")
+	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p) {
+		Item artikel = itemService.findById(id);
+		Ausleihe ausleihe = new Ausleihe();
+		Person user = personService.get(p);
+
+		//Please refactor TODO
+		String startDatum = ausleihForm.getDate().substring(0, 10);
+		String endDatum = ausleihForm.getDate().substring(13);
+
+		ausleihe.setStartDatum(LocalDate.parse(startDatum));
+		ausleihe.setEndDatum(LocalDate.parse(endDatum));
+
+		user.addAusleihe(ausleihe);
+		artikel.addAusleihe(ausleihe);
+
+		ausleiheService.save(ausleihe);
+		personService.save(user);
+		itemService.save(artikel);
+
+		return "redirect:/";
+	}
+
 
 	@GetMapping("/newitem")
 	public String createItem(Model model, Principal p) {
