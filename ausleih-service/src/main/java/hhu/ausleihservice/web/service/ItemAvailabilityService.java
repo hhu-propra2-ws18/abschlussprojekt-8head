@@ -5,6 +5,8 @@ import hhu.ausleihservice.databasemodel.Item;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -27,16 +29,27 @@ public class ItemAvailabilityService {
 				-> isInPeriod(date, ausleihe.getStartDatum(), ausleihe.getEndDatum()));
 	}
 
-	//Format of input is "YYYY-MM-DD"
-	public boolean isAvailableFromTill(Item item, String from, String till) {
-		LocalDate temp = LocalDate.parse(from);
-		LocalDate end = LocalDate.parse(till);
-		while (!temp.equals(end.plusDays(1))) {
+	public boolean isAvailableFromTill(Item item, LocalDate from, LocalDate till) {
+		LocalDate temp = from;
+		while (!temp.equals(till.plusDays(1))) {
 			if (!isAvailable(item, temp)) {
 				return false;
 			}
 			temp = temp.plusDays(1);
 		}
 		return true;
+	}
+
+	public List<String> getUnavailableDates(Item item) {
+		LocalDate temp = item.getAvailableFrom();
+		LocalDate end = item.getAvailableTill();
+		List<String> unavailabeDates = new ArrayList<>();
+		while (!temp.isAfter(end)) {
+			if (!isAvailable(item, temp)) {
+				unavailabeDates.add(temp.toString());
+			}
+			temp = temp.plusDays(1);
+		}
+		return unavailabeDates;
 	}
 }

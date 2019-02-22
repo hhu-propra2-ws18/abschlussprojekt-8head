@@ -107,7 +107,7 @@ public class ItemServiceTest {
 			} else if (searchedItem.getId() == 4L) {
 				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertTrue(false);
+				fail();
 			}
 		}
 	}
@@ -196,8 +196,8 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch(null,
 				2147483647,
 				2147483647,
-				"2010-07-01",
-				"2010-07-01");
+				LocalDate.of(2010, 7, 1),
+				LocalDate.of(2010, 7, 1));
 
 		assertEquals(4, searchedList.size());
 
@@ -222,8 +222,8 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch("",
 				2147483647,
 				2147483647,
-				"2010-07-01",
-				"2010-07-01");
+				LocalDate.of(2010, 7, 1),
+				LocalDate.of(2010, 7, 1));
 
 		assertEquals(4, searchedList.size());
 
@@ -248,8 +248,8 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch(null,
 				15,
 				2147483647,
-				"2010-07-01",
-				"2010-07-01");
+				LocalDate.of(2010, 7, 1),
+				LocalDate.of(2010, 7, 1));
 
 		assertEquals(3, searchedList.size());
 
@@ -272,8 +272,8 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch(null,
 				2147483647,
 				100,
-				"2010-07-01",
-				"2010-07-01");
+				LocalDate.of(2010, 7, 1),
+				LocalDate.of(2010, 7, 1));
 
 		assertEquals(2, searchedList.size());
 
@@ -294,8 +294,8 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch("Fahrrad",
 				2147483647,
 				2147483647,
-				"2010-07-01",
-				"2010-07-01");
+				LocalDate.of(2010, 7, 1),
+				LocalDate.of(2010, 7, 1));
 
 		assertEquals(2, searchedList.size());
 
@@ -316,8 +316,8 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch("Fahrrad",
 				2147483647,
 				100,
-				"2010-07-01",
-				"2010-07-01");
+				LocalDate.of(2010, 7, 1),
+				LocalDate.of(2010, 7, 1));
 
 		assertEquals(1, searchedList.size());
 
@@ -336,8 +336,8 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch(null,
 				2147483647,
 				2147483647,
-				"2007-01-01",
-				"2012-01-01");
+				LocalDate.of(2007, 1, 1),
+				LocalDate.of(2012, 1, 1));
 
 		assertEquals(2, searchedList.size());
 
@@ -358,8 +358,8 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch(null,
 				2147483647,
 				2147483647,
-				"2000-01-01",
-				"2003-01-01");
+				LocalDate.of(2000, 1, 1),
+				LocalDate.of(2003, 1, 1));
 
 		assertEquals(2, searchedList.size());
 

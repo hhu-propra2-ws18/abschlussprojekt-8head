@@ -6,7 +6,11 @@ import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.validators.AbholortValidator;
 import hhu.ausleihservice.validators.ItemValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
-import hhu.ausleihservice.web.service.*;
+import hhu.ausleihservice.web.service.AbholortService;
+import hhu.ausleihservice.web.service.ItemAvailabilityService;
+import hhu.ausleihservice.web.service.ItemService;
+import hhu.ausleihservice.web.service.PersonService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -26,18 +31,22 @@ public class ItemController {
 	private final PersonService personService;
 	private final ItemService itemService;
 	private final AbholortService abholortService;
+	private final ItemAvailabilityService itemAvailabilityService;
 	private ItemValidator itemValidator;
 	private AbholortValidator abholortValidator;
+
 
 	public ItemController(PersonService perService,
 						  ItemService iService,
 						  AbholortService abholortService,
+						  ItemAvailabilityService itemAvailabilityService,
 						  ItemValidator itemValidator,
 						  AbholortValidator abholortValidator
 	) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
+		this.itemAvailabilityService = itemAvailabilityService;
 		this.itemValidator = itemValidator;
 		this.abholortValidator = abholortValidator;
 	}
@@ -68,8 +77,12 @@ public class ItemController {
 									   int tagessatzMax,
 							   @RequestParam(defaultValue = "2147483647")
 									   int kautionswertMax,
-							   String availableMin, //YYYY-MM-DD
-							   String availableMax,
+							   @RequestParam
+							   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+									   LocalDate availableMin,
+							   @RequestParam
+							   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+									   LocalDate availableMax,
 							   Principal p) {
 		model.addAttribute("user", personService.get(p));
 
@@ -90,7 +103,9 @@ public class ItemController {
 								 @PathVariable long id,
 								 Principal p) {
 		try {
-			model.addAttribute("artikel", itemService.findById(id));
+			Item artikel = itemService.findById(id);
+			model.addAttribute("artikel", artikel);
+			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
 		} catch (ItemNichtVorhanden a) {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";

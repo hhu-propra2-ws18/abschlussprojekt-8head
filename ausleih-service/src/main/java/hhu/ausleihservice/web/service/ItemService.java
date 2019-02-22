@@ -5,6 +5,7 @@ import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -71,8 +72,8 @@ public class ItemService {
 	public List<Item> extendedSearch(String query,
 									 int tagessatzMax,
 									 int kautionswertMax,
-									 String availableMin,
-									 String availableMax) {
+									 LocalDate availableMin,
+									 LocalDate availableMax) {
 		Stream<Item> listStream = findAll().stream();
 
 		if (query != null && !query.equals("")) {
@@ -91,9 +92,7 @@ public class ItemService {
 				item -> itemAvailabilityService.isAvailableFromTill(item, availableMin, availableMax)
 		);
 
-		List<Item> list = listStream.collect(Collectors.toList());
-
-		return list;
+		return listStream.collect(Collectors.toList());
 	}
 
 	public void save(Item newItem) {

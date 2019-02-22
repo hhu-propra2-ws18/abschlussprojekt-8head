@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<!-- TODO th:replace entfernen und marker-->
 <head th:replace="../static/css/navbar :: style">
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
@@ -27,7 +26,7 @@
 		<td th:text="${artikel.tagessatz} + &euro;">Tagessatz</td>
 		<td th:text="${artikel.kautionswert} + &euro;">Kaution</td>
 		<td th:text="${artikel.abholort.beschreibung}">Standort</td>
-		<td><a th:href="@{/profil/{besitzerId} (besitzerId=${artikel.getBesitzer().getId()})}"
+		<td><a th:href="@{/profil/{besitzerId} (besitzerId=${artikel.besitzer.getId()})}"
 			   th:text="|${artikel.besitzer.getVorname()} ${artikel.besitzer.getNachname()}|"><p>Name</p></a>
 		</td>
 	</tr>
@@ -62,53 +61,69 @@
 				<div id="error" th:text="${titelErrors?.code}"></div>
 			</td>
 			<td>
-				<button type="submit" value="true" name="editArtikel" >Artikel Ändern</button>
+				<button type="submit" value="true" name="editArtikel">Artikel Ändern</button>
 			</td>
 		</form>
 	</tr>
 </table>
-<table id="items">
-	<tr>
-		<th>Noch verfügbar zu folgenden Zeiten</th>
-	</tr>
-	<tr th:each="periods: ${artikel.availablePeriods}">
-		<td th:text="${periods}"></td>
-	</tr>
-</table>
+
 <br>
 <a href="/liste">Zurück</a>
+<br>
+<input type="text" class="daterange"/>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+    var start_date = /*[[${artikel.getAvailableFrom().toString()}]]*/
+    var end_date = /*[[${artikel.getAvailableTill().toString()}]]*/
+	var some_date_range = /*[[${availabilityList}]]*/
+	$('.daterange').daterangepicker({
+		"minDate": start_date,
+        "maxDate": end_date,
+        "startDate": start_date,
+        "endDate": end_date,
+        "locale": {
+            format: 'YYYY-MM-DD',
+        },
+		"isInvalidDate" : function(date){
+  			for(var ii = 0; ii < some_date_range.length; ii++){
+    			if (date.format('YYYY-MM-DD') == some_date_range[ii]){
+    		  	return true;
+    			}
+  			}
+		}
+	});
+	/*]]>*/
+
+
+
+
+
+
+</script>
+
 <img th:if="${artikel.getBase64EncodedString()!=null}"
 	 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/>
 <div id="mapid" style="width: 600px; height: 400px;"></div>
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    var longitude = /*[[${artikel.abholort.longitude}]]*/;
-    var latitude = /*[[${artikel.abholort.latitude}]]*/;
-    var map = L.map('mapid').setView([latitude, longitude], 13);
-    mapLink =
-        '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-    L.tileLayer(
-        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	/*<![CDATA[*/
+		var longitude = /*[[${artikel.abholort.longitude}]]*/;
+		var latitude = /*[[${artikel.abholort.latitude}]]*/;
+        var map = L.map('mapid').setView([latitude, longitude], 13);
+        mapLink =
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; ' + mapLink + ' Contributors',
             maxZoom: 18,
-        }).addTo(map);
-    var message = /*[[${artikel.abholort.beschreibung}]]*/
-        L.marker([latitude, longitude]).addTo(map)
-            .bindPopup(message).openPopup();
-    /*]]>*/
+            }).addTo(map);
+		var message = /*[[${artikel.abholort.beschreibung}]]*/
+		L.marker([latitude, longitude]).addTo(map)
+			.bindPopup(message).openPopup();
+	/*]]>*/
+
+
+
 
 </script>
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-		crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-		crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-		crossorigin="anonymous"></script>
 </body>
 </html>
