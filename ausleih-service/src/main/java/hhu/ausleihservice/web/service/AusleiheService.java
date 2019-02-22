@@ -1,4 +1,4 @@
-package hhu.ausleihservice.web;
+package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.AusleiheRepository;
 import hhu.ausleihservice.databasemodel.Ausleihe;
@@ -13,7 +13,7 @@ public class AusleiheService {
 		this.ausleiheRepository = ausleiheRepository;
 	}
 
-	void save(Ausleihe ausleihe) {
+	public void save(Ausleihe ausleihe) {
 		ausleiheRepository.save(ausleihe);
 	}
 
