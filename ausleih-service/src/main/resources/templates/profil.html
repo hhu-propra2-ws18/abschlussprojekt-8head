@@ -26,7 +26,6 @@
 		<td th:text="${benutzer.vorname}">Max</td>
 		<td th:text="${benutzer.nachname}">Mustermann</td>
 		<td th:text="${benutzer.email}">mamus@gmail.com</td>
-		<td th:text="${benutzer.ausleihen}">mamus@gmail.com</td>
 		<td></td>
 	</tr>
 	<form th:action="@{/profil/{PersonId} (PersonId=${benutzer.getId()})}" th:object="${benutzer}" method="post">
