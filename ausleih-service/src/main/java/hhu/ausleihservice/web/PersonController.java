@@ -1,7 +1,9 @@
 package hhu.ausleihservice.web;
 
+import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.validators.PersonValidator;
+import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
 import hhu.ausleihservice.web.service.ProPayService;
 import org.springframework.stereotype.Controller;
@@ -17,11 +19,13 @@ public class PersonController {
 	private PersonService personService;
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
+	private AusleiheService ausleiheService;
 
-	PersonController(PersonService personService, PersonValidator personValidator, ProPayService proPayService) {
+	PersonController(PersonService personService, PersonValidator personValidator, ProPayService proPayService, AusleiheService ausleiheService) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
+		this.ausleiheService = ausleiheService;
 	}
 
 	@GetMapping("/")
@@ -131,4 +135,13 @@ public class PersonController {
 		return "admin";
 	}
 
+	@GetMapping("/allconflicts")
+	public String showAllconflicts(Model model, Principal p){
+		if(personService.get(p).isAdmin()){
+			model.addAttribute("message", "Administrator depostulatur");
+			return "errorMessage";
+		} else {
+			List<Ausleihe>
+		}
+	}
 }
