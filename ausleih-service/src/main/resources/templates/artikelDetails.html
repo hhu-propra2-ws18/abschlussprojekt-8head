@@ -91,6 +91,8 @@
     <div>
       <form th:action="@{/ausleihen/{id}(id=${artikel.id})}" th:object="${ausleihForm}" method="post">
 	      <input type="text" class="daterange" th:field="*{date}"/>
+	      <div id="error" th:text="${startDatumErrors?.code}"></div>
+	      <div id="error" th:text="${ausleiherErrors?.code}"></div>
 	      <script th:inline="javascript">
 		     /*<![CDATA[*/
 		    var start_date = /*[[${artikel.getAvailableFrom().toString()}]]*/
