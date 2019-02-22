@@ -40,7 +40,7 @@ public class ItemAvailabilityService {
 		return true;
 	}
 
-  public List<String> getUnavailableDates(Item item) {
+	public List<String> getUnavailableDates(Item item) {
 		LocalDate temp = item.getAvailableFrom();
 		LocalDate end = item.getAvailableTill();
 		List<String> unavailabeDates = new ArrayList<>();
