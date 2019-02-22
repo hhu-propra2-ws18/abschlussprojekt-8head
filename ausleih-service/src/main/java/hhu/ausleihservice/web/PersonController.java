@@ -48,8 +48,9 @@ public class PersonController {
 						   BindingResult bindingResult
 	) {
 		System.out.println("Post triggered at /profil/" + id);
-		if(benutzer.getUsername().equals("")){
-			System.out.println("Da Username leer, setze auf alten, damit Validierung funktioniert. Alter Username: " +personService.findById(id).getUsername());
+		if (benutzer.getUsername().equals("")) {
+			System.out.println("Da Username leer, setze auf alten, damit Validierung funktioniert.\n" +
+					"Alter Username: " + personService.findById(id).getUsername());
 			benutzer.setUsername(personService.findById(id).getUsername());
 		}
 		personValidator.validate(benutzer, bindingResult);

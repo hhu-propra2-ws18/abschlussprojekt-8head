@@ -1,7 +1,6 @@
 package hhu.ausleihservice.validators;
 
 import hhu.ausleihservice.databasemodel.Person;
-import hhu.ausleihservice.databasemodel.Role;
 import hhu.ausleihservice.web.service.PersonService;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -30,7 +29,7 @@ public class PersonValidator implements Validator {
 		if (person.getUsername().length() < 4 || person.getUsername().length() > 32) {
 			errors.rejectValue("username", Messages.usernameSize);
 		}
-		if(personService.findOptionalById(((Person) target).getId()).isPresent()){
+		if (personService.findOptionalById(((Person) target).getId()).isPresent()) {
 			if (personService.findByUsername(person.getUsername()).isPresent() &&
 					!person.getUsername().equals(personService.findById(person.getId()).getUsername())) {
 				errors.rejectValue("username", Messages.duplicateUsername);
@@ -43,7 +42,7 @@ public class PersonValidator implements Validator {
 		}
 		if (personService.findOptionalById(person.getId()).isPresent()) {
 			if (person.getPassword().length() != 0) {
-				if(person.getPassword().trim().length()==0) {
+				if (person.getPassword().trim().length() == 0) {
 					errors.rejectValue("password", Messages.notEmpty);
 				}
 				if (person.getPassword().length() < 3 || person.getPassword().length() > 100) {
