@@ -44,7 +44,7 @@
 			<td><input name="newAbholortBeschreibung" type="text" th:field="*{abholort.beschreibung}"></td>
 			<td><input name="newTitle" type="text" th:field="*{titel}"></td>
 			<td>
-				<button type="submit" value="true" name="editArtikel" >Artikel Ändern</button>
+				<button type="submit" value="true" name="editArtikel">Artikel Ändern</button>
 			</td>
 		</form>
 	</tr>
@@ -79,6 +79,9 @@
 
 
 
+
+
+
 </script>
 
 <img th:if="${artikel.getBase64EncodedString()!=null}"
@@ -100,6 +103,9 @@
 		L.marker([latitude, longitude]).addTo(map)
 			.bindPopup(message).openPopup();
 	/*]]>*/
+
+
+
 
 </script>
 </body>

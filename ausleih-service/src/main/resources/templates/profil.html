@@ -31,7 +31,8 @@
 		</tr>
 		<tr>
 			<td>
-				<input th:if="${user.isAdmin() and !(user.isHimself(benutzer))}" name="newUsername" type="text" th:field="*{username}">
+				<input th:if="${user.isAdmin() and !(user.isHimself(benutzer))}" name="newUsername" type="text"
+					   th:field="*{username}">
 			</td>
 			<td>
 				<input name="newVorname" type="text" th:field="*{vorname}">

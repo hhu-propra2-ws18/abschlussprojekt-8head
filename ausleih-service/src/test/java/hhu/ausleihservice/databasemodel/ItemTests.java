@@ -1,4 +1,3 @@
-
 package hhu.ausleihservice.databasemodel;
 
 import org.junit.Assert;
