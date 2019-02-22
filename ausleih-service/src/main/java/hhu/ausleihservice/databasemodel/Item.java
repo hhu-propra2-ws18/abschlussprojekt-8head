@@ -18,6 +18,7 @@ public class Item {
 	private Long id;
 
 	private String titel = "";
+	@Lob
 	private String beschreibung = "";
 	private Integer tagessatz;
 	private Integer kautionswert;
