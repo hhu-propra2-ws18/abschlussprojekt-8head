@@ -1,6 +1,7 @@
 package hhu.ausleihservice.validators;
 
 class Messages {
+
 	static String notEmpty = "Benötigtes Feld";
 
 	static String usernameSize = "Der Benutzername muss zwischen 6 und 32 Zeichen lang sein.";
@@ -18,4 +19,8 @@ class Messages {
 	static String negativeValue = "Der Wert muss mindestens 1 betragen";
 	static String invalidPeriod = "Das Anfangsdatum muss vor dem Enddatum liegen!";
 	static String invalidAvailableFrom = "Das Anfangsdatum muss mindestens heute sein";
+
+	static String itemNotAvailable = "Der Artikel ist im gewählten Zeitraum nicht verfuegbar";
+	static String invalidUser = "Der angegebene Nutzer stimmt nicht mit dem Login ueberein";
+	static String ownItemAusleihe = "Ein eigener Artikel kann nicht ausgeliehen werden";
 }

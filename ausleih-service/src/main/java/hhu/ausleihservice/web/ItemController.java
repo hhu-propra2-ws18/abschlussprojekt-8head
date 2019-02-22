@@ -6,6 +6,7 @@ import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.form.AusleihForm;
 import hhu.ausleihservice.validators.AbholortValidator;
+import hhu.ausleihservice.validators.AusleiheValidator;
 import hhu.ausleihservice.validators.ItemValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import hhu.ausleihservice.web.service.*;
@@ -13,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +35,7 @@ public class ItemController {
 	private final ItemAvailabilityService itemAvailabilityService;
 	private ItemValidator itemValidator;
 	private AbholortValidator abholortValidator;
+	private AusleiheValidator ausleiheValidator;
 	private AusleiheService ausleiheService;
 
 	public ItemController(AusleiheService ausleiheService,
@@ -41,7 +44,8 @@ public class ItemController {
 						  AbholortService abholortService,
 						  ItemAvailabilityService itemAvailabilityService,
 						  ItemValidator itemValidator,
-						  AbholortValidator abholortValidator
+						  AbholortValidator abholortValidator,
+						  AusleiheValidator ausleiheValidator
 	) {
 		this.ausleiheService = ausleiheService;
 		this.personService = perService;
@@ -50,6 +54,7 @@ public class ItemController {
 		this.itemAvailabilityService = itemAvailabilityService;
 		this.itemValidator = itemValidator;
 		this.abholortValidator = abholortValidator;
+		this.ausleiheValidator = ausleiheValidator;
 	}
 
 	@GetMapping("/liste")
@@ -141,7 +146,7 @@ public class ItemController {
 
 	//2019-05-02 - 2019-05-09
 	@PostMapping("/ausleihen/{id}")
-	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p) {
+	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p, Model model) {
 		Item artikel = itemService.findById(id);
 		Ausleihe ausleihe = new Ausleihe();
 		Person user = personService.get(p);
@@ -153,6 +158,25 @@ public class ItemController {
 		ausleihe.setStartDatum(LocalDate.parse(startDatum));
 		ausleihe.setEndDatum(LocalDate.parse(endDatum));
 		ausleihe.setApproved(false);
+
+		ausleihe.setAusleiher(user);
+		ausleihe.setItem(artikel);
+		
+		DataBinder dataBinder = new DataBinder(ausleihe);
+		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.validate();
+		BindingResult bindingResult = dataBinder.getBindingResult();
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("startDatumErrors", bindingResult.getFieldError("startDatum"));
+			model.addAttribute("endDatumErrors", bindingResult.getFieldError("endDatum"));
+			model.addAttribute("ausleiherErrors", bindingResult.getFieldError("ausleiher"));
+			model.addAttribute("artikel", artikel);
+			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
+			model.addAttribute("ausleihForm", new AusleihForm());
+			model.addAttribute("dateformat", DATEFORMAT);
+			model.addAttribute("user", user);
+			return "artikelDetails";
+		}
 
 		user.addAusleihe(ausleihe);
 		artikel.addAusleihe(ausleihe);
@@ -172,7 +196,7 @@ public class ItemController {
 			model.addAttribute("message", "Bitte Abholorte hinzufügen");
 			return "errorMessage";
 		}
-		model.addAttribute("user", personService.get(p));
+		model.addAttribute("user", person);
 		model.addAttribute("newitem", new Item());
 		model.addAttribute("abholorte", person.getAbholorte());
 		return "neuerArtikel";
@@ -182,15 +206,22 @@ public class ItemController {
 	public String addItem(@ModelAttribute Item newItem, Principal p, @RequestParam("file") MultipartFile picture,
 						  BindingResult bindingResult, Model model) {
 		itemValidator.validate(newItem, bindingResult);
+		Person besitzer = personService.get(p);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("newitem", newItem);
 			model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
 			model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
 			model.addAttribute("kautionswertErrors", bindingResult.getFieldError("kautionswert"));
 			model.addAttribute("availableFromErrors", bindingResult.getFieldError("availableFrom"));
+
+			if (besitzer.getAbholorte().isEmpty()) {
+				model.addAttribute("message", "Bitte Abholorte hinzufügen");
+				return "errorMessage";
+			}
+			model.addAttribute("user", besitzer);
+			model.addAttribute("abholorte", besitzer.getAbholorte());
 			return "neuerArtikel";
 		}
-		Person besitzer = personService.get(p);
 		try {
 			newItem.setPicture(picture.getBytes());
 		} catch (IOException e) {

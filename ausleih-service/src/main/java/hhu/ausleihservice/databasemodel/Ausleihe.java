@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 @Data
@@ -23,7 +26,9 @@ public class Ausleihe {
 	private Item item;
 	@ManyToOne
 	private Person ausleiher;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate startDatum;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate endDatum;
 	private Long reservationId;
 	private boolean approved;
