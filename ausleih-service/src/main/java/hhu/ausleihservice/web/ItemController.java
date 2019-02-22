@@ -28,18 +28,22 @@ public class ItemController {
 	private final PersonService personService;
 	private final ItemService itemService;
 	private final AbholortService abholortService;
+	private final ItemAvailabilityService itemAvailabilityService;
 	private ItemValidator itemValidator;
 	private AbholortValidator abholortValidator;
 
+
 	public ItemController(PersonService perService,
-	                      ItemService iService,
-	                      AbholortService abholortService,
-	                      ItemValidator itemValidator,
-	                      AbholortValidator abholortValidator
+						  ItemService iService,
+						  AbholortService abholortService,
+						  ItemAvailabilityService itemAvailabilityService,
+						  ItemValidator itemValidator,
+						  AbholortValidator abholortValidator
 	) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
+		this.itemAvailabilityService = itemAvailabilityService;
 		this.itemValidator = itemValidator;
 		this.abholortValidator = abholortValidator;
 	}
@@ -96,7 +100,9 @@ public class ItemController {
 	                             @PathVariable long id,
 	                             Principal p) {
 		try {
-			model.addAttribute("artikel", itemService.findById(id));
+			Item artikel = itemService.findById(id);
+			model.addAttribute("artikel", artikel);
+			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
 		} catch (ItemNichtVorhanden a) {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
