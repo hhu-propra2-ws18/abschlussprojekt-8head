@@ -149,9 +149,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item2.setAvailableTill(ersterMai.plusDays(10));
 		item3.setAvailableTill(ersterMai.plusDays(11));
 
-		item1.setBesitzer(person1);
-		item2.setBesitzer(person2);
-		item3.setBesitzer(person3);
+		person1.addItem(item1);
+		person2.addItem(item2);
+		person3.addItem(item3);
 
 		try {
 			item1.setPicture(Files.readAllBytes(
@@ -163,12 +163,6 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		} catch (IOException e) {
 			System.out.println("Files could not be stored");
 		}
-
-		Set<Ausleihe> ausleihen1 = new HashSet<>();
-		Set<Ausleihe> ausleihen2 = new HashSet<>();
-
-		item3.setAusleihen(ausleihen1);
-		item1.setAusleihen(ausleihen2);
 
 		this.abholortRepository.save(ort1);
 		this.abholortRepository.save(ort2);
@@ -189,21 +183,18 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		ausleihe1.setReservationId(0L);
 		ausleihe1.setStartDatum(ersterMai.plusDays(4));
 		ausleihe1.setEndDatum(ersterMai.plusDays(6));
-		ausleihe1.setAusleiher(person2);
-		ausleihe1.setItem(item3);
 
 		Ausleihe ausleihe2 = new Ausleihe();
 		ausleihe2.setReservationId(1L);
 		ausleihe2.setStartDatum(ersterMai.plusDays(2));
 		ausleihe2.setEndDatum(ersterMai.plusDays(3));
 		ausleihe2.setAusleiher(person3);
-		ausleihe2.setItem(item1);
 
-		ausleihen1.add(ausleihe1);
-		ausleihen2.add(ausleihe2);
+		item3.addAusleihe(ausleihe1);
+		item1.addAusleihe(ausleihe2);
 
-		item3.setAusleihen(ausleihen1);
-		item1.setAusleihen(ausleihen2);
+		person2.addAusleihe(ausleihe1);
+		person3.addAusleihe(ausleihe2);
 
 		this.ausleiheRepository.save(ausleihe1);
 		this.ausleiheRepository.save(ausleihe2);
