@@ -95,19 +95,19 @@ public class PersonServiceTest {
 
 		for (Person searchedPerson : searchedPeople) {
 			if (searchedPerson.getId() == 1L) {
-				assertEquals(true, testPersonEquality(repository.get(0), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(0), searchedPerson));
 			} else if (searchedPerson.getId() == 2L) {
-				assertEquals(true, testPersonEquality(repository.get(1), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(1), searchedPerson));
 			} else if (searchedPerson.getId() == 3L) {
-				assertEquals(true, testPersonEquality(repository.get(2), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(2), searchedPerson));
 			} else if (searchedPerson.getId() == 4L) {
-				assertEquals(true, testPersonEquality(repository.get(3), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(3), searchedPerson));
 			} else if (searchedPerson.getId() == 5L) {
-				assertEquals(true, testPersonEquality(repository.get(4), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(4), searchedPerson));
 			} else if (searchedPerson.getId() == 6L) {
-				assertEquals(true, testPersonEquality(repository.get(5), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(5), searchedPerson));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -120,19 +120,19 @@ public class PersonServiceTest {
 
 		for (Person searchedPerson : searchedPeople) {
 			if (searchedPerson.getId() == 1L) {
-				assertEquals(true, testPersonEquality(repository.get(0), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(0), searchedPerson));
 			} else if (searchedPerson.getId() == 2L) {
-				assertEquals(true, testPersonEquality(repository.get(1), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(1), searchedPerson));
 			} else if (searchedPerson.getId() == 3L) {
-				assertEquals(true, testPersonEquality(repository.get(2), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(2), searchedPerson));
 			} else if (searchedPerson.getId() == 4L) {
-				assertEquals(true, testPersonEquality(repository.get(3), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(3), searchedPerson));
 			} else if (searchedPerson.getId() == 5L) {
-				assertEquals(true, testPersonEquality(repository.get(4), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(4), searchedPerson));
 			} else if (searchedPerson.getId() == 6L) {
-				assertEquals(true, testPersonEquality(repository.get(5), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(5), searchedPerson));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -145,13 +145,13 @@ public class PersonServiceTest {
 
 		for (Person searchedPerson : searchedPeople) {
 			if (searchedPerson.getId() == 1L) {
-				assertEquals(true, testPersonEquality(repository.get(0), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(0), searchedPerson));
 			} else if (searchedPerson.getId() == 2L) {
-				assertEquals(true, testPersonEquality(repository.get(1), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(1), searchedPerson));
 			} else if (searchedPerson.getId() == 4L) {
-				assertEquals(true, testPersonEquality(repository.get(3), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(3), searchedPerson));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -164,9 +164,9 @@ public class PersonServiceTest {
 
 		for (Person searchedPerson : searchedPeople) {
 			if (searchedPerson.getId() == 6L) {
-				assertEquals(true, testPersonEquality(repository.get(5), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(5), searchedPerson));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -179,11 +179,11 @@ public class PersonServiceTest {
 
 		for (Person searchedPerson : searchedPeople) {
 			if (searchedPerson.getId() == 3L) {
-				assertEquals(true, testPersonEquality(repository.get(2), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(2), searchedPerson));
 			} else if (searchedPerson.getId() == 4L) {
-				assertEquals(true, testPersonEquality(repository.get(3), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(3), searchedPerson));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -196,11 +196,11 @@ public class PersonServiceTest {
 
 		for (Person searchedPerson : searchedPeople) {
 			if (searchedPerson.getId() == 2L) {
-				assertEquals(true, testPersonEquality(repository.get(1), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(1), searchedPerson));
 			} else if (searchedPerson.getId() == 5L) {
-				assertEquals(true, testPersonEquality(repository.get(4), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(4), searchedPerson));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -213,9 +213,9 @@ public class PersonServiceTest {
 
 		for (Person searchedPerson : searchedPeople) {
 			if (searchedPerson.getId() == 4L) {
-				assertEquals(true, testPersonEquality(repository.get(3), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(3), searchedPerson));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -235,9 +235,9 @@ public class PersonServiceTest {
 
 		for (Person searchedPerson : searchedPeople) {
 			if (searchedPerson.getId() == 2L) {
-				assertEquals(true, testPersonEquality(repository.get(1), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(1), searchedPerson));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -250,9 +250,9 @@ public class PersonServiceTest {
 
 		for (Person searchedPerson : searchedPeople) {
 			if (searchedPerson.getId() == 6L) {
-				assertEquals(true, testPersonEquality(repository.get(5), searchedPerson));
+				assertTrue(testPersonEquality(repository.get(5), searchedPerson));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}

@@ -70,10 +70,10 @@ public class ItemService {
 	}
 
 	public List<Item> extendedSearch(String query,
-	                                 int tagessatzMax,
-	                                 int kautionswertMax,
-	                                 LocalDate availableMin,
-	                                 LocalDate availableMax) {
+									 int tagessatzMax,
+									 int kautionswertMax,
+									 LocalDate availableMin,
+									 LocalDate availableMax) {
 		Stream<Item> listStream = findAll().stream();
 
 		if (query != null && !query.equals("")) {

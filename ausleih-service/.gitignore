@@ -1,6 +1,7 @@
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
+ausleihservice.mv.db
 
 ### STS ###
 .apt_generated
