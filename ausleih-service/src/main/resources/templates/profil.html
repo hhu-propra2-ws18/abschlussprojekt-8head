@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="../static/css/navbar :: style">
 	<meta charset="UTF-8">
 	<title th:text="${'Profil von ' + benutzer.username}">Profil von xxx</title>
@@ -21,14 +21,14 @@
 		<th>E-Mail</th>
 		<th>Passwort</th>
 	</tr>
+	<tr>
+		<td th:text="${benutzer.username}">MaMus</td>
+		<td th:text="${benutzer.vorname}">Max</td>
+		<td th:text="${benutzer.nachname}">Mustermann</td>
+		<td th:text="${benutzer.email}">mamus@gmail.com</td>
+		<td></td>
+	</tr>
 	<form th:action="@{/profil/{PersonId} (PersonId=${benutzer.getId()})}" th:object="${benutzer}" method="post">
-		<tr>
-			<td th:text="${benutzer.username}">MaMus</td>
-			<td th:text="${benutzer.vorname}">Max</td>
-			<td th:text="${benutzer.nachname}">Mustermann</td>
-			<td th:text="${benutzer.email}">mamus@gmail.com</td>
-			<td></td>
-		</tr>
 		<tr>
 			<td>
 				<input th:if="${user.isAdmin() and !(user.isHimself(benutzer))}" name="newUsername" type="text"

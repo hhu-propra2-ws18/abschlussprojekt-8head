@@ -88,33 +88,37 @@
 		<div>
 			<div id="mapid" class="product-details-map">map is here</div>
 		</div>
+    <div>
+      <form th:action="@{/ausleihen/{id}(id=${artikel.id})}" th:object="${ausleihForm}" method="post">
+	      <input type="text" class="daterange" th:field="*{date}"/>
+	      <script th:inline="javascript">
+		     /*<![CDATA[*/
+		    var start_date = /*[[${artikel.getAvailableFrom().toString()}]]*/
+		    var end_date = /*[[${artikel.getAvailableTill().toString()}]]*/
+		    var some_date_range = /*[[${availabilityList}]]*/
+		    $('.daterange').daterangepicker({
+			  "minDate": start_date,
+			  "maxDate": end_date,
+			  "startDate": start_date,
+			  "endDate": end_date,
+			  "locale": {
+				  format: 'YYYY-MM-DD',
+			  },
+			  "isInvalidDate" : function(date){
+				  for(var ii = 0; ii < some_date_range.length; ii++){
+					  if (date.format('YYYY-MM-DD') == some_date_range[ii]){
+					  return true;
+					  }
+				  }
+			  }
+		    });
+		    /*]]>*/
+	    </script>
+      <button type="submit">Ausleihen</button>
+      </form>
+    </div>
 	</div>
 </container>
-<script th:inline="javascript">
-
-	/*<![CDATA[*/
-    var start_date = /*[[${artikel.getAvailableFrom().toString()}]]*/
-    var end_date = /*[[${artikel.getAvailableTill().toString()}]]*/
-	var some_date_range = /*[[${availabilityList}]]*/
-	$('.daterange').daterangepicker({
-		"minDate": start_date,
-        "maxDate": end_date,
-        "startDate": start_date,
-        "endDate": end_date,
-        "locale": {
-            format: 'YYYY-MM-DD',
-        },
-		"isInvalidDate" : function(date){
-  			for(var ii = 0; ii < some_date_range.length; ii++){
-    			if (date.format('YYYY-MM-DD') == some_date_range[ii]){
-    		  	return true;
-    			}
-  			}
-		}
-	});
-	/*]]>*/
-
-</script>
 
 <script th:inline="javascript">
 
