@@ -32,18 +32,16 @@ public class ItemController {
 	private final AbholortService abholortService;
 	private ItemValidator itemValidator;
 	private AbholortValidator abholortValidator;
+	private AusleiheValidator ausleiheValidator;
 
-	public ItemController(PersonService perService,
-	                      ItemService iService,
-	                      AbholortService abholortService,
-	                      ItemValidator itemValidator,
-	                      AbholortValidator abholortValidator
-	) {
+	public ItemController(PersonService perService, ItemService iService, AbholortService abholortService,
+			ItemValidator itemValidator, AbholortValidator abholortValidator, AusleiheValidator ausleiheValidator) {
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
 		this.itemValidator = itemValidator;
 		this.abholortValidator = abholortValidator;
+		this.ausleiheValidator = ausleiheValidator;
 	}
 
 	@GetMapping("/liste")
@@ -66,19 +64,11 @@ public class ItemController {
 	}
 
 	@PostMapping("/artikelsuche")
-	public String artikelSuche(Model model,
-	                           String query, //For titel or beschreibung
-	                           @RequestParam(defaultValue = "2147483647")
-			                           int tagessatzMax,
-	                           @RequestParam(defaultValue = "2147483647")
-			                           int kautionswertMax,
-	                           @RequestParam
-	                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-			                           LocalDate availableMin,
-	                           @RequestParam
-	                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-			                           LocalDate availableMax,
-	                           Principal p) {
+	public String artikelSuche(Model model, String query, // For titel or beschreibung
+			@RequestParam(defaultValue = "2147483647") int tagessatzMax,
+			@RequestParam(defaultValue = "2147483647") int kautionswertMax,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate availableMin,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate availableMax, Principal p) {
 		model.addAttribute("user", personService.get(p));
 
 		if (query != null) {
@@ -94,9 +84,7 @@ public class ItemController {
 	}
 
 	@GetMapping("/details/{id}")
-	public String artikelDetails(Model model,
-	                             @PathVariable long id,
-	                             Principal p) {
+	public String artikelDetails(Model model, @PathVariable long id, Principal p) {
 		try {
 			model.addAttribute("artikel", itemService.findById(id));
 		} catch (ItemNichtVorhanden a) {
@@ -109,14 +97,9 @@ public class ItemController {
 	}
 
 	@PostMapping("/details/{id}")
-	public String bearbeiteArtikel(Model model,
-	                               @PathVariable long id,
-	                               Principal p,
-	                               @RequestParam(
-			                               name = "editArtikel", defaultValue = "false"
-	                               ) final boolean changeArticleDetails,
-	                               @ModelAttribute("artikel") Item artikel
-	) {
+	public String bearbeiteArtikel(Model model, @PathVariable long id, Principal p,
+			@RequestParam(name = "editArtikel", defaultValue = "false") final boolean changeArticleDetails,
+			@ModelAttribute("artikel") Item artikel) {
 		System.out.println("Post triggered at /details/" + id);
 
 		if (changeArticleDetails) {
@@ -144,7 +127,7 @@ public class ItemController {
 
 	@PostMapping("/newitem")
 	public String addItem(@ModelAttribute Item newItem, Principal p, @RequestParam("file") MultipartFile picture,
-	                      BindingResult bindingResult, Model model) {
+			BindingResult bindingResult, Model model) {
 		itemValidator.validate(newItem, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("newitem", newItem);
@@ -178,10 +161,8 @@ public class ItemController {
 	}
 
 	@PostMapping("/newlocation")
-	public String saveNewLocation(@ModelAttribute Abholort abholort,
-	                              Principal p,
-	                              BindingResult bindingResult,
-	                              Model model) {
+	public String saveNewLocation(@ModelAttribute Abholort abholort, Principal p, BindingResult bindingResult,
+			Model model) {
 		abholortValidator.validate(abholort, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("abholort", abholort);
@@ -199,7 +180,6 @@ public class ItemController {
 
 	@GetMapping("/ausleihen/{id}")
 	public String getAusleihen(Model model, Principal p, @PathVariable long id) {
-		Person user = personService.get(p);
 		Item item = itemService.findById(id);
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setItem(item);
@@ -214,13 +194,11 @@ public class ItemController {
 		Person user = personService.get(p);
 		ausleihe.setAusleiher(user);
 		ausleihe.setItem(itemService.findById(id));
-		ItemAvailabilityService available = new ItemAvailabilityService();
-		AusleiheValidator valid = new AusleiheValidator(available);
-		valid.validate(ausleihe, bindingResult);
-		
-		if(bindingResult.hasErrors()) {
+		ausleiheValidator.validate(ausleihe, bindingResult);
+		if (bindingResult.hasErrors()) {
 			model.addAttribute("startDatumErrors", bindingResult.getFieldError("startDatum"));
 			model.addAttribute("endDatumErrors", bindingResult.getFieldError("endDatum"));
+			model.addAttribute("ausleiherErrors", bindingResult.getFieldError("ausleiher"));
 			return "ausleihen";
 		}
 		model.addAttribute("item", itemService.findById(id));
