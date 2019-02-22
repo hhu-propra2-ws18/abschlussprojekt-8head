@@ -17,7 +17,8 @@
 					<td><img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}" th:width="60px"
 							 th:height="60px"/>
 						<img th:if="${artikel.picture != null and artikel.getBase64EncodedString()!=null}"
-							 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/></td>
+							 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}" th:width="60px"
+							 th:height="60px"/></td>
 				</tr>
 				<tr>
 					<td>Beschreibung</td>
@@ -61,8 +62,28 @@
 				<tr style="background:white">
 					<td><a href="/liste">Zurück</a></td>
 				</tr>
-			</table>
 
+				<tr th:if="${user.isAdmin() or user.isOwner(artikel)}">
+					<form th:action="@{/details/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}"
+						  method="post">
+						<td><input name="newBeschreibung" type="text" th:field="*{beschreibung}"></td>
+						<td>
+							<input name="newAvailableFrom" type="date" th:field="*{availableFrom}" id="availableFrom">
+						</td>
+						<td>
+							<input name="newAvailableTill" type="date" th:field="*{availableTill}" id="availableTill">
+						</td>
+						<td><input name="newTagessatz" type="number" step="0.1" min="0" th:field="*{tagessatz}"></td>
+						<td><input name="newKautionswert" type="number" step="0.1" min="0" th:field="*{kautionswert}">
+						</td>
+						<td><input name="newAbholortBeschreibung" type="text" th:field="*{abholort.beschreibung}"></td>
+						<td><input name="newTitle" type="text" th:field="*{titel}"></td>
+						<td>
+							<button type="submit" value="true" name="editArtikel">Artikel Ändern</button>
+						</td>
+					</form>
+				</tr>
+			</table>
 		</div>
 		<div>
 			<div id="mapid" class="product-details-map">map is here</div>
@@ -70,20 +91,49 @@
 	</div>
 </container>
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    var longitude = /*[[${artikel.abholort.longitude}]]*/;
-    var latitude = /*[[${artikel.abholort.latitude}]]*/;
-    var map = L.map('mapid').setView([latitude, longitude], 13);
-    mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-    L.tileLayer(
-        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+	/*<![CDATA[*/
+    var start_date = /*[[${artikel.getAvailableFrom().toString()}]]*/
+    var end_date = /*[[${artikel.getAvailableTill().toString()}]]*/
+	var some_date_range = /*[[${availabilityList}]]*/
+	$('.daterange').daterangepicker({
+		"minDate": start_date,
+        "maxDate": end_date,
+        "startDate": start_date,
+        "endDate": end_date,
+        "locale": {
+            format: 'YYYY-MM-DD',
+        },
+		"isInvalidDate" : function(date){
+  			for(var ii = 0; ii < some_date_range.length; ii++){
+    			if (date.format('YYYY-MM-DD') == some_date_range[ii]){
+    		  	return true;
+    			}
+  			}
+		}
+	});
+	/*]]>*/
+
+</script>
+
+<script th:inline="javascript">
+
+	/*<![CDATA[*/
+		var longitude = /*[[${artikel.abholort.longitude}]]*/;
+		var latitude = /*[[${artikel.abholort.latitude}]]*/;
+        var map = L.map('mapid').setView([latitude, longitude], 13);
+        mapLink =
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; ' + mapLink + ' Contributors',
             maxZoom: 18,
-        }).addTo(map);
-    var message = /*[[${artikel.abholort.beschreibung}]]*/
-        L.marker([latitude, longitude]).addTo(map)
-            .bindPopup(message).openPopup();
-    /*]]>*/
+            }).addTo(map);
+		var message = /*[[${artikel.abholort.beschreibung}]]*/
+		L.marker([latitude, longitude]).addTo(map)
+			.bindPopup(message).openPopup();
+	/*]]>*/
+
 </script>
 </body>
 </html>

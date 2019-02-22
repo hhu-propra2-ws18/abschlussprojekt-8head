@@ -6,7 +6,10 @@ import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.validators.AbholortValidator;
 import hhu.ausleihservice.validators.ItemValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
-import hhu.ausleihservice.web.service.*;
+import hhu.ausleihservice.web.service.AbholortService;
+import hhu.ausleihservice.web.service.ItemAvailabilityService;
+import hhu.ausleihservice.web.service.ItemService;
+import hhu.ausleihservice.web.service.PersonService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,18 +72,18 @@ public class ItemController {
 
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
-	                           String query, //For titel or beschreibung
-	                           @RequestParam(defaultValue = "2147483647")
-			                           int tagessatzMax,
-	                           @RequestParam(defaultValue = "2147483647")
-			                           int kautionswertMax,
-	                           @RequestParam
-	                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-			                           LocalDate availableMin,
-	                           @RequestParam
-	                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-			                           LocalDate availableMax,
-	                           Principal p) {
+							   String query, //For titel or beschreibung
+							   @RequestParam(defaultValue = "2147483647")
+									   int tagessatzMax,
+							   @RequestParam(defaultValue = "2147483647")
+									   int kautionswertMax,
+							   @RequestParam
+							   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+									   LocalDate availableMin,
+							   @RequestParam
+							   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+									   LocalDate availableMax,
+							   Principal p) {
 		model.addAttribute("user", personService.get(p));
 
 		if (query != null) {
@@ -97,8 +100,8 @@ public class ItemController {
 
 	@GetMapping("/details/{id}")
 	public String artikelDetails(Model model,
-	                             @PathVariable long id,
-	                             Principal p) {
+								 @PathVariable long id,
+								 Principal p) {
 		try {
 			Item artikel = itemService.findById(id);
 			model.addAttribute("artikel", artikel);
@@ -114,12 +117,12 @@ public class ItemController {
 
 	@PostMapping("/details/{id}")
 	public String bearbeiteArtikel(Model model,
-	                               @PathVariable long id,
-	                               Principal p,
-	                               @RequestParam(
-			                               name = "editArtikel", defaultValue = "false"
-	                               ) final boolean changeArticleDetails,
-	                               @ModelAttribute("artikel") Item artikel
+								   @PathVariable long id,
+								   Principal p,
+								   @RequestParam(
+										   name = "editArtikel", defaultValue = "false"
+								   ) final boolean changeArticleDetails,
+								   @ModelAttribute("artikel") Item artikel
 	) {
 		System.out.println("Post triggered at /details/" + id);
 
@@ -148,7 +151,7 @@ public class ItemController {
 
 	@PostMapping("/newitem")
 	public String addItem(@ModelAttribute Item newItem, Principal p, @RequestParam("file") MultipartFile picture,
-	                      BindingResult bindingResult, Model model) {
+						  BindingResult bindingResult, Model model) {
 		itemValidator.validate(newItem, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("newitem", newItem);
@@ -183,9 +186,9 @@ public class ItemController {
 
 	@PostMapping("/newlocation")
 	public String saveNewLocation(@ModelAttribute Abholort abholort,
-	                              Principal p,
-	                              BindingResult bindingResult,
-	                              Model model) {
+								  Principal p,
+								  BindingResult bindingResult,
+								  Model model) {
 		abholortValidator.validate(abholort, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("abholort", abholort);
