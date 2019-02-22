@@ -22,4 +22,5 @@ class Messages {
 
 	static String itemNotAvailable = "Der Artikel ist im gewählten Zeitraum nicht verfuegbar";
 	static String invalidUser = "Der angegebene Nutzer stimmt nicht mit dem Login ueberein";
+	static String ownItemAusleihe = "Ein eigener Artikel kann nicht ausgeliehen werden";
 }

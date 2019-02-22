@@ -1,9 +1,7 @@
 package hhu.ausleihservice.validators;
 
-import java.security.Principal;
 import java.time.LocalDate;
 
-import org.springframework.scheduling.support.PeriodicTrigger;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -11,7 +9,6 @@ import org.springframework.validation.Validator;
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Period;
-import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.web.service.ItemAvailabilityService;
 
 public class AusleiheValidator implements Validator {
@@ -53,6 +50,10 @@ public class AusleiheValidator implements Validator {
 		}
 
 		ValidationUtils.rejectIfEmpty(errors, "ausleiher", Messages.notEmpty);
+
+		if (ausleihe.getAusleiher().equals(ausleiheItem.getBesitzer())) {
+			errors.rejectValue("ausleiher", Messages.ownItemAusleihe);
+		}
 	}
 
 }
