@@ -171,7 +171,7 @@ public class ItemController {
 			model.addAttribute("message", "Bitte Abholorte hinzufügen");
 			return "errorMessage";
 		}
-		model.addAttribute("user", personService.get(p));
+		model.addAttribute("user", person);
 		model.addAttribute("newitem", new Item());
 		model.addAttribute("abholorte", person.getAbholorte());
 		return "neuerArtikel";
@@ -181,15 +181,22 @@ public class ItemController {
 	public String addItem(@ModelAttribute Item newItem, Principal p, @RequestParam("file") MultipartFile picture,
 						  BindingResult bindingResult, Model model) {
 		itemValidator.validate(newItem, bindingResult);
+		Person besitzer = personService.get(p);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("newitem", newItem);
 			model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
 			model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
 			model.addAttribute("kautionswertErrors", bindingResult.getFieldError("kautionswert"));
 			model.addAttribute("availableFromErrors", bindingResult.getFieldError("availableFrom"));
+
+			if (besitzer.getAbholorte().isEmpty()) {
+				model.addAttribute("message", "Bitte Abholorte hinzufügen");
+				return "errorMessage";
+			}
+			model.addAttribute("user", besitzer);
+			model.addAttribute("abholorte", besitzer.getAbholorte());
 			return "neuerArtikel";
 		}
-		Person besitzer = personService.get(p);
 		try {
 			newItem.setPicture(picture.getBytes());
 		} catch (IOException e) {
