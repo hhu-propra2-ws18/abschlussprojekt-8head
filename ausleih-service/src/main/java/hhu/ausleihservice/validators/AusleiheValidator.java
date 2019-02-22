@@ -2,6 +2,7 @@ package hhu.ausleihservice.validators;
 
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -10,6 +11,7 @@ import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.service.ItemAvailabilityService;
 
+@Component
 public class AusleiheValidator implements Validator {
 
 	private ItemAvailabilityService availabilityService;
