@@ -6,8 +6,18 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<div th:text="${user?.vorname} ?: 'Bitte loggen sie sich ein oder registrieren sie sich.'">Bitte loggen sie sich ein
-	oder registrieren sie sich.
+<h2>
+	<div th:text="${'Willkommen, ' + user?.vorname + ' ' + user?.nachname + '!'} ?: 'Bitte loggen sie sich ein oder registrieren sie sich.'">
+		Bitte loggen sie sich ein oder registrieren sie sich.
+	</div>
+</h2>
+<div th:if="${user != null}">
+	<a href="/liste">Artikel durchstöbern</a><br>
+	<a href="/newitem">Neuen Artikel verleihen</a><br>
+	<a href="/newlocation">Neuen Abholort hinzufügen</a>
+	<br>
+	<br>
+	<h3 th:text="${message}"></h3>
 </div>
 </body>
 </html>
