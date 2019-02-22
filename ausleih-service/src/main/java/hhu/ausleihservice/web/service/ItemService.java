@@ -101,6 +101,7 @@ public class ItemService {
 
 	public void updateById(Long id, Item newItem) {
 		Item toUpdate = this.findById(id);
+		System.out.println("Starting item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
 		toUpdate.setAvailableFrom(newItem.getAvailableFrom());

@@ -29,7 +29,10 @@ public class PersonValidator implements Validator {
 		if (person.getUsername().length() < 4 || person.getUsername().length() > 32) {
 			errors.rejectValue("username", Messages.usernameSize);
 		}
-		if (personService.findOptionalById(((Person) target).getId()).isPresent()) {
+		System.out.println("Im here1");
+
+		if (person.getId() == null || personService.findOptionalById(person.getId()).isPresent()) {
+			System.out.println("Im here2");
 			if (personService.findByUsername(person.getUsername()).isPresent() &&
 					!person.getUsername().equals(personService.findById(person.getId()).getUsername())) {
 				errors.rejectValue("username", Messages.duplicateUsername);
@@ -38,9 +41,8 @@ public class PersonValidator implements Validator {
 			if (personService.findByUsername(person.getUsername()).isPresent()) {
 				errors.rejectValue("username", Messages.duplicateUsername);
 			}
-
 		}
-		if (personService.findOptionalById(person.getId()).isPresent()) {
+		if (person.getId() == null || personService.findOptionalById(person.getId()).isPresent()) {
 			if (person.getPassword().length() != 0) {
 				if (person.getPassword().trim().length() == 0) {
 					errors.rejectValue("password", Messages.notEmpty);

@@ -10,52 +10,28 @@
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
 
-<table id="items">
-	<tr>
-		<th>Name</th>
-		<th>Verfügbarkeit</th>
-		<th>Tagessatz</th>
-		<th>Kaution</th>
-		<th>Standort</th>
-	</tr>
-	<th:block th:each="artikel : ${artikelListe}">
-		<tr>
-			<td th:text="${artikel.titel}"></td>
-			<td th:text="${artikel.availableFrom.format(dateformat) + '-' + artikel.availableTill.format(dateformat)}"></td>
-			<td th:text="${artikel.tagessatz} + &euro;"></td>
-			<td th:text="${artikel.kautionswert} + &euro;"></td>
-			<td th:text="${artikel.abholort.beschreibung}"></td>
-			<td><a th:href="@{/details/{artikelId} (artikelId=${artikel.getId()})}">anzeigen</a></td>
-		</tr>
-	</th:block>
-</table>
 <div class="products">
 	<th:block class="products" th:each="artikel : ${artikelListe}">
-		<a th:href="@{/details(id=${artikel.id})}">
+		<a th:href="@{'/details/' + ${artikel.id}}">
 			<div class="product">
 				<div class="product-top">
 					<span class="itemName" th:text="${artikel.titel}">itemName</span>
 				</div>
 
 				<div class="product-middle">
-					<img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}" alt="produkt"
-						 width="50"
-						 height="50"/>
-					<img th:unless="${artikel.picture == null}" th:src="@{${'img/' + artikel.picture}}" alt="produkt"
-						 width="50"
-						 height="50"/>
+					<img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}"/>
+					<img th:if="${artikel.picture != null and artikel.getBase64EncodedString()!=null}"
+						 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/>
 				</div>
 
 				<div class="product-bottom">
 					<div class="heading"
 						 th:text="${artikel.availableFrom.format(dateformat) + '-' + artikel.availableTill.format(dateformat)}">
-						Chuck Taylor All Star Classic Colours
-					</div>
+						Chuck Taylor All Star Classic Colours</div>
 					<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
 					<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
-					<div class="price" th:text="${artikel.tagessatz} + &euro;">$50.00 <span class="old-price"
-																							th:text="${artikel.tagessatz + 5} + &euro;">$75.00</span>
-					</div>
+					<div class="price" th:text="${artikel.tagessatz} + &euro;">$50.00
+						<span class="old-price" th:text="${artikel.tagessatz + 5} + &euro;">$75.00</span></div>
 				</div>
 			</div>
 		</a>

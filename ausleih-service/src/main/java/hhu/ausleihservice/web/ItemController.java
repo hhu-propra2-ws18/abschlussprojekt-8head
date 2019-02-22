@@ -1,15 +1,14 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Abholort;
+import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.form.AusleihForm;
 import hhu.ausleihservice.validators.AbholortValidator;
 import hhu.ausleihservice.validators.ItemValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
-import hhu.ausleihservice.web.service.AbholortService;
-import hhu.ausleihservice.web.service.ItemAvailabilityService;
-import hhu.ausleihservice.web.service.ItemService;
-import hhu.ausleihservice.web.service.PersonService;
+import hhu.ausleihservice.web.service.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,15 +33,17 @@ public class ItemController {
 	private final ItemAvailabilityService itemAvailabilityService;
 	private ItemValidator itemValidator;
 	private AbholortValidator abholortValidator;
+	private AusleiheService ausleiheService;
 
-
-	public ItemController(PersonService perService,
+	public ItemController(AusleiheService ausleiheService,
+						  PersonService perService,
 						  ItemService iService,
 						  AbholortService abholortService,
 						  ItemAvailabilityService itemAvailabilityService,
 						  ItemValidator itemValidator,
 						  AbholortValidator abholortValidator
 	) {
+		this.ausleiheService = ausleiheService;
 		this.personService = perService;
 		this.itemService = iService;
 		this.abholortService = abholortService;
@@ -110,6 +111,8 @@ public class ItemController {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
 		}
+
+		model.addAttribute("ausleihForm", new AusleihForm());
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("user", personService.get(p));
 		return "artikelDetails";
@@ -125,27 +128,59 @@ public class ItemController {
 								   BindingResult bindingResult
 	) {
 		System.out.println("Post triggered at /details/" + id);
+		System.out.println(artikel + " " + changeArticleDetails);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("user", personService.get(p));
+		model.addAttribute("ausleihForm", new AusleihForm());
+		Item item = new Item();
+		System.out.println(item);
 		itemValidator.validate(artikel, bindingResult);
 
 		if (changeArticleDetails) {
 			if (bindingResult.hasErrors()) {
+				System.out.println("Error, das geht so nicht.");
 				model.addAttribute("artikel", itemService.findById(id));
 				model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
 				model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
 				model.addAttribute("tagessatzErrors", bindingResult.getFieldError("tagessatz"));
 				model.addAttribute("kautionswertErrors", bindingResult.getFieldError("kautionswert"));
 				model.addAttribute("availableFromErrors", bindingResult.getFieldError("availableFrom"));
+				model.addAttribute("abholortErrors", bindingResult.getFieldError("abholort"));
 				model.addAttribute("dateformat", DATEFORMAT);
 				return "artikelDetails";
 			}
+			System.out.println("BOOOY about to update");
 			itemService.updateById(id, artikel);
 		}
 		model.addAttribute("artikel", itemService.findById(id));
 
 		return "artikelDetails";
 	}
+
+	//2019-05-02 - 2019-05-09
+	@PostMapping("/ausleihen/{id}")
+	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p) {
+		Item artikel = itemService.findById(id);
+		Ausleihe ausleihe = new Ausleihe();
+		Person user = personService.get(p);
+
+		//Please refactor TODO
+		String startDatum = ausleihForm.getDate().substring(0, 10);
+		String endDatum = ausleihForm.getDate().substring(13);
+
+		ausleihe.setStartDatum(LocalDate.parse(startDatum));
+		ausleihe.setEndDatum(LocalDate.parse(endDatum));
+
+		user.addAusleihe(ausleihe);
+		artikel.addAusleihe(ausleihe);
+
+		ausleiheService.save(ausleihe);
+		personService.save(user);
+		itemService.save(artikel);
+
+		return "redirect:/";
+	}
+
 
 	@GetMapping("/newitem")
 	public String createItem(Model model, Principal p) {
@@ -174,6 +209,7 @@ public class ItemController {
 			model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
 			model.addAttribute("kautionswertErrors", bindingResult.getFieldError("kautionswert"));
 			model.addAttribute("availableFromErrors", bindingResult.getFieldError("availableFrom"));
+			model.addAttribute("abholortErrors", bindingResult.getFieldError("abholort"));
 			return "neuerArtikel";
 		}
 		Person besitzer = personService.get(p);
