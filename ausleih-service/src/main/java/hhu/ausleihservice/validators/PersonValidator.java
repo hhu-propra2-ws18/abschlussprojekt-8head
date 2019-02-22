@@ -27,21 +27,34 @@ public class PersonValidator implements Validator {
 		Person person = (Person) target;
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", Messages.notEmpty);
-		if (person.getUsername().length() < 6 || person.getUsername().length() > 32) {
+		if (person.getUsername().length() < 4 || person.getUsername().length() > 32) {
 			errors.rejectValue("username", Messages.usernameSize);
 		}
-		if (personService.findByUsername(person.getUsername()).isPresent()) {
-			errors.rejectValue("username", Messages.duplicateUsername);
-		}
+		if(personService.findOptionalById(((Person) target).getId()).isPresent()){
+			if (personService.findByUsername(person.getUsername()).isPresent() &&
+					!person.getUsername().equals(personService.findById(person.getId()).getUsername())) {
+				errors.rejectValue("username", Messages.duplicateUsername);
+			}
+		} else {
+			if (personService.findByUsername(person.getUsername()).isPresent()) {
+				errors.rejectValue("username", Messages.duplicateUsername);
+			}
 
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", Messages.notEmpty);
-		if (person.getPassword().length() < 3 || person.getPassword().length() > 100) {
-			errors.rejectValue("password", Messages.passwordSize);
 		}
-
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "role", Messages.notEmpty);
-		if (person.getRole() != Role.ADMIN && person.getRole() != Role.USER) {
-			errors.rejectValue("role", Messages.invalidRole);
+		if (personService.findOptionalById(person.getId()).isPresent()) {
+			if (person.getPassword().length() != 0) {
+				if(person.getPassword().trim().length()==0) {
+					errors.rejectValue("password", Messages.notEmpty);
+				}
+				if (person.getPassword().length() < 3 || person.getPassword().length() > 100) {
+					errors.rejectValue("password", Messages.passwordSize);
+				}
+			}
+		} else {
+			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", Messages.notEmpty);
+			if (person.getPassword().length() < 3 || person.getPassword().length() > 100) {
+				errors.rejectValue("password", Messages.passwordSize);
+			}
 		}
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", Messages.invalidEmail);

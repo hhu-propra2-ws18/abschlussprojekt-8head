@@ -30,9 +30,11 @@
 			<td></td>
 		</tr>
 		<tr>
-			<td>
-				<input th:if="${user.isAdmin() and !(user.isHimself(benutzer))}" name="newUsername" type="text" th:field="*{username}">
-				<div id="error" th:text="${usernameErrors?.code}"></div>
+			<td th:if="${user.isAdmin() and !(user.isHimself(benutzer))}">
+				<input name="newUsername" type="text" th:field="*{username}">
+			</td>
+			<div id="error" th:text="${usernameErrors?.code}"></div>
+			<td th:unless="${user.isAdmin() and !(user.isHimself(benutzer))}">
 			</td>
 			<td>
 				<input name="newVorname" type="text" th:field="*{vorname}">

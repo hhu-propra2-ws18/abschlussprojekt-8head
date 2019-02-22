@@ -73,6 +73,10 @@ public class PersonService implements UserDetailsService {
 		return person.get();
 	}
 
+	public Optional<Person> findOptionalById(Long id) {
+		return users.findById(id);
+	}
+
 	public void save(Person person) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		person.setPassword(encoder.encode(person.getPassword()));
