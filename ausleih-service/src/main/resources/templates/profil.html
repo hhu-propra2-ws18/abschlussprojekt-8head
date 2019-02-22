@@ -62,5 +62,47 @@
 	<button type="submit">€ Aufladen</button>
 </form>
 
+<div class="container">
+	<h2>Ausgeliehene Items </h2>
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th>Item</th>
+			<th>Von</th>
+			<th>Bis</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="ausleihe : ${benutzer.ausleihen}">
+			<td th:text="${ausleihe.item.titel}"></td>
+			<td th:text="${ausleihe.startDatum.toString()}"></td>
+			<td th:text="${ausleihe.endDatum.toString()}"></td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="container">
+	<h2>Ausleihen von eigenen Items</h2>
+	<div th:each="item : ${benutzer.items}">
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th>Item</th>
+			<th>Von</th>
+			<th>Bis</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="ausleihe : ${item.ausleihen}">
+			<td th:text="${ausleihe.item.titel}"></td>
+			<td th:text="${ausleihe.startDatum.toString()}"></td>
+			<td th:text="${ausleihe.endDatum.toString()}"></td>
+		</tr>
+		</tbody>
+	</table>
+	</div>
+</div>
+
 </body>
 </html>

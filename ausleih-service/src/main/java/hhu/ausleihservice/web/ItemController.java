@@ -158,6 +158,8 @@ public class ItemController {
 
 		ausleihe.setStartDatum(LocalDate.parse(startDatum));
 		ausleihe.setEndDatum(LocalDate.parse(endDatum));
+		ausleihe.setApproved(false);
+
 		ausleihe.setAusleiher(user);
 		ausleihe.setItem(artikel);
 		

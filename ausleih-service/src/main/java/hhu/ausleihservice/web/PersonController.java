@@ -122,7 +122,7 @@ public class PersonController {
 			model.addAttribute("emailErrors", bindingResult.getFieldError("email"));
 			return "register";
 		}
-		personService.save(userForm);
+		personService.encrypteAndSave(userForm);
 		return startseite(model, null);
 	}
 
