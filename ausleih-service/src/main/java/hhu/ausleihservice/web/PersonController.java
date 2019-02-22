@@ -3,6 +3,7 @@ package hhu.ausleihservice.web;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.service.PersonService;
+import hhu.ausleihservice.web.service.ProPayService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,10 +16,12 @@ import java.util.List;
 public class PersonController {
 	private PersonService personService;
 	private PersonValidator personValidator;
+	private ProPayService proPayService;
 
-	PersonController(PersonService personService, PersonValidator personValidator) {
+	PersonController(PersonService personService, PersonValidator personValidator, ProPayService proPayService) {
 		this.personService = personService;
 		this.personValidator = personValidator;
+		this.proPayService = proPayService;
 	}
 
 	@GetMapping("/")
@@ -29,7 +32,9 @@ public class PersonController {
 
 	@GetMapping("/profil/{id}")
 	public String otherUser(Model model, @PathVariable Long id, Principal p) {
-		model.addAttribute("benutzer", personService.findById(id));
+		Person benutzer = personService.findById(id);
+		model.addAttribute("benutzer", benutzer);
+		model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		model.addAttribute("user", personService.get(p));
 		return "profil";
 	}
@@ -51,10 +56,7 @@ public class PersonController {
 			System.out.println("Now updating..");
 			personService.updateById(id, person);
 		}
-		model.addAttribute("benutzer", personService.findById(id));
-		model.addAttribute("user", personService.get(p));
-		return "profil";
-
+		return "redirect:/profil/" + id;
 	}
 
 	@PostMapping("/profil")
@@ -63,6 +65,18 @@ public class PersonController {
 						   @RequestParam(name = "editPerson", defaultValue = "false") final boolean changePerson
 	) {
 		return editUser(model, personService.get(p).getId(), p, changePerson, personService.get(p));
+	}
+
+	@PostMapping("/profiladdmoney/{id}")
+	public String chargeProPayById
+			(Model model, @RequestParam("moneten") double moneten, @PathVariable Long id, Principal p) {
+		if (personService.get(p).isHimself(personService.findById(id))) {
+			proPayService.addFunds(personService.findById(id), moneten);
+			return "redirect:/profil/" + id;
+		} else {
+			model.addAttribute("message", "Du bist die falsche Person");
+			return "errorMessage";
+		}
 	}
 
 	@GetMapping("/benutzersuche")
