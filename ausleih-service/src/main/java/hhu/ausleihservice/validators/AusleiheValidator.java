@@ -8,7 +8,6 @@ import org.springframework.validation.Validator;
 
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
-import hhu.ausleihservice.databasemodel.Period;
 import hhu.ausleihservice.web.service.ItemAvailabilityService;
 
 public class AusleiheValidator implements Validator {
@@ -28,7 +27,6 @@ public class AusleiheValidator implements Validator {
 
 		Ausleihe ausleihe = (Ausleihe) target;
 		Item ausleiheItem = ausleihe.getItem();
-		Period period = new Period(ausleihe.getStartDatum(), ausleihe.getEndDatum());
 
 		ValidationUtils.rejectIfEmpty(errors, "item", Messages.notEmpty);
 
