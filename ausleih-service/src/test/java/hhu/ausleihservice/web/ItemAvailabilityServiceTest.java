@@ -2,6 +2,7 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
+import hhu.ausleihservice.web.service.ItemAvailabilityService;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -51,8 +52,8 @@ public class ItemAvailabilityServiceTest {
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
-		String from = "2000-06-01";
-		String till = "2000-07-01";
+		LocalDate from = LocalDate.of(2000, 6, 1);
+		LocalDate till = LocalDate.of(2000, 7, 1);
 
 		assertTrue(itemAvailabilityService.isAvailableFromTill(item, from, till));
 	}
@@ -63,8 +64,8 @@ public class ItemAvailabilityServiceTest {
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
-		String from = "2000-01-01";
-		String till = "2000-07-01";
+		LocalDate from = LocalDate.of(2000, 1, 1);
+		LocalDate till = LocalDate.of(2000, 7, 1);
 
 		assertTrue(itemAvailabilityService.isAvailableFromTill(item, from, till));
 	}
@@ -75,8 +76,8 @@ public class ItemAvailabilityServiceTest {
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
-		String from = "2000-06-01";
-		String till = "2001-01-01";
+		LocalDate from = LocalDate.of(2000, 6, 1);
+		LocalDate till = LocalDate.of(2001, 1, 1);
 
 		assertTrue(itemAvailabilityService.isAvailableFromTill(item, from, till));
 	}
@@ -87,8 +88,8 @@ public class ItemAvailabilityServiceTest {
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
-		String from = "1999-06-01";
-		String till = "2000-07-01";
+		LocalDate from = LocalDate.of(1999, 6, 1);
+		LocalDate till = LocalDate.of(2000, 7, 1);
 
 		assertFalse(itemAvailabilityService.isAvailableFromTill(item, from, till));
 	}
@@ -99,8 +100,8 @@ public class ItemAvailabilityServiceTest {
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
-		String from = "2000-06-01";
-		String till = "2001-07-01";
+		LocalDate from = LocalDate.of(2000, 6, 1);
+		LocalDate till = LocalDate.of(2001, 7, 1);
 
 		assertFalse(itemAvailabilityService.isAvailableFromTill(item, from, till));
 	}
@@ -111,8 +112,8 @@ public class ItemAvailabilityServiceTest {
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2000, 1, 10));
 
-		String from = "2000-01-01";
-		String till = "2000-02-01";
+		LocalDate from = LocalDate.of(2000, 1, 1);
+		LocalDate till = LocalDate.of(2000, 2, 1);
 
 		assertFalse(itemAvailabilityService.isAvailableFromTill(item, from, till));
 	}
@@ -128,8 +129,8 @@ public class ItemAvailabilityServiceTest {
 		ausleihe.setEndDatum(LocalDate.of(2000, 1, 10));
 		item.addAusleihe(ausleihe);
 
-		String from = "2000-06-01";
-		String till = "2000-07-01";
+		LocalDate from = LocalDate.of(2000, 6, 1);
+		LocalDate till = LocalDate.of(2000, 7, 1);
 
 		assertTrue(itemAvailabilityService.isAvailableFromTill(item, from, till));
 	}
@@ -145,8 +146,8 @@ public class ItemAvailabilityServiceTest {
 		ausleihe.setEndDatum(LocalDate.of(2000, 6, 10));
 		item.addAusleihe(ausleihe);
 
-		String from = "2000-06-01";
-		String till = "2000-07-01";
+		LocalDate from = LocalDate.of(2000, 6, 1);
+		LocalDate till = LocalDate.of(2000, 7, 1);
 
 		assertFalse(itemAvailabilityService.isAvailableFromTill(item, from, till));
 	}
@@ -162,8 +163,8 @@ public class ItemAvailabilityServiceTest {
 		ausleihe.setEndDatum(LocalDate.of(2000, 6, 1));
 		item.addAusleihe(ausleihe);
 
-		String from = "2000-06-01";
-		String till = "2000-07-01";
+		LocalDate from = LocalDate.of(2000, 6, 1);
+		LocalDate till = LocalDate.of(2000, 7, 1);
 
 		assertFalse(itemAvailabilityService.isAvailableFromTill(item, from, till));
 	}
@@ -179,8 +180,8 @@ public class ItemAvailabilityServiceTest {
 		ausleihe.setEndDatum(LocalDate.of(2000, 7, 1));
 		item.addAusleihe(ausleihe);
 
-		String from = "2000-06-01";
-		String till = "2000-07-01";
+		LocalDate from = LocalDate.of(2000, 6, 1);
+		LocalDate till = LocalDate.of(2000, 7, 1);
 
 		assertFalse(itemAvailabilityService.isAvailableFromTill(item, from, till));
 	}

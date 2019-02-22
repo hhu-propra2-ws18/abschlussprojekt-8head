@@ -3,6 +3,9 @@ package hhu.ausleihservice.web;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.Item;
+import hhu.ausleihservice.web.service.ItemAvailabilityService;
+import hhu.ausleihservice.web.service.ItemService;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,16 +27,16 @@ public class ItemServiceTest {
 	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	@Mock
-	ItemRepository itemRepository;
-	ItemService itemService = new ItemService(null, new ItemAvailabilityService());
-	List<Item> repository = new ArrayList<>();
+	private ItemRepository itemRepository;
+	private ItemService itemService = new ItemService(null, new ItemAvailabilityService());
+	private List<Item> repository = new ArrayList<>();
 
 	private boolean testItemEquality(Item base, Item toTest) {
 		return base.getId().longValue() == toTest.getId().longValue() &&
 				base.getTitel().equals(toTest.getTitel()) &&
 				base.getBeschreibung().equals(toTest.getBeschreibung()) &&
-				base.getKautionswert() == toTest.getKautionswert() &&
-				base.getTagessatz() == toTest.getTagessatz() &&
+				base.getKautionswert().equals(toTest.getKautionswert()) &&
+				base.getTagessatz().equals(toTest.getTagessatz()) &&
 				base.getAvailableFrom() == toTest.getAvailableFrom() &&
 				base.getAvailableTill() == toTest.getAvailableTill();
 	}
@@ -96,15 +99,15 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
-				assertEquals(true, testItemEquality(repository.get(1), searchedItem));
+				assertTrue(testItemEquality(repository.get(1), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -117,15 +120,15 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
-				assertEquals(true, testItemEquality(repository.get(1), searchedItem));
+				assertTrue(testItemEquality(repository.get(1), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -139,11 +142,11 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -157,9 +160,9 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -180,9 +183,9 @@ public class ItemServiceTest {
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -193,22 +196,22 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch(null,
 				2147483647,
 				2147483647,
-				"2010-07-01",
-				"2010-07-01");
+				LocalDate.of(2010, 7, 1),
+				LocalDate.of(2010, 7, 1));
 
 		assertEquals(4, searchedList.size());
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
-				assertEquals(true, testItemEquality(repository.get(1), searchedItem));
+				assertTrue(testItemEquality(repository.get(1), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -219,22 +222,22 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch("",
 				2147483647,
 				2147483647,
-				"2010-07-01",
-				"2010-07-01");
+				LocalDate.of(2010, 7, 1),
+				LocalDate.of(2010, 7, 1));
 
 		assertEquals(4, searchedList.size());
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
-				assertEquals(true, testItemEquality(repository.get(1), searchedItem));
+				assertTrue(testItemEquality(repository.get(1), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -245,20 +248,20 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch(null,
 				15,
 				2147483647,
-				"2010-07-01",
-				"2010-07-01");
+				LocalDate.of(2010, 7, 1),
+				LocalDate.of(2010, 7, 1));
 
 		assertEquals(3, searchedList.size());
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
-				assertEquals(true, testItemEquality(repository.get(1), searchedItem));
+				assertTrue(testItemEquality(repository.get(1), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else {
-				assertEquals(true, false);
+				Assert.fail();
 			}
 		}
 	}
@@ -269,18 +272,18 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch(null,
 				2147483647,
 				100,
-				"2010-07-01",
-				"2010-07-01");
+				LocalDate.of(2010, 7, 1),
+				LocalDate.of(2010, 7, 1));
 
 		assertEquals(2, searchedList.size());
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -291,18 +294,18 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch("Fahrrad",
 				2147483647,
 				2147483647,
-				"2010-07-01",
-				"2010-07-01");
+				LocalDate.of(2010, 7, 1),
+				LocalDate.of(2010, 7, 1));
 
 		assertEquals(2, searchedList.size());
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -313,16 +316,16 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch("Fahrrad",
 				2147483647,
 				100,
-				"2010-07-01",
-				"2010-07-01");
+				LocalDate.of(2010, 7, 1),
+				LocalDate.of(2010, 7, 1));
 
 		assertEquals(1, searchedList.size());
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -333,18 +336,18 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch(null,
 				2147483647,
 				2147483647,
-				"2007-01-01",
-				"2012-01-01");
+				LocalDate.of(2007, 1, 1),
+				LocalDate.of(2012, 1, 1));
 
 		assertEquals(2, searchedList.size());
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
-				assertEquals(true, testItemEquality(repository.get(2), searchedItem));
+				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}
@@ -355,18 +358,18 @@ public class ItemServiceTest {
 		List<Item> searchedList = itemService.extendedSearch(null,
 				2147483647,
 				2147483647,
-				"2000-01-01",
-				"2003-01-01");
+				LocalDate.of(2000, 1, 1),
+				LocalDate.of(2003, 1, 1));
 
 		assertEquals(2, searchedList.size());
 
 		for (Item searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
-				assertEquals(true, testItemEquality(repository.get(0), searchedItem));
+				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
-				assertEquals(true, testItemEquality(repository.get(3), searchedItem));
+				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
-				assertEquals(true, false);
+				fail();
 			}
 		}
 	}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Neuer Abholort</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" th:href="@{https://unpkg.com/leaflet@1.4.0/dist/leaflet.css}"
+		  integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+		  crossorigin=""/>
+	<script th:src="@{https://unpkg.com/leaflet@1.4.0/dist/leaflet.js}"
+			integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+			crossorigin=""></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row mt-3">
+		<div class="col-md-3">
+			<h2>Neuen Abholort hinzufügen:</h2>
+			<form action="#" th:action="@{/newlocation}" th:object="${abholort}" method="post">
+				<div class="form-group">
+					<label for="beschreibung">Beschreibung:</label>
+					<input type="text" th:field="*{beschreibung}" class="form-control" id="beschreibung">
+					<div id="error" th:text="${beschreibungErrors?.code}"></div>
+				</div>
+				<div class="form-group">
+					<label for="latitude">Latitude:</label>
+					<input type="number" th:field="*{latitude}" class="form-control" id="latitude" step="0.000001">
+					<div id="error" th:text="${latitudeErrors?.code}"></div>
+				</div>
+				<div class="form-group">
+					<label for="beschreibung">Longitude:</label>
+					<input type="number" th:field="*{longitude}" class="form-control" id="longitude" step="0.000001">
+					<div id="error" th:text="${longitudeErrors?.code}"></div>
+				</div>
+				<button type="submit" class="btn btn-primary">Hinzufügen</button>
+				<button type="reset" class="btn btn-primary">Zurücksetzen</button>
+			</form>
+		</div>
+		<div class="col-md-3">
+			<div id="mapid" style="width: 600px; height: 400px;"></div>
+			<script th:inline="javascript">
+				/*<![CDATA[*/
+					var longitude = /*[[${abholort.longitude}]]*/;
+					var latitude = /*[[${abholort.latitude}]]*/;
+        			var map = L.map('mapid').setView([latitude, longitude], 13);
+        			mapLink =
+            			'<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        			L.tileLayer(
+            			'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            			attribution: '&copy; ' + mapLink + ' Contributors',
+            			maxZoom: 18,
+            			}).addTo(map);
+					var marker = L.marker([latitude, longitude],{draggable: true}).addTo(map)
+					marker.on('dragend', function (e) {
+  						document.getElementById('latitude').value = marker.getLatLng().lat.toFixed(6);
+  						document.getElementById('longitude').value = marker.getLatLng().lng.toFixed(6);
+					});
+				/*]]>*/
+
+
+			</script>
+		</div>
+	</div>
+</div>
+</body>
+</html>

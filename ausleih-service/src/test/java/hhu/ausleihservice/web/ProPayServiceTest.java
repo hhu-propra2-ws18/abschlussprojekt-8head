@@ -6,6 +6,7 @@ import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.propay.ProPayAccount;
 import hhu.ausleihservice.propay.ProPayInterface;
 import hhu.ausleihservice.propay.ProPayReservation;
+import hhu.ausleihservice.web.service.ProPayService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

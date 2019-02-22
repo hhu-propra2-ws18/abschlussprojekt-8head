@@ -1,6 +1,6 @@
 package hhu.ausleihservice.databasemodel;
 
-public enum Rolle {
+public enum Role {
 	ADMIN,
 	USER
 }

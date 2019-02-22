@@ -9,7 +9,7 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<h1>Personensuche</h1>
+<h1>Benutzersuche</h1>
 <table id="items">
 
 	<form method="post" th:action="@{/benutzersuche} + '?' + ${_csrf.parameterName} + '=' + ${_csrf.token}"

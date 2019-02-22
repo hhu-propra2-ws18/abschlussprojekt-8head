@@ -1,4 +1,4 @@
-package hhu.ausleihservice.web;
+package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.AbholortRepository;
 import hhu.ausleihservice.databasemodel.Abholort;
@@ -13,7 +13,7 @@ public class AbholortService {
 		this.abholortRepository = abholortRepository;
 	}
 
-	void save(Abholort abholort) {
+	public void save(Abholort abholort) {
 		abholortRepository.save(abholort);
 	}
 

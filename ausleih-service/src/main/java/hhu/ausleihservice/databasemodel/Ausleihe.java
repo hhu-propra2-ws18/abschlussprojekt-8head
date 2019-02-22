@@ -2,6 +2,7 @@ package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(exclude = {"ausleiher", "item"})
 public class Ausleihe {
 	@Id
 	@GeneratedValue
@@ -25,22 +27,4 @@ public class Ausleihe {
 	private LocalDate endDatum;
 	private Long reservationId;
 
-
-	@Override
-	public String toString() {
-		return "Ausleihe("
-				+ "id=" + ((id == null) ? "null" : id.toString()) + ", "
-				+ "item="
-				+ ((item == null) ? "null" :
-				"Item("
-						+ "id=" + item.getId() + ", "
-						+ "titel=" + item.getTitel())
-				+ "), "
-				+ "ausleiher=" + ((ausleiher == null) ? "null" : ausleiher.getVorname()
-				+ " " + ausleiher.getNachname()) + ", "
-				+ "startDatum=" + ((startDatum == null) ? "null" : startDatum.toString()) + ", "
-				+ "endDatum=" + ((endDatum == null) ? "null" : endDatum.toString()) + ", "
-				+ "reservationId=" + ((reservationId == null) ? "null" : reservationId.toString())
-				+ ")";
-	}
 }

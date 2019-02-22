@@ -1,10 +1,11 @@
-package hhu.ausleihservice.web;
+package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,12 +18,12 @@ public class ItemService {
 	private ItemAvailabilityService itemAvailabilityService;
 
 
-	ItemService(ItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
+	public ItemService(ItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
 		this.items = itemRep;
 		this.itemAvailabilityService = itemAvailabilityService;
 	}
 
-	Item findByID(long id) {
+	public Item findById(long id) {
 		Optional<Item> item = items.findById(id);
 		if (!item.isPresent()) {
 			throw new ItemNichtVorhanden();
@@ -69,10 +70,10 @@ public class ItemService {
 	}
 
 	public List<Item> extendedSearch(String query,
-									 int tagessatzMax,
-									 int kautionswertMax,
-									 String availableMin,
-									 String availableMax) {
+	                                 int tagessatzMax,
+	                                 int kautionswertMax,
+	                                 LocalDate availableMin,
+	                                 LocalDate availableMax) {
 		Stream<Item> listStream = findAll().stream();
 
 		if (query != null && !query.equals("")) {
@@ -91,12 +92,22 @@ public class ItemService {
 				item -> itemAvailabilityService.isAvailableFromTill(item, availableMin, availableMax)
 		);
 
-		List<Item> list = listStream.collect(Collectors.toList());
-
-		return list;
+		return listStream.collect(Collectors.toList());
 	}
 
 	public void save(Item newItem) {
 		items.save(newItem);
+	}
+
+	public void updateById(Long id, Item newItem) {
+		Item toUpdate = this.findById(id);
+		toUpdate.setTitel(newItem.getTitel());
+		toUpdate.setBeschreibung(newItem.getBeschreibung());
+		toUpdate.setAvailableFrom(newItem.getAvailableFrom());
+		toUpdate.setAvailableTill(newItem.getAvailableTill());
+		toUpdate.setTagessatz(newItem.getTagessatz());
+		toUpdate.setKautionswert(newItem.getKautionswert());
+		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
+		items.save(toUpdate);
 	}
 }

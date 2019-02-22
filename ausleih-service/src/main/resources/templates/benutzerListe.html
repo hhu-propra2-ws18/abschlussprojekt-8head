@@ -3,8 +3,8 @@
 <head th:replace="../static/css/navbar :: style">
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>Personen</title>
 </head>
 <body>
@@ -19,9 +19,9 @@
 	</tr>
 	<th:block th:each="benutzer : ${benutzerListe}">
 		<tr>
-			<td th:text="${benutzer.vorname + ' ' + benutzer.nachname}"></td>
+			<td th:text="|${benutzer.vorname} ${benutzer.nachname}|"></td>
 			<td th:text="${benutzer.username}"></td>
-			<td><a th:href="@{profil/{benutzerID} (benutzerID=${benutzer.id})}">anzeigen</a></td>
+			<td><a th:href="@{profil/{benutzerID} (benutzerID=${benutzer.id})}">Anzeigen</a></td>
 		</tr>
 	</th:block>
 </table>
