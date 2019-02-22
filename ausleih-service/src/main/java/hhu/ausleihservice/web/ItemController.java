@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -53,11 +54,11 @@ public class ItemController {
 	}
 
 	@GetMapping("/liste")
-	public String artikelListe(Model model, @RequestParam(required = false) String query, Principal p) {
-		if (query != null) {
-			query = query.trim();
+	public String artikelListe(Model model, @RequestParam(required = false) String q, Principal p) {
+		if (q != null) {
+			q = q.trim();
 		}
-		List<Item> list = itemService.simpleSearch(query);
+		List<Item> list = itemService.simpleSearch(q);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
 		model.addAttribute("user", personService.get(p));
@@ -178,8 +179,12 @@ public class ItemController {
 	}
 
 	@PostMapping("/newitem")
-	public String addItem(@ModelAttribute Item newItem, Principal p, @RequestParam("file") MultipartFile picture,
-						  BindingResult bindingResult, Model model) {
+	public String addItem(@ModelAttribute Item newItem,
+						  Principal p,
+						  @RequestParam("file") MultipartFile picture,
+						  BindingResult bindingResult,
+						  Model model,
+						  RedirectAttributes redirAttrs) {
 		itemValidator.validate(newItem, bindingResult);
 		Person besitzer = personService.get(p);
 		if (bindingResult.hasErrors()) {
@@ -206,6 +211,7 @@ public class ItemController {
 		itemService.save(newItem);
 		besitzer.addItem(newItem);
 		personService.save(besitzer);
+		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich hinzugefügt!");
 		return "redirect:/";
 	}
 
@@ -223,7 +229,8 @@ public class ItemController {
 	public String saveNewLocation(@ModelAttribute Abholort abholort,
 								  Principal p,
 								  BindingResult bindingResult,
-								  Model model) {
+								  Model model,
+								  RedirectAttributes redirAttrs) {
 		abholortValidator.validate(abholort, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("abholort", abholort);
@@ -236,6 +243,7 @@ public class ItemController {
 		abholortService.save(abholort);
 		aktuellerNutzer.getAbholorte().add(abholort);
 		personService.save(aktuellerNutzer);
+		redirAttrs.addFlashAttribute("message", "Abholort erfolgreich hinzugefügt!");
 		return "redirect:/";
 	}
 }
