@@ -35,7 +35,7 @@ public class PersonValidator implements Validator {
 		}
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", Messages.notEmpty);
-		if (person.getPassword().length() < 8 || person.getPassword().length() > 100) {
+		if (person.getPassword().length() < 3 || person.getPassword().length() > 100) {
 			errors.rejectValue("password", Messages.passwordSize);
 		}
 

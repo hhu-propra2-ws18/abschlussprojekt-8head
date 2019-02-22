@@ -44,12 +44,29 @@ public class PersonController {
 						   @PathVariable Long id,
 						   Principal p,
 						   @RequestParam(name = "editPerson", defaultValue = "false") final boolean changePerson,
-						   @ModelAttribute("person") Person person
+						   @ModelAttribute("benutzer") Person benutzer,
+						   BindingResult bindingResult
 	) {
 		System.out.println("Post triggered at /profil/" + id);
+		personValidator.validate(benutzer, bindingResult);
+
 		if (changePerson) {
+			if (bindingResult.hasErrors()) {
+				model.addAttribute("benutzer", benutzer);
+				model.addAttribute("usernameErrors", bindingResult.getFieldError("username"));
+				model.addAttribute("vornameErrors", bindingResult.getFieldError("vorname"));
+				model.addAttribute("nachnameErrors", bindingResult.getFieldError("nachname"));
+				model.addAttribute("passwordErrors", bindingResult.getFieldError("password"));
+				model.addAttribute("emailErrors", bindingResult.getFieldError("email"));
+				model.addAttribute("benutzer", personService.findById(id));
+				model.addAttribute("user", personService.get(p));
+				return "profil";
+			}
 			System.out.println("Now updating..");
-			personService.updateById(id, person);
+			personService.updateById(id, benutzer);
+			model.addAttribute("benutzer", personService.findById(id));
+			model.addAttribute("user", personService.get(p));
+			return "profil";
 		}
 		model.addAttribute("benutzer", personService.findById(id));
 		model.addAttribute("user", personService.get(p));
@@ -60,9 +77,10 @@ public class PersonController {
 	@PostMapping("/profil")
 	public String editUser(Model model,
 						   Principal p,
-						   @RequestParam(name = "editPerson", defaultValue = "false") final boolean changePerson
+						   @RequestParam(name = "editPerson", defaultValue = "false") final boolean changePerson,
+						   BindingResult bindingResult
 	) {
-		return editUser(model, personService.get(p).getId(), p, changePerson, personService.get(p));
+		return editUser(model, personService.get(p).getId(), p, changePerson, personService.get(p), bindingResult);
 	}
 
 	@GetMapping("/benutzersuche")
