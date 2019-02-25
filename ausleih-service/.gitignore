@@ -27,3 +27,4 @@
 
 ### DATABASE ###
 *.db
+/database/
