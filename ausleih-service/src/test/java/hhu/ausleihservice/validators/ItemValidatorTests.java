@@ -436,8 +436,6 @@ public class ItemValidatorTests {
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
-		FieldError error = bindingResult.getFieldError("");
-
 		assertFalse(bindingResult.hasErrors());
 	}
 }
