@@ -14,6 +14,9 @@
 <div th:if="${user != null}">
 	<a href="/liste">Artikel durchstöbern</a><br>
 	<a href="/newitem">Neuen Artikel verleihen</a>
+	<div th:if="${user.isAdmin()}">
+		<a th:href="@{/allconflicts}">Konflikte anzeigen</a>
+	</div>
 </div>
 </body>
 </html>
