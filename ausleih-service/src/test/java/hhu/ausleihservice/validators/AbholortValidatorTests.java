@@ -1,25 +1,29 @@
 package hhu.ausleihservice.validators;
 
-import hhu.ausleihservice.databasemodel.Abholort;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
 
-import static org.junit.Assert.*;
+import hhu.ausleihservice.databasemodel.Abholort;
 
 public class AbholortValidatorTests {
 
 	//Tests for supports(Class<?> clazz)
 	@Test
 	public void supportsValidClass() {
-		ItemValidator itemValidator = new ItemValidator();
-		assertTrue(itemValidator.supports(Abholort.class));
+		AbholortValidator abholortValidator = new AbholortValidator();
+		assertTrue(abholortValidator.supports(Abholort.class));
 	}
 
 	@Test
 	public void supportsInvalidClassFalse() {
-		ItemValidator itemValidator = new ItemValidator();
-		assertFalse(itemValidator.supports(Integer.class));
+		AbholortValidator abholortValidator = new AbholortValidator();
+		assertFalse(abholortValidator.supports(Integer.class));
 	}
 
 
