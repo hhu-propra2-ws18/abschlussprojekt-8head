@@ -2,6 +2,7 @@ package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(exclude = {"items"})
 public class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
