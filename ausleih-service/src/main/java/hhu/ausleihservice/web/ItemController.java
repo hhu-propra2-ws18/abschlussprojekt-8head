@@ -107,7 +107,7 @@ public class ItemController {
 								 @PathVariable long id,
 								 Principal p) {
 		try {
-			Item artikel = itemService.findById(id);
+			AusleihItem artikel = itemService.findById(id);
 			model.addAttribute("artikel", artikel);
 			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
 		} catch (ItemNichtVorhanden a) {
@@ -127,7 +127,7 @@ public class ItemController {
 								   Principal p,
 								   @RequestParam(name = "editArtikel", defaultValue = "false")
 									   final boolean changeArticleDetails,
-								   @ModelAttribute("artikel") Item artikel,
+								   @ModelAttribute("artikel") AusleihItem artikel,
 								   BindingResult bindingResult
 	) {
 		System.out.println("Post triggered at /details/" + id);
@@ -135,7 +135,7 @@ public class ItemController {
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("user", personService.get(p));
 		model.addAttribute("ausleihForm", new AusleihForm());
-		Item item = new Item();
+		Item item = new AusleihItem();
 		System.out.println(item);
 		itemValidator.validate(artikel, bindingResult);
 
@@ -161,7 +161,7 @@ public class ItemController {
 	//2019-05-02 - 2019-05-09
 	@PostMapping("/ausleihen/{id}")
 	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p, Model model) {
-		Item artikel = itemService.findById(id);
+		AusleihItem artikel = itemService.findById(id);
 		Ausleihe ausleihe = new Ausleihe();
 		Person user = personService.get(p);
 
@@ -211,7 +211,7 @@ public class ItemController {
 			return "errorMessage";
 		}
 		model.addAttribute("user", user);
-		model.addAttribute("newitem", new Item());
+		model.addAttribute("newitem", new AusleihItem());
 		model.addAttribute("abholorte", user.getAbholorte());
 		model.addAttribute("today", LocalDateTime.now().format(DATEFORMAT));
 		return "neuerArtikel";
@@ -219,7 +219,7 @@ public class ItemController {
 
 	@PostMapping("/newitem")
 	public String addItem(Model model,
-						  @ModelAttribute Item newItem,
+						  @ModelAttribute AusleihItem newItem,
 						  Principal p,
 						  @RequestParam("file") MultipartFile picture,
 						  BindingResult bindingResult,

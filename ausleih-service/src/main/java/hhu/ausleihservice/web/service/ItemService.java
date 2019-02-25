@@ -1,6 +1,7 @@
 package hhu.ausleihservice.web.service;
 
-import hhu.ausleihservice.dataaccess.ItemRepository;
+import hhu.ausleihservice.dataaccess.AusleihItemRepository;
+import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,11 @@ import java.util.stream.Stream;
 @Service
 public class ItemService {
 
-	private ItemRepository items;
+	private AusleihItemRepository items;
 	private ItemAvailabilityService itemAvailabilityService;
 
 
-	public ItemService(ItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
+	public ItemService(AusleihItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
 		this.items = itemRep;
 		this.itemAvailabilityService = itemAvailabilityService;
 	}
@@ -99,8 +100,8 @@ public class ItemService {
 		items.save(newItem);
 	}
 
-	public void updateById(Long id, Item newItem) {
-		Item toUpdate = this.findById(id);
+	public void updateById(Long id, AusleihItem newItem) {
+		AusleihItem toUpdate = this.findById(id);
 		System.out.println("Starting item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());

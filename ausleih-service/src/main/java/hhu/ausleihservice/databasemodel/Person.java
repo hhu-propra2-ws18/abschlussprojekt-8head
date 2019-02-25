@@ -52,7 +52,7 @@ public class Person {
 		ausleihe.setAusleiher(null);
 	}
 
-	public void addItem(Item item) {
+	public void addItem(AusleihItem item) {
 		if (item == null) {
 			return;
 		}
@@ -60,7 +60,7 @@ public class Person {
 		item.setBesitzer(this);
 	}
 
-	public void removeItem(Item item) {
+	public void removeItem(AusleihItem item) {
 		if (item == null) {
 			return;
 		}
@@ -72,7 +72,7 @@ public class Person {
 		return this.getRole().equals(Role.ADMIN);
 	}
 
-	public boolean isOwner(Item artikel) {
+	public boolean isOwner(AusleihItem artikel) {
 		return this.getId().equals(artikel.getBesitzer().getId());
 	}
 

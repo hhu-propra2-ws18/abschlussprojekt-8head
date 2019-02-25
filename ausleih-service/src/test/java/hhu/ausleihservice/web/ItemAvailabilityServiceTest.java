@@ -1,7 +1,7 @@
 package hhu.ausleihservice.web;
 
+import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.service.ItemAvailabilityService;
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isAvaibleInItemPeriod() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAusleihen(new HashSet<>());
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
@@ -27,7 +27,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isNotAvaibleOutsideItemPeriod() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAusleihen(new HashSet<>());
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
@@ -36,7 +36,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isNotAvaibleInItemPeriod() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setStartDatum(LocalDate.of(2000, 1, 5));
 		ausleihe.setEndDatum(LocalDate.of(2000, 1, 5));
@@ -48,7 +48,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isAvailableFromTillPeriodInside() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -60,7 +60,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isAvailableFromTillPeriodOnLeftEdge() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -72,7 +72,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isAvailableFromTillPeriodOnRightEdge() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -84,7 +84,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isAvailableFromTillPeriodOverLeftEdge() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -96,7 +96,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isAvailableFromTillPeriodOverRightEdge() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -108,7 +108,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isAvailableFromTillPeriodOverRightEdgeSmallPeriod() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2000, 1, 10));
 
@@ -120,7 +120,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isAvailableFromTillWithAusleiheNoConflict() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -137,7 +137,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isAvailableFromTillWithAusleiheWithConflictInside() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -154,7 +154,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isAvailableFromTillWithAusleiheWithConflictOnLeftEdge() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -171,7 +171,7 @@ public class ItemAvailabilityServiceTest {
 
 	@Test
 	public void isAvailableFromTillWithAusleiheWithConflictOnRightEdge() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 

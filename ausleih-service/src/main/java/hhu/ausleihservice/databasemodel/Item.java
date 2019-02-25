@@ -2,42 +2,27 @@ package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.Base64;
 
-@Entity
 @Data
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Item {
+	protected String titel = "";
+	@Lob
+	protected String beschreibung = "";
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+	@JoinColumn
+	protected Abholort abholort = new Abholort();
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@EqualsAndHashCode.Include
 	private Long id;
-
-	private String titel = "";
-	@Lob
-	private String beschreibung = "";
-	private Integer tagessatz;
-	private Integer kautionswert;
-
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
-	@JoinColumn
-	private Abholort abholort = new Abholort();
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate availableFrom;
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate availableTill;
 	@ManyToOne
 	private Person besitzer;
-	@ToString.Exclude
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Ausleihe> ausleihen = new HashSet<>();
-
 	@Lob
 	private byte[] picture;
 
@@ -61,83 +46,8 @@ public class Item {
 		System.arraycopy(in, 0, picture, 0, in.length);
 	}
 
-	public void addAusleihe(Ausleihe ausleihe) {
-		if (ausleihe != null) {
-			ausleihen.add(ausleihe);
-			ausleihe.setItem(this);
-		}
-	}
-
-	public void removeAusleihe(Ausleihe ausleihe) {
-		ausleihen.remove(ausleihe);
-		ausleihe.setItem(null);
-	}
-
 	public String getBase64EncodedString() {
 		return this.getPicture() != null ? Base64.getEncoder().encodeToString(this.getPicture()) : null;
-	}
-
-	public ArrayList<Period> getAvailablePeriods() {
-
-		ArrayList<Period> out = new ArrayList<>();
-
-		if (ausleihen.isEmpty()) {
-			out.add(new Period(availableFrom, availableTill));
-			return out;
-		}
-
-		Ausleihe[] sortierteAusleihen = getSortierteAusleihen();
-		int length = sortierteAusleihen.length;
-
-		LocalDate start = availableFrom;
-		LocalDate end = sortierteAusleihen[0].getStartDatum();
-
-		if (!start.equals(end)) {
-			out.add(new Period(start, end.minusDays(1)));
-		}
-
-		for (int i = 0; i < length - 1; i++) {
-
-			start = sortierteAusleihen[i].getEndDatum();
-			end = sortierteAusleihen[i + 1].getStartDatum();
-
-			if (!start.equals(end)) {
-				out.add(new Period(start.plusDays(1), end.minusDays(1)));
-			}
-		}
-
-		start = sortierteAusleihen[length - 1].getEndDatum();
-		end = availableTill;
-
-		if (!start.equals(end)) {
-			out.add(new Period(start.plusDays(1), end));
-		}
-
-		return out;
-	}
-
-	Ausleihe[] getSortierteAusleihen() {
-
-		Ausleihe[] sortierteAusleihen = new Ausleihe[ausleihen.size()];
-		List<Ausleihe> tempAusleihen = new ArrayList<>(ausleihen);
-
-		for (int i = 0; i < ausleihen.size(); i++) {
-
-			Ausleihe smallest = tempAusleihen.get(0);
-			LocalDate smallestDate = smallest.getStartDatum();
-
-			for (Ausleihe test : tempAusleihen) {
-				LocalDate testDate = test.getStartDatum();
-				if (testDate.isBefore(smallestDate)) {
-					smallest = test;
-					smallestDate = smallest.getStartDatum();
-				}
-			}
-			sortierteAusleihen[i] = smallest;
-			tempAusleihen.remove(smallest);
-		}
-
-		return sortierteAusleihen;
 	}
 
 	public void setTitel(String s) {

@@ -1,7 +1,8 @@
 package hhu.ausleihservice.web;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import hhu.ausleihservice.dataaccess.ItemRepository;
+import hhu.ausleihservice.dataaccess.AusleihItemRepository;
+import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.service.ItemAvailabilityService;
 import hhu.ausleihservice.web.service.ItemService;
@@ -27,11 +28,11 @@ public class ItemServiceTest {
 	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	@Mock
-	private ItemRepository itemRepository;
+	private AusleihItemRepository ausleihItemRepository;
 	private ItemService itemService = new ItemService(null, new ItemAvailabilityService());
 	private List<Item> repository = new ArrayList<>();
 
-	private boolean testItemEquality(Item base, Item toTest) {
+	private boolean testItemEquality(AusleihItem base, AusleihItem toTest) {
 		return base.getId().longValue() == toTest.getId().longValue() &&
 				base.getTitel().equals(toTest.getTitel()) &&
 				base.getBeschreibung().equals(toTest.getBeschreibung()) &&
@@ -45,7 +46,7 @@ public class ItemServiceTest {
 	public void prepareTestData() {
 		repository = new ArrayList<>();
 
-		Item item1 = new Item();
+		AusleihItem item1 = new AusleihItem();
 		item1.setId(1L);
 		item1.setTitel("Fahrrad");
 		item1.setBeschreibung("Hammer Fahrrad mit Dynamo");
@@ -54,7 +55,7 @@ public class ItemServiceTest {
 		item1.setAvailableFrom(LocalDate.of(0, 1, 1));
 		item1.setAvailableTill(LocalDate.of(9999, 12, 31));
 
-		Item item2 = new Item();
+		AusleihItem item2 = new AusleihItem();
 		item2.setId(2L);
 		item2.setTitel("Würfelset");
 		item2.setBeschreibung("Acht hellgürne Würfel. Sie leuchten im dunkeln");
@@ -63,7 +64,7 @@ public class ItemServiceTest {
 		item2.setAvailableFrom(LocalDate.of(2010, 6, 1));
 		item2.setAvailableTill(LocalDate.of(2010, 8, 1));
 
-		Item item3 = new Item();
+		AusleihItem item3 = new AusleihItem();
 		item3.setId(3L);
 		item3.setTitel("Rosa Fahrrad");
 		item3.setBeschreibung("Rosafarbendes Fahrrad ohne Hinterrad");
@@ -72,7 +73,7 @@ public class ItemServiceTest {
 		item3.setAvailableFrom(LocalDate.of(2005, 1, 1));
 		item3.setAvailableTill(LocalDate.of(2015, 1, 1));
 
-		Item item4 = new Item();
+		AusleihItem item4 = new AusleihItem();
 		item4.setId(4L);
 		item4.setTitel("Hammer");
 		item4.setBeschreibung("Ein großer Vorschlaghammer");
@@ -86,9 +87,9 @@ public class ItemServiceTest {
 		repository.add(item3);
 		repository.add(item4);
 
-		itemService = new ItemService(itemRepository, new ItemAvailabilityService());
+		itemService = new ItemService(ausleihItemRepository, new ItemAvailabilityService());
 
-		Mockito.when(itemRepository.findAll()).thenReturn(repository);
+		Mockito.when(ausleihItemRepository.findAll()).thenReturn(repository);
 	}
 
 	@Test
@@ -97,7 +98,7 @@ public class ItemServiceTest {
 
 		assertEquals(4, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
 				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
@@ -118,7 +119,7 @@ public class ItemServiceTest {
 
 		assertEquals(4, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
 				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
@@ -140,7 +141,7 @@ public class ItemServiceTest {
 
 		assertEquals(2, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
 				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
@@ -158,7 +159,7 @@ public class ItemServiceTest {
 
 		assertEquals(1, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
 				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else {
@@ -181,7 +182,7 @@ public class ItemServiceTest {
 
 		assertEquals(1, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 4L) {
 				assertTrue(testItemEquality(repository.get(3), searchedItem));
 			} else {
@@ -201,7 +202,7 @@ public class ItemServiceTest {
 
 		assertEquals(4, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
 				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
@@ -227,7 +228,7 @@ public class ItemServiceTest {
 
 		assertEquals(4, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
 				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
@@ -253,7 +254,7 @@ public class ItemServiceTest {
 
 		assertEquals(3, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
 				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 2L) {
@@ -277,7 +278,7 @@ public class ItemServiceTest {
 
 		assertEquals(2, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 3L) {
 				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
@@ -299,7 +300,7 @@ public class ItemServiceTest {
 
 		assertEquals(2, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
 				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
@@ -321,7 +322,7 @@ public class ItemServiceTest {
 
 		assertEquals(1, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 3L) {
 				assertTrue(testItemEquality(repository.get(2), searchedItem));
 			} else {
@@ -341,7 +342,7 @@ public class ItemServiceTest {
 
 		assertEquals(2, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
 				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 3L) {
@@ -363,7 +364,7 @@ public class ItemServiceTest {
 
 		assertEquals(2, searchedList.size());
 
-		for (Item searchedItem : searchedList) {
+		for (AusleihItem searchedItem : searchedList) {
 			if (searchedItem.getId() == 1L) {
 				assertTrue(testItemEquality(repository.get(0), searchedItem));
 			} else if (searchedItem.getId() == 4L) {
