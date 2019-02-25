@@ -38,8 +38,10 @@ public class AusleiheValidator implements Validator {
 
 		ValidationUtils.rejectIfEmpty(errors, "ausleiher", Messages.notEmpty);
 
-		if (ausleihe.getAusleiher().equals(ausleiheItem.getBesitzer())) {
-			errors.rejectValue("ausleiher", Messages.ownItemAusleihe);
+		if (ausleiheItem != null && ausleihe.getAusleiher() != null) {
+			if (ausleihe.getAusleiher().equals(ausleiheItem.getBesitzer())) {
+				errors.rejectValue("ausleiher", Messages.ownItemAusleihe);
+			}
 		}
 	}
 
