@@ -73,7 +73,7 @@ public class ItemController {
 	@GetMapping("/artikelsuche")
 	public String artikelSuche(Model model, Principal p) {
 		model.addAttribute("user", personService.get(p));
-		model.addAttribute("datum", LocalDateTime.now().format(DATEFORMAT));
+		model.addAttribute("today", LocalDateTime.now().format(DATEFORMAT));
 		return "artikelSuche";
 	}
 
@@ -198,6 +198,7 @@ public class ItemController {
 		model.addAttribute("user", person);
 		model.addAttribute("newitem", new Item());
 		model.addAttribute("abholorte", person.getAbholorte());
+		model.addAttribute("today", LocalDateTime.now().format(DATEFORMAT));
 		return "neuerArtikel";
 	}
 
