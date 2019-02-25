@@ -26,25 +26,31 @@
 		<td th:text="${benutzer.vorname}">Max</td>
 		<td th:text="${benutzer.nachname}">Mustermann</td>
 		<td th:text="${benutzer.email}">mamus@gmail.com</td>
-		<td></td>
+
 	</tr>
 	<form th:action="@{/profil/{PersonId} (PersonId=${benutzer.getId()})}" th:object="${benutzer}" method="post">
 		<tr>
-			<td>
-				<input th:if="${user.isAdmin() and !(user.isHimself(benutzer))}" name="newUsername" type="text"
-					   th:field="*{username}">
+			<td th:if="${user.isAdmin() and !(user.isHimself(benutzer))}">
+				<input name="newUsername" type="text" th:field="*{username}">
+			</td>
+			<div id="error" th:text="${usernameErrors?.code}"></div>
+			<td th:unless="${user.isAdmin() and !(user.isHimself(benutzer))}">
 			</td>
 			<td>
 				<input name="newVorname" type="text" th:field="*{vorname}">
+				<div id="error" th:text="${vornameErrors?.code}"></div>
 			</td>
 			<td>
 				<input name="newNachname" type="text" th:field="*{nachname}">
+				<div id="error" th:text="${nachnameErrors?.code}"></div>
 			</td>
 			<td>
 				<input name="newEMail" type="email" th:field="*{email}">
+				<div id="error" th:text="${emailErrors?.code}"></div>
 			</td>
 			<td>
 				<input name="newPassword" type="password" th:field="*{password}" th:id="password">
+				<div id="error" th:text="${passwordErrors?.code}"></div>
 			</td>
 			<td>
 				<button type="submit" value="true" name="editPerson">Nutzer Ändern</button>

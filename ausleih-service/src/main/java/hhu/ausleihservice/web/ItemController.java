@@ -128,19 +128,35 @@ public class ItemController {
 	public String bearbeiteArtikel(Model model,
 								   @PathVariable long id,
 								   Principal p,
-								   @RequestParam(
-										   name = "editArtikel", defaultValue = "false"
-								   ) final boolean changeArticleDetails,
-								   @ModelAttribute("artikel") Item artikel
+								   @RequestParam(name = "editArtikel", defaultValue = "false")
+									   final boolean changeArticleDetails,
+								   @ModelAttribute("artikel") Item artikel,
+								   BindingResult bindingResult
 	) {
 		System.out.println("Post triggered at /details/" + id);
+		System.out.println(artikel + " " + changeArticleDetails);
+		model.addAttribute("dateformat", DATEFORMAT);
+		model.addAttribute("user", personService.get(p));
+		model.addAttribute("ausleihForm", new AusleihForm());
+		Item item = new Item();
+		System.out.println(item);
+		itemValidator.validate(artikel, bindingResult);
 
 		if (changeArticleDetails) {
+			if (bindingResult.hasErrors()) {
+				model.addAttribute("artikel", itemService.findById(id));
+				model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
+				model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
+				model.addAttribute("tagessatzErrors", bindingResult.getFieldError("tagessatz"));
+				model.addAttribute("kautionswertErrors", bindingResult.getFieldError("kautionswert"));
+				model.addAttribute("availableFromErrors", bindingResult.getFieldError("availableFrom"));
+				model.addAttribute("abholortErrors", bindingResult.getFieldError("abholort"));
+				model.addAttribute("dateformat", DATEFORMAT);
+				return "artikelDetails";
+			}
 			itemService.updateById(id, artikel);
 		}
 		model.addAttribute("artikel", itemService.findById(id));
-		model.addAttribute("dateformat", DATEFORMAT);
-		model.addAttribute("user", personService.get(p));
 
 		return "artikelDetails";
 	}
@@ -192,32 +208,34 @@ public class ItemController {
 
 	@GetMapping("/newitem")
 	public String createItem(Model model, Principal p) {
-		Person person = personService.get(p);
-		if (person.getAbholorte().isEmpty()) {
+		Person user = personService.get(p);
+		if (user.getAbholorte().isEmpty()) {
 			model.addAttribute("message", "Bitte Abholorte hinzufügen");
 			return "errorMessage";
 		}
-		model.addAttribute("user", person);
+		model.addAttribute("user", user);
 		model.addAttribute("newitem", new Item());
-		model.addAttribute("abholorte", person.getAbholorte());
+		model.addAttribute("abholorte", user.getAbholorte());
 		return "neuerArtikel";
 	}
 
 	@PostMapping("/newitem")
-	public String addItem(@ModelAttribute Item newItem,
+	public String addItem(Model model,
+						  @ModelAttribute Item newItem,
 						  Principal p,
 						  @RequestParam("file") MultipartFile picture,
 						  BindingResult bindingResult,
-						  Model model,
 						  RedirectAttributes redirAttrs) {
 		itemValidator.validate(newItem, bindingResult);
 		Person besitzer = personService.get(p);
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("abholorte", personService.get(p).getAbholorte());
 			model.addAttribute("newitem", newItem);
 			model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
 			model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
 			model.addAttribute("kautionswertErrors", bindingResult.getFieldError("kautionswert"));
 			model.addAttribute("availableFromErrors", bindingResult.getFieldError("availableFrom"));
+			model.addAttribute("abholortErrors", bindingResult.getFieldError("abholort"));
 
 			if (besitzer.getAbholorte().isEmpty()) {
 				model.addAttribute("message", "Bitte Abholorte hinzufügen");
