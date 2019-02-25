@@ -160,4 +160,23 @@ public class PersonController {
 			return "konflikt";
 		}
 	}
+
+	@PostMapping("/conflict/{id}")
+	public String resolveConflict
+			(Model model, Principal p, @PathVariable Long id, @RequestParam("entscheidung") String entscheidung){
+		if(!personService.get(p).isAdmin()){
+			model.addAttribute("message", "Administrator depostulatur");
+			return "errorMessage";
+		} else {
+			Ausleihe konflikt = ausleiheService.findById(id);
+			if (entscheidung.equals("bestrafen")) {
+				proPayService.punishRerservation(konflikt);
+			} else {
+				proPayService.releaseReservation(konflikt);
+			}
+			konflikt.setKonflikt(false);
+			return "redirect:/allconflicts/";
+		}
+
+	}
 }

@@ -9,5 +9,10 @@
 <a th:href="@{|/details/${konflikt.item.id}|}" th:text="|Artikel: ${konflikt.item.titel}|"></a>
 <a th:href="@{|/profil/${konflikt.item.besitzer.id}|}" th:text="|Besitzer: ${konflikt.item.besitzer.username}|"></a>
 <a th:href="@{|/profil/${konflikt.ausleiher.id}|}" th:text="|Ausleiher: ${konflikt.ausleiher.username}|"></a>
+<form action="#" method="post" th:action="@{|/conflict/${konflikt.id}|}">
+	<button name="entscheidung" type="submit" value="verwerfen">Konflikt verwerfen</button>
+	<button name="entscheidung" type="submit" value="bestrafen">Ausleiher bestrafen</button>
+</form>
+
 </body>
 </html>
