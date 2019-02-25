@@ -1,9 +1,6 @@
 package hhu.ausleihservice.web;
 
-import hhu.ausleihservice.databasemodel.Abholort;
-import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.databasemodel.Item;
-import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.databasemodel.*;
 import hhu.ausleihservice.form.AusleihForm;
 import hhu.ausleihservice.validators.AbholortValidator;
 import hhu.ausleihservice.validators.AusleiheValidator;
@@ -158,11 +155,11 @@ public class ItemController {
 
 		ausleihe.setStartDatum(LocalDate.parse(startDatum));
 		ausleihe.setEndDatum(LocalDate.parse(endDatum));
-		ausleihe.setApproved(false);
+		ausleihe.setStatus(Status.ANGEFRAGT);
 
 		ausleihe.setAusleiher(user);
 		ausleihe.setItem(artikel);
-		
+
 		DataBinder dataBinder = new DataBinder(ausleihe);
 		dataBinder.setValidator(ausleiheValidator);
 		dataBinder.validate();
