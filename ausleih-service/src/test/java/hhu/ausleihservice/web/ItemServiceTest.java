@@ -1,7 +1,7 @@
 package hhu.ausleihservice.web;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import hhu.ausleihservice.dataaccess.AusleihItemRepository;
+import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.service.ItemAvailabilityService;
@@ -28,7 +28,7 @@ public class ItemServiceTest {
 	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	@Mock
-	private AusleihItemRepository ausleihItemRepository;
+	private ItemRepository itemRepository;
 	private ItemService itemService = new ItemService(null, new ItemAvailabilityService());
 	private List<Item> repository = new ArrayList<>();
 
@@ -87,9 +87,9 @@ public class ItemServiceTest {
 		repository.add(item3);
 		repository.add(item4);
 
-		itemService = new ItemService(ausleihItemRepository, new ItemAvailabilityService());
+		itemService = new ItemService(itemRepository, new ItemAvailabilityService());
 
-		Mockito.when(ausleihItemRepository.findAll()).thenReturn(repository);
+		Mockito.when(itemRepository.findAll()).thenReturn(repository);
 	}
 
 	@Test

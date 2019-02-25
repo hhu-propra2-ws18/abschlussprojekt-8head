@@ -8,7 +8,7 @@ import java.util.Base64;
 
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Item {
 	protected String titel = "";

@@ -2,7 +2,7 @@ package hhu.ausleihservice.databasemodel;
 
 import hhu.ausleihservice.dataaccess.AbholortRepository;
 import hhu.ausleihservice.dataaccess.AusleiheRepository;
-import hhu.ausleihservice.dataaccess.AusleihItemRepository;
+import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,16 +20,16 @@ import java.util.Set;
 public class DatabaseInitializer implements ServletContextInitializer {
 
 	private PersonRepository personRepository;
-	private AusleihItemRepository ausleihItemRepository;
+	private ItemRepository itemRepository;
 	private AbholortRepository abholortRepository;
 	private AusleiheRepository ausleiheRepository;
 
 	public DatabaseInitializer(PersonRepository perRepository,
-							   AusleihItemRepository iRepository,
+							   ItemRepository iRepository,
 							   AbholortRepository abhRepository,
 							   AusleiheRepository ausleiheRepository) {
 		this.personRepository = perRepository;
-		this.ausleihItemRepository = iRepository;
+		this.itemRepository = iRepository;
 		this.abholortRepository = abhRepository;
 		this.ausleiheRepository = ausleiheRepository;
 	}
@@ -175,9 +175,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.personRepository.save(person4);
 		this.personRepository.save(person5);
 
-		this.ausleihItemRepository.save(item1);
-		this.ausleihItemRepository.save(item2);
-		this.ausleihItemRepository.save(item3);
+		this.itemRepository.save(item1);
+		this.itemRepository.save(item2);
+		this.itemRepository.save(item3);
 
 		Ausleihe ausleihe1 = new Ausleihe();
 		ausleihe1.setReservationId(0L);
@@ -198,7 +198,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 
 		this.ausleiheRepository.save(ausleihe1);
 		this.ausleiheRepository.save(ausleihe2);
-		this.ausleihItemRepository.save(item3);
-		this.ausleihItemRepository.save(item1);
+		this.itemRepository.save(item3);
+		this.itemRepository.save(item1);
 	}
 }

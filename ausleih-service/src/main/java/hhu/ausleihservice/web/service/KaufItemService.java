@@ -3,8 +3,8 @@ package hhu.ausleihservice.web.service;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Item;
+import hhu.ausleihservice.databasemodel.KaufItem;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,33 +14,26 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class ItemService {
+public class KaufItemService extends ItemService {
 
-	@Autowired
 	private ItemRepository items;
-	@Autowired
 	private ItemAvailabilityService itemAvailabilityService;
 
-	public Item findById(long id) {
-		Optional<Item> item = items.findById(id);
+	public KaufItemService(ItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
+		this.items = itemRep;
+		this.itemAvailabilityService = itemAvailabilityService;
+	}
+
+	public KaufItem findKaufItemById(long id) {
+		Optional<KaufItem> item = items.findKaufItemById(id);
 		if (!item.isPresent()) {
 			throw new ItemNichtVorhanden();
 		}
 		return item.get();
-
 	}
 
-	List<Item> findAll() {
-		return items.findAll();
-	}
-
-	public boolean containsArray(String string, String[] array) {
-		for (String entry : array) {
-			if (!string.contains(entry)) {
-				return false;
-			}
-		}
-		return true;
+	List<KaufItem> findAllKaufItem() {
+		return items.findAllKaufItem();
 	}
 
 	public List<Item> simpleSearch(String query) {
@@ -71,12 +64,13 @@ public class ItemService {
 		items.save(newItem);
 	}
 
-	public void updateById(Long id, Item newItem) {
-		Item toUpdate = this.findById(id);
+	public void updateById(Long id, KaufItem newItem) {
+		KaufItem toUpdate = findKaufItemById(id);
 		System.out.println("Starting item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
 		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
+		toUpdate.setKaufpreis(newItem.getKaufpreis());
 		items.save(toUpdate);
 	}
 }

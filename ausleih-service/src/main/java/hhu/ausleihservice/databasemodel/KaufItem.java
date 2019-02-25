@@ -6,6 +6,6 @@ import javax.persistence.Entity;
 
 @Entity
 @Data
-public class KaufItem {
+public class KaufItem extends Item {
 	private int kaufpreis;
 }
