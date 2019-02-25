@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="../static/css/navbar :: style">
+	<meta charset="UTF-8">
+	<title>Alle Konflikte</title>
+</head>
+<body>
+<nav th:replace="../static/css/navbar :: main-menu">menu</nav>
+<a th:href="@{|/details/${konflikt.item.id}|}" th:text="|Artikel: ${konflikt.item.titel}|"></a>
+<a th:href="@{|/profil/${konflikt.item.besitzer.id}|}" th:text="|Besitzer: ${konflikt.item.besitzer.username}|"></a>
+<a th:href="@{|/profil/${konflikt.ausleiher.id}|}" th:text="|Ausleiher: ${konflikt.ausleiher.username}|"></a>
+</body>
+</html>

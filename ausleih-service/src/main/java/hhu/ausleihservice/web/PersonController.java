@@ -143,9 +143,21 @@ public class PersonController {
 
 
 		} else {
-			List<Ausleihe> ausleihen = ausleiheService.findAllConflicts();
-			model.addAttribute("konflikte", ausleihen);
+			List<Ausleihe> konflikte = ausleiheService.findAllConflicts();
+			model.addAttribute("konflikte", konflikte);
 			return "alleKonflikte";
+		}
+	}
+
+	@GetMapping("/conflict/{id}")
+	public String showConflict(Model model, Principal p, @PathVariable Long id){
+		if(!personService.get(p).isAdmin()){
+			model.addAttribute("message", "Administrator depostulatur");
+			return "errorMessage";
+		} else {
+			Ausleihe konflikt = ausleiheService.findById(id);
+			model.addAttribute("konflikt", konflikt);
+			return "konflikt";
 		}
 	}
 }

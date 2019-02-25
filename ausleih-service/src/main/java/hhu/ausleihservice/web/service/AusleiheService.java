@@ -5,6 +5,7 @@ import hhu.ausleihservice.databasemodel.Ausleihe;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AusleiheService {
@@ -22,5 +23,11 @@ public class AusleiheService {
 	public List<Ausleihe> findAllConflicts(){
 		return ausleiheRepository.findByKonflikt(true);
 	}
+
+	public Ausleihe findById(Long id) {
+		Optional<Ausleihe> ausleihe = ausleiheRepository.findById(id);
+		return ausleihe.get();
+	}
+
 
 }
