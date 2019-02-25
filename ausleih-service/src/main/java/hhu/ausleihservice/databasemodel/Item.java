@@ -2,6 +2,8 @@ package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -34,6 +36,7 @@ public class Item {
 	private LocalDate availableTill;
 	@ManyToOne
 	private Person besitzer;
+	@ToString.Exclude
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Ausleihe> ausleihen = new HashSet<>();
 
