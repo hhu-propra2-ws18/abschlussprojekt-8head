@@ -46,6 +46,7 @@ public class ItemValidator implements Validator {
 		} else {
 			errors.rejectValue("tagessatz", Messages.notEmpty);
 		}
+
 		if (item.getAvailableFrom() != null && item.getAvailableTill() != null) {
 			if (item.getAvailableFrom().isAfter(item.getAvailableTill())) {
 				errors.rejectValue("availableFrom", Messages.invalidPeriod);
@@ -57,7 +58,8 @@ public class ItemValidator implements Validator {
 			errors.rejectValue("availableFrom", Messages.notEmpty);
 			errors.rejectValue("availableTill", Messages.notEmpty);
 		}
-		if (item.getId() == null) {
+
+		if (item.getAbholort() == null) {
 			ValidationUtils.rejectIfEmpty(errors, "abholort", Messages.notEmpty);
 		}
 	}

@@ -72,30 +72,6 @@ public class AbholortValidatorTests {
 	}
 
 	@Test
-	public void validateNullBeschreibung() {
-		AbholortValidator abholortValidator = new AbholortValidator();
-		Abholort abholort = new Abholort();
-
-		abholort.setId(0L);
-		abholort.setLongitude(0.0);
-		abholort.setLatitude(0.0);
-
-		DataBinder dataBinder = new DataBinder(abholort);
-		dataBinder.setValidator(abholortValidator);
-		dataBinder.validate();
-		BindingResult bindingResult = dataBinder.getBindingResult();
-
-		List<FieldError> errors = bindingResult.getFieldErrors("beschreibung");
-
-		assertTrue(bindingResult.hasErrors());
-		assertEquals(2, bindingResult.getErrorCount());
-		assertNotNull(errors);
-		assertEquals(2, errors.size());
-		assertEquals(Messages.notEmpty, errors.get(0).getCode());
-		assertEquals(Messages.sizeLocationDescription, errors.get(1).getCode());
-	}
-
-	@Test
 	public void validateBeschreibungEmpty() {
 		AbholortValidator abholortValidator = new AbholortValidator();
 		Abholort abholort = new Abholort();
@@ -244,20 +220,13 @@ public class AbholortValidatorTests {
 		abholort.setLongitude(0.0);
 		abholort.setLatitude(0.0);
 
+		StringBuilder beschreibungBuilder = new StringBuilder();
+		for (int i = 1; i <= 401; i++) {
+			beschreibungBuilder.append("E");
+		}
+		abholort.setBeschreibung(beschreibungBuilder.toString());
+
 		DataBinder dataBinder = new DataBinder(abholort);
-		abholort.setBeschreibung(
-				"0123456789012345678901234567890123456789" +
-				"0123456789012345678901234567890123456789" +
-				"0123456789012345678901234567890123456789" +
-				"0123456789012345678901234567890123456789" +
-				"0123456789012345678901234567890123456789" +
-				"0123456789012345678901234567890123456789" + //440 characters
-				"0123456789012345678901234567890123456789" +
-				"0123456789012345678901234567890123456789" +
-				"0123456789012345678901234567890123456789" +
-				"0123456789012345678901234567890123456789" +
-				"0123456789012345678901234567890123456789"
-		);
 		dataBinder.setValidator(abholortValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
@@ -270,5 +239,21 @@ public class AbholortValidatorTests {
 		assertEquals(Messages.sizeLocationDescription, error.getCode());
 	}
 
+	@Test
+	public void validateValid() {
+		AbholortValidator abholortValidator = new AbholortValidator();
+		Abholort abholort = new Abholort();
 
+		abholort.setId(0L);
+		abholort.setLongitude(0.0);
+		abholort.setLatitude(0.0);
+		abholort.setBeschreibung("Ugands");
+
+		DataBinder dataBinder = new DataBinder(abholort);
+		dataBinder.setValidator(abholortValidator);
+		dataBinder.validate();
+		BindingResult bindingResult = dataBinder.getBindingResult();
+
+		assertFalse(bindingResult.hasErrors());
+	}
 }
