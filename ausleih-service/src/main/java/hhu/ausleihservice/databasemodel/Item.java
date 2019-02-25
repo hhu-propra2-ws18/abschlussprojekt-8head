@@ -126,11 +126,11 @@ public class Item {
 		BufferedImage image100 = resize(fullImage, Method.ULTRA_QUALITY, Mode.FIT_EXACT, 100, 100);
 
 		ByteArrayOutputStream image250Stream = new ByteArrayOutputStream();
-		ImageIO.write(image250, "png", image250Stream);
+		ImageIO.write(image250, "jpg", image250Stream);
 		byte[] image250Bytes = image250Stream.toByteArray();
 
 		ByteArrayOutputStream image100Stream = new ByteArrayOutputStream();
-		ImageIO.write(image100, "png", image100Stream);
+		ImageIO.write(image100, "jpg", image100Stream);
 		byte[] image100Bytes = image100Stream.toByteArray();
 
 		this.setPicture250(image250Bytes);

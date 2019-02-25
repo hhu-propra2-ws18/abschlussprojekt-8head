@@ -19,7 +19,7 @@
 				</div>
 				<div class="product-middle">
 					<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
-						 th:src="@{'data:image/png;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
+						 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
 				</div>
 				<div class="product-bottom">
 					<div class="heading"

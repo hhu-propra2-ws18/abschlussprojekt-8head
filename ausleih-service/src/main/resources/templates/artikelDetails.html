@@ -17,7 +17,7 @@
 						<td><h2 th:text="${artikel.titel}">ITEM</h2></td>
 						<td><img
 								th:if="${artikel.picture100 != null and artikel.getPicture100Base64EncodedString()!=null}"
-								th:src="@{'data:image/png;base64,'+${artikel.getPicture100Base64EncodedString()}}"
+								th:src="@{'data:image/jpg;base64,'+${artikel.getPicture100Base64EncodedString()}}"
 								th:width="60px"
 								th:height="60px"/></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
