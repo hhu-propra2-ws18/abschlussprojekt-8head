@@ -31,5 +31,5 @@ public class Ausleihe {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate endDatum;
 	private Long reservationId;
-
+	private Status status;
 }

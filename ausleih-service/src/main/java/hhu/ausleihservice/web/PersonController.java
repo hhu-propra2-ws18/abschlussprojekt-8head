@@ -49,12 +49,34 @@ public class PersonController {
 						   @PathVariable Long id,
 						   Principal p,
 						   @RequestParam(name = "editPerson", defaultValue = "false") final boolean changePerson,
-						   @ModelAttribute("person") Person person
+						   @ModelAttribute("benutzer") Person benutzer,
+						   BindingResult bindingResult
 	) {
 		System.out.println("Post triggered at /profil/" + id);
+		if (benutzer.getUsername().equals("")) {
+			System.out.println("Da Username leer, setze auf alten, damit Validierung funktioniert.\n" +
+					"Alter Username: " + personService.findById(id).getUsername());
+			benutzer.setUsername(personService.findById(id).getUsername());
+		}
+		personValidator.validate(benutzer, bindingResult);
+
 		if (changePerson) {
+			if (bindingResult.hasErrors()) {
+				model.addAttribute("benutzer", benutzer);
+				model.addAttribute("usernameErrors", bindingResult.getFieldError("username"));
+				model.addAttribute("vornameErrors", bindingResult.getFieldError("vorname"));
+				model.addAttribute("nachnameErrors", bindingResult.getFieldError("nachname"));
+				model.addAttribute("passwordErrors", bindingResult.getFieldError("password"));
+				model.addAttribute("emailErrors", bindingResult.getFieldError("email"));
+				model.addAttribute("benutzer", personService.findById(id));
+				model.addAttribute("user", personService.get(p));
+				return "profil";
+			}
 			System.out.println("Now updating..");
-			personService.updateById(id, person);
+			personService.updateById(id, benutzer);
+			model.addAttribute("benutzer", personService.findById(id));
+			model.addAttribute("user", personService.get(p));
+			return "profil";
 		}
 		return "redirect:/profil/" + id;
 	}
@@ -62,9 +84,10 @@ public class PersonController {
 	@PostMapping("/profil")
 	public String editUser(Model model,
 						   Principal p,
-						   @RequestParam(name = "editPerson", defaultValue = "false") final boolean changePerson
+						   @RequestParam(name = "editPerson", defaultValue = "false") final boolean changePerson,
+						   BindingResult bindingResult
 	) {
-		return editUser(model, personService.get(p).getId(), p, changePerson, personService.get(p));
+		return editUser(model, personService.get(p).getId(), p, changePerson, personService.get(p), bindingResult);
 	}
 
 	@PostMapping("/profiladdmoney/{id}")
@@ -122,7 +145,7 @@ public class PersonController {
 			model.addAttribute("emailErrors", bindingResult.getFieldError("email"));
 			return "register";
 		}
-		personService.save(userForm);
+		personService.encrypteAndSave(userForm);
 		return startseite(model, null);
 	}
 
