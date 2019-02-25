@@ -1,8 +1,6 @@
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
-ausleihservice.mv.db
-ausleihservice.trace.db
 
 ### STS ###
 .apt_generated
@@ -26,3 +24,6 @@ ausleihservice.trace.db
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### DATABASE ###
+*.db
