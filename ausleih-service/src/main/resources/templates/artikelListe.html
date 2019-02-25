@@ -17,17 +17,15 @@
 				<div class="product-top">
 					<span class="itemName" th:text="${artikel.titel}">itemName</span>
 				</div>
-
 				<div class="product-middle">
-					<img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}"/>
-					<img th:if="${artikel.picture != null and artikel.getBase64EncodedString()!=null}"
-						 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/>
+					<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
+						 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
 				</div>
-
 				<div class="product-bottom">
 					<div class="heading"
 						 th:text="${artikel.availableFrom.format(dateformat) + '-' + artikel.availableTill.format(dateformat)}">
-						Chuck Taylor All Star Classic Colours</div>
+						Chuck Taylor All Star Classic Colours
+					</div>
 					<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
 					<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
 					<div class="price" th:text="${artikel.tagessatz} + &euro;">$50.00
