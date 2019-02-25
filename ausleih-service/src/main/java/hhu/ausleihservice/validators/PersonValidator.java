@@ -29,10 +29,8 @@ public class PersonValidator implements Validator {
 		if (person.getUsername().length() < 4 || person.getUsername().length() > 32) {
 			errors.rejectValue("username", Messages.usernameSize);
 		}
-		System.out.println("Im here1");
 
 		if (person.getId() == null || personService.findOptionalById(person.getId()).isPresent()) {
-			System.out.println("Im here2");
 			if (personService.findByUsername(person.getUsername()).isPresent() &&
 					!person.getUsername().equals(personService.findById(person.getId()).getUsername())) {
 				errors.rejectValue("username", Messages.duplicateUsername);
