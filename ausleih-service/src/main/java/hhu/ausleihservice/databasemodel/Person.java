@@ -2,6 +2,7 @@ package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -25,10 +26,13 @@ public class Person {
 
 	private String email = "";
 
+	@ToString.Exclude
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Item> items = new HashSet<>();
+	@ToString.Exclude
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Ausleihe> ausleihen = new HashSet<>();
+	@ToString.Exclude
 	@OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
 	private Set<Abholort> abholorte = new HashSet<>();
 
