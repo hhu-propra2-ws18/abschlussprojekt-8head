@@ -76,6 +76,7 @@
 			<th>Item</th>
 			<th>Von</th>
 			<th>Bis</th>
+			<th>Status</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -83,6 +84,7 @@
 			<td th:text="${ausleihe.item.titel}"></td>
 			<td th:text="${ausleihe.startDatum.toString()}"></td>
 			<td th:text="${ausleihe.endDatum.toString()}"></td>
+			<td th:text="${ausleihe.status}"></td>
 		</tr>
 		</tbody>
 	</table>
@@ -97,6 +99,7 @@
 			<th>Item</th>
 			<th>Von</th>
 			<th>Bis</th>
+			<th>Bestätigen</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -104,6 +107,9 @@
 			<td th:text="${ausleihe.item.titel}"></td>
 			<td th:text="${ausleihe.startDatum.toString()}"></td>
 			<td th:text="${ausleihe.endDatum.toString()}"></td>
+			<td>
+				<span th:if="${ausleihe.status == 'ANGEFRAGT'}"></span>
+			</td>
 		</tr>
 		</tbody>
 	</table>
