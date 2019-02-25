@@ -137,11 +137,15 @@ public class PersonController {
 
 	@GetMapping("/allconflicts")
 	public String showAllconflicts(Model model, Principal p){
-		if(personService.get(p).isAdmin()){
+		if(!personService.get(p).isAdmin()){
 			model.addAttribute("message", "Administrator depostulatur");
 			return "errorMessage";
+
+
 		} else {
-			List<Ausleihe>
+			List<Ausleihe> ausleihen = ausleiheService.findAllConflicts();
+			model.addAttribute("konflikte", ausleihen);
+			return "alleKonflikte";
 		}
 	}
 }

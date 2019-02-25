@@ -11,7 +11,7 @@ public class AusleiheService {
 
 	private AusleiheRepository ausleiheRepository;
 
-	AusleiheService(AusleiheRepository ausleiheRepository) {
+	public AusleiheService(AusleiheRepository ausleiheRepository) {
 		this.ausleiheRepository = ausleiheRepository;
 	}
 

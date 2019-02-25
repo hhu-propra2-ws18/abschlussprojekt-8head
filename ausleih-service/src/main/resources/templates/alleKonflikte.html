@@ -6,9 +6,9 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<p th:each="konflikt : ${konflikte}">
-	<div th:text="Besitzer: ${konflikt.item.besitzer} Ausleiher: ${konflikt.ausleiher}"></div>
-	<a th:href="@{'/konflikt/' + ${konflikt.id}}"></a>
-</p>
+<div th:each="konflikt : ${konflikte}">
+	<div th:text="'Besitzer: ' + ${konflikt.item.besitzer.username} + ' Ausleiher: ' + ${konflikt.ausleiher.username}"></div>
+	<a th:href="@{'/konflikt/' + ${konflikt.id}}">Konflikt</a>
+</div>
 </body>
 </html>
