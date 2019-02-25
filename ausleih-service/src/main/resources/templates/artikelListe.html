@@ -27,7 +27,8 @@
 				<div class="product-bottom">
 					<div class="heading"
 						 th:text="${artikel.availableFrom.format(dateformat) + '-' + artikel.availableTill.format(dateformat)}">
-						Chuck Taylor All Star Classic Colours</div>
+						Chuck Taylor All Star Classic Colours
+					</div>
 					<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
 					<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
 					<div class="price" th:text="${artikel.tagessatz} + &euro;">$50.00
