@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import static org.imgscalr.Scalr.Mode;
+import static org.imgscalr.Scalr.Method;
 import static org.imgscalr.Scalr.resize;
 
 @Entity
@@ -121,8 +122,8 @@ public class Item {
 			throw new IOException();
 		}
 
-		BufferedImage image250 = resize(fullImage, Mode.FIT_EXACT, 250, 250);
-		BufferedImage image100 = resize(fullImage, Mode.FIT_EXACT, 100, 100);
+		BufferedImage image250 = resize(fullImage, Method.ULTRA_QUALITY, Mode.FIT_EXACT, 250, 250);
+		BufferedImage image100 = resize(fullImage, Method.ULTRA_QUALITY, Mode.FIT_EXACT, 100, 100);
 
 		ByteArrayOutputStream image250Stream = new ByteArrayOutputStream();
 		ImageIO.write(image250, "png", image250Stream);
