@@ -6,11 +6,11 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<h2>
-	<div th:unless="${user == null}" th:text="${'Willkommen, ' + user.vorname + ' ' + user.nachname + '!'}"></div>
-	<div th:if="${user == null}" th:text="${'Bitte loggen sie sich ein oder registrieren sie sich.'}"></div>
-</h2>
-<div th:unless="${user == null}">
+<div th:if="${user == null}">
+	<h2>Bitte loggen Sie sich ein oder registrieren Sie sich.</h2>
+</div>
+<div th:if="${user != null}">
+	<h2><div th:text="${'Willkommen, ' + user.vorname + ' ' + user.nachname + '!'}">Willkommen!</div></h2>
 	<a href="/liste">Artikel durchstöbern</a><br>
 	<a href="/newitem">Neuen Artikel verleihen</a><br>
 	<a href="/newlocation">Neuen Abholort hinzufügen</a>
