@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class ItemTests {
 	@Test
 	public void testGetPictureReturnsByteArrayWithSameLength() {
-		Item item = new Item();
+		Item item = new AusleihItem();
 		byte[] picture = new byte[256];
 		item.setPicture(picture);
 		Assert.assertEquals(256, item.getPicture().length);
@@ -19,7 +19,7 @@ public class ItemTests {
 
 	@Test
 	public void testGetPictureReturnsCopyOfPicture() {
-		Item item = new Item();
+		Item item = new AusleihItem();
 		byte[] picture = new byte[256];
 		item.setPicture(picture);
 		byte[] copy = item.getPicture();
@@ -29,20 +29,20 @@ public class ItemTests {
 
 	@Test
 	public void testGetPictureReturnsNullIfPictureIsNotSet() {
-		Item item = new Item();
+		Item item = new AusleihItem();
 		Assert.assertNull(item.getPicture());
 	}
 
 	@Test
 	public void testGetPictureReturnsEmptyByteArrayIfPictureIsEmpty() {
-		Item item = new Item();
+		Item item = new AusleihItem();
 		item.setPicture(new byte[0]);
 		Assert.assertEquals(0, item.getPicture().length);
 	}
 
 	@Test
 	public void testSetPictureCopiesGivenByteArray() {
-		Item item = new Item();
+		Item item = new AusleihItem();
 		byte[] original = new byte[256];
 		item.setPicture(original);
 		original[255] = 77;
@@ -51,7 +51,7 @@ public class ItemTests {
 
 	@Test
 	public void testSetPictureNull() {
-		Item item = new Item();
+		Item item = new AusleihItem();
 		item.setPicture(null);
 		Assert.assertNull(item.getPicture());
 	}
@@ -62,7 +62,7 @@ public class ItemTests {
 		burak.setUsername("bumar100");
 		Abholort ort = new Abholort();
 		ort.setBeschreibung("Zuhause");
-		Item fahrrad = new Item();
+		AusleihItem fahrrad = new AusleihItem();
 		fahrrad.setId(1L);
 		fahrrad.setBeschreibung("Schnell");
 		fahrrad.setTitel("Mountain-Bike");
@@ -80,7 +80,7 @@ public class ItemTests {
 
 	@Test
 	public void addAusleiheNull() {
-		Item fahrrad = new Item();
+		AusleihItem fahrrad = new AusleihItem();
 		Assert.assertEquals(0, fahrrad.getAusleihen().size());
 		fahrrad.addAusleihe(null);
 		Assert.assertEquals(0, fahrrad.getAusleihen().size());
@@ -90,7 +90,7 @@ public class ItemTests {
 	public void removeAusleihe() {
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setId(1L);
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setId(2L);
 		item.addAusleihe(ausleihe);
 		item.removeAusleihe(ausleihe);
@@ -100,7 +100,7 @@ public class ItemTests {
 
 	@Test
 	public void getSortierteAusleihenWithNoAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -111,7 +111,7 @@ public class ItemTests {
 
 	@Test
 	public void getSortierteAusleihenWithOneAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -129,7 +129,7 @@ public class ItemTests {
 
 	@Test
 	public void getSortierteAusleihenWithTwoSortedAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -154,7 +154,7 @@ public class ItemTests {
 
 	@Test
 	public void getSortierteAusleihenWithTwoUnsortedAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -179,7 +179,7 @@ public class ItemTests {
 
 	@Test
 	public void getSortierteAusleihenWithThreeSortedAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -211,7 +211,7 @@ public class ItemTests {
 
 	@Test
 	public void getSortierteAusleihenWithThreeUnsortedAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -243,7 +243,7 @@ public class ItemTests {
 
 	@Test
 	public void getSortierteAusleihenWithThreeLongUnsortedAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -276,7 +276,7 @@ public class ItemTests {
 
 	@Test
 	public void getAvailablePeriodsWithNoAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -289,7 +289,7 @@ public class ItemTests {
 
 	@Test
 	public void getAvailablePeriodsWithOneSingleDayAusleihe() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -310,7 +310,7 @@ public class ItemTests {
 
 	@Test
 	public void getAvailablePeriodsWithOneMultipleDayAusleihe() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -331,7 +331,7 @@ public class ItemTests {
 
 	@Test
 	public void getAvailablePeriodsWithTwoSortedSingleDayAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -360,7 +360,7 @@ public class ItemTests {
 
 	@Test
 	public void getAvailablePeriodsWithTwoUnsortedSingleDayAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -389,7 +389,7 @@ public class ItemTests {
 
 	@Test
 	public void getAvailablePeriodsWithTwoSortedMultipleDayAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -418,7 +418,7 @@ public class ItemTests {
 
 	@Test
 	public void getAvailablePeriodsWithTwoUnsortedMultipleDayAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -447,7 +447,7 @@ public class ItemTests {
 
 	@Test
 	public void getAvailablePeriodsWithThreeSortedSingleDayAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -484,7 +484,7 @@ public class ItemTests {
 
 	@Test
 	public void getAvailablePeriodsWithThreeUnsortedSingleDayAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -521,7 +521,7 @@ public class ItemTests {
 
 	@Test
 	public void getAvailablePeriodsWithThreeSortedMultipleDayAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -558,7 +558,7 @@ public class ItemTests {
 
 	@Test
 	public void getAvailablePeriodsWithThreeUnsortedMultipleDayAusleihen() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
 		item.setAvailableTill(LocalDate.of(2001, 1, 1));
 
@@ -597,7 +597,7 @@ public class ItemTests {
 	//Tests for setTitel(String s)
 	@Test
 	public void setTitelToNull() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setTitel(null);
 
 		assertEquals("", item.getTitel());
@@ -605,7 +605,7 @@ public class ItemTests {
 
 	@Test
 	public void setTitelWithNoWhiteSpace() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setTitel("Uganda");
 
 		assertEquals("Uganda", item.getTitel());
@@ -613,7 +613,7 @@ public class ItemTests {
 
 	@Test
 	public void setTitelWithWhiteSpaceLeft() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setTitel("                          Uganda");
 
 		assertEquals("Uganda", item.getTitel());
@@ -621,7 +621,7 @@ public class ItemTests {
 
 	@Test
 	public void setTitelWithWhiteSpaceRight() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setTitel("Uganda                            ");
 
 		assertEquals("Uganda", item.getTitel());
@@ -629,7 +629,7 @@ public class ItemTests {
 
 	@Test
 	public void setTitelWithWhiteSpaceBothSides() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setTitel("                    Uganda                  ");
 
 		assertEquals("Uganda", item.getTitel());
@@ -637,7 +637,7 @@ public class ItemTests {
 
 	@Test
 	public void setTitelWithWhiteSpaceInside() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setTitel("Uga nda");
 
 		assertEquals("Uga nda", item.getTitel());
@@ -647,7 +647,7 @@ public class ItemTests {
 	//Tests for setBeschreibung(String s)
 	@Test
 	public void setBeschreibungToNull() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setBeschreibung(null);
 
 		assertEquals("", item.getBeschreibung());
@@ -655,7 +655,7 @@ public class ItemTests {
 
 	@Test
 	public void setBeschreibungWithNoWhiteSpace() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setBeschreibung("Uganda");
 
 		assertEquals("Uganda", item.getBeschreibung());
@@ -663,7 +663,7 @@ public class ItemTests {
 
 	@Test
 	public void setBeschreibungWithWhiteSpaceLeft() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setBeschreibung("                          Uganda");
 
 		assertEquals("Uganda", item.getBeschreibung());
@@ -671,7 +671,7 @@ public class ItemTests {
 
 	@Test
 	public void setBeschreibungWithWhiteSpaceRight() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setBeschreibung("Uganda                            ");
 
 		assertEquals("Uganda", item.getBeschreibung());
@@ -679,7 +679,7 @@ public class ItemTests {
 
 	@Test
 	public void setBeschreibungWithWhiteSpaceBothSides() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setBeschreibung("                    Uganda                  ");
 
 		assertEquals("Uganda", item.getBeschreibung());
@@ -687,7 +687,7 @@ public class ItemTests {
 
 	@Test
 	public void setBeschreibungWithWhiteSpaceInside() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setBeschreibung("Uga nda");
 
 		assertEquals("Uga nda", item.getBeschreibung());
@@ -697,7 +697,7 @@ public class ItemTests {
 	//Tests for setAbholort(Abholort a)
 	@Test
 	public void setAbholortToNull() {
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setAbholort(null);
 
 		assertEquals(new Abholort(), item.getAbholort());

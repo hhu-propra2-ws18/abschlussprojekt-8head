@@ -2,9 +2,7 @@ package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import org.springframework.format.annotation.DateTimeFormat;
+import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -12,14 +10,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.Base64;
 
-import static org.imgscalr.Scalr.Mode;
-import static org.imgscalr.Scalr.Method;
 import static org.imgscalr.Scalr.resize;
 
 @Entity
+@Inheritance
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Item {
@@ -27,32 +23,18 @@ public class Item {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@EqualsAndHashCode.Include
 	private Long id;
-
 	private String titel = "";
 	@Lob
 	private String beschreibung = "";
-	private Integer tagessatz;
-	private Integer kautionswert;
-
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
 	@JoinColumn
 	private Abholort abholort = new Abholort();
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate availableFrom;
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	private LocalDate availableTill;
 	@ManyToOne
 	private Person besitzer;
-	@ToString.Exclude
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Ausleihe> ausleihen = new HashSet<>();
-
 	@Lob
 	private byte[] picture;
-
 	@Lob
 	private byte[] picture250;
-
 	@Lob
 	private byte[] picture100;
 
@@ -125,8 +107,8 @@ public class Item {
 			throw new IOException();
 		}
 
-		BufferedImage image250 = resize(fullImage, Method.ULTRA_QUALITY, Mode.FIT_EXACT, 250, 250);
-		BufferedImage image100 = resize(fullImage, Method.ULTRA_QUALITY, Mode.FIT_EXACT, 100, 100);
+		BufferedImage image250 = resize(fullImage, Scalr.Method.ULTRA_QUALITY, Scalr.Mode.FIT_EXACT, 250, 250);
+		BufferedImage image100 = resize(fullImage, Scalr.Method.ULTRA_QUALITY, Scalr.Mode.FIT_EXACT, 100, 100);
 
 		ByteArrayOutputStream image250Stream = new ByteArrayOutputStream();
 		ImageIO.write(image250, "jpg", image250Stream);
@@ -140,18 +122,6 @@ public class Item {
 		this.setPicture100(image100Bytes);
 	}
 
-	public void addAusleihe(Ausleihe ausleihe) {
-		if (ausleihe != null) {
-			ausleihen.add(ausleihe);
-			ausleihe.setItem(this);
-		}
-	}
-
-	public void removeAusleihe(Ausleihe ausleihe) {
-		ausleihen.remove(ausleihe);
-		ausleihe.setItem(null);
-	}
-
 	public String getPictureBase64EncodedString() {
 		return this.getPicture() != null ? Base64.getEncoder().encodeToString(this.getPicture()) : null;
 	}
@@ -162,69 +132,6 @@ public class Item {
 
 	public String getPicture100Base64EncodedString() {
 		return this.getPicture100() != null ? Base64.getEncoder().encodeToString(this.getPicture100()) : null;
-	}
-
-	public ArrayList<Period> getAvailablePeriods() {
-
-		ArrayList<Period> out = new ArrayList<>();
-
-		if (ausleihen.isEmpty()) {
-			out.add(new Period(availableFrom, availableTill));
-			return out;
-		}
-
-		Ausleihe[] sortierteAusleihen = getSortierteAusleihen();
-		int length = sortierteAusleihen.length;
-
-		LocalDate start = availableFrom;
-		LocalDate end = sortierteAusleihen[0].getStartDatum();
-
-		if (!start.equals(end)) {
-			out.add(new Period(start, end.minusDays(1)));
-		}
-
-		for (int i = 0; i < length - 1; i++) {
-
-			start = sortierteAusleihen[i].getEndDatum();
-			end = sortierteAusleihen[i + 1].getStartDatum();
-
-			if (!start.equals(end)) {
-				out.add(new Period(start.plusDays(1), end.minusDays(1)));
-			}
-		}
-
-		start = sortierteAusleihen[length - 1].getEndDatum();
-		end = availableTill;
-
-		if (!start.equals(end)) {
-			out.add(new Period(start.plusDays(1), end));
-		}
-
-		return out;
-	}
-
-	Ausleihe[] getSortierteAusleihen() {
-
-		Ausleihe[] sortierteAusleihen = new Ausleihe[ausleihen.size()];
-		List<Ausleihe> tempAusleihen = new ArrayList<>(ausleihen);
-
-		for (int i = 0; i < ausleihen.size(); i++) {
-
-			Ausleihe smallest = tempAusleihen.get(0);
-			LocalDate smallestDate = smallest.getStartDatum();
-
-			for (Ausleihe test : tempAusleihen) {
-				LocalDate testDate = test.getStartDatum();
-				if (testDate.isBefore(smallestDate)) {
-					smallest = test;
-					smallestDate = smallest.getStartDatum();
-				}
-			}
-			sortierteAusleihen[i] = smallest;
-			tempAusleihen.remove(smallest);
-		}
-
-		return sortierteAusleihen;
 	}
 
 	public void setTitel(String s) {

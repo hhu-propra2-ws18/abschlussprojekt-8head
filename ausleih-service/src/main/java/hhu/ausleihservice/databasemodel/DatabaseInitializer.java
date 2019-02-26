@@ -1,9 +1,6 @@
 package hhu.ausleihservice.databasemodel;
 
-import hhu.ausleihservice.dataaccess.AbholortRepository;
-import hhu.ausleihservice.dataaccess.AusleiheRepository;
-import hhu.ausleihservice.dataaccess.ItemRepository;
-import hhu.ausleihservice.dataaccess.PersonRepository;
+import hhu.ausleihservice.dataaccess.*;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -20,12 +17,12 @@ import java.util.Set;
 public class DatabaseInitializer implements ServletContextInitializer {
 
 	private PersonRepository personRepository;
-	private ItemRepository itemRepository;
+	private AusleihItemRepository itemRepository;
 	private AbholortRepository abholortRepository;
 	private AusleiheRepository ausleiheRepository;
 
 	public DatabaseInitializer(PersonRepository perRepository,
-							   ItemRepository iRepository,
+							   AusleihItemRepository iRepository,
 							   AbholortRepository abhRepository,
 							   AusleiheRepository ausleiheRepository) {
 		this.personRepository = perRepository;
@@ -115,9 +112,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person3.setAbholorte(orte3);
 
 
-		Item item1 = new Item();
-		Item item2 = new Item();
-		Item item3 = new Item();
+		AusleihItem item1 = new AusleihItem();
+		AusleihItem item2 = new AusleihItem();
+		AusleihItem item3 = new AusleihItem();
 
 		item1.setTitel("Stift");
 		item2.setTitel("Fahrrad");

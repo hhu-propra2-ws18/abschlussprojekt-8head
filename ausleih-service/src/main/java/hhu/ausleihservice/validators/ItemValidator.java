@@ -1,6 +1,6 @@
 package hhu.ausleihservice.validators;
 
-import hhu.ausleihservice.databasemodel.Item;
+import hhu.ausleihservice.databasemodel.AusleihItem;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -13,12 +13,12 @@ public class ItemValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Item.class.equals(clazz);
+		return AusleihItem.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Item item = (Item) target;
+		AusleihItem item = (AusleihItem) target;
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "titel", Messages.notEmpty);
 		if (item.getTitel().length() < 4 || item.getTitel().length() > 40) {
