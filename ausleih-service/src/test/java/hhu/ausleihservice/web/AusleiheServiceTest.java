@@ -26,7 +26,7 @@ public class AusleiheServiceTest {
 		List<Ausleihe> testInputList = null;
 		LocalDate testInputDate = LocalDate.of(2000, 1, 1);
 
-		ausleiheService.updateAusleihenListIfTooLate(testInputList, testInputDate);
+		ausleiheService.updateAusleihenIfTooLate(testInputList, testInputDate);
 
 		assertEquals(null, testInputList);
 	}
@@ -36,7 +36,7 @@ public class AusleiheServiceTest {
 		List<Ausleihe> testInputList = new ArrayList<>();
 		LocalDate testInputDate = LocalDate.of(2000, 1, 1);
 
-		ausleiheService.updateAusleihenListIfTooLate(testInputList, testInputDate);
+		ausleiheService.updateAusleihenIfTooLate(testInputList, testInputDate);
 
 		assertEquals(0, testInputList.size());
 	}
@@ -67,7 +67,7 @@ public class AusleiheServiceTest {
 
 		LocalDate testInputDate = LocalDate.of(2000, 1, 1);
 
-		ausleiheService.updateAusleihenListIfTooLate(testInputList, testInputDate);
+		ausleiheService.updateAusleihenIfTooLate(testInputList, testInputDate);
 
 		assertEquals(4, testInputList.size());
 
@@ -111,7 +111,7 @@ public class AusleiheServiceTest {
 
 		LocalDate testInputDate = LocalDate.of(2000, 1, 1);
 
-		ausleiheService.updateAusleihenListIfTooLate(testInputList, testInputDate);
+		ausleiheService.updateAusleihenIfTooLate(testInputList, testInputDate);
 
 		assertEquals(6, testInputList.size());
 
