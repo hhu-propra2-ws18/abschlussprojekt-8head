@@ -47,7 +47,11 @@ public class ProPayService {
 	}
 
 	public double getProPayKontostand(Person person) {
-		return proPayInterface.getAccountInfo(person.getUsername()).getAmount();
+		double amount = proPayInterface.getAccountInfo(person.getUsername()).getAmount();
+		for (ProPayReservation  reservations : proPayInterface.getAccountInfo(person.getUsername()).getReservations()) {
+			amount = amount - reservations.getAmount();
+		}
+		return amount;
 	}
 
 	public void addFunds(Person person, double betrag) {
