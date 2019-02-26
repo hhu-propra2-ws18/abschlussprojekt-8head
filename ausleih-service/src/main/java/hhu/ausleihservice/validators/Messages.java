@@ -20,7 +20,7 @@ class Messages {
 	static String invalidPeriod = "Das Anfangsdatum muss vor dem Enddatum liegen!";
 	static String invalidAvailableFrom = "Das Anfangsdatum muss mindestens heute sein";
 
-	static String itemNotAvailable = "Der Artikel ist im gewählten Zeitraum nicht verfuegbar";
-	static String invalidUser = "Der angegebene Nutzer stimmt nicht mit dem Login ueberein";
+	static String itemNotAvailable = "Der Artikel ist im gewählten Zeitraum nicht verfügbar";
+	static String invalidUser = "Der angegebene Nutzer stimmt nicht mit dem Login überein";
 	static String ownItemAusleihe = "Ein eigener Artikel kann nicht ausgeliehen werden";
 }

@@ -15,13 +15,11 @@
 				<table class="product-details">
 					<tr>
 						<td><h2 th:text="${artikel.titel}">ITEM</h2></td>
-						<td><img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}"
-								 th:width="60px"
-								 th:height="60px"/>
-							<img th:if="${artikel.picture != null and artikel.getBase64EncodedString()!=null}"
-								 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"
-								 th:width="60px"
-								 th:height="60px"/></td>
+						<td><a target="_blank" th:href="@{'data:image/jpg;base64,'+${artikel.getPictureBase64EncodedString()}}"><img
+								th:if="${artikel.picture100 != null and artikel.getPicture100Base64EncodedString()!=null}"
+								th:src="@{'data:image/jpg;base64,'+${artikel.getPicture100Base64EncodedString()}}"
+								th:width="60px"
+								th:height="60px"/></a></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<input name="newTitle" type="text" th:field="*{titel}" id="titel">
 							<div id="error" th:text="${titelErrors?.code}"></div>
@@ -34,7 +32,6 @@
 							<input name="newBeschreibung" type="text" th:field="*{beschreibung}" id="beschreibung">
 							<div id="error" th:text="${beschreibungErrors?.code}"></div>
 						</td>
-
 					</tr>
 					<tr>
 						<td>Verfügbarkeit ab</td>
@@ -50,16 +47,6 @@
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<input name="newAvailableTill" type="date" th:field="*{availableTill}" id="availableTill">
 							<div id="error" th:text="${availableTillErrors?.code}"></div>
-						</td>
-					</tr>
-					<tr>
-						<td>Noch verfügbar zu folgenden Zeiten</td>
-						<td>
-							<table class="table-striped">
-								<tr th:each="periods: ${artikel.availablePeriods}">
-									<td th:text="${periods}">from now to then</td>
-								</tr>
-							</table>
 						</td>
 					</tr>
 					<tr>
@@ -136,6 +123,7 @@
                             }
                         });
                     /*]]>*/
+
 				</script>
 				<button type="submit">Ausleihen</button>
 			</form>
@@ -160,6 +148,7 @@
         L.marker([latitude, longitude]).addTo(map)
             .bindPopup(message).openPopup();
     /*]]>*/
+
 
 </script>
 </body>
