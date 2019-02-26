@@ -1,7 +1,7 @@
 package hhu.ausleihservice.validators;
 
 import hhu.ausleihservice.databasemodel.Abholort;
-import hhu.ausleihservice.databasemodel.Item;
+import hhu.ausleihservice.databasemodel.AusleihItem;
 import org.junit.Test;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
@@ -17,7 +17,7 @@ public class ItemValidatorTests {
 	@Test
 	public void supportsValidClass() {
 		ItemValidator itemValidator = new ItemValidator();
-		assertTrue(itemValidator.supports(Item.class));
+		assertTrue(itemValidator.supports(AusleihItem.class));
 	}
 
 	@Test
@@ -31,7 +31,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateNullTagessatz() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Frittiertes Fahrrad");
@@ -57,7 +57,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateNullKautionswert() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Frittiertes Fahrrad");
@@ -83,7 +83,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateNullAvailableFrom() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Frittiertes Fahrrad");
@@ -112,7 +112,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateNullAvailableTill() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Frittiertes Fahrrad");
@@ -141,7 +141,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateEmptyTitel() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("");
@@ -170,7 +170,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateEmptyBeschreibung() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Frittiertes Fahrrad");
@@ -199,7 +199,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateTitelTooShort() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Fri");
@@ -226,7 +226,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateTitelTooLong() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("01234567890123456789012345678901234567890123456789");
@@ -253,7 +253,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateBeschreibungTooShort() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Frittiertes Fahrrad");
@@ -280,7 +280,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateBeschreibungTooLong() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Frittiertes Fahrrad");
@@ -312,7 +312,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateKautionswertTooSmall() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Frittiertes Fahrrad");
@@ -339,7 +339,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateTagessatzTooSmall() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Frittiertes Fahrrad");
@@ -366,7 +366,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateAvailableFromAfterAvailableTill() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Frittiertes Fahrrad");
@@ -393,7 +393,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateAvailableFromBeforeToday() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Frittiertes Fahrrad");
@@ -420,7 +420,7 @@ public class ItemValidatorTests {
 	@Test
 	public void validateValid() {
 		ItemValidator itemValidator = new ItemValidator();
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
 		item.setTitel("Frittiertes Fahrrad");

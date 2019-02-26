@@ -39,7 +39,7 @@ public class PersonTest {
 	public void addItem() {
 		Person person = new Person();
 		person.setUsername("bumar100");
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setId(1L);
 		person.addItem(item);
 		Assert.assertEquals(person.getItems().iterator().next(), item);
@@ -52,7 +52,7 @@ public class PersonTest {
 	public void removeItem() {
 		Person person = new Person();
 		person.setUsername("bumar100");
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setId(1L);
 		person.addItem(item);
 

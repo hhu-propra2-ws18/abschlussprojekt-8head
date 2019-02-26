@@ -59,7 +59,7 @@ public class ItemTests {
 		burak.setUsername("bumar100");
 		Abholort ort = new Abholort();
 		ort.setBeschreibung("Zuhause");
-		Item fahrrad = new Item();
+		AusleihItem fahrrad = new AusleihItem();
 		fahrrad.setId(1L);
 		fahrrad.setBeschreibung("Schnell");
 		fahrrad.setTitel("Mountain-Bike");
@@ -77,7 +77,7 @@ public class ItemTests {
 
 	@Test
 	public void addAusleiheNull() {
-		Item fahrrad = new Item();
+		AusleihItem fahrrad = new AusleihItem();
 		Assert.assertEquals(0, fahrrad.getAusleihen().size());
 		fahrrad.addAusleihe(null);
 		Assert.assertEquals(0, fahrrad.getAusleihen().size());
@@ -87,7 +87,7 @@ public class ItemTests {
 	public void removeAusleihe() {
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setId(1L);
-		Item item = new Item();
+		AusleihItem item = new AusleihItem();
 		item.setId(2L);
 		item.addAusleihe(ausleihe);
 		item.removeAusleihe(ausleihe);

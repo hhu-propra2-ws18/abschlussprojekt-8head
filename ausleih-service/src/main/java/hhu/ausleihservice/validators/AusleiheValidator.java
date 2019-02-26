@@ -1,13 +1,12 @@
 package hhu.ausleihservice.validators;
 
+import hhu.ausleihservice.databasemodel.AusleihItem;
+import hhu.ausleihservice.databasemodel.Ausleihe;
+import hhu.ausleihservice.web.service.ItemAvailabilityService;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
-import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.databasemodel.Item;
-import hhu.ausleihservice.web.service.ItemAvailabilityService;
 
 @Component
 public class AusleiheValidator implements Validator {
@@ -26,7 +25,7 @@ public class AusleiheValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 
 		Ausleihe ausleihe = (Ausleihe) target;
-		Item ausleiheItem = ausleihe.getItem();
+		AusleihItem ausleiheItem = ausleihe.getItem();
 
 		ValidationUtils.rejectIfEmpty(errors, "item", Messages.notEmpty);
 
