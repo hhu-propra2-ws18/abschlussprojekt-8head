@@ -3,7 +3,6 @@ package hhu.ausleihservice.web;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hhu.ausleihservice.dataaccess.AusleihItemRepository;
 import hhu.ausleihservice.databasemodel.AusleihItem;
-import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.service.AusleihItemService;
 import hhu.ausleihservice.web.service.ItemAvailabilityService;
 import hhu.ausleihservice.web.service.ItemService;
@@ -89,109 +88,11 @@ public class ItemServiceTest {
 		repository.add(item3);
 		repository.add(item4);
 
-		itemService = new AusleihItemService(itemRepository, new ItemAvailabilityService());
+		ausleihItemService = new AusleihItemService(itemRepository, new ItemAvailabilityService());
 
 		Mockito.when(itemRepository.findAll()).thenReturn(repository);
 	}
 
-	@Test
-	public void testSimpleSearch_1_nullQuery() {
-		List<Item> searchedList = ausleihItemService.simpleSearch(null);
-
-		assertEquals(4, searchedList.size());
-
-		for (Item searchedItem : searchedList) {
-			if (searchedItem.getId() == 1L) {
-				assertTrue(testItemEquality(repository.get(0), (AusleihItem) searchedItem));
-			} else if (searchedItem.getId() == 2L) {
-				assertTrue(testItemEquality(repository.get(1), (AusleihItem) searchedItem));
-			} else if (searchedItem.getId() == 3L) {
-				assertTrue(testItemEquality(repository.get(2), (AusleihItem) searchedItem));
-			} else if (searchedItem.getId() == 4L) {
-				assertTrue(testItemEquality(repository.get(3), (AusleihItem) searchedItem));
-			} else {
-				fail();
-			}
-		}
-	}
-
-	@Test
-	public void testSimpleSearch_2_emptyQuery() {
-		List<Item> searchedList = ausleihItemService.simpleSearch("");
-
-		assertEquals(4, searchedList.size());
-
-		for (Item searchedItem : searchedList) {
-			if (searchedItem.getId() == 1L) {
-				assertTrue(testItemEquality(repository.get(0), (AusleihItem) searchedItem));
-			} else if (searchedItem.getId() == 2L) {
-				assertTrue(testItemEquality(repository.get(1), (AusleihItem) searchedItem));
-			} else if (searchedItem.getId() == 3L) {
-				assertTrue(testItemEquality(repository.get(2), (AusleihItem) searchedItem));
-			} else if (searchedItem.getId() == 4L) {
-				assertTrue(testItemEquality(repository.get(3), (AusleihItem) searchedItem));
-			} else {
-				fail();
-			}
-		}
-	}
-
-	@Test
-	public void testSimpleSearch_3_oneWordQuery() {
-
-		List<Item> searchedList = itemService.simpleSearch("Fahrrad");
-
-		assertEquals(2, searchedList.size());
-
-		for (Item searchedItem : searchedList) {
-			if (searchedItem.getId() == 1L) {
-				assertTrue(testItemEquality(repository.get(0), (AusleihItem) searchedItem));
-			} else if (searchedItem.getId() == 3L) {
-				assertTrue(testItemEquality(repository.get(2), (AusleihItem) searchedItem));
-			} else {
-				fail();
-			}
-		}
-	}
-
-	@Test
-	public void testSimpleSearch_4_twoWordQuery() {
-
-		List<Item> searchedList = itemService.simpleSearch("Hammer Fahrrad");
-
-		assertEquals(1, searchedList.size());
-
-		for (Item searchedItem : searchedList) {
-			if (searchedItem.getId() == 1L) {
-				assertTrue(testItemEquality(repository.get(0), (AusleihItem) searchedItem));
-			} else {
-				fail();
-			}
-		}
-	}
-
-	@Test
-	public void testSimpleSearch_5_queryNotFound() {
-		List<Item> searchedList = itemService.simpleSearch("Auto");
-
-		assertEquals(0, searchedList.size());
-	}
-
-	@Test
-	public void testSimpleSearch_6_twoWordQuerySpanningTitleAndDescription() {
-
-		List<Item> searchedList = ausleihItemService.simpleSearch("großer Hammer");
-
-		assertEquals(1, searchedList.size());
-
-		for (Item searchedItem : searchedList) {
-			if (searchedItem.getId() == 4L) {
-				assertTrue(testItemEquality(repository.get(3), (AusleihItem) searchedItem));
-			} else {
-				fail();
-			}
-		}
-	}
 
 	@Test
 	public void testExtendedSearch_1_nullQuery() {
