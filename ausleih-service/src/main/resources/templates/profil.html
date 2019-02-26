@@ -26,25 +26,31 @@
 		<td th:text="${benutzer.vorname}">Max</td>
 		<td th:text="${benutzer.nachname}">Mustermann</td>
 		<td th:text="${benutzer.email}">mamus@gmail.com</td>
-		<td></td>
+
 	</tr>
 	<form th:action="@{/profil/{PersonId} (PersonId=${benutzer.getId()})}" th:object="${benutzer}" method="post">
 		<tr>
-			<td>
-				<input th:if="${user.isAdmin() and !(user.isHimself(benutzer))}" name="newUsername" type="text"
-					   th:field="*{username}">
+			<td th:if="${user.isAdmin() and !(user.isHimself(benutzer))}">
+				<input name="newUsername" type="text" th:field="*{username}">
+			</td>
+			<div id="error" th:text="${usernameErrors?.code}"></div>
+			<td th:unless="${user.isAdmin() and !(user.isHimself(benutzer))}">
 			</td>
 			<td>
 				<input name="newVorname" type="text" th:field="*{vorname}">
+				<div id="error" th:text="${vornameErrors?.code}"></div>
 			</td>
 			<td>
 				<input name="newNachname" type="text" th:field="*{nachname}">
+				<div id="error" th:text="${nachnameErrors?.code}"></div>
 			</td>
 			<td>
 				<input name="newEMail" type="email" th:field="*{email}">
+				<div id="error" th:text="${emailErrors?.code}"></div>
 			</td>
 			<td>
 				<input name="newPassword" type="password" th:field="*{password}" th:id="password">
+				<div id="error" th:text="${passwordErrors?.code}"></div>
 			</td>
 			<td>
 				<button type="submit" value="true" name="editPerson">Nutzer Ändern</button>
@@ -61,6 +67,54 @@
 	<input type="number" name="moneten" min="0">
 	<button type="submit">€ Aufladen</button>
 </form>
+
+<div class="container">
+	<h2>Ausgeliehene Items </h2>
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th>Item</th>
+			<th>Von</th>
+			<th>Bis</th>
+			<th>Status</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="ausleihe : ${benutzer.ausleihen}">
+			<td th:text="${ausleihe.item.titel}"></td>
+			<td th:text="${ausleihe.startDatum.toString()}"></td>
+			<td th:text="${ausleihe.endDatum.toString()}"></td>
+			<td th:text="${ausleihe.status}"></td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="container">
+	<h2>Ausleihen von eigenen Items</h2>
+	<div th:each="item : ${benutzer.items}">
+		<table class="table table-hover">
+			<thead>
+			<tr>
+				<th>Item</th>
+				<th>Von</th>
+				<th>Bis</th>
+				<th>Bestätigen</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="ausleihe : ${item.ausleihen}">
+				<td th:text="${ausleihe.item.titel}"></td>
+				<td th:text="${ausleihe.startDatum.toString()}"></td>
+				<td th:text="${ausleihe.endDatum.toString()}"></td>
+				<td>
+					<span th:if="${ausleihe.status == 'ANGEFRAGT'}"></span>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
 
 </body>
 </html>

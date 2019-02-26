@@ -13,8 +13,8 @@ public class Abholort {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private Double longitude;
 	private Double latitude;
+	private Double longitude;
 	private String beschreibung = "";
 
 	public void setBeschreibung(String s) {

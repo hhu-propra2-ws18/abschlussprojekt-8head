@@ -21,12 +21,12 @@ public class ItemValidator implements Validator {
 		Item item = (Item) target;
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "titel", Messages.notEmpty);
-		if (item.getTitel().length() < 6 || item.getTitel().length() > 40) {
+		if (item.getTitel().length() < 4 || item.getTitel().length() > 40) {
 			errors.rejectValue("titel", Messages.sizeTitle);
 		}
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "beschreibung", Messages.notEmpty);
-		if (item.getBeschreibung().length() < 6 || item.getBeschreibung().length() > 4000) {
+		if (item.getBeschreibung().length() < 4 || item.getBeschreibung().length() > 4000) {
 			errors.rejectValue("beschreibung", Messages.sizeItemDescription);
 		}
 
@@ -46,6 +46,7 @@ public class ItemValidator implements Validator {
 		} else {
 			errors.rejectValue("tagessatz", Messages.notEmpty);
 		}
+
 		if (item.getAvailableFrom() != null && item.getAvailableTill() != null) {
 			if (item.getAvailableFrom().isAfter(item.getAvailableTill())) {
 				errors.rejectValue("availableFrom", Messages.invalidPeriod);
@@ -58,6 +59,8 @@ public class ItemValidator implements Validator {
 			errors.rejectValue("availableTill", Messages.notEmpty);
 		}
 
-		ValidationUtils.rejectIfEmpty(errors, "abholort", Messages.notEmpty);
+		if (item.getAbholort() == null) {
+			ValidationUtils.rejectIfEmpty(errors, "abholort", Messages.notEmpty);
+		}
 	}
 }

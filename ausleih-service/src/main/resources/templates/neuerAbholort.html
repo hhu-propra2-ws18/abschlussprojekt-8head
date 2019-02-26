@@ -24,12 +24,14 @@
 				</div>
 				<div class="form-group">
 					<label for="latitude">Latitude:</label>
-					<input type="number" th:field="*{latitude}" class="form-control" id="latitude" step="0.000001">
+					<input type="number" th:field="*{latitude}" min="-90" max="90" class="form-control" id="latitude"
+						   step="0.000001">
 					<div id="error" th:text="${latitudeErrors?.code}"></div>
 				</div>
 				<div class="form-group">
 					<label for="beschreibung">Longitude:</label>
-					<input type="number" th:field="*{longitude}" class="form-control" id="longitude" step="0.000001">
+					<input type="number" th:field="*{longitude}" min="-180" max="180" class="form-control"
+						   id="longitude" step="0.000001">
 					<div id="error" th:text="${longitudeErrors?.code}"></div>
 				</div>
 				<button type="submit" class="btn btn-primary">Hinzufügen</button>
@@ -56,9 +58,6 @@
   						document.getElementById('longitude').value = marker.getLatLng().lng.toFixed(6);
 					});
 				/*]]>*/
-
-
-
 
 
 			</script>
