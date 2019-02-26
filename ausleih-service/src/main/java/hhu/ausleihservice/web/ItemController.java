@@ -29,6 +29,8 @@ public class ItemController {
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 	private final PersonService personService;
 	private final ItemService itemService;
+	private final AusleihItemService ausleihItemService;
+	private final KaufItemService kaufItemService;
 	private final AbholortService abholortService;
 	private final ItemAvailabilityService itemAvailabilityService;
 	private ItemValidator itemValidator;
@@ -38,7 +40,9 @@ public class ItemController {
 
 	public ItemController(AusleiheService ausleiheService,
 						  PersonService perService,
-						  ItemService iService,
+						  ItemService itemService,
+						  AusleihItemService ausleihItemService,
+						  KaufItemService kaufItemService,
 						  AbholortService abholortService,
 						  ItemAvailabilityService itemAvailabilityService,
 						  ItemValidator itemValidator,
@@ -47,7 +51,9 @@ public class ItemController {
 	) {
 		this.ausleiheService = ausleiheService;
 		this.personService = perService;
-		this.itemService = iService;
+		this.itemService = itemService;
+		this.ausleihItemService = ausleihItemService;
+		this.kaufItemService = kaufItemService;
 		this.abholortService = abholortService;
 		this.itemAvailabilityService = itemAvailabilityService;
 		this.itemValidator = itemValidator;
@@ -60,7 +66,7 @@ public class ItemController {
 		if (q != null) {
 			q = q.trim();
 		}
-		List<AusleihItem> list = itemService.simpleSearch(q);
+		List<Item> list = itemService.simpleSearch(q);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
 		model.addAttribute("user", personService.get(p));

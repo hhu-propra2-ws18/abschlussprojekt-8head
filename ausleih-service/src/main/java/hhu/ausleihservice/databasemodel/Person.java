@@ -71,7 +71,7 @@ public class Person {
 		kauf.setKaeufer(null);
 	}
 
-	public void addItem(AusleihItem item) {
+	public void addItem(Item item) {
 		if (item == null) {
 			return;
 		}
@@ -79,7 +79,7 @@ public class Person {
 		item.setBesitzer(this);
 	}
 
-	public void removeItem(AusleihItem item) {
+	public void removeItem(Item item) {
 		if (item == null) {
 			return;
 		}
@@ -91,7 +91,7 @@ public class Person {
 		return this.getRole().equals(Role.ADMIN);
 	}
 
-	public boolean isOwner(AusleihItem artikel) {
+	public boolean isOwner(Item artikel) {
 		return this.getId().equals(artikel.getBesitzer().getId());
 	}
 
