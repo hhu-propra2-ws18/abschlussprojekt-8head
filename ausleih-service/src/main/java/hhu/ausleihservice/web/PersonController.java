@@ -21,7 +21,8 @@ public class PersonController {
 	private ProPayService proPayService;
 	private AusleiheService ausleiheService;
 
-	PersonController(PersonService personService, PersonValidator personValidator, ProPayService proPayService, AusleiheService ausleiheService) {
+	PersonController(PersonService personService, PersonValidator personValidator,
+					 ProPayService proPayService, AusleiheService ausleiheService) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
@@ -136,8 +137,8 @@ public class PersonController {
 	}
 
 	@GetMapping("/allconflicts")
-	public String showAllconflicts(Model model, Principal p){
-		if(!personService.get(p).isAdmin()){
+	public String showAllconflicts(Model model, Principal p) {
+		if (!personService.get(p).isAdmin()) {
 			model.addAttribute("message", "Administrator depostulatur");
 			return "errorMessage";
 
@@ -150,8 +151,8 @@ public class PersonController {
 	}
 
 	@GetMapping("/conflict/{id}")
-	public String showConflict(Model model, Principal p, @PathVariable Long id){
-		if(!personService.get(p).isAdmin()){
+	public String showConflict(Model model, Principal p, @PathVariable Long id) {
+		if (!personService.get(p).isAdmin()) {
 			model.addAttribute("message", "Administrator depostulatur");
 			return "errorMessage";
 		} else {
@@ -163,8 +164,8 @@ public class PersonController {
 
 	@PostMapping("/conflict/{id}")
 	public String resolveConflict
-			(Model model, Principal p, @PathVariable Long id, @RequestParam("entscheidung") String entscheidung){
-		if(!personService.get(p).isAdmin()){
+			(Model model, Principal p, @PathVariable Long id, @RequestParam("entscheidung") String entscheidung) {
+		if (!personService.get(p).isAdmin()) {
 			model.addAttribute("message", "Administrator depostulatur");
 			return "errorMessage";
 		} else {

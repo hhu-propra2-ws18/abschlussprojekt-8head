@@ -21,7 +21,7 @@ public class AusleiheService {
 		ausleiheRepository.save(ausleihe);
 	}
 
-	public List<Ausleihe> findAllConflicts(){
+	public List<Ausleihe> findAllConflicts() {
 		return ausleiheRepository.findByKonflikt(true);
 	}
 
