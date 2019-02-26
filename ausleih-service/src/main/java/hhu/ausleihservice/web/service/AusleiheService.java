@@ -32,14 +32,17 @@ public class AusleiheService {
 
 		System.out.println("Triggering update");
 		for (Ausleihe ausleihe : findAll()) {
-			checkAusleiheDate(ausleihe, currnetDate);
+			checkAusleiheTooLate(ausleihe, currnetDate);
 		}
 	}
 
-	private void checkAusleiheDate(Ausleihe ausleihe, LocalDate date) {
-		if (ausleihe.getStatus().equals(Status.AUSGELIEHEN) && ausleihe.getEndDatum().isBefore(date)) {
-			ausleihe.setStatus(Status.RUECKGABE_VERPASST);
+	private void checkAusleiheTooLate(Ausleihe ausleihe, LocalDate date) {
+		if (ausleihe.getStatus().equals(Status.AUSGELIEHEN)) {
+			if (ausleihe.getEndDatum().isBefore(date)) {
+				ausleihe.setStatus(Status.RUECKGABE_VERPASST);
+			}
 		}
 	}
+
 
 }
