@@ -274,14 +274,15 @@ public class ItemController {
 								  Model model,
 								  RedirectAttributes redirAttrs) {
 		abholortValidator.validate(abholort, bindingResult);
+		Person aktuellerNutzer = personService.get(p);
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("user", aktuellerNutzer);
 			model.addAttribute("abholort", abholort);
 			model.addAttribute("longitudeErrors", bindingResult.getFieldError("longitude"));
 			model.addAttribute("latitudeErrors", bindingResult.getFieldError("latitude"));
 			model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
 			return "neuerAbholort";
 		}
-		Person aktuellerNutzer = personService.get(p);
 		abholortService.save(abholort);
 		aktuellerNutzer.getAbholorte().add(abholort);
 		personService.save(aktuellerNutzer);
