@@ -100,7 +100,7 @@ public class ItemController {
 			query = query.trim();
 		}
 
-		List<AusleihItem> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax,
+		List<AusleihItem> list = ausleihItemService.extendedSearch(query, tagessatzMax, kautionswertMax,
 				availableMin, availableMax);
 
 		model.addAttribute("dateformat", DATEFORMAT);
@@ -114,7 +114,7 @@ public class ItemController {
 								 @PathVariable long id,
 								 Principal p) {
 		try {
-			AusleihItem artikel = itemService.findById(id);
+			AusleihItem artikel = (AusleihItem) itemService.findById(id);
 			model.addAttribute("artikel", artikel);
 			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
 		} catch (ItemNichtVorhanden a) {
@@ -168,7 +168,7 @@ public class ItemController {
 	//2019-05-02 - 2019-05-09
 	@PostMapping("/ausleihen/{id}")
 	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p, Model model) {
-		AusleihItem artikel = itemService.findById(id);
+		AusleihItem artikel = (AusleihItem) itemService.findById(id);
 		Ausleihe ausleihe = new Ausleihe();
 		Person user = personService.get(p);
 

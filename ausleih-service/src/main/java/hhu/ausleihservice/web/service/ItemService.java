@@ -21,6 +21,14 @@ public class ItemService {
 	@Autowired
 	private ItemAvailabilityService itemAvailabilityService;
 
+	public ItemService() {
+	}
+
+	public ItemService(ItemRepository items, ItemAvailabilityService itemAvailabilityService) {
+		this.items = items;
+		this.itemAvailabilityService = itemAvailabilityService;
+	}
+
 	public Item findById(long id) {
 		Optional<Item> item = items.findById(id);
 		if (!item.isPresent()) {

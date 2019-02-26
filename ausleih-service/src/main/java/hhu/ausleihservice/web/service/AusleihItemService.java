@@ -1,5 +1,6 @@
 package hhu.ausleihservice.web.service;
 
+import hhu.ausleihservice.dataaccess.AusleihItemRepository;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Item;
@@ -15,17 +16,17 @@ import java.util.stream.Stream;
 @Service
 public class AusleihItemService extends ItemService {
 
-	private ItemRepository items;
+	private AusleihItemRepository items;
 	private ItemAvailabilityService itemAvailabilityService;
 
 
-	public AusleihItemService(ItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
+	public AusleihItemService(AusleihItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
 		this.items = itemRep;
 		this.itemAvailabilityService = itemAvailabilityService;
 	}
 
 	public AusleihItem findAusleihItemById(long id) {
-		Optional<AusleihItem> item = items.findAusleihItemById(id);
+		Optional<AusleihItem> item = items.findById(id);
 		if (!item.isPresent()) {
 			throw new ItemNichtVorhanden();
 		}
@@ -33,7 +34,7 @@ public class AusleihItemService extends ItemService {
 	}
 
 	List<AusleihItem> findAllAusleihItem() {
-		return items.findAllAusleihItem();
+		return items.findAll();
 	}
 
 	public List<Item> simpleSearch(String query) {
