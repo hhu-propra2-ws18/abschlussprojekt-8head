@@ -3,14 +3,12 @@ package hhu.ausleihservice.databasemodel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDate;
 
 @Data
@@ -31,5 +29,6 @@ public class Ausleihe {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate endDatum;
 	private Long reservationId;
+	private boolean konflikt = false;
 	private Status status;
 }
