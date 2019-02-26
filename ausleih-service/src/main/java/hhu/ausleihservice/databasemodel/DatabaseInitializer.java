@@ -189,6 +189,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		ausleihe2.setStartDatum(ersterMai.plusDays(2));
 		ausleihe2.setEndDatum(ersterMai.plusDays(3));
 		ausleihe2.setAusleiher(person3);
+		ausleihe2.setKonflikt(true);
 
 		item3.addAusleihe(ausleihe1);
 		item1.addAusleihe(ausleihe2);
