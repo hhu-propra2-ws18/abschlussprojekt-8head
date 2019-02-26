@@ -155,7 +155,8 @@ public class PersonController {
 	}
 
 	@GetMapping("/admin")
-	public String admin(Model model) {
+	public String admin(Model model, Principal p) {
+		model.addAttribute("user", personService.get(p));
 		return "admin";
 	}
 
