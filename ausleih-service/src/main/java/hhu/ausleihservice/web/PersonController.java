@@ -1,9 +1,7 @@
 package hhu.ausleihservice.web;
 
-import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.validators.PersonValidator;
-import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
 import hhu.ausleihservice.web.service.ProPayService;
 import org.springframework.stereotype.Controller;
@@ -12,26 +10,32 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
 public class PersonController {
+
+	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
+
 	private PersonService personService;
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
-	private AusleiheService ausleiheService;
 
-	PersonController(PersonService personService, PersonValidator personValidator,
-					 ProPayService proPayService, AusleiheService ausleiheService) {
+	PersonController(PersonService personService, PersonValidator personValidator, ProPayService proPayService) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
-		this.ausleiheService = ausleiheService;
 	}
 
 	@GetMapping("/")
 	public String startseite(Model model, Principal p) {
-		model.addAttribute("user", personService.get(p));
+		Person user = personService.get(p);
+		model.addAttribute("user", user);
+		if (user != null) {
+			model.addAttribute("lateAusleihen", personService.findLateAusleihen(user.getId()));
+		}
+		model.addAttribute("dateformat", DATEFORMAT);
 		return "startseite";
 	}
 
@@ -159,51 +163,4 @@ public class PersonController {
 		return "admin";
 	}
 
-	@GetMapping("/allconflicts")
-	public String showAllconflicts(Model model, Principal p) {
-		model.addAttribute("user", personService.get(p));
-		if (!personService.get(p).isAdmin()) {
-			model.addAttribute("message", "Administrator depostulatur");
-			return "errorMessage";
-
-
-		} else {
-			List<Ausleihe> konflikte = ausleiheService.findAllConflicts();
-			model.addAttribute("konflikte", konflikte);
-			return "alleKonflikte";
-		}
-	}
-
-	@GetMapping("/conflict/{id}")
-	public String showConflict(Model model, Principal p, @PathVariable Long id) {
-		model.addAttribute("user", personService.get(p));
-		if (!personService.get(p).isAdmin()) {
-			model.addAttribute("message", "Administrator depostulatur");
-			return "errorMessage";
-		} else {
-			Ausleihe konflikt = ausleiheService.findById(id);
-			model.addAttribute("konflikt", konflikt);
-			return "konflikt";
-		}
-	}
-
-	@PostMapping("/conflict/{id}")
-	public String resolveConflict
-			(Model model, Principal p, @PathVariable Long id, @RequestParam("entscheidung") String entscheidung) {
-		if (!personService.get(p).isAdmin()) {
-			model.addAttribute("message", "Administrator depostulatur");
-			return "errorMessage";
-		} else {
-			Ausleihe konflikt = ausleiheService.findById(id);
-			if (entscheidung.equals("bestrafen")) {
-				proPayService.punishRerservation(konflikt);
-			} else {
-				proPayService.releaseReservation(konflikt);
-			}
-			konflikt.setKonflikt(false);
-			ausleiheService.save(konflikt);
-			return "redirect:/allconflicts/";
-		}
-
-	}
 }
