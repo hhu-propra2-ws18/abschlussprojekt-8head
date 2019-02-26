@@ -50,16 +50,6 @@
 						</td>
 					</tr>
 					<tr>
-						<td>Noch verfügbar zu folgenden Zeiten</td>
-						<td>
-							<table class="table-striped">
-								<tr th:each="periods: ${artikel.availablePeriods}">
-									<td th:text="${periods}">from now to then</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-					<tr>
 						<td>Tagessatz</td>
 						<td th:text="${artikel.tagessatz} + &euro;"></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
@@ -133,6 +123,7 @@
                             }
                         });
                     /*]]>*/
+
 				</script>
 				<button type="submit">Ausleihen</button>
 			</form>
@@ -157,6 +148,8 @@
         L.marker([latitude, longitude]).addTo(map)
             .bindPopup(message).openPopup();
     /*]]>*/
+
+
 </script>
 </body>
 </html>

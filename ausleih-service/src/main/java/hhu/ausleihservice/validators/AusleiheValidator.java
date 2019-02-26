@@ -32,18 +32,6 @@ public class AusleiheValidator implements Validator {
 
 		ValidationUtils.rejectIfEmpty(errors, "item", Messages.notEmpty);
 
-		if (ausleiheItem.getAvailableFrom() != null && ausleiheItem.getAvailableTill() != null) {
-			if (ausleiheItem.getAvailableFrom().isAfter(ausleiheItem.getAvailableTill())) {
-				errors.rejectValue("availableFrom", Messages.invalidPeriod);
-			}
-			if (ausleiheItem.getAvailableFrom().isBefore(LocalDate.now())) {
-				errors.rejectValue("availableFrom", Messages.invalidAvailableFrom);
-			}
-		} else {
-			errors.rejectValue("availableFrom", Messages.notEmpty);
-			errors.rejectValue("availableTill", Messages.notEmpty);
-		}
-
 		if (!availabilityService.isAvailableFromTill(ausleiheItem, ausleihe.getStartDatum(), ausleihe.getEndDatum())) {
 			errors.rejectValue("startDatum", Messages.itemNotAvailable);
 			errors.rejectValue("endDatum", Messages.itemNotAvailable);
@@ -51,8 +39,10 @@ public class AusleiheValidator implements Validator {
 
 		ValidationUtils.rejectIfEmpty(errors, "ausleiher", Messages.notEmpty);
 
-		if (ausleihe.getAusleiher().equals(ausleiheItem.getBesitzer())) {
-			errors.rejectValue("ausleiher", Messages.ownItemAusleihe);
+		if (ausleiheItem != null && ausleihe.getAusleiher() != null) {
+			if (ausleihe.getAusleiher().equals(ausleiheItem.getBesitzer())) {
+				errors.rejectValue("ausleiher", Messages.ownItemAusleihe);
+			}
 		}
 	}
 

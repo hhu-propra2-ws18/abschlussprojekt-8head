@@ -53,13 +53,15 @@
 
 				<div class="form-group">
 					<label for="availableFrom">Verfügbar ab: </label>
-					<input type="date" th:field="*{availableFrom}" th:min=${today} class="form-control" id="availableFrom">
+					<input type="date" th:field="*{availableFrom}" th:min=${today} class="form-control"
+						   id="availableFrom">
 					<div id="error" th:text="${availableFromErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
 					<label for="availableTill">Verfügbar bis: </label>
-					<input type="date" th:field="*{availableTill}" th:min=${today} class="form-control" id="availableTill">
+					<input type="date" th:field="*{availableTill}" th:min=${today} class="form-control"
+						   id="availableTill">
 					<div id="error" th:text="${availableTillErrors?.code}"></div>
 				</div>
 
