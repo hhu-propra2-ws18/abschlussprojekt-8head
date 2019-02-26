@@ -20,6 +20,8 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class AusleihItem extends Item {
 
+	private String titel = "";
+	private String beschreibung = "";
 	private Integer tagessatz;
 	private Integer kautionswert;
 
