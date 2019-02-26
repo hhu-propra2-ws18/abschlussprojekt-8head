@@ -169,9 +169,8 @@
     margin-bottom: 20px;
 }
 
-.old-price {
+.besitzer {
     color: #f00;
-    text-decoration: line-through;
 }
 #error {
 	color: red;

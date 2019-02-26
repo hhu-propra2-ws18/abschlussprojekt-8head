@@ -10,13 +10,80 @@
 	<h2>Bitte loggen Sie sich ein oder registrieren Sie sich.</h2>
 </div>
 <div th:if="${user != null}">
-	<h2><div th:text="${'Willkommen, ' + user.vorname + ' ' + user.nachname + '!'}">Willkommen!</div></h2>
+	<h2>
+		<div th:text="${'Willkommen, ' + user.vorname + ' ' + user.nachname + '!'}">Willkommen!</div>
+	</h2>
 	<a href="/liste">Artikel durchstöbern</a><br>
 	<a href="/newitem">Neuen Artikel verleihen</a><br>
 	<a href="/newlocation">Neuen Abholort hinzufügen</a>
 	<br>
 	<br>
 	<h3 th:text="${message}"></h3>
+	<h2>Artikel, die du ausleihst.</h2>
+	<div class="products">
+		<th:block class="products" th:each="ausleihung : ${user.ausleihen}">
+			<a th:href="@{'/details/' + ${ausleihung.item.id}}">
+				<div class="product-top">
+					<span class="itemName" th:text="${ausleihung.item.titel}">itemName</span>
+				</div>
+
+				<div class="product-middle">
+					<img th:if="${ausleihung.item.picture == null}" th:src="@{${'img/' + ausleihung.item.image}}"/>
+					<img th:if="${ausleihung.item.picture != null and ausleihung.item.getBase64EncodedString()!=null}"
+						 th:src="@{'data:image/png;base64,'+${ausleihung.item.getBase64EncodedString()}}"/>
+				</div>
+			</a>
+			<a th:href="@{profil/{verleiherID} (verleiherID=${ausleihung.item.besitzer.id})}">
+				<div class="product-bottom">
+					<div th:text="${'Verliehen von: ' + ausleihung.item.besitzer.vorname + ' ' + ausleihung.item.besitzer.nachname}">
+						Frank
+						vomBlock
+					</div>
+					<div class="heading"
+						 th:text="${ausleihung.startDatum.format(dateformat) + '-' + ausleihung.endDatum.format(dateformat)}">
+						Chuck Taylor All Star Classic Colours
+					</div>
+					<div class="info" th:text="${ausleihung.item.beschreibung}">Classic red converse edition</div>
+					<div class="style" th:text="${ausleihung.item.abholort.beschreibung}">Color: Red / Style: M9621C
+					</div>
+					<div class="price" th:text="${ausleihung.item.tagessatz} + &euro;">$50.00</div>
+				</div>
+			</a>
+		</th:block>
+		</th:block>
+	</div>
+	<h2>Artikel, die du verleihst.</h2>
+	<div class="products">
+		<th:block class="products" th:each="artikel : ${user.items}">
+			<th:block class="product" th:each="verleihung : ${artikel.ausleihen}">
+				<a th:href="@{'/details/' + ${artikel.id}}">
+					<div class="product-top">
+						<span class="itemName" th:text="${artikel.titel}">itemName</span>
+					</div>
+
+					<div class="product-middle">
+						<img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}"/>
+						<img th:if="${artikel.picture != null and artikel.getBase64EncodedString()!=null}"
+							 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/>
+					</div>
+				</a>
+				<a th:href="@{profil/{ausleiherID} (ausleiherID=${verleihung.ausleiher.id})}">
+					<div class="product-bottom">
+						<div th:text="${'Ausgeliehen von: ' + verleihung.ausleiher.vorname + ' ' + verleihung.ausleiher.nachname}">
+							Frank vomBlock
+						</div>
+						<div class="heading"
+							 th:text="${verleihung.startDatum.format(dateformat) + '-' + verleihung.endDatum.format(dateformat)}">
+							Chuck Taylor All Star Classic Colours
+						</div>
+						<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
+						<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
+						<div class="price" th:text="${artikel.tagessatz} + &euro;">$50.00</div>
+					</div>
+				</a>
+			</th:block>
+		</th:block>
+	</div>
 </div>
 </body>
 </html>

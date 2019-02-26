@@ -93,26 +93,26 @@
 <div class="container">
 	<h2>Ausleihen von eigenen Items</h2>
 	<div th:each="item : ${benutzer.items}">
-	<table class="table table-hover">
-		<thead>
-		<tr>
-			<th>Item</th>
-			<th>Von</th>
-			<th>Bis</th>
-			<th>Bestätigen</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr th:each="ausleihe : ${item.ausleihen}">
-			<td th:text="${ausleihe.item.titel}"></td>
-			<td th:text="${ausleihe.startDatum.toString()}"></td>
-			<td th:text="${ausleihe.endDatum.toString()}"></td>
-			<td>
-				<span th:if="${ausleihe.status == 'ANGEFRAGT'}"></span>
-			</td>
-		</tr>
-		</tbody>
-	</table>
+		<table class="table table-hover">
+			<thead>
+			<tr>
+				<th>Item</th>
+				<th>Von</th>
+				<th>Bis</th>
+				<th>Bestätigen</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="ausleihe : ${item.ausleihen}">
+				<td th:text="${ausleihe.item.titel}"></td>
+				<td th:text="${ausleihe.startDatum.toString()}"></td>
+				<td th:text="${ausleihe.endDatum.toString()}"></td>
+				<td>
+					<span th:if="${ausleihe.status == 'ANGEFRAGT'}"></span>
+				</td>
+			</tr>
+			</tbody>
+		</table>
 	</div>
 </div>
 

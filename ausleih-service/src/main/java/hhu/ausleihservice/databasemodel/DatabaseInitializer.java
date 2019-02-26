@@ -188,17 +188,22 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		ausleihe2.setReservationId(1L);
 		ausleihe2.setStartDatum(ersterMai.plusDays(2));
 		ausleihe2.setEndDatum(ersterMai.plusDays(3));
-		ausleihe2.setAusleiher(person3);
+
+		this.ausleiheRepository.save(ausleihe1);
+		this.ausleiheRepository.save(ausleihe2);
 
 		item3.addAusleihe(ausleihe1);
 		item1.addAusleihe(ausleihe2);
 
+		//this.itemRepository.save(item3);
+		//this.itemRepository.save(item1);
+
 		person2.addAusleihe(ausleihe1);
 		person3.addAusleihe(ausleihe2);
 
-		this.ausleiheRepository.save(ausleihe1);
-		this.ausleiheRepository.save(ausleihe2);
-		this.itemRepository.save(item3);
-		this.itemRepository.save(item1);
+		this.personRepository.save(person1);
+		this.personRepository.save(person2);
+		this.personRepository.save(person3);
+
 	}
 }

@@ -1,5 +1,7 @@
 package hhu.ausleihservice.web;
 
+import hhu.ausleihservice.databasemodel.Ausleihe;
+import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.service.PersonService;
@@ -10,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -27,6 +30,24 @@ public class PersonController {
 	@GetMapping("/")
 	public String startseite(Model model, Principal p) {
 		model.addAttribute("user", personService.get(p));
+		if (personService.get(p) != null) {
+			System.out.println(personService.get(p).getItems());
+			Iterator<Item> iitem = personService.get(p).getItems().iterator();
+			Iterator<Ausleihe> iausleihe;
+			while (iitem.hasNext()) {
+				Item element = iitem.next();
+				iausleihe = element.getAusleihen().iterator();
+				while (iausleihe.hasNext()) {
+					Ausleihe itemAusleihe = iausleihe.next();
+					System.out.println(itemAusleihe.getItem().getTitel() +
+							" wird verliehen in " +
+							itemAusleihe +
+							" an " +
+							itemAusleihe.getAusleiher());
+				}
+			}
+			System.out.println();
+		}
 		return "startseite";
 	}
 
