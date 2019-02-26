@@ -14,11 +14,9 @@ import java.util.stream.Collectors;
 public class KaufItemService extends ItemService {
 
 	private KaufItemRepository items;
-	private ItemAvailabilityService itemAvailabilityService;
 
-	public KaufItemService(KaufItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
+	public KaufItemService(KaufItemRepository itemRep) {
 		this.items = itemRep;
-		this.itemAvailabilityService = itemAvailabilityService;
 	}
 
 	public KaufItem findKaufItemById(long id) {

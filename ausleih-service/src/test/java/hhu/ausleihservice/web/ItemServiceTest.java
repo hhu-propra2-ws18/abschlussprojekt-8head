@@ -5,7 +5,6 @@ import hhu.ausleihservice.dataaccess.AusleihItemRepository;
 import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.web.service.AusleihItemService;
 import hhu.ausleihservice.web.service.ItemAvailabilityService;
-import hhu.ausleihservice.web.service.ItemService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -29,8 +28,8 @@ public class ItemServiceTest {
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	@Mock
 	private AusleihItemRepository itemRepository;
-	private ItemService itemService = new ItemService(null, new ItemAvailabilityService());
-	private AusleihItemService ausleihItemService = new AusleihItemService(itemRepository, new ItemAvailabilityService());
+	private AusleihItemService ausleihItemService =
+			new AusleihItemService(null, new ItemAvailabilityService());
 	private List<AusleihItem> repository = new ArrayList<>();
 
 	private boolean testItemEquality(AusleihItem base, AusleihItem toTest) {
