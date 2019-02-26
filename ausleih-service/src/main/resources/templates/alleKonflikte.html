@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="../static/css/navbar :: style">
+	<meta charset="UTF-8">
+	<title>Alle Konflikte</title>
+</head>
+<body>
+<nav th:replace="../static/css/navbar :: main-menu">menu</nav>
+<div th:each="konflikt : ${konflikte}">
+	<div th:text="'Besitzer: ' + ${konflikt.item.besitzer.username} + ' Ausleiher: ' + ${konflikt.ausleiher.username}
+		 + ' Artikel: ' + ${konflikt.item.titel}"></div>
+	<a th:href="@{'/conflict/' + ${konflikt.id}}">Konflikt</a>
+</div>
+</body>
+</html>
