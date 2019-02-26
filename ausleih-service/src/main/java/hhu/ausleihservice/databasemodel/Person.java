@@ -35,6 +35,9 @@ public class Person {
 	@ToString.Exclude
 	@OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
 	private Set<Abholort> abholorte = new HashSet<>();
+	@ToString.Exclude
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Kauf> kaeufe = new HashSet<>();
 
 	public void addAusleihe(Ausleihe ausleihe) {
 		if (ausleihe == null) {
@@ -50,6 +53,22 @@ public class Person {
 		}
 		ausleihen.remove(ausleihe);
 		ausleihe.setAusleiher(null);
+	}
+
+	public void addKauf(Kauf kauf) {
+		if (kauf == null) {
+			return;
+		}
+		kaeufe.add(kauf);
+		kauf.setKaeufer(this);
+	}
+
+	public void removeKauf(Kauf kauf) {
+		if (kauf == null) {
+			return;
+		}
+		kaeufe.remove(kauf);
+		kauf.setKaeufer(null);
 	}
 
 	public void addItem(Item item) {

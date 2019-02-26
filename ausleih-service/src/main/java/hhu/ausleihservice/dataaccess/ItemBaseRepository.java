@@ -10,5 +10,6 @@ import java.util.Optional;
 @NoRepositoryBean
 public interface ItemBaseRepository<T extends Item> extends CrudRepository<T, Long> {
 	List<T> findAll();
+
 	Optional<T> findById(long id);
 }
