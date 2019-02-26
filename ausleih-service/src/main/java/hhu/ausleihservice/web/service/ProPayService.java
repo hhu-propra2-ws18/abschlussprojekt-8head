@@ -54,5 +54,4 @@ public class ProPayService {
 		proPayInterface.addFunds(person.getUsername(), betrag);
 	}
 
-
 }

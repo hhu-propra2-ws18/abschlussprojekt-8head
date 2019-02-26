@@ -14,6 +14,10 @@
 		<div th:text="${'Willkommen, ' + user.vorname + ' ' + user.nachname + '!'}">Willkommen!</div>
 	</h2>
 	<a href="/liste">Artikel durchstöbern</a><br>
+	<a href="/newitem">Neuen Artikel verleihen</a>
+	<div th:if="${user.isAdmin()}">
+		<a th:href="@{/allconflicts}">Konflikte anzeigen</a>
+	</div>
 	<a href="/newitem">Neuen Artikel verleihen</a><br>
 	<a href="/newlocation">Neuen Abholort hinzufügen</a>
 	<br>
