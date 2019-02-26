@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="../static/css/navbar :: style">
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
@@ -15,7 +15,8 @@
 				<table class="product-details">
 					<tr>
 						<td><h2 th:text="${artikel.titel}">ITEM</h2></td>
-						<td><a target="_blank" th:href="@{'data:image/jpg;base64,'+${artikel.getPictureBase64EncodedString()}}"><img
+						<td><a target="_blank"
+							   th:href="@{'data:image/jpg;base64,'+${artikel.getPictureBase64EncodedString()}}"><img
 								th:if="${artikel.picture100 != null and artikel.getPicture100Base64EncodedString()!=null}"
 								th:src="@{'data:image/jpg;base64,'+${artikel.getPicture100Base64EncodedString()}}"
 								th:width="60px"
@@ -124,6 +125,7 @@
                         });
                     /*]]>*/
 
+
 				</script>
 				<button type="submit">Ausleihen</button>
 			</form>
@@ -148,6 +150,7 @@
         L.marker([latitude, longitude]).addTo(map)
             .bindPopup(message).openPopup();
     /*]]>*/
+
 
 
 </script>
