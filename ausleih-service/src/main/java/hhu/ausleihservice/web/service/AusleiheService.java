@@ -32,18 +32,19 @@ public class AusleiheService {
 
 	@Scheduled(cron = "0 0 1 * * ?")
 	public void updateAllAusleihenDaily() {
-		LocalDate currnetDate = LocalDate.now();
-
 		System.out.println("Triggering update");
-		for (Ausleihe ausleihe : findAll()) {
-			checkAusleiheTooLate(ausleihe, currnetDate);
-		}
+
+		updateAusleihenIfTooLate(findAll(), LocalDate.now());
 	}
 
-	private void checkAusleiheTooLate(Ausleihe ausleihe, LocalDate date) {
-		if (ausleihe.getStatus().equals(Status.AUSGELIEHEN)) {
-			if (ausleihe.getEndDatum().isBefore(date)) {
-				ausleihe.setStatus(Status.RUECKGABE_VERPASST);
+	public void updateAusleihenIfTooLate(List<Ausleihe> ausleihen, LocalDate date) {
+		if (ausleihen != null) {
+			for (Ausleihe ausleihe : ausleihen) {
+				if (ausleihe.getStatus().equals(Status.AUSGELIEHEN)) {
+					if (ausleihe.getEndDatum().isBefore(date)) {
+						ausleihe.setStatus(Status.RUECKGABE_VERPASST);
+					}
+				}
 			}
 		}
 	}
@@ -60,10 +61,10 @@ public class AusleiheService {
 		return ausleihe.get();
 	}
 
-	public List<Ausleihe> findLateAusleihen(Person person) {
+	public List<Ausleihe> findLateAusleihen(Iterable<Ausleihe> ausleiheList) {
 		List<Ausleihe> lateAusleihen = new ArrayList<>();
 
-		for (Ausleihe ausleihe : person.getAusleihen()) {
+		for (Ausleihe ausleihe : ausleiheList) {
 			if (ausleihe.getStatus().equals(Status.RUECKGABE_VERPASST)) {
 				lateAusleihen.add(ausleihe);
 			}

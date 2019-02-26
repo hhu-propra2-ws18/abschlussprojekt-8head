@@ -39,7 +39,7 @@ public class PersonController {
 		Person user = personService.get(p);
 		model.addAttribute("user", user);
 		if (user != null) {
-			model.addAttribute("lateAusleihen", ausleiheService.findLateAusleihen(user));
+			model.addAttribute("lateAusleihen", ausleiheService.findLateAusleihen(user.getAusleihen()));
 		}
 		model.addAttribute("dateformat", DATEFORMAT);
 		return "startseite";
