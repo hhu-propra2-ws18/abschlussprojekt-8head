@@ -9,7 +9,7 @@
 <div th:each="konflikt : ${konflikte}">
 	<div th:text="'Besitzer: ' + ${konflikt.item.besitzer.username} + ' Ausleiher: ' + ${konflikt.ausleiher.username}
 		 + ' Artikel: ' + ${konflikt.item.titel}"></div>
-	<a th:href="@{'/conflict/' + ${konflikt.id}}">Konflikt</a>
+	<a th:href="@{'/admin/conflict/' + ${konflikt.id}}">Konflikt</a>
 </div>
 </body>
 </html>
