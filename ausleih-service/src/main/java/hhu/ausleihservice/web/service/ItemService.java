@@ -1,17 +1,14 @@
 package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.ItemRepository;
-import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ItemService {

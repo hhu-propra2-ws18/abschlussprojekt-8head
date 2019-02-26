@@ -1,6 +1,9 @@
 package hhu.ausleihservice.databasemodel;
 
-import hhu.ausleihservice.dataaccess.*;
+import hhu.ausleihservice.dataaccess.AbholortRepository;
+import hhu.ausleihservice.dataaccess.AusleihItemRepository;
+import hhu.ausleihservice.dataaccess.AusleiheRepository;
+import hhu.ausleihservice.dataaccess.PersonRepository;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;

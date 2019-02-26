@@ -1,7 +1,6 @@
 package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.AusleihItemRepository;
-import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
@@ -61,17 +60,17 @@ public class AusleihItemService extends ItemService {
 	}
 
 	public List<AusleihItem> extendedSearch(String query,
-									 int tagessatzMax,
-									 int kautionswertMax,
-									 LocalDate availableMin,
-									 LocalDate availableMax) {
+											int tagessatzMax,
+											int kautionswertMax,
+											LocalDate availableMin,
+											LocalDate availableMax) {
 		Stream<AusleihItem> listStream = findAllAusleihItem().stream();
 
 		if (query != null && !query.equals("")) {
 			//Ignores Case
 			String[] qArray = query.toLowerCase().split(" ");
 			listStream = listStream.filter(
-					item ->  containsArray(
+					item -> containsArray(
 							(item.getTitel() + item.getBeschreibung()).toLowerCase(),
 							qArray));
 		}
