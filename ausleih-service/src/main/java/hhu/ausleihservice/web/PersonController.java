@@ -175,6 +175,7 @@ public class PersonController {
 				proPayService.releaseReservation(konflikt);
 			}
 			konflikt.setKonflikt(false);
+			ausleiheService.save(konflikt);
 			return "redirect:/allconflicts/";
 		}
 
