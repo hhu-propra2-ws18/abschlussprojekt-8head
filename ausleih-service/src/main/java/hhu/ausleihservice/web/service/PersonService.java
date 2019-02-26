@@ -1,9 +1,7 @@
 package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.PersonRepository;
-import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Person;
-import hhu.ausleihservice.databasemodel.Status;
 import hhu.ausleihservice.web.responsestatus.PersonNichtVorhanden;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,7 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

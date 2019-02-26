@@ -2,7 +2,6 @@ package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.AusleiheRepository;
 import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.databasemodel.Status;
 import hhu.ausleihservice.web.responsestatus.PersonNichtVorhanden;
 import org.springframework.scheduling.annotation.Scheduled;
