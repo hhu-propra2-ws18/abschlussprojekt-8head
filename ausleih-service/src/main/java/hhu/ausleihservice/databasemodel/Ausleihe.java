@@ -21,7 +21,7 @@ public class Ausleihe {
 	@EqualsAndHashCode.Include
 	private Long id;
 	@ManyToOne
-	private Item item;
+	private AusleihItem item;
 	@ManyToOne
 	private Person ausleiher;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
