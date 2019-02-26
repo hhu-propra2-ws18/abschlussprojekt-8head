@@ -18,7 +18,6 @@ public class AusleihItemService extends ItemService {
 	private AusleihItemRepository items;
 	private ItemAvailabilityService itemAvailabilityService;
 
-
 	public AusleihItemService(AusleihItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
 		this.items = itemRep;
 		this.itemAvailabilityService = itemAvailabilityService;
@@ -36,53 +35,12 @@ public class AusleihItemService extends ItemService {
 		return items.findAll();
 	}
 
-	public List<Item> simpleSearch(String query) {
-		List<Item> list;
-
-		if (query == null || query.isEmpty()) {
-			list = findAll();
-		} else {
-			//Ignores case
-			String[] qArray = query.toLowerCase().split(" ");
-			list = findAll()
-					.stream()
-					.filter(
-							item -> containsArray(
-									(item.getTitel()
-											+ item.getBeschreibung())
-											.toLowerCase(),
-									qArray
-							)
-					)
-					.collect(Collectors.toList());
-		}
-		return list;
-	}
-
 	public List<AusleihItem> extendedSearch(String query,
 											int tagessatzMax,
 											int kautionswertMax,
 											LocalDate availableMin,
 											LocalDate availableMax) {
-		Stream<AusleihItem> listStream = findAllAusleihItem().stream();
-
-		if (query != null && !query.equals("")) {
-			//Ignores Case
-			String[] qArray = query.toLowerCase().split(" ");
-			listStream = listStream.filter(
-					item -> containsArray(
-							(item.getTitel() + item.getBeschreibung()).toLowerCase(),
-							qArray));
-		}
-
-		listStream = listStream.filter(item -> item.getTagessatz() <= tagessatzMax);
-		listStream = listStream.filter(item -> item.getKautionswert() <= kautionswertMax);
-
-		listStream = listStream.filter(
-				item -> itemAvailabilityService.isAvailableFromTill(item, availableMin, availableMax)
-		);
-
-		return listStream.collect(Collectors.toList());
+		return items.extendedSearch(query);//,availableMin,availableMax);
 	}
 
 	public void updateById(Long id, AusleihItem newItem) {

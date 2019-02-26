@@ -8,7 +8,5 @@ import java.util.Optional;
 
 @Transactional
 public interface ItemRepository extends ItemBaseRepository<Item> {
-	List<Item> findAll();
 
-	Optional<Item> findById(long id);
 }

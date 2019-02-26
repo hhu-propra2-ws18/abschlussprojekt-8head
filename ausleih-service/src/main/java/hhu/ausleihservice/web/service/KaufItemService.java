@@ -1,14 +1,12 @@
 package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.KaufItemRepository;
-import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.KaufItem;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class KaufItemService extends ItemService {
@@ -29,30 +27,6 @@ public class KaufItemService extends ItemService {
 
 	List<KaufItem> findAllKaufItem() {
 		return items.findAll();
-	}
-
-	public List<Item> simpleSearch(String query) {
-		List<Item> list;
-
-		if (query == null || query.isEmpty()) {
-			list = findAll();
-		} else {
-			//Ignores case
-			String[] qArray = query.toLowerCase().split(" ");
-			list = findAll()
-					.stream()
-					.filter(
-							item -> containsArray(
-									(item.getTitel()
-											+ item.getBeschreibung())
-											.toLowerCase(),
-									qArray
-							)
-					)
-					.collect(Collectors.toList());
-		}
-
-		return list;
 	}
 
 	public void save(KaufItem newItem) {

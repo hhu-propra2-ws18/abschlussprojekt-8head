@@ -39,6 +39,12 @@ public class ItemService {
 		return items.findAll();
 	}
 
+	public List<Item> simpleSearch(String query) {
+		if (query == null || query.isEmpty()) return findAll();
+		return items.simpleSearch(query);
+	}
+
+	/*
 	public boolean containsArray(String string, String[] array) {
 		for (String entry : array) {
 			if (!string.contains(entry)) {
@@ -71,7 +77,7 @@ public class ItemService {
 
 		return list;
 	}
-
+*/
 	public void save(Item newItem) {
 		items.save(newItem);
 	}

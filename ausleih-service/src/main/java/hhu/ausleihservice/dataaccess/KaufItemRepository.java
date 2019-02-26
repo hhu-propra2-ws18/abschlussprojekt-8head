@@ -8,7 +8,4 @@ import java.util.Optional;
 
 @Transactional
 public interface KaufItemRepository extends ItemBaseRepository<KaufItem> {
-	List<KaufItem> findAll();
-
-	Optional<KaufItem> findById(long id);
 }
