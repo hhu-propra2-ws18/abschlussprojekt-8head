@@ -1,1 +1,4 @@
- 
+Commit Nachrichten in Englisch, Präsens, kurz und kompakt. +
+Codeformatierung ist IntelliJ default mit "Use tab character", aber ohne Smart Tabs. +
+In Travis wird checkstyle verwendet. Wenn dies nicht erfolgreich durchläuft sollte
+ein Branch im Allgemeinen nicht in den Master gemerged werden.
