@@ -138,6 +138,7 @@ public class PersonController {
 
 	@GetMapping("/allconflicts")
 	public String showAllconflicts(Model model, Principal p) {
+		model.addAttribute("user", personService.get(p));
 		if (!personService.get(p).isAdmin()) {
 			model.addAttribute("message", "Administrator depostulatur");
 			return "errorMessage";
@@ -152,6 +153,7 @@ public class PersonController {
 
 	@GetMapping("/conflict/{id}")
 	public String showConflict(Model model, Principal p, @PathVariable Long id) {
+		model.addAttribute("user", personService.get(p));
 		if (!personService.get(p).isAdmin()) {
 			model.addAttribute("message", "Administrator depostulatur");
 			return "errorMessage";
