@@ -2,6 +2,7 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.validators.PersonValidator;
+import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
 import hhu.ausleihservice.web.service.ProPayService;
 import org.springframework.stereotype.Controller;
@@ -21,11 +22,16 @@ public class PersonController {
 	private PersonService personService;
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
+	private AusleiheService ausleiheService;
 
-	PersonController(PersonService personService, PersonValidator personValidator, ProPayService proPayService) {
+	PersonController(PersonService personService,
+					 PersonValidator personValidator,
+					 ProPayService proPayService,
+					 AusleiheService ausleiheService) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
+		this.ausleiheService = ausleiheService;
 	}
 
 	@GetMapping("/")
@@ -33,7 +39,7 @@ public class PersonController {
 		Person user = personService.get(p);
 		model.addAttribute("user", user);
 		if (user != null) {
-			model.addAttribute("lateAusleihen", personService.findLateAusleihen(user.getId()));
+			model.addAttribute("lateAusleihen", ausleiheService.findLateAusleihen(user));
 		}
 		model.addAttribute("dateformat", DATEFORMAT);
 		return "startseite";

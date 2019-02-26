@@ -140,17 +140,4 @@ public class PersonService implements UserDetailsService {
 		person.setPassword(encoder.encode(person.getPassword()));
 		users.save(person);
 	}
-
-	public List<Ausleihe> findLateAusleihen(Long id) {
-		Person personToCheck = findById(id);
-		List<Ausleihe> lateAusleihen = new ArrayList<>();
-
-		for (Ausleihe ausleihe : personToCheck.getAusleihen()) {
-			if (ausleihe.getStatus().equals(Status.RUECKGABE_VERPASST)) {
-				lateAusleihen.add(ausleihe);
-			}
-		}
-
-		return lateAusleihen;
-	}
 }
