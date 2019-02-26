@@ -11,7 +11,6 @@ import java.util.Set;
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"items"})
 public class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
