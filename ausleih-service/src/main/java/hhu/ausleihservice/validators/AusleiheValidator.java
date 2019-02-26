@@ -45,11 +45,11 @@ public class AusleiheValidator implements Validator {
 				errors.rejectValue("ausleiher", Messages.ownItemAusleihe);
 			}
 		}
-		
-		if(ausleihe.getAusleiher() != null && ausleiheItem.getBesitzer() != null) {
+
+		if (ausleihe.getAusleiher() != null && ausleiheItem.getBesitzer() != null) {
 			double kontostand = proPayService.getProPayKontostand(ausleihe.getAusleiher());
 			int kautionswert = ausleiheItem.getKautionswert();
-			if(kontostand < kautionswert) {
+			if (kontostand < kautionswert) {
 				errors.rejectValue("ausleiher", Messages.notEnoughMoney);
 			}
 		}
