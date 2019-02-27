@@ -38,9 +38,14 @@ public class PersonController {
 	@GetMapping("/profil/{id}")
 	public String otherUser(Model model, @PathVariable Long id, Principal p) {
 		Person benutzer = personService.findById(id);
+		boolean isProPayAvailable = proPayService.isAvailable();
+		model.addAttribute("isProPayAvailable", isProPayAvailable);
 		model.addAttribute("benutzer", benutzer);
-		model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		model.addAttribute("user", personService.get(p));
+
+		if (isProPayAvailable) {
+			model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
+		}
 		return "profil";
 	}
 

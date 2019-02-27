@@ -9,6 +9,7 @@ import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ public class ProPayInterface {
 	private static final int PORT = 8888;
 	private static final String SCHEME = "http";
 	private static final MediaType MIME_TYPE = MediaType.APPLICATION_JSON_UTF8;
+	private static final Duration timeout = Duration.ofSeconds(1);
 
 	public ProPayAccount getAccountInfo(final String proPayName) {
 		final Mono<ProPayAccount> mono
@@ -34,6 +36,24 @@ public class ProPayInterface {
 				.retrieve()
 				.bodyToMono(ProPayAccount.class);
 		return mono.block();
+	}
+
+	public boolean isAvailable() {
+		try {
+			WebClient.create()
+					.get()
+					.uri(builder -> builder.scheme(SCHEME)
+							.host(HOST)
+							.port(PORT)
+							.build())
+					.retrieve()
+					.bodyToMono(ProPayAccount.class)
+					.retryBackoff(3, timeout)
+					.block();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	public ProPayAccount addFunds(final String proPayName, final double amount) {
