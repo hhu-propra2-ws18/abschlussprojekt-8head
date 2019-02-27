@@ -67,6 +67,7 @@ public class ItemController {
 			q = q.trim();
 		}
 		List<Item> list = itemService.simpleSearch(q);
+		System.out.println(list.get(0).getClass().getSimpleName());
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
 		model.addAttribute("user", personService.get(p));
@@ -109,7 +110,7 @@ public class ItemController {
 		return "artikelListe";
 	}
 
-	@GetMapping("/details/{id}")
+	@GetMapping("/details/ausleih/{id}")
 	public String artikelDetails(Model model,
 								 @PathVariable long id,
 								 Principal p) {
@@ -128,7 +129,7 @@ public class ItemController {
 		return "artikelDetails";
 	}
 
-	@PostMapping("/details/{id}")
+	@PostMapping("/details/ausleih/{id}")
 	public String bearbeiteArtikel(Model model,
 								   @PathVariable long id,
 								   Principal p,
