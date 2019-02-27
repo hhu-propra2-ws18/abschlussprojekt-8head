@@ -58,8 +58,8 @@
 		</tr>
 	</form>
 </table>
+<h1 th:unless="${isProPayAvailable}" id="error">ProPay ist aktuell nicht verfügbar.</h1>
 <div th:if="${isProPayAvailable}">
-	<h1 th:unless="${isProPayAvailable}" id="error">ProPay ist aktuell nicht verügbar.</h1>
 	<h1 th:if="${user.isHimself(benutzer)}">
 		<div th:text="${moneten}"></div>
 	</h1>
