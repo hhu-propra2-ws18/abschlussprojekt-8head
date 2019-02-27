@@ -25,4 +25,6 @@ class Messages {
 	static String invalidUser = "Der angegebene Nutzer stimmt nicht mit dem Login überein";
 	static String ownItemAusleihe = "Ein eigener Artikel kann nicht ausgeliehen werden";
 	static String notEnoughMoney = "Das Guthaben auf dem ProPay-Konto reicht nicht für die Kaution";
+
+	static String propayUnavailable = "ProPay ist aktuell nicht verfügbar";
 }
