@@ -116,7 +116,7 @@ public class ItemController {
 		try {
 			Item artikel = itemService.findById(id);
 			model.addAttribute("artikel", artikel);
-			if(artikel.getClass().equals(AusleihItem.class)){
+			if (artikel.getClass().equals(AusleihItem.class)) {
 				model.addAttribute("availabilityList",
 						itemAvailabilityService.getUnavailableDates((AusleihItem) artikel));
 			}
@@ -243,11 +243,11 @@ public class ItemController {
 
 	@PostMapping("/newitem/ausleihen")
 	public String addAusleihItem(Model model,
-						  @ModelAttribute AusleihItem newItem,
-						  Principal p,
-						  @RequestParam("file") MultipartFile picture,
-						  BindingResult bindingResult,
-						  RedirectAttributes redirAttrs) {
+								 @ModelAttribute AusleihItem newItem,
+								 Principal p,
+								 @RequestParam("file") MultipartFile picture,
+								 BindingResult bindingResult,
+								 RedirectAttributes redirAttrs) {
 		itemValidator.validate(newItem, bindingResult);
 		Person besitzer = personService.get(p);
 		if (bindingResult.hasErrors()) {
@@ -282,11 +282,11 @@ public class ItemController {
 
 	@PostMapping("/newitem/kaufen")
 	public String addKaufItem(Model model,
-						  @ModelAttribute KaufItem newItem,
-						  Principal p,
-						  @RequestParam("file") MultipartFile picture,
-						  BindingResult bindingResult,
-						  RedirectAttributes redirAttrs) {
+							  @ModelAttribute KaufItem newItem,
+							  Principal p,
+							  @RequestParam("file") MultipartFile picture,
+							  BindingResult bindingResult,
+							  RedirectAttributes redirAttrs) {
 		Person besitzer = personService.get(p);
 		try {
 			newItem.setPicture(picture.getBytes());
