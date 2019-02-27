@@ -81,10 +81,11 @@
 	</table>
 </div>
 
+
 <div class="container-fluid">
 	<h2>Ausleihen von eigenen Items</h2>
-	<table class="table table-hover">
-		<thead>
+	<table class="table">
+		<thead class="thead-dark">
 		<tr>
 			<th>Item</th>
 			<th>Von</th>
@@ -133,7 +134,8 @@
 <div class="container-fluid">
 	<h1 th:if="${user.isHimself(benutzer)}" th:text="${moneten}"></h1>
 
-	<form th:if="${user.isHimself(benutzer)}" th:action="@{/profiladdmoney/{id} (id=${benutzer.getId()})}" method="post">
+	<form th:if="${user.isHimself(benutzer)}" th:action="@{/profiladdmoney/{id} (id=${benutzer.getId()})}"
+		  method="post">
 		<input type="number" name="moneten" min="0" th:value="100">
 		<button type="submit">€ Aufladen</button>
 	</form>
