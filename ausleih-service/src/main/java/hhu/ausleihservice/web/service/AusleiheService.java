@@ -33,5 +33,9 @@ public class AusleiheService {
 		return ausleihe.get();
 	}
 
+	public List<Ausleihe> findAllByAusleiherId(Long id){
+		return ausleiheRepository.findAllByAusleiherId(id);
+	}
+
 
 }

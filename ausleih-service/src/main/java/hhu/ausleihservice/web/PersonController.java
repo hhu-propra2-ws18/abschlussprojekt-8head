@@ -1,6 +1,8 @@
 package hhu.ausleihservice.web;
 
+import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Ausleihe;
+import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.service.AusleiheService;
@@ -12,7 +14,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class PersonController {
@@ -38,9 +44,20 @@ public class PersonController {
 	@GetMapping("/profil/{id}")
 	public String otherUser(Model model, @PathVariable Long id, Principal p) {
 		Person benutzer = personService.findById(id);
+		List<Ausleihe> verleihen = ausleiheService.findAllByAusleiherId(id);
+		List<AusleihItem> ausleihenItems = new ArrayList<>();
+		for(Item item :benutzer.getItems()){
+			if(item instanceof AusleihItem){
+				ausleihenItems.add((AusleihItem)item);
+			}
+		}
+
+
 		model.addAttribute("benutzer", benutzer);
 		model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		model.addAttribute("user", personService.get(p));
+		model.addAttribute("ausleihen", ausleihenItems);
+		model.addAttribute("verleihen", verleihen);
 		return "profil";
 	}
 

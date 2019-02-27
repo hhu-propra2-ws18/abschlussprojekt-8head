@@ -33,24 +33,24 @@
 			<td th:if="${user.isAdmin() and !(user.isHimself(benutzer))}">
 				<input name="newUsername" type="text" th:field="*{username}">
 			</td>
-			<div id="error" th:text="${usernameErrors?.code}"></div>
+			<div th:text="${usernameErrors?.code}"></div>
 			<td th:unless="${user.isAdmin() and !(user.isHimself(benutzer))}">
 			</td>
 			<td>
 				<input name="newVorname" type="text" th:field="*{vorname}">
-				<div id="error" th:text="${vornameErrors?.code}"></div>
+				<div th:text="${vornameErrors?.code}"></div>
 			</td>
 			<td>
 				<input name="newNachname" type="text" th:field="*{nachname}">
-				<div id="error" th:text="${nachnameErrors?.code}"></div>
+				<div th:text="${nachnameErrors?.code}"></div>
 			</td>
 			<td>
 				<input name="newEMail" type="email" th:field="*{email}">
-				<div id="error" th:text="${emailErrors?.code}"></div>
+				<div th:text="${emailErrors?.code}"></div>
 			</td>
 			<td>
 				<input name="newPassword" type="password" th:field="*{password}" th:id="password">
-				<div id="error" th:text="${passwordErrors?.code}"></div>
+				<div th:text="${passwordErrors?.code}"></div>
 			</td>
 			<td>
 				<button type="submit" value="true" name="editPerson">Nutzer Ändern</button>
@@ -92,16 +92,16 @@
 
 <div class="container">
 	<h2>Ausleihen von eigenen Items</h2>
-	<div th:each="item : ${benutzer.items}">
-		<table class="table table-hover">
-			<thead>
-			<tr>
-				<th>Item</th>
-				<th>Von</th>
-				<th>Bis</th>
-				<th>Bestätigen</th>
-			</tr>
-			</thead>
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th>Item</th>
+			<th>Von</th>
+			<th>Bis</th>
+			<th>Bestätigen</th>
+		</tr>
+		</thead>
+		<div th:each="item : ${ausleihen}">
 			<tbody>
 			<tr th:each="ausleihe : ${item.ausleihen}">
 				<td th:text="${ausleihe.item.titel}"></td>
@@ -112,8 +112,9 @@
 				</td>
 			</tr>
 			</tbody>
-		</table>
-	</div>
+		</div>
+	</table>
+</div>
 </div>
 
 </body>
