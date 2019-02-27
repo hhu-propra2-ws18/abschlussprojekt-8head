@@ -1,7 +1,7 @@
 package hhu.ausleihservice.web;
 
+import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.propay.ProPayAccount;
 import hhu.ausleihservice.propay.ProPayInterface;
@@ -34,7 +34,7 @@ public class ProPayServiceTest {
 	@Test
 	public void testUeberweiseTagessaetzeForOneDay() {
 		Ausleihe ausleihe = new Ausleihe();
-		Item fahrrad = new Item();
+		AusleihItem fahrrad = new AusleihItem();
 		Person burak = new Person();
 		Person simon = new Person();
 
@@ -55,7 +55,7 @@ public class ProPayServiceTest {
 	@Test
 	public void testUeberweiseTagessaetzeForFiveDays() {
 		Ausleihe ausleihe = new Ausleihe();
-		Item fahrrad = new Item();
+		AusleihItem fahrrad = new AusleihItem();
 		Person burak = new Person();
 		Person simon = new Person();
 
@@ -76,7 +76,7 @@ public class ProPayServiceTest {
 	@Test
 	public void testUeberweiseTagessaetzeForZeroDays() {
 		Ausleihe ausleihe = new Ausleihe();
-		Item fahrrad = new Item();
+		AusleihItem fahrrad = new AusleihItem();
 		Person burak = new Person();
 		Person simon = new Person();
 
@@ -97,7 +97,7 @@ public class ProPayServiceTest {
 	@Test
 	public void kautionReservieren() {
 		Ausleihe ausleihe = new Ausleihe();
-		Item fahrrad = new Item();
+		AusleihItem fahrrad = new AusleihItem();
 		Person burak = new Person();
 		Person simon = new Person();
 		burak.setUsername("bumar100");
@@ -121,7 +121,7 @@ public class ProPayServiceTest {
 	@Test
 	public void punishRerservation() {
 		Ausleihe ausleihe = new Ausleihe();
-		Item fahrrad = new Item();
+		AusleihItem fahrrad = new AusleihItem();
 		Person burak = new Person();
 		Person simon = new Person();
 		burak.setUsername("bumar100");
@@ -139,7 +139,7 @@ public class ProPayServiceTest {
 	@Test
 	public void releaseReservation() {
 		Ausleihe ausleihe = new Ausleihe();
-		Item fahrrad = new Item();
+		AusleihItem fahrrad = new AusleihItem();
 		Person burak = new Person();
 		Person simon = new Person();
 		burak.setUsername("bumar100");

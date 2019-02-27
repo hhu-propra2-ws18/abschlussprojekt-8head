@@ -21,7 +21,7 @@ public class Ausleihe {
 	@EqualsAndHashCode.Include
 	private Long id;
 	@ManyToOne
-	private Item item;
+	private AusleihItem item;
 	@ManyToOne
 	private Person ausleiher;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -29,5 +29,6 @@ public class Ausleihe {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate endDatum;
 	private Long reservationId;
+	private boolean konflikt = false;
 	private Status status;
 }
