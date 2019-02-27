@@ -101,18 +101,42 @@
 			<th>Bestätigen</th>
 		</tr>
 		</thead>
-		<div th:each="item : ${ausleihen}">
-			<tbody>
-			<tr th:each="ausleihe : ${item.ausleihen}">
-				<td th:text="${ausleihe.item.titel}"></td>
-				<td th:text="${ausleihe.startDatum.toString()}"></td>
-				<td th:text="${ausleihe.endDatum.toString()}"></td>
-				<td>
-					<span th:if="${ausleihe.status == 'ANGEFRAGT'}"></span>
-				</td>
-			</tr>
-			</tbody>
-		</div>
+		<tbody th:each="item : ${ausleihen}">
+		<tr th:each="ausleihe : ${item.ausleihen}">
+			<td th:text="${ausleihe.getItem().titel}"></td>
+			<td th:text="${ausleihe.getStartDatum().toString()}"></td>
+			<td th:text="${ausleihe.getEndDatum().toString()}"></td>
+			<td th:switch="${ausleihe?.status?.name()}">
+				<div th:case="'ANGEFRAGT'" class="row">
+					<form th:action="@{/ausleihe/bestaetigen/{id}(id=${ausleihe.id})}" method="post">
+						<button type="submit" class="btn btn-success" th:text="Bestätigen">
+							Bestätigen
+						</button>
+					</form>
+					<form th:action="@{/ausleihe/ablehnen/{id}(id=${ausleihe.id})}" method="post">
+						<button type="submit" class="btn btn-danger" th:text="Ablehnen">
+							Ablehnen
+						</button>
+					</form>
+				</div>
+				<button th:case="'BESTAETIGT'" type="button" class="btn btn-success" th:text="Bestätigt"
+						disabled>
+					Abgelehnt
+				</button>
+				<button th:case="'ABGELEHNT'" type="button" class="btn btn-danger" th:text="Abgelehnt" disabled>
+					Abgelehnt
+				</button>
+				<button th:case="'AUSGELIEHEN'" type="button" class="btn btn-info" th:text="Ausgeliehen"
+						disabled>
+					Ausgeliehen
+				</button>
+				<button th:case="'ABGESCHLOSSEN'" type="button" class="btn btn-success" th:text="Abgeschlossen"
+						disabled>
+					Abgeschlossen
+				</button>
+			</td>
+		</tr>
+		</tbody>
 	</table>
 </div>
 </div>

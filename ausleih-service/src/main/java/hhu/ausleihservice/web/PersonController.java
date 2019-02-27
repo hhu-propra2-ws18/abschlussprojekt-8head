@@ -51,13 +51,10 @@ public class PersonController {
 				ausleihenItems.add((AusleihItem)item);
 			}
 		}
-
-
 		model.addAttribute("benutzer", benutzer);
 		model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		model.addAttribute("user", personService.get(p));
 		model.addAttribute("ausleihen", ausleihenItems);
-		model.addAttribute("verleihen", verleihen);
 		return "profil";
 	}
 
