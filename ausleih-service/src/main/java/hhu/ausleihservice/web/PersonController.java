@@ -35,7 +35,7 @@ public class PersonController {
 	public String startseite(Model model, Principal p) {
 		model.addAttribute("user", personService.get(p));
 		Iterator<Kauf> kaeufe = personService.get(p).getKaeufe().iterator();
-		while(kaeufe.hasNext()){
+		while (kaeufe.hasNext()) {
 			System.out.println(kaeufe.next().getItem().getBesitzer());
 		}
 		return "startseite";
