@@ -59,6 +59,19 @@
 	</form>
 </table>
 
+<h1 th:unless="${isProPayAvailable}" th:text="${Messages.propayUnavailable}" id="error"></h1>
+<div th:if="${isProPayAvailable}">
+	<h1 th:if="${user.isHimself(benutzer)}">
+		<div th:text="${moneten}"></div>
+	</h1>
+
+	<form th:if="${user.isHimself(benutzer)}" action="#"
+	  	th:action="@{/profiladdmoney/{benutzerID} (benutzerID=${benutzer.getId()})}" method="post">
+		<input type="number" name="moneten" min="0">
+		<button type="submit">€ Aufladen</button>
+	</form>
+</div>
+
 <div class="container">
 	<h2>Ausgeliehene Items </h2>
 	<table class="table table-hover">

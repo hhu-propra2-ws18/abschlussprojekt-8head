@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class ItemController {
 
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -135,8 +136,9 @@ public class ItemController {
 	public String bearbeiteArtikel(Model model,
 								   @PathVariable long id,
 								   Principal p,
-								   @RequestParam(name = "editArtikel", defaultValue = "false")
-									   final boolean changeArticleDetails,
+								   @RequestParam(
+										   name = "editArtikel", defaultValue = "false"
+								   ) final boolean changeArticleDetails,
 								   @ModelAttribute("artikel") AusleihItem artikel,
 								   BindingResult bindingResult
 	) {
@@ -168,14 +170,21 @@ public class ItemController {
 		return "artikelDetails";
 	}
 
-	//2019-05-02 - 2019-05-09
+	@GetMapping("/ausleihen/{id}")
+	public String ausleihenAbbrechen(Model model, @PathVariable Long id) {
+		return "redirect:/details/" + id;
+	}
+
 	@PostMapping("/ausleihen/{id}")
-	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p, Model model) {
+	public String ausleihen(Model model,
+							@PathVariable Long id,
+							@ModelAttribute AusleihForm ausleihForm,
+							Principal p,
+							RedirectAttributes redirAttrs) {
 		AusleihItem artikel = (AusleihItem) itemService.findById(id);
 		Ausleihe ausleihe = new Ausleihe();
 		Person user = personService.get(p);
 
-		//Please refactor TODO
 		String startDatum = ausleihForm.getDate().substring(0, 10);
 		String endDatum = ausleihForm.getDate().substring(13);
 
@@ -192,7 +201,6 @@ public class ItemController {
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("startDatumErrors", bindingResult.getFieldError("startDatum"));
-			model.addAttribute("endDatumErrors", bindingResult.getFieldError("endDatum"));
 			model.addAttribute("ausleiherErrors", bindingResult.getFieldError("ausleiher"));
 			model.addAttribute("artikel", artikel);
 			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
@@ -209,7 +217,9 @@ public class ItemController {
 		personService.save(user);
 		itemService.save(artikel);
 
-		return "redirect:/";
+		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich ausgeliehen!");
+
+		return "redirect:/details/" + id;
 	}
 
 

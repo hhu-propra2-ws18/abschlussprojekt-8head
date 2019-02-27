@@ -16,10 +16,15 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class PersonController {
+
+	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
+
 	private PersonService personService;
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
@@ -39,7 +44,12 @@ public class PersonController {
 
 	@GetMapping("/")
 	public String startseite(Model model, Principal p) {
-		model.addAttribute("user", personService.get(p));
+		Person user = personService.get(p);
+		model.addAttribute("user", user);
+		if (user != null) {
+			model.addAttribute("lateAusleihen", ausleiheService.findLateAusleihen(user.getAusleihen()));
+		}
+		model.addAttribute("dateformat", DATEFORMAT);
 		return "startseite";
 	}
 
@@ -52,10 +62,14 @@ public class PersonController {
 				ausleihenItems.add((AusleihItem) item);
 			}
 		}
+		boolean isProPayAvailable = proPayService.isAvailable();
+		model.addAttribute("isProPayAvailable", isProPayAvailable);
 		model.addAttribute("benutzer", benutzer);
-		model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		model.addAttribute("user", personService.get(p));
 		model.addAttribute("ausleihen", ausleihenItems);
+		if (isProPayAvailable) {
+			model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
+		}
 		return "profil";
 	}
 

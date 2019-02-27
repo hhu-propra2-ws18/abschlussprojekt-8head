@@ -62,4 +62,7 @@ public class ProPayService {
 		proPayInterface.addFunds(person.getUsername(), betrag);
 	}
 
+	public boolean isAvailable() {
+		return proPayInterface.isAvailable();
+	}
 }
