@@ -5,8 +5,11 @@ Klassen-, Methoden- und Variabelnnamen sind gemischt Deutsch und Englisch. +
 HTML-Dateien sind auf deutsch, Urls auf Englisch. +
 Die Dokumentation wird auf Deutsch verfasst. +
 Codeformatierung ist IntelliJ default mit "Use tab character", aber ohne Smart Tabs. +
-In Travis wird checkstyle verwendet. Wenn dies nicht erfolgreich durchläuft sollte
-ein Branch im Allgemeinen nicht in den Master gemerged werden.
+In Travis werden checkstyle und spotBugs verwendet. Wenn diese nicht erfolgreich durchlaufen, dann sollte
+ein Branch im Allgemeinen nicht in den Master gemerged werden. PMD wird ebenfalls in Travis verwendet, allerdings führen
+Fehler dort nicht dazu, dass der Build fehlschlägt.
+
+
 
 ## Bedienung
 
@@ -47,6 +50,8 @@ Vorgaben erfüllen. Es gibt:
 
 #### Login
 Die Loginseite ist die Default von Spring Security mit Username
+#### Login und Logout
+Die Login und Logout Seiten sind die Default Seiten von Spring Security mit Username
 und Passwort.
 
 #### Neuen Abholort
