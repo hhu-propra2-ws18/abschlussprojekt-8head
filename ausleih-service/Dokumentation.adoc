@@ -64,12 +64,12 @@ kann. Zusätzlich kann man noch eine Beschreibung angeben (z.B.
 Auf der Starteseite wählt man aus ob man es zum Verleih oder Verkauf
 anbietet.
 
-## Zum Verleih
+###### Zum Verleih
 Man gibt die wichtigen Informationen aus den Minimalanforderungen für einen Artikel an. Die Verfügbarkeit
 wird über zwei Daten angeben und geht einschließlich vom ersten bis einschließlich zum zweiten.
 (Das zweite darf nicht vor dem ersten sein).
 
-## Zum Verkauf
+###### Zum Verkauf
 Ähnlich zum Verleih. Man gibt keine Kaution oder Tagesssatz an,
 stattdessen einen Kaufpreis. Es gibt auch keine Verfügbarkeit (wenn man etwas zum Verkauf anbietet
 sollte es auch immer verfügbar sein).
@@ -83,10 +83,29 @@ und Preise.
 Über die Profilpage sieht man die öffentlichen Daten einer Person. Wenn es
 das eigene Profil ist oder man admin ist kann man alle Daten
 außer den Username modifizieren. Als user selber kann hier auch
-die seinen Propay-Stand anzeigen lassen und Geld aufladen.
+die seinen ProPay-Stand anzeigen lassen und Geld aufladen.
+
+#### Artikeldetails
+Auf der Detailpage sieht man die Information zu einem eingestellten
+Artikel und kann sie als Besitzer oder Admin ändern.
+Als nicht-Besitzer kann man sie hier ausleihen.
+
+#### Adminfunktionen
+Die Adminpages sind nur als Admin erreichbar.
+
+###### Admin page
+Zeigt einem, dass man der Admin ist.
+
+###### Konfliktlösestelle
+In der Konfliktlösestelle wird einem eine Liste aller Ausleihen
+angezeigt, wo sich der Besitzer und der Ausleiher uneinig
+waren. Wenn man auf einen Konfliktklickt kommt man auf die Page
+dieses Konflikt von den man auf alle notwendigen Daten für
+diesen Konflikt kommt und wo der Admin diesen Konflikt zugunsten
+des Besitzers oder des Ausleihers resolven kann.
 
 
-#### Implementierung der Verkaufsoption
+## Implementierung der Verkaufsoption
 
 Um das Design den neuen Vorgaben unseres gutmütigen Chefs zuentsprechen haben wir
 uns entschieden die Itemklasse (welche einen eingestellten Artikel respäsentiert)
