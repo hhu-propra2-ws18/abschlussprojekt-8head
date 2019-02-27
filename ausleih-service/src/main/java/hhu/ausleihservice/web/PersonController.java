@@ -165,8 +165,40 @@ public class PersonController {
 	}
 
 	@GetMapping("/admin")
-	public String admin(Model model) {
+	public String admin(Model model, Principal p) {
+		model.addAttribute("user", personService.get(p));
 		return "admin";
 	}
 
+	@GetMapping("/admin/allconflicts")
+	public String showAllconflicts(Model model, Principal p) {
+		model.addAttribute("user", personService.get(p));
+		List<Ausleihe> konflikte = ausleiheService.findAllConflicts();
+		model.addAttribute("konflikte", konflikte);
+		return "alleKonflikte";
+	}
+
+
+	@GetMapping("/admin/conflict/{id}")
+	public String showConflict(Model model, Principal p, @PathVariable Long id) {
+		model.addAttribute("user", personService.get(p));
+		Ausleihe konflikt = ausleiheService.findById(id);
+		model.addAttribute("konflikt", konflikt);
+		return "konflikt";
+	}
+
+
+	@PostMapping("/admin/conflict/{id}")
+	public String resolveConflict
+			(Principal p, @PathVariable Long id, @RequestParam("entscheidung") String entscheidung) {
+		Ausleihe konflikt = ausleiheService.findById(id);
+		if (entscheidung.equals("bestrafen")) {
+			proPayService.punishRerservation(konflikt);
+		} else {
+			proPayService.releaseReservation(konflikt);
+		}
+		konflikt.setKonflikt(false);
+		ausleiheService.save(konflikt);
+		return "redirect:/admin/allconflicts/";
+	}
 }
