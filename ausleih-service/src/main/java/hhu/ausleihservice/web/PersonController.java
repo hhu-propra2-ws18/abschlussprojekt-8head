@@ -1,9 +1,6 @@
 package hhu.ausleihservice.web;
 
-import hhu.ausleihservice.databasemodel.AusleihItem;
-import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.databasemodel.Item;
-import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.databasemodel.*;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
@@ -205,5 +202,15 @@ public class PersonController {
 		konflikt.setKonflikt(false);
 		ausleiheService.save(konflikt);
 		return "redirect:/admin/allconflicts/";
+	}
+
+	@PostMapping("/ausleihe/bestaetigen/{id}")
+	public String ausleiheBestaetigen(@PathVariable Long id, Principal principal){
+		Ausleihe ausleihe = ausleiheService.findById(id);
+		ausleihe.setStatus(Status.BESTAETIGT);
+		proPayService.kautionReservieren(ausleihe);
+		
+
+		return "redirect:profil/"+personService.get(principal);
 	}
 }
