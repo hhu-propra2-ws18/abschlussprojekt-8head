@@ -7,3 +7,90 @@ Die Dokumentation wird auf Deutsch verfasst. +
 Codeformatierung ist IntelliJ default mit "Use tab character", aber ohne Smart Tabs. +
 In Travis wird checkstyle verwendet. Wenn dies nicht erfolgreich durchläuft sollte
 ein Branch im Allgemeinen nicht in den Master gemerged werden.
+
+## Bedienung
+
+#### Starten der Anwendung
+Die Anwendung wird über das Terminalkommando "sudo docker-compose up" gestartet.
+
+#### Bestehende Accounts
+Im DatabaseInizializer werden bereits mehrere Personen initialisiert
+über die man sich auch einloggen kann. Beispielsweise:
+
+* Username Kawumms mit Passwort rumbl7
+* Username Admin mit Passwort 123 (hat Admin Rechte)
+
+#### Navbar
+
+Im gesamten Service wird zur Hilfestellung eine Navigationsleiste angezeigt. Mit dieser
+kann man direkt zur Artikel- oder Personensuche. Wenn man uneingelogt stellt sie einem
+außerdem Links zur Registrierungs- und Anmeldeseite zurverfügung, ansonsten erhält
+man Links zum Auslogen und zur Profilseite und noch zur Adminseite als Admin.
+
+#### Startseite
+Die Default-page ist die Startseite auf der uneingelogt nur eine Aufforderung zum
+Anmelden angezeigt wird. +
+Wenn man als Nutzer eingelogt ist befinden sich hier auch die Links auf
+die Artikel Liste und auf die Seiten wo man neue Abholorte oder Artikel
+einfügen kann.
+
+#### Registrierung
+Bei der Registrierung muss man die notwendigen Daten angeben.
+Durch Validator wird sicher gestellt das diese bestimmten
+Vorgaben erfüllen. Es gibt:
+
+* Vorname
+* Nachname
+* Username (zwischen 6 und 32 Zeichen)
+* Passwort (zwischen 3-100 Zeichen)
+* Email (Gültiges Emailformat)
+
+#### Login
+Die Loginseite ist die Default von Spring Security mit Username
+und Passwort.
+
+#### Neuen Abholort
+Neue Abholorte muss man zu seinem Profil hinzufügen, bevor man
+einen Artikel hinzufügt. Diese stehen dann bei der Einreichung
+von jedem neuen Artikel zurverfügung. +
+Man gibt die Koordinaten des Abholorts entweder manuel oder über
+die einbundene Openstreetmap Karte an. Diese werden bis zu 6 Nachkommastellen
+gespeichert, was Abweichungen von bis zu 11 Zentimetern entsprechen
+kann. Zusätzlich kann man noch eine Beschreibung angeben (z.B.
+"Bitte gehen sie in den dritten Stock." oder
+"Vorsicht! Die Schlangen sind giftig!").
+
+#### Artikel reinstellen
+Auf der Starteseite wählt man aus ob man es zum Verleih oder Verkauf
+anbietet.
+
+## Zum Verleih
+Man gibt die wichtigen Informationen aus den Minimalanforderungen für einen Artikel an. Die Verfügbarkeit
+wird über zwei Daten angeben und geht einschließlich vom ersten bis einschließlich zum zweiten.
+(Das zweite darf nicht vor dem ersten sein).
+
+## Zum Verkauf
+Ähnlich zum Verleih. Man gibt keine Kaution oder Tagesssatz an,
+stattdessen einen Kaufpreis. Es gibt auch keine Verfügbarkeit (wenn man etwas zum Verkauf anbietet
+sollte es auch immer verfügbar sein).
+
+#### Artikel- und Personensuchen
+Führen einfache String Abgleiche durch. Bei der Artikelsuche
+kann über die "Erweiterte  Suche" noch weiter nach Verfügbarkeit
+und Preise.
+
+#### Profil
+Über die Profilpage sieht man die öffentlichen Daten einer Person. Wenn es
+das eigene Profil ist oder man admin ist kann man alle Daten
+außer den Username modifizieren. Als user selber kann hier auch
+die seinen Propay-Stand anzeigen lassen und Geld aufladen.
+
+
+#### Implementierung der Verkaufsoption
+
+Um das Design den neuen Vorgaben unseres gutmütigen Chefs zuentsprechen haben wir
+uns entschieden die Itemklasse (welche einen eingestellten Artikel respäsentiert)
+als eine Oberklasse für die Klassen AusleiheItem und KaufItem zu verwenden. Die erste
+wird für Artikel verwendet die zum Ausleihen eingestellt werden, die andere für Artikel
+die verkauft werden. Um diese Klassen zu verarbeiten wurden weitere Klassen und HTML-Datein
+in zwei geteilt, damit jeweils mit Kauf- oder Verleih Logik umgegangen wird.
