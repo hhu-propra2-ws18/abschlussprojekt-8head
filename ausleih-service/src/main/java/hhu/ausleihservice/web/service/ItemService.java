@@ -19,7 +19,7 @@ public class ItemService {
 	public ItemService() {
 	}
 
-	public ItemService(ItemRepository items, ItemAvailabilityService itemAvailabilityService) {
+	public ItemService(ItemRepository items) {
 		this.items = items;
 	}
 

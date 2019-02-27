@@ -7,8 +7,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import java.time.LocalDate;
-
 @Component
 public class KaufItemValidator implements Validator {
 
