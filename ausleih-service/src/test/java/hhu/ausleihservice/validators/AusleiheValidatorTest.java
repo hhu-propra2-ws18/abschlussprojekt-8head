@@ -17,6 +17,7 @@ import org.springframework.validation.DataBinder;
 import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.databasemodel.Status;
 import hhu.ausleihservice.web.service.ItemAvailabilityService;
 import hhu.ausleihservice.web.service.ProPayService;
 
@@ -29,6 +30,7 @@ public class AusleiheValidatorTest {
 		AusleihItem ausleiheItem = mock(AusleihItem.class);
 		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setStatus(Status.ANGEFRAGT);
 		ausleihe.setStartDatum(LocalDate.of(2000, 5, 5));
 		ausleihe.setEndDatum(LocalDate.of(2000, 5, 4));
 		ausleihe.setItem(ausleiheItem);
@@ -163,6 +165,7 @@ public class AusleiheValidatorTest {
 		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
 
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setStatus(Status.ANGEFRAGT);
 		ausleihe.setStartDatum(LocalDate.of(2019, 5, 3));
 		ausleihe.setEndDatum(LocalDate.of(2019, 5, 3));
 		ausleihe.setItem(ausleiheItem);
