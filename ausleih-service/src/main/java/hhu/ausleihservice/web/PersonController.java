@@ -2,6 +2,8 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.databasemodel.Status;
+import hhu.ausleihservice.validators.AusleiheValidator;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
@@ -9,9 +11,11 @@ import hhu.ausleihservice.web.service.ProPayService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -20,13 +24,16 @@ public class PersonController {
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
 	private AusleiheService ausleiheService;
+	private final AusleiheValidator ausleiheValidator;
 
 	PersonController(PersonService personService, PersonValidator personValidator,
-					 ProPayService proPayService, AusleiheService ausleiheService) {
+					 ProPayService proPayService, AusleiheService ausleiheService,
+					 AusleiheValidator ausleiheValidator) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
 		this.ausleiheService = ausleiheService;
+		this.ausleiheValidator = ausleiheValidator;
 	}
 
 	@GetMapping("/")
@@ -191,5 +198,25 @@ public class PersonController {
 		konflikt.setKonflikt(false);
 		ausleiheService.save(konflikt);
 		return "redirect:/admin/allconflicts/";
+	}
+
+	@PostMapping("/zurueckgeben/{id}")
+	public String returnArticle(Principal p, @PathVariable Long id) {
+		Ausleihe ausleihe = ausleiheService.findById(id);
+		DataBinder dataBinder = new DataBinder(ausleihe);
+		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.validate();
+
+		BindingResult bindingResult = dataBinder.getBindingResult();
+		if (bindingResult.hasErrors()) {
+			//TODO ErrorMessage nicht genug Geld
+			return "redirect:/profil";
+		}
+		Person person = personService.get(p);
+		ausleihe.setStatus(Status.RÜCKGABE_ANGEFRAGT);
+		ausleihe.setEndDatum(LocalDate.now());
+		proPayService.ueberweiseTagessaetze(ausleihe);
+		personService.save(person);
+		return "redirect:/profil";
 	}
 }

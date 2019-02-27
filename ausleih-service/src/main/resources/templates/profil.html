@@ -84,7 +84,14 @@
 			<td th:text="${ausleihe.item.titel}"></td>
 			<td th:text="${ausleihe.startDatum.toString()}"></td>
 			<td th:text="${ausleihe.endDatum.toString()}"></td>
-			<td th:text="${ausleihe.status}"></td>
+			<td th:switch="${ausleihe.status.name()}">
+				<span th:case="'AUSGELIEHEN'">
+					<form action="#" th:action="@{'/zurueckgeben/' + ${ausleihe.id}}" method="post">
+							<button type="submit" class="btn btn-primary" th:text="Zurückgeben"></button>
+					</form>
+				</span>
+				<p th:case="*" th:text="${ausleihe.status}"></p>
+			</td>
 		</tr>
 		</tbody>
 	</table>
