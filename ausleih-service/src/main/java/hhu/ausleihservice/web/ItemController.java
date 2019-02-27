@@ -35,7 +35,6 @@ public class ItemController {
 	private AbholortValidator abholortValidator;
 	private AusleiheValidator ausleiheValidator;
 	private AusleiheService ausleiheService;
-	private ProPayService proPayService;
 
 	public ItemController(AusleiheService ausleiheService,
 						  PersonService perService,
@@ -44,8 +43,7 @@ public class ItemController {
 						  ItemAvailabilityService itemAvailabilityService,
 						  ItemValidator itemValidator,
 						  AbholortValidator abholortValidator,
-						  AusleiheValidator ausleiheValidator,
-						  ProPayService proPayService
+						  AusleiheValidator ausleiheValidator
 	) {
 		this.ausleiheService = ausleiheService;
 		this.personService = perService;
@@ -55,7 +53,6 @@ public class ItemController {
 		this.itemValidator = itemValidator;
 		this.abholortValidator = abholortValidator;
 		this.ausleiheValidator = ausleiheValidator;
-		this.proPayService = proPayService;
 	}
 
 	@GetMapping("/liste")
