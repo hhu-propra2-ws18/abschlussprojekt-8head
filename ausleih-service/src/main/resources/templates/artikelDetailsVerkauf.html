@@ -75,6 +75,14 @@
 	</div>
 </container>
 
+<div th:unless="${user.isOwner(artikel)}">
+	<form th:action="@{/kaufen/{id}(id=${artikel.id})}" th:object="${kaufForm}" method="post">
+		<button type="submit" value="true" name="kaufeArtikel">Kaufen</button>
+		<div th:text="${kaeuferErrors?.code}"></div>
+		<div th:text="${ownItemErrors?.code}"></div>
+	</form>
+</div>
+
 <script th:inline="javascript">
 
     /*<![CDATA[*/
@@ -96,5 +104,6 @@
 
 
 </script>
+
 </body>
 </html>

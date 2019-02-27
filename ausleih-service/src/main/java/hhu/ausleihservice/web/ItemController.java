@@ -2,10 +2,7 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.*;
 import hhu.ausleihservice.form.AusleihForm;
-import hhu.ausleihservice.validators.AbholortValidator;
-import hhu.ausleihservice.validators.AusleiheValidator;
-import hhu.ausleihservice.validators.AusleihItemValidator;
-import hhu.ausleihservice.validators.KaufItemValidator;
+import hhu.ausleihservice.validators.*;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import hhu.ausleihservice.web.service.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -38,6 +35,7 @@ public class ItemController {
 	private KaufItemValidator kaufItemValidator;
 	private AbholortValidator abholortValidator;
 	private AusleiheValidator ausleiheValidator;
+	private KaufValidator kaufValidator;
 	private AusleiheService ausleiheService;
 
 	public ItemController(AusleiheService ausleiheService,
@@ -50,7 +48,8 @@ public class ItemController {
 						  AusleihItemValidator ausleihItemValidator,
 						  KaufItemValidator kaufItemValidator,
 						  AbholortValidator abholortValidator,
-						  AusleiheValidator ausleiheValidator
+						  AusleiheValidator ausleiheValidator,
+						  KaufValidator kaufValidator
 	) {
 		this.ausleiheService = ausleiheService;
 		this.personService = perService;
@@ -63,6 +62,7 @@ public class ItemController {
 		this.kaufItemValidator = kaufItemValidator;
 		this.abholortValidator = abholortValidator;
 		this.ausleiheValidator = ausleiheValidator;
+		this.kaufValidator = kaufValidator;
 	}
 
 	@GetMapping("/liste")
@@ -159,12 +159,41 @@ public class ItemController {
 		return "artikelDetailsVerkauf";
 	}
 
+	@PostMapping("/kaufen/{id}")
+	public String kaufen(@PathVariable Long id, Principal p, Model model) {
+		KaufItem artikel = kaufItemService.findById(id);
+		Person user = personService.get(p);
+		Kauf kauf = new Kauf();
+
+		//Please refactor TODO
+		kauf.setKaeufer(personService.get(p));
+		kauf.setItem(artikel);
+		kauf.setStatus(Status.ANGEFRAGT);
+
+		DataBinder dataBinder = new DataBinder(kauf);
+		dataBinder.setValidator(kaufValidator);
+		dataBinder.validate();
+		BindingResult bindingResult = dataBinder.getBindingResult();
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("kaeuferErrors", bindingResult.getFieldError("kaeufer"));
+			model.addAttribute("ownItemErrors", bindingResult.getFieldError("ownItem"));
+			model.addAttribute("artikel", artikel);
+			model.addAttribute("user", user);
+			return "artikelDetailsVerkauf";
+		}
+
+		user.addKauf(kauf);
+		personService.save(user);
+		return "redirect:/";
+	}
+
+
 	@GetMapping("/details/ausleih/{id}")
 	public String artikelDetailsAusleih(Model model,
 								 @PathVariable long id,
 								 Principal p) {
 		try {
-			AusleihItem artikel = (AusleihItem) ausleihItemService.findById(id);
+			AusleihItem artikel = ausleihItemService.findById(id);
 			model.addAttribute("artikel", artikel);
 			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
 		} catch (ItemNichtVorhanden a) {
