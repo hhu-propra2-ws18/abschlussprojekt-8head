@@ -14,8 +14,8 @@ import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -204,6 +204,7 @@ public class PersonController {
 			proPayService.releaseReservation(konflikt);
 		}
 		konflikt.setKonflikt(false);
+		konflikt.setStatus(Status.ABGESCHLOSSEN);
 		ausleiheService.save(konflikt);
 		return "redirect:/admin/allconflicts/";
 	}
@@ -228,6 +229,24 @@ public class PersonController {
 		Person person = personService.get(principal);
 		ausleihe.setStatus(Status.ABGELEHNT);
 		personService.save(person);
+		return "redirect:/profil/" + person.getId();
+	}
+
+	@PostMapping("/ausleihe/bestaetigen/{id}")
+	public String rueckgabeBestaetigen(@PathVariable Long id, Principal principal) {
+		Ausleihe ausleihe = ausleiheService.findById(id);
+		Person person = personService.get(principal);
+		ausleihe.setStatus(Status.ABGESCHLOSSEN);
+		proPayService.releaseReservation(ausleihe);
+		personService.save(person);
+		return "redirect:/profil/" + person.getId();
+	}
+
+	@PostMapping("/ausleihe/ablehnen/{id}")
+	public String rueckgabeKonflikt(@PathVariable Long id, Principal principal) {
+		Ausleihe ausleihe = ausleiheService.findById(id);
+		Person person = personService.get(principal);
+		ausleihe.setKonflikt(true);
 		return "redirect:/profil/" + person.getId();
 	}
 
