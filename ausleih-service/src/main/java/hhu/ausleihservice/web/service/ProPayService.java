@@ -2,6 +2,7 @@ package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.propay.ProPayAccount;
 import hhu.ausleihservice.propay.ProPayInterface;
 import hhu.ausleihservice.propay.ProPayReservation;
 import org.springframework.stereotype.Component;
@@ -47,7 +48,14 @@ public class ProPayService {
 	}
 
 	public double getProPayKontostand(Person person) {
-		return proPayInterface.getAccountInfo(person.getUsername()).getAmount();
+		ProPayAccount account = proPayInterface.getAccountInfo(person.getUsername());
+		double amount = account.getAmount();
+		if (account.getReservations() != null) {
+			for (ProPayReservation reservation : account.getReservations()) {
+				amount = amount - reservation.getAmount();
+			}
+		}
+		return amount;
 	}
 
 	public void addFunds(Person person, double betrag) {

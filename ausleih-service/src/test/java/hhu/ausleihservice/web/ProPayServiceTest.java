@@ -18,7 +18,6 @@ import java.time.LocalDate;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-
 public class ProPayServiceTest {
 
 	@Mock
@@ -48,8 +47,8 @@ public class ProPayServiceTest {
 		ausleihe.setEndDatum(LocalDate.now().plusDays(1));
 
 		proPayService.ueberweiseTagessaetze(ausleihe);
-		verify(proPayInterface).transferFunds(ArgumentMatchers.eq("siker102")
-				, ArgumentMatchers.eq("bumar100"), ArgumentMatchers.eq(10.0));
+		verify(proPayInterface).transferFunds(ArgumentMatchers.eq("siker102"), ArgumentMatchers.eq("bumar100"),
+				ArgumentMatchers.eq(10.0));
 	}
 
 	@Test
@@ -69,8 +68,8 @@ public class ProPayServiceTest {
 		ausleihe.setEndDatum(LocalDate.now().plusDays(5));
 
 		proPayService.ueberweiseTagessaetze(ausleihe);
-		verify(proPayInterface).transferFunds(ArgumentMatchers.eq("siker102")
-				, ArgumentMatchers.eq("bumar100"), ArgumentMatchers.eq(50.0));
+		verify(proPayInterface).transferFunds(ArgumentMatchers.eq("siker102"), ArgumentMatchers.eq("bumar100"),
+				ArgumentMatchers.eq(50.0));
 	}
 
 	@Test
@@ -90,8 +89,8 @@ public class ProPayServiceTest {
 		ausleihe.setEndDatum(LocalDate.now());
 
 		proPayService.ueberweiseTagessaetze(ausleihe);
-		verify(proPayInterface).transferFunds(ArgumentMatchers.eq("siker102")
-				, ArgumentMatchers.eq("bumar100"), ArgumentMatchers.eq(0.0));
+		verify(proPayInterface).transferFunds(ArgumentMatchers.eq("siker102"), ArgumentMatchers.eq("bumar100"),
+				ArgumentMatchers.eq(0.0));
 	}
 
 	@Test
@@ -112,8 +111,8 @@ public class ProPayServiceTest {
 		when(proPayInterface.createReservation(anyString(), anyString(), anyDouble())).thenReturn(reservation);
 		proPayService.kautionReservieren(ausleihe);
 
-		verify(proPayInterface).createReservation(ArgumentMatchers.eq("siker102")
-				, ArgumentMatchers.eq("bumar100"), ArgumentMatchers.eq(300.0));
+		verify(proPayInterface).createReservation(ArgumentMatchers.eq("siker102"), ArgumentMatchers.eq("bumar100"),
+				ArgumentMatchers.eq(300.0));
 
 		assertEquals(Long.valueOf(42L), ausleihe.getReservationId());
 	}
@@ -132,8 +131,7 @@ public class ProPayServiceTest {
 		ausleihe.setAusleiher(simon);
 		ausleihe.setReservationId(22L);
 		proPayService.punishRerservation(ausleihe);
-		verify(proPayInterface).punishReservation(ArgumentMatchers.eq(22L)
-				, ArgumentMatchers.eq("siker102"));
+		verify(proPayInterface).punishReservation(ArgumentMatchers.eq(22L), ArgumentMatchers.eq("siker102"));
 	}
 
 	@Test
@@ -150,8 +148,7 @@ public class ProPayServiceTest {
 		ausleihe.setAusleiher(simon);
 		ausleihe.setReservationId(22L);
 		proPayService.releaseReservation(ausleihe);
-		verify(proPayInterface).releaseReservation(ArgumentMatchers.eq(22L)
-				, ArgumentMatchers.eq("siker102"));
+		verify(proPayInterface).releaseReservation(ArgumentMatchers.eq(22L), ArgumentMatchers.eq("siker102"));
 	}
 
 	@Test
