@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
 <head th:replace="../static/css/navbar :: style">
 	<meta charset="UTF-8">
 	<title>Startseite</title>
@@ -17,7 +17,7 @@
 	<a href="/newitem">Neuen Artikel verleihen</a><br>
 	<a href="/newlocation">Neuen Abholort hinzufügen</a><br>
 	<div th:if="${user.isAdmin()}">
-		<a th:href="@{/allconflicts}">Konflikte anzeigen</a>
+		<a th:href="@{/admin/allconflicts}">Konflikte anzeigen</a>
 	</div>
 	<br>
 	<br>

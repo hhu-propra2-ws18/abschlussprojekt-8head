@@ -80,6 +80,7 @@ public class PersonController {
 			System.out.println("Now updating..");
 			personService.updateById(id, benutzer);
 			model.addAttribute("benutzer", personService.findById(id));
+			model.addAttribute("moneten", proPayService.getProPayKontostand(personService.findById(id)));
 			model.addAttribute("user", personService.get(p));
 			return "profil";
 		}
@@ -155,55 +156,40 @@ public class PersonController {
 	}
 
 	@GetMapping("/admin")
-	public String admin(Model model) {
+	public String admin(Model model, Principal p) {
+		model.addAttribute("user", personService.get(p));
 		return "admin";
 	}
 
-	@GetMapping("/allconflicts")
+	@GetMapping("/admin/allconflicts")
 	public String showAllconflicts(Model model, Principal p) {
 		model.addAttribute("user", personService.get(p));
-		if (!personService.get(p).isAdmin()) {
-			model.addAttribute("message", "Administrator depostulatur");
-			return "errorMessage";
-
-
-		} else {
-			List<Ausleihe> konflikte = ausleiheService.findAllConflicts();
-			model.addAttribute("konflikte", konflikte);
-			return "alleKonflikte";
-		}
+		List<Ausleihe> konflikte = ausleiheService.findAllConflicts();
+		model.addAttribute("konflikte", konflikte);
+		return "alleKonflikte";
 	}
 
-	@GetMapping("/conflict/{id}")
+
+	@GetMapping("/admin/conflict/{id}")
 	public String showConflict(Model model, Principal p, @PathVariable Long id) {
 		model.addAttribute("user", personService.get(p));
-		if (!personService.get(p).isAdmin()) {
-			model.addAttribute("message", "Administrator depostulatur");
-			return "errorMessage";
-		} else {
-			Ausleihe konflikt = ausleiheService.findById(id);
-			model.addAttribute("konflikt", konflikt);
-			return "konflikt";
-		}
+		Ausleihe konflikt = ausleiheService.findById(id);
+		model.addAttribute("konflikt", konflikt);
+		return "konflikt";
 	}
 
-	@PostMapping("/conflict/{id}")
-	public String resolveConflict
-			(Model model, Principal p, @PathVariable Long id, @RequestParam("entscheidung") String entscheidung) {
-		if (!personService.get(p).isAdmin()) {
-			model.addAttribute("message", "Administrator depostulatur");
-			return "errorMessage";
-		} else {
-			Ausleihe konflikt = ausleiheService.findById(id);
-			if (entscheidung.equals("bestrafen")) {
-				proPayService.punishRerservation(konflikt);
-			} else {
-				proPayService.releaseReservation(konflikt);
-			}
-			konflikt.setKonflikt(false);
-			ausleiheService.save(konflikt);
-			return "redirect:/allconflicts/";
-		}
 
+	@PostMapping("/admin/conflict/{id}")
+	public String resolveConflict
+			(Principal p, @PathVariable Long id, @RequestParam("entscheidung") String entscheidung) {
+		Ausleihe konflikt = ausleiheService.findById(id);
+		if (entscheidung.equals("bestrafen")) {
+			proPayService.punishRerservation(konflikt);
+		} else {
+			proPayService.releaseReservation(konflikt);
+		}
+		konflikt.setKonflikt(false);
+		ausleiheService.save(konflikt);
+		return "redirect:/admin/allconflicts/";
 	}
 }
