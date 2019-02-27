@@ -15,15 +15,12 @@ public class ItemService {
 
 	@Autowired
 	private ItemRepository items;
-	@Autowired
-	private ItemAvailabilityService itemAvailabilityService;
 
 	public ItemService() {
 	}
 
 	public ItemService(ItemRepository items, ItemAvailabilityService itemAvailabilityService) {
 		this.items = items;
-		this.itemAvailabilityService = itemAvailabilityService;
 	}
 
 	public Item findById(long id) {
@@ -74,14 +71,5 @@ public class ItemService {
 
 	public void save(Item newItem) {
 		items.save(newItem);
-	}
-
-	public void updateById(Long id, Item newItem) {
-		Item toUpdate = this.findById(id);
-		System.out.println("Starting item update");
-		toUpdate.setTitel(newItem.getTitel());
-		toUpdate.setBeschreibung(newItem.getBeschreibung());
-		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
-		items.save(toUpdate);
 	}
 }

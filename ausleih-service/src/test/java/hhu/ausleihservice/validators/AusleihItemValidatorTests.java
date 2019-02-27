@@ -12,25 +12,25 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class ItemValidatorTests {
+public class AusleihItemValidatorTests {
 	//Tests for supports(Class<?> clazz)
 	@Test
 	public void supportsValidClass() {
-		ItemValidator itemValidator = new ItemValidator();
-		assertTrue(itemValidator.supports(AusleihItem.class));
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
+		assertTrue(ausleihItemValidator.supports(AusleihItem.class));
 	}
 
 	@Test
 	public void supportsInvalidClassFalse() {
-		ItemValidator itemValidator = new ItemValidator();
-		assertFalse(itemValidator.supports(Integer.class));
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
+		assertFalse(ausleihItemValidator.supports(Integer.class));
 	}
 
 
 	//Tests for validate(Object target, Errors errors)
 	@Test
 	public void validateNullTagessatz() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -42,7 +42,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -56,7 +56,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateNullKautionswert() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -68,7 +68,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -82,7 +82,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateNullAvailableFrom() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -94,7 +94,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -111,7 +111,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateNullAvailableTill() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -123,7 +123,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -140,7 +140,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateEmptyTitel() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -153,7 +153,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -169,7 +169,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateEmptyBeschreibung() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -182,7 +182,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -198,7 +198,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateTitelTooShort() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -211,7 +211,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -225,7 +225,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateTitelTooLong() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -238,7 +238,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -252,7 +252,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateBeschreibungTooShort() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -265,7 +265,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -279,7 +279,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateBeschreibungTooLong() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -297,7 +297,7 @@ public class ItemValidatorTests {
 		item.setBeschreibung(beschreibungBuilder.toString());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -311,7 +311,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateKautionswertTooSmall() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -324,7 +324,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -338,7 +338,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateTagessatzTooSmall() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -351,7 +351,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -365,7 +365,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateAvailableFromAfterAvailableTill() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -378,7 +378,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -392,7 +392,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateAvailableFromBeforeToday() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -405,7 +405,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
@@ -419,7 +419,7 @@ public class ItemValidatorTests {
 
 	@Test
 	public void validateValid() {
-		ItemValidator itemValidator = new ItemValidator();
+		AusleihItemValidator ausleihItemValidator = new AusleihItemValidator();
 		AusleihItem item = new AusleihItem();
 
 		item.setId(0L);
@@ -432,7 +432,7 @@ public class ItemValidatorTests {
 		item.setAbholort(new Abholort());
 
 		DataBinder dataBinder = new DataBinder(item);
-		dataBinder.setValidator(itemValidator);
+		dataBinder.setValidator(ausleihItemValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 

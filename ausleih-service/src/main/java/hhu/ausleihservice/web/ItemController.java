@@ -4,7 +4,8 @@ import hhu.ausleihservice.databasemodel.*;
 import hhu.ausleihservice.form.AusleihForm;
 import hhu.ausleihservice.validators.AbholortValidator;
 import hhu.ausleihservice.validators.AusleiheValidator;
-import hhu.ausleihservice.validators.ItemValidator;
+import hhu.ausleihservice.validators.AusleihItemValidator;
+import hhu.ausleihservice.validators.KaufItemValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import hhu.ausleihservice.web.service.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -33,7 +34,8 @@ public class ItemController {
 	private final KaufItemService kaufItemService;
 	private final AbholortService abholortService;
 	private final ItemAvailabilityService itemAvailabilityService;
-	private ItemValidator itemValidator;
+	private AusleihItemValidator ausleihItemValidator;
+	private KaufItemValidator kaufItemValidator;
 	private AbholortValidator abholortValidator;
 	private AusleiheValidator ausleiheValidator;
 	private AusleiheService ausleiheService;
@@ -45,7 +47,8 @@ public class ItemController {
 						  KaufItemService kaufItemService,
 						  AbholortService abholortService,
 						  ItemAvailabilityService itemAvailabilityService,
-						  ItemValidator itemValidator,
+						  AusleihItemValidator ausleihItemValidator,
+						  KaufItemValidator kaufItemValidator,
 						  AbholortValidator abholortValidator,
 						  AusleiheValidator ausleiheValidator
 	) {
@@ -56,7 +59,8 @@ public class ItemController {
 		this.kaufItemService = kaufItemService;
 		this.abholortService = abholortService;
 		this.itemAvailabilityService = itemAvailabilityService;
-		this.itemValidator = itemValidator;
+		this.ausleihItemValidator = ausleihItemValidator;
+		this.kaufItemValidator = kaufItemValidator;
 		this.abholortValidator = abholortValidator;
 		this.ausleiheValidator = ausleiheValidator;
 	}
@@ -110,12 +114,57 @@ public class ItemController {
 		return "artikelListe";
 	}
 
+	@GetMapping("/details/verkauf/{id}")
+	public String artikelDetailsVerkauf(Model model,
+										@PathVariable long id,
+										Principal p) {
+		try {
+			KaufItem artikel = kaufItemService.findById(id);
+			model.addAttribute("artikel", artikel);
+		} catch (ItemNichtVorhanden a) {
+			model.addAttribute("id", id);
+			return "artikelNichtGefunden";
+		}
+		model.addAttribute("user", personService.get(p));
+		return "artikelDetailsVerkauf";
+	}
+
+	@PostMapping("/details/verkauf/{id}")
+	public String bearbeiteArtikelVerkauf(Model model,
+										  @PathVariable long id,
+										  Principal p,
+										  @RequestParam(name = "editArtikel", defaultValue = "false")
+										  final boolean changeArticleDetails,
+										  @ModelAttribute("artikel") KaufItem artikel,
+										  BindingResult bindingResult
+	) {
+		System.out.println("Post triggered at /details/verkauf/" + id);
+		System.out.println(artikel + " " + changeArticleDetails);
+		model.addAttribute("user", personService.get(p));
+		kaufItemValidator.validate(artikel, bindingResult);
+
+		if (changeArticleDetails) {
+			if (bindingResult.hasErrors()) {
+				model.addAttribute("artikel", kaufItemService.findById(id));
+				model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
+				model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
+				model.addAttribute("kaufpreisErrors", bindingResult.getFieldError("kaufpreis"));
+				model.addAttribute("abholortErrors", bindingResult.getFieldError("abholort"));
+				return "artikelDetailsVerkauf";
+			}
+			kaufItemService.updateById(id, artikel);
+		}
+		model.addAttribute("artikel", kaufItemService.findById(id));
+
+		return "artikelDetailsVerkauf";
+	}
+
 	@GetMapping("/details/ausleih/{id}")
-	public String artikelDetails(Model model,
+	public String artikelDetailsAusleih(Model model,
 								 @PathVariable long id,
 								 Principal p) {
 		try {
-			AusleihItem artikel = (AusleihItem) itemService.findById(id);
+			AusleihItem artikel = (AusleihItem) ausleihItemService.findById(id);
 			model.addAttribute("artikel", artikel);
 			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
 		} catch (ItemNichtVorhanden a) {
@@ -126,11 +175,11 @@ public class ItemController {
 		model.addAttribute("ausleihForm", new AusleihForm());
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("user", personService.get(p));
-		return "artikelDetails";
+		return "artikelDetailsAusleih";
 	}
 
 	@PostMapping("/details/ausleih/{id}")
-	public String bearbeiteArtikel(Model model,
+	public String bearbeiteArtikelAusleih(Model model,
 								   @PathVariable long id,
 								   Principal p,
 								   @RequestParam(name = "editArtikel", defaultValue = "false")
@@ -138,18 +187,16 @@ public class ItemController {
 								   @ModelAttribute("artikel") AusleihItem artikel,
 								   BindingResult bindingResult
 	) {
-		System.out.println("Post triggered at /details/" + id);
+		System.out.println("Post triggered at /details/verleih/" + id);
 		System.out.println(artikel + " " + changeArticleDetails);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("user", personService.get(p));
 		model.addAttribute("ausleihForm", new AusleihForm());
-		Item item = new AusleihItem();
-		System.out.println(item);
-		itemValidator.validate(artikel, bindingResult);
+		ausleihItemValidator.validate(artikel, bindingResult);
 
 		if (changeArticleDetails) {
 			if (bindingResult.hasErrors()) {
-				model.addAttribute("artikel", itemService.findById(id));
+				model.addAttribute("artikel", ausleihItemService.findById(id));
 				model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
 				model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
 				model.addAttribute("tagessatzErrors", bindingResult.getFieldError("tagessatz"));
@@ -157,19 +204,19 @@ public class ItemController {
 				model.addAttribute("availableFromErrors", bindingResult.getFieldError("availableFrom"));
 				model.addAttribute("abholortErrors", bindingResult.getFieldError("abholort"));
 				model.addAttribute("dateformat", DATEFORMAT);
-				return "artikelDetails";
+				return "artikelDetailsAusleih";
 			}
-			itemService.updateById(id, artikel);
+			ausleihItemService.updateById(id, artikel);
 		}
-		model.addAttribute("artikel", itemService.findById(id));
+		model.addAttribute("artikel", ausleihItemService.findById(id));
 
-		return "artikelDetails";
+		return "artikelDetailsAusleih";
 	}
 
 	//2019-05-02 - 2019-05-09
 	@PostMapping("/ausleihen/{id}")
 	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p, Model model) {
-		AusleihItem artikel = (AusleihItem) itemService.findById(id);
+		AusleihItem artikel = ausleihItemService.findById(id);
 		Ausleihe ausleihe = new Ausleihe();
 		Person user = personService.get(p);
 
@@ -197,7 +244,7 @@ public class ItemController {
 			model.addAttribute("ausleihForm", new AusleihForm());
 			model.addAttribute("dateformat", DATEFORMAT);
 			model.addAttribute("user", user);
-			return "artikelDetails";
+			return "artikelDetailsAusleih";
 		}
 
 		user.addAusleihe(ausleihe);
@@ -205,7 +252,7 @@ public class ItemController {
 
 		ausleiheService.save(ausleihe);
 		personService.save(user);
-		itemService.save(artikel);
+		ausleihItemService.save(artikel);
 
 		return "redirect:/";
 	}
@@ -232,7 +279,7 @@ public class ItemController {
 						  @RequestParam("file") MultipartFile picture,
 						  BindingResult bindingResult,
 						  RedirectAttributes redirAttrs) {
-		itemValidator.validate(newItem, bindingResult);
+		ausleihItemValidator.validate(newItem, bindingResult);
 		Person besitzer = personService.get(p);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("abholorte", personService.get(p).getAbholorte());

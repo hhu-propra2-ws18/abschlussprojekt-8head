@@ -19,7 +19,8 @@ public class KaufItemService extends ItemService {
 		this.items = itemRep;
 	}
 
-	public KaufItem findKaufItemById(long id) {
+	@Override
+	public KaufItem findById(long id) {
 		Optional<KaufItem> item = items.findById(id);
 		if (!item.isPresent()) {
 			throw new ItemNichtVorhanden();
@@ -60,8 +61,8 @@ public class KaufItemService extends ItemService {
 	}
 
 	public void updateById(Long id, KaufItem newItem) {
-		KaufItem toUpdate = findKaufItemById(id);
-		System.out.println("Starting item update");
+		KaufItem toUpdate = findById(id);
+		System.out.println("Starting verkauf item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
 		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());

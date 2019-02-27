@@ -11,7 +11,7 @@
 <container class="container px-lg-5">
 	<div class="row mx-lg-n5 product-details-row">
 		<div>
-			<form th:action="@{/details/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}" method="post">
+			<form th:action="@{/details/ausleih/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}" method="post">
 				<table class="product-details">
 					<tr>
 						<td><h2 th:text="${artikel.titel}">ITEM</h2></td>
@@ -80,13 +80,15 @@
 					<tr>
 						<td>Verleihender</td>
 						<td><a th:href="@{../../profil/{benutzerID} (benutzerID=${artikel.besitzer.id})}"
-							   th:text="${artikel.besitzer.vorname +' ' + artikel.besitzer.nachname}"></a></td>
-					</tr>
-					<tr style="background:white">
-						<td><a href="/liste">Zurück</a></td>
-						<td th:if="${user.isAdmin() or user.isOwner(artikel)}"></td>
+							   th:text="${artikel.besitzer.vorname +' ' + artikel.besitzer.nachname}"></a>
+						</td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<button type="submit" value="true" name="editArtikel">Artikel Ändern</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="/liste">Zurück</a>
 						</td>
 					</tr>
 				</table>

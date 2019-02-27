@@ -17,10 +17,10 @@ import java.util.Set;
 public class DatabaseInitializer implements ServletContextInitializer {
 
 	private PersonRepository personRepository;
-	private AusleihItemRepository itemRepository;
+	private AusleihItemRepository ausleihItemRepository;
+	private KaufItemRepository kaufItemRepository;
 	private AbholortRepository abholortRepository;
 	private AusleiheRepository ausleiheRepository;
-	private KaufItemRepository kaufItemRepository;
 
 	public DatabaseInitializer(PersonRepository perRepository,
 							   AusleihItemRepository iRepository,
@@ -28,7 +28,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 							   AusleiheRepository ausleiheRepository,
 							   KaufItemRepository kaufItemRepository) {
 		this.personRepository = perRepository;
-		this.itemRepository = iRepository;
+		this.ausleihItemRepository = iRepository;
 		this.abholortRepository = abhRepository;
 		this.ausleiheRepository = ausleiheRepository;
 		this.kaufItemRepository = kaufItemRepository;
@@ -232,11 +232,11 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.personRepository.save(person5);
 
 		System.out.println(item5);
-		this.itemRepository.save(item1);
-		this.itemRepository.save(item2);
-		this.itemRepository.save(item3);
-		this.itemRepository.save(item4);
-		this.itemRepository.save(item5);
+		this.ausleihItemRepository.save(item1);
+		this.ausleihItemRepository.save(item2);
+		this.ausleihItemRepository.save(item3);
+		this.ausleihItemRepository.save(item4);
+		this.ausleihItemRepository.save(item5);
 		System.out.println(item6);
 		this.kaufItemRepository.save(item6);
 

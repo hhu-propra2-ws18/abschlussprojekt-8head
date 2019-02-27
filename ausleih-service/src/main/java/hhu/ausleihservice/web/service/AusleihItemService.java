@@ -24,7 +24,8 @@ public class AusleihItemService extends ItemService {
 		this.itemAvailabilityService = itemAvailabilityService;
 	}
 
-	public AusleihItem findAusleihItemById(long id) {
+	@Override
+	public AusleihItem findById(long id) {
 		Optional<AusleihItem> item = items.findById(id);
 		if (!item.isPresent()) {
 			throw new ItemNichtVorhanden();
@@ -34,29 +35,6 @@ public class AusleihItemService extends ItemService {
 
 	List<AusleihItem> findAllAusleihItem() {
 		return items.findAll();
-	}
-
-	public List<Item> simpleSearch(String query) {
-		List<Item> list;
-
-		if (query == null || query.isEmpty()) {
-			list = findAll();
-		} else {
-			//Ignores case
-			String[] qArray = query.toLowerCase().split(" ");
-			list = findAll()
-					.stream()
-					.filter(
-							item -> containsArray(
-									(item.getTitel()
-											+ item.getBeschreibung())
-											.toLowerCase(),
-									qArray
-							)
-					)
-					.collect(Collectors.toList());
-		}
-		return list;
 	}
 
 	public List<AusleihItem> extendedSearch(String query,
@@ -86,8 +64,8 @@ public class AusleihItemService extends ItemService {
 	}
 
 	public void updateById(Long id, AusleihItem newItem) {
-		AusleihItem toUpdate = findAusleihItemById(id);
-		System.out.println("Starting item update");
+		AusleihItem toUpdate = findById(id);
+		System.out.println("Starting ausleih item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
 		toUpdate.setAvailableFrom(newItem.getAvailableFrom());
@@ -96,6 +74,10 @@ public class AusleihItemService extends ItemService {
 		toUpdate.setKautionswert(newItem.getKautionswert());
 		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
 		items.save(toUpdate);
+	}
+
+	public void save(AusleihItem newItem) {
+		items.save(newItem);
 	}
 
 }
