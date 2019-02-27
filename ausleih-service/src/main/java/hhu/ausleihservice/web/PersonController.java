@@ -218,8 +218,8 @@ public class PersonController {
 		} else {
 			ausleihe.setStatus(Status.BESTAETIGT);
 		}
-		personService.save(person);
 		proPayService.kautionReservieren(ausleihe);
+		personService.save(person);
 		return "redirect:/profil/" + person.getId();
 	}
 
@@ -264,7 +264,7 @@ public class PersonController {
 		}
 
 		Person person = personService.get(p);
-		ausleihe.setStatus(Status.RÜCKGABE_ANGEFRAGT);
+		ausleihe.setStatus(Status.RUECKGABE_ANGEFRAGT);
 		ausleihe.setEndDatum(LocalDate.now());
 		proPayService.ueberweiseTagessaetze(ausleihe);
 		personService.save(person);

@@ -131,13 +131,13 @@
 				</button>
 				<div th:case="'RUECKGABE_ANGEFRAGT'" class="row">
 					<form th:action="@{/rueckgabe/bestaetigen/{id}(id=${ausleihe.id})}" method="post">
-						<button type="submit" class="btn btn-success" th:text="Bestätigen">
-							Bestätigen
+						<button type="submit" class="btn btn-success" th:text="Rückgabe Bestätigen">
+							Rückgabe Bestätigen
 						</button>
 					</form>
 					<form th:action="@{/rueckgabe/ablehnen/{id}(id=${ausleihe.id})}" method="post">
-						<button type="submit" class="btn btn-success" th:text="Ablehnen">
-							Ablehnen
+						<button type="submit" class="btn btn-danger" th:text="Konflikt">
+							Konflikt
 						</button>
 					</form>
 				</div>
