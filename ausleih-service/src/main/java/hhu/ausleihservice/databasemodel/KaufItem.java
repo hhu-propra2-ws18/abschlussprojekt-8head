@@ -10,4 +10,5 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 public class KaufItem extends Item {
 	private Integer kaufpreis;
+	private Status status;
 }

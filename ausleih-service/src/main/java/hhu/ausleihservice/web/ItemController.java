@@ -166,9 +166,9 @@ public class ItemController {
 		Kauf kauf = new Kauf();
 
 		//Please refactor TODO
-		kauf.setKaeufer(personService.get(p));
+		artikel.setStatus(Status.VERKAUFT);
 		kauf.setItem(artikel);
-		kauf.setStatus(Status.ANGEFRAGT);
+		user.addKauf(kauf);
 
 		DataBinder dataBinder = new DataBinder(kauf);
 		dataBinder.setValidator(kaufValidator);
@@ -182,7 +182,6 @@ public class ItemController {
 			return "artikelDetailsVerkauf";
 		}
 
-		user.addKauf(kauf);
 		personService.save(user);
 		return "redirect:/";
 	}
