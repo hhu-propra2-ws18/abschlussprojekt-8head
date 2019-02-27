@@ -212,7 +212,11 @@ public class PersonController {
 	public String ausleiheBestaetigen(@PathVariable Long id, Principal principal) {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		Person person = personService.get(principal);
-		ausleihe.setStatus(Status.BESTAETIGT);
+		if(ausleihe.getStartDatum().equals(LocalDate.now())){
+			ausleihe.setStatus(Status.AUSGELIEHEN);
+		}else{
+			ausleihe.setStatus(Status.BESTAETIGT);
+		}
 		personService.save(person);
 		proPayService.kautionReservieren(ausleihe);
 		return "redirect:/profil/" + person.getId();
@@ -239,6 +243,7 @@ public class PersonController {
 			//TODO ErrorMessage nicht genug Geld
 			return "redirect:/profil";
 		}
+
 		Person person = personService.get(p);
 		ausleihe.setStatus(Status.RÜCKGABE_ANGEFRAGT);
 		ausleihe.setEndDatum(LocalDate.now());
