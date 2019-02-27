@@ -232,7 +232,7 @@ public class PersonController {
 		return "redirect:/profil/" + person.getId();
 	}
 
-	@PostMapping("/ausleihe/bestaetigen/{id}")
+	@PostMapping("/rueckgabe/bestaetigen/{id}")
 	public String rueckgabeBestaetigen(@PathVariable Long id, Principal principal) {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		Person person = personService.get(principal);
@@ -242,7 +242,7 @@ public class PersonController {
 		return "redirect:/profil/" + person.getId();
 	}
 
-	@PostMapping("/ausleihe/ablehnen/{id}")
+	@PostMapping("/rueckgabe/ablehnen/{id}")
 	public String rueckgabeKonflikt(@PathVariable Long id, Principal principal) {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		Person person = personService.get(principal);
