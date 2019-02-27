@@ -2,7 +2,8 @@
 
 Commit Nachrichten in Englisch, Präsens, kurz und kompakt. +
 Klassen-, Methoden- und Variabelnnamen sind gemischt Deutsch und Englisch. +
-HTML-Dateien sind auf deutsch. +
+HTML-Dateien sind auf deutsch, Urls auf Englisch. +
+Die Dokumentation wird auf Deutsch verfasst. +
 Codeformatierung ist IntelliJ default mit "Use tab character", aber ohne Smart Tabs. +
 In Travis wird checkstyle verwendet. Wenn dies nicht erfolgreich durchläuft sollte
 ein Branch im Allgemeinen nicht in den Master gemerged werden.
