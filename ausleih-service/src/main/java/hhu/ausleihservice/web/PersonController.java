@@ -13,13 +13,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.soap.Addressing;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class PersonController {
@@ -31,7 +28,8 @@ public class PersonController {
 
 	@Autowired
 	PersonController(PersonService personService, PersonValidator personValidator,
-					 ProPayService proPayService, AusleiheService ausleiheService, AusleiheValidator ausleiheValidator) {
+					 ProPayService proPayService, AusleiheService ausleiheService,
+					 AusleiheValidator ausleiheValidator) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
@@ -222,11 +220,31 @@ public class PersonController {
 	}
 
 	@PostMapping("/ausleihe/ablehnen/{id}")
-	public String ausleiheAblehnen(@PathVariable Long id, Principal principal){
+	public String ausleiheAblehnen(@PathVariable Long id, Principal principal) {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		Person person = personService.get(principal);
 		ausleihe.setStatus(Status.ABGELEHNT);
 		personService.save(person);
-		return "redirect:/profil/"+person.getId();
+		return "redirect:/profil/" + person.getId();
+	}
+
+	@PostMapping("/zurueckgeben/{id}")
+	public String returnArticle(Principal p, @PathVariable Long id) {
+		Ausleihe ausleihe = ausleiheService.findById(id);
+		DataBinder dataBinder = new DataBinder(ausleihe);
+		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.validate();
+
+		BindingResult bindingResult = dataBinder.getBindingResult();
+		if (bindingResult.hasErrors()) {
+			//TODO ErrorMessage nicht genug Geld
+			return "redirect:/profil";
+		}
+		Person person = personService.get(p);
+		ausleihe.setStatus(Status.RÜCKGABE_ANGEFRAGT);
+		ausleihe.setEndDatum(LocalDate.now());
+		proPayService.ueberweiseTagessaetze(ausleihe);
+		personService.save(person);
+		return "redirect:/profil";
 	}
 }
