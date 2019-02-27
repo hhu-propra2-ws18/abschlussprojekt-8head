@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class ItemController {
 
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -135,8 +136,9 @@ public class ItemController {
 	public String bearbeiteArtikel(Model model,
 								   @PathVariable long id,
 								   Principal p,
-								   @RequestParam(name = "editArtikel", defaultValue = "false")
-									   final boolean changeArticleDetails,
+								   @RequestParam(
+										   name = "editArtikel", defaultValue = "false"
+								   ) final boolean changeArticleDetails,
 								   @ModelAttribute("artikel") AusleihItem artikel,
 								   BindingResult bindingResult
 	) {
@@ -175,7 +177,6 @@ public class ItemController {
 		Ausleihe ausleihe = new Ausleihe();
 		Person user = personService.get(p);
 
-		//Please refactor TODO
 		String startDatum = ausleihForm.getDate().substring(0, 10);
 		String endDatum = ausleihForm.getDate().substring(13);
 

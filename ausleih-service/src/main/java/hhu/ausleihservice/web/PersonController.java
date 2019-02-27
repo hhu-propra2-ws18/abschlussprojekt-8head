@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class PersonController {
 
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -49,9 +50,14 @@ public class PersonController {
 	@GetMapping("/profil/{id}")
 	public String otherUser(Model model, @PathVariable Long id, Principal p) {
 		Person benutzer = personService.findById(id);
+		boolean isProPayAvailable = proPayService.isAvailable();
+		model.addAttribute("isProPayAvailable", isProPayAvailable);
 		model.addAttribute("benutzer", benutzer);
-		model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		model.addAttribute("user", personService.get(p));
+
+		if (isProPayAvailable) {
+			model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
+		}
 		return "profil";
 	}
 
