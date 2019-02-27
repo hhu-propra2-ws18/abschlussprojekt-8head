@@ -95,7 +95,7 @@
 		<div>
 			<div id="mapid" class="product-details-map">map is here</div>
 		</div>
-		<div>
+		<div th:unless="${user.isOwner(artikel)}">
 			<form th:action="@{/ausleihen/{id}(id=${artikel.id})}" th:object="${ausleihForm}" method="post">
 				<input type="text" class="daterange" th:field="*{date}"/>
 				<div id="error" th:text="${startDatumErrors?.code}"></div>
