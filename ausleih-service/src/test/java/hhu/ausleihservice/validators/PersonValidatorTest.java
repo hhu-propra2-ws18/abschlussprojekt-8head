@@ -6,8 +6,6 @@ import org.junit.Test;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
 
-import java.util.Optional;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
@@ -216,16 +214,10 @@ public class PersonValidatorTest {
 		PersonValidator personValidator = new PersonValidator(personService);
 		Person person = new Person();
 		person.setUsername("user1");
-		person.setId(5L);
 		DataBinder dataBinder = new DataBinder(person);
 		dataBinder.setValidator(personValidator);
 
-		Person person2 = new Person();
-		person.setUsername("user1");
-		person.setId(6L);
-		Optional<Person> optionalPerson = Optional.of(person2);
-
-		when(personService.findByUsername(person.getUsername())).thenReturn(optionalPerson);
+		when(personService.existsByUsername(person.getUsername())).thenReturn(true);
 
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();

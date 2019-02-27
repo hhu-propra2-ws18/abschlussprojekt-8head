@@ -6,7 +6,6 @@ import hhu.ausleihservice.validators.AbholortValidator;
 import hhu.ausleihservice.validators.AusleiheValidator;
 import hhu.ausleihservice.validators.ItemValidator;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
-import hhu.ausleihservice.web.responsestatus.PersonNichtVorhanden;
 import hhu.ausleihservice.web.service.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -23,7 +22,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.function.Consumer;
 
 @Controller
 @SuppressWarnings({"WeakerAccess", "unused"})
