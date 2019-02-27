@@ -58,15 +58,6 @@
 		</tr>
 	</form>
 </table>
-<h1 th:if="${user.isHimself(benutzer)}">
-	<div th:text="${moneten}"></div>
-</h1>
-
-<form th:if="${user.isHimself(benutzer)}" action="#"
-	  th:action="@{/profiladdmoney/{benutzerID} (benutzerID=${benutzer.getId()})}" method="post">
-	<input type="number" name="moneten" min="0">
-	<button type="submit">€ Aufladen</button>
-</form>
 
 <div class="container">
 	<h2>Ausgeliehene Items </h2>
@@ -90,7 +81,7 @@
 	</table>
 </div>
 
-<div class="container">
+<div class="container-fluid">
 	<h2>Ausleihen von eigenen Items</h2>
 	<table class="table table-hover">
 		<thead>
@@ -106,7 +97,7 @@
 			<td th:text="${ausleihe.getItem().titel}"></td>
 			<td th:text="${ausleihe.getStartDatum().toString()}"></td>
 			<td th:text="${ausleihe.getEndDatum().toString()}"></td>
-			<td th:switch="${ausleihe?.status?.name()}">
+			<td th:switch="${ausleihe.status.name()}">
 				<div th:case="'ANGEFRAGT'" class="row">
 					<form th:action="@{/ausleihe/bestaetigen/{id}(id=${ausleihe.id})}" method="post">
 						<button type="submit" class="btn btn-success" th:text="Bestätigen">
@@ -139,7 +130,15 @@
 		</tbody>
 	</table>
 </div>
+<div class="container-fluid">
+	<h1 th:if="${user.isHimself(benutzer)}" th:text="${moneten}"></h1>
+
+	<form th:if="${user.isHimself(benutzer)}" th:action="@{/profiladdmoney/{id} (id=${benutzer.getId()})}" method="post">
+		<input type="number" name="moneten" min="0" th:value="100">
+		<button type="submit">€ Aufladen</button>
+	</form>
 </div>
+
 
 </body>
 </html>

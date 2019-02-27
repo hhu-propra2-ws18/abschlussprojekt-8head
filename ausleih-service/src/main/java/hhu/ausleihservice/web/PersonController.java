@@ -1,15 +1,19 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.*;
+import hhu.ausleihservice.validators.AusleiheValidator;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
 import hhu.ausleihservice.web.service.ProPayService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.soap.Addressing;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,13 +27,16 @@ public class PersonController {
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
 	private AusleiheService ausleiheService;
+	private final AusleiheValidator ausleiheValidator;
 
+	@Autowired
 	PersonController(PersonService personService, PersonValidator personValidator,
-					 ProPayService proPayService, AusleiheService ausleiheService) {
+					 ProPayService proPayService, AusleiheService ausleiheService, AusleiheValidator ausleiheValidator) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
 		this.ausleiheService = ausleiheService;
+		this.ausleiheValidator = ausleiheValidator;
 	}
 
 	@GetMapping("/")
@@ -207,10 +214,19 @@ public class PersonController {
 	@PostMapping("/ausleihe/bestaetigen/{id}")
 	public String ausleiheBestaetigen(@PathVariable Long id, Principal principal){
 		Ausleihe ausleihe = ausleiheService.findById(id);
+		Person person = personService.get(principal);
 		ausleihe.setStatus(Status.BESTAETIGT);
+		personService.save(person);
 		proPayService.kautionReservieren(ausleihe);
-		
+		return "redirect:/profil/"+person.getId();
+	}
 
-		return "redirect:profil/"+personService.get(principal);
+	@PostMapping("/ausleihe/ablehnen/{id}")
+	public String ausleiheAblehnen(@PathVariable Long id, Principal principal){
+		Ausleihe ausleihe = ausleiheService.findById(id);
+		Person person = personService.get(principal);
+		ausleihe.setStatus(Status.ABGELEHNT);
+		personService.save(person);
+		return "redirect:/profil/"+person.getId();
 	}
 }
