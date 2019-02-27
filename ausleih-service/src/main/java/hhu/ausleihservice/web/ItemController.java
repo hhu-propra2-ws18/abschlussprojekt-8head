@@ -171,7 +171,7 @@ public class ItemController {
 	}
 
 	@GetMapping("/ausleihen/{id}")
-	public String ausleihenAbbrechen(Model model, @PathVariable Long id){
+	public String ausleihenAbbrechen(Model model, @PathVariable Long id) {
 		return "redirect:/details/" + id;
 	}
 
