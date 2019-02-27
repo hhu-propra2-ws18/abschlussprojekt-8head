@@ -46,7 +46,7 @@ public class AusleiheValidator implements Validator {
 			}
 		}
 
-		if (ausleihe.getAusleiher() != null && ausleiheItem.getBesitzer() != null) {
+		if ((ausleiheItem != null) && ausleihe.getAusleiher() != null && ausleiheItem.getBesitzer() != null) {
 			double kontostand = proPayService.getProPayKontostand(ausleihe.getAusleiher());
 			int kautionswert = ausleiheItem.getKautionswert();
 			if (kontostand < kautionswert) {
