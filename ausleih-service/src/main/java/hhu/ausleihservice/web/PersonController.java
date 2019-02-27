@@ -46,11 +46,10 @@ public class PersonController {
 	@GetMapping("/profil/{id}")
 	public String otherUser(Model model, @PathVariable Long id, Principal p) {
 		Person benutzer = personService.findById(id);
-		List<Ausleihe> verleihen = ausleiheService.findAllByAusleiherId(id);
 		List<AusleihItem> ausleihenItems = new ArrayList<>();
-		for(Item item :benutzer.getItems()){
-			if(item instanceof AusleihItem){
-				ausleihenItems.add((AusleihItem)item);
+		for (Item item : benutzer.getItems()) {
+			if (item instanceof AusleihItem) {
+				ausleihenItems.add((AusleihItem) item);
 			}
 		}
 		model.addAttribute("benutzer", benutzer);
@@ -210,13 +209,13 @@ public class PersonController {
 	}
 
 	@PostMapping("/ausleihe/bestaetigen/{id}")
-	public String ausleiheBestaetigen(@PathVariable Long id, Principal principal){
+	public String ausleiheBestaetigen(@PathVariable Long id, Principal principal) {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		Person person = personService.get(principal);
 		ausleihe.setStatus(Status.BESTAETIGT);
 		personService.save(person);
 		proPayService.kautionReservieren(ausleihe);
-		return "redirect:/profil/"+person.getId();
+		return "redirect:/profil/" + person.getId();
 	}
 
 	@PostMapping("/ausleihe/ablehnen/{id}")
