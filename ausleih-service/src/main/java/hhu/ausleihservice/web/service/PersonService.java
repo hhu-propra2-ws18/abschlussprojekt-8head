@@ -55,7 +55,6 @@ public class PersonService implements UserDetailsService {
 
 	public Person get(Principal p) {
 		if (p == null) {
-			System.out.println("Null Principal");
 			return null;
 		}
 		Optional<Person> person = users.findByUsername(p.getName());
@@ -140,5 +139,13 @@ public class PersonService implements UserDetailsService {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		person.setPassword(encoder.encode(person.getPassword()));
 		users.save(person);
+	}
+
+	public boolean existsByUsername(String username) {
+		return users.existsByUsername(username);
+	}
+
+	public boolean existsById(Long id) {
+		return users.existsById(id);
 	}
 }

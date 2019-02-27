@@ -27,4 +27,5 @@ class Messages {
 	static String notEnoughMoney = "Das Guthaben auf dem ProPay-Konto reicht nicht für die Kaution";
 
 	static String propayUnavailable = "ProPay ist aktuell nicht verfügbar";
+	static String usernameExists = "Der Benutzername ist schon vergeben";
 }
