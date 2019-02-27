@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="../static/css/navbar :: style">
+	<meta charset="UTF-8">
 	<title>Neuer Abholort</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 		  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -12,6 +13,7 @@
 			crossorigin=""></script>
 </head>
 <body>
+<nav th:replace="../static/css/navbar :: main-menu">menu</nav>
 <div class="container-fluid">
 	<div class="row mt-3">
 		<div class="col-md-3">
@@ -58,6 +60,8 @@
   						document.getElementById('longitude').value = marker.getLatLng().lng.toFixed(6);
 					});
 				/*]]>*/
+
+
 
 			</script>
 		</div>

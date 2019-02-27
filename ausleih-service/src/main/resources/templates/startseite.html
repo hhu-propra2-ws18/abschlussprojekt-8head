@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
 <head th:replace="../static/css/navbar :: style">
 	<meta charset="UTF-8">
 	<title>Startseite</title>
@@ -14,11 +14,31 @@
 		<div th:text="${'Willkommen, ' + user.vorname + ' ' + user.nachname + '!'}">Willkommen!</div>
 	</h2>
 	<a href="/liste">Artikel durchstöbern</a><br>
-	<a href="/newitem">Neuen Artikel verleihen</a><br>
+	<div th:if="${user.isAdmin()}">
+		<a th:href="@{/admin/allconflicts}">Konflikte anzeigen</a>
+	</div>
+	<a th:href="@{/newitem/ausleihen}">Neuen Artikel verleihen</a>
+	<a th:href="@{/newitem/kaufen}">Neuen Artikel verkaufen</a><br>
 	<a href="/newlocation">Neuen Abholort hinzufügen</a>
 	<br>
 	<br>
 	<h3 th:text="${message}"></h3>
+	<br>
+	<div th:if="${lateAusleihen.size() != 0}">
+		<h4>Du hast vergessen ausgeliehende Gegenstände zurückzugeben</h4>
+		<table id="items">
+			<tr>
+				<th>Gegenstand</th>
+				<th>Ursprüngliches Rückgabedatum</th>
+			</tr>
+			<th:block th:each="ausleihe : ${lateAusleihen}">
+				<tr>
+					<td th:text="${ausleihe.item.titel}"></td>
+					<td th:text="${ausleihe.endDatum.format(dateformat)}"></td>
+				</tr>
+			</th:block>
+		</table>
+	</div>
 	<h2>Artikel, die du ausleihst.</h2>
 	<div class="products">
 		<th:block class="products" th:each="ausleihung : ${user.ausleihen}">
@@ -28,9 +48,8 @@
 				</div>
 
 				<div class="product-middle">
-					<img th:if="${ausleihung.item.picture == null}" th:src="@{${'img/' + ausleihung.item.image}}"/>
-					<img th:if="${ausleihung.item.picture != null and ausleihung.item.getBase64EncodedString()!=null}"
-						 th:src="@{'data:image/png;base64,'+${ausleihung.item.getBase64EncodedString()}}"/>
+					<img th:if="${ausleihung.item.picture != null and ausleihung.item.getPicture250Base64EncodedString()!=null}"
+						 th:src="@{'data:image/png;base64,'+${ausleihung.item.getPicture250Base64EncodedString()}}"/>
 				</div>
 			</a>
 			<a th:href="@{profil/{verleiherID} (verleiherID=${ausleihung.item.besitzer.id})}">
@@ -62,9 +81,8 @@
 					</div>
 
 					<div class="product-middle">
-						<img th:if="${artikel.picture == null}" th:src="@{${'img/' + artikel.image}}"/>
-						<img th:if="${artikel.picture != null and artikel.getBase64EncodedString()!=null}"
-							 th:src="@{'data:image/png;base64,'+${artikel.getBase64EncodedString()}}"/>
+						<img th:if="${artikel.picture != null and artikel.getPicture250Base64EncodedString()!=null}"
+							 th:src="@{'data:image/png;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
 					</div>
 				</a>
 				<a th:href="@{profil/{ausleiherID} (ausleiherID=${verleihung.ausleiher.id})}">
@@ -77,7 +95,8 @@
 							Chuck Taylor All Star Classic Colours
 						</div>
 						<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
-						<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
+						<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C
+						</div>
 						<div class="price" th:text="${artikel.tagessatz} + &euro;">$50.00</div>
 					</div>
 				</a>

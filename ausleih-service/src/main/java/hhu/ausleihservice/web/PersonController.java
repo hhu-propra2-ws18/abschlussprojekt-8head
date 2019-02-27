@@ -1,9 +1,11 @@
 package hhu.ausleihservice.web;
 
+import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Ausleihe;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.validators.PersonValidator;
+import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
 import hhu.ausleihservice.web.service.ProPayService;
 import org.springframework.stereotype.Controller;
@@ -12,51 +14,73 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 
 @Controller
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class PersonController {
+
+	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
+
 	private PersonService personService;
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
+	private AusleiheService ausleiheService;
 
-	PersonController(PersonService personService, PersonValidator personValidator, ProPayService proPayService) {
+	PersonController(PersonService personService,
+					 PersonValidator personValidator,
+					 ProPayService proPayService,
+					 AusleiheService ausleiheService) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
+		this.ausleiheService = ausleiheService;
 	}
 
 	@GetMapping("/")
 	public String startseite(Model model, Principal p) {
-		model.addAttribute("user", personService.get(p));
-		if (personService.get(p) != null) {
-			System.out.println(personService.get(p).getItems());
-			Iterator<Item> iitem = personService.get(p).getItems().iterator();
+		Person user = personService.get(p);
+		model.addAttribute("user", user);
+		if (user != null) {
+			System.out.println(user.getItems());
+			Iterator<Item> iitem = user.getItems().iterator();
 			Iterator<Ausleihe> iausleihe;
 			while (iitem.hasNext()) {
 				Item element = iitem.next();
-				iausleihe = element.getAusleihen().iterator();
-				while (iausleihe.hasNext()) {
-					Ausleihe itemAusleihe = iausleihe.next();
-					System.out.println(itemAusleihe.getItem().getTitel() +
-							" wird verliehen in " +
-							itemAusleihe +
-							" an " +
-							itemAusleihe.getAusleiher());
+				if (element.getClass().getSimpleName().equals("AusleihItem")) {
+					iausleihe = ((AusleihItem) element).getAusleihen().iterator();
+					while (iausleihe.hasNext()) {
+						Ausleihe itemAusleihe = iausleihe.next();
+						System.out.println(itemAusleihe.getItem().getTitel() +
+								" wird verliehen in " +
+								itemAusleihe +
+								" an " +
+								itemAusleihe.getAusleiher());
+					}
 				}
 			}
 			System.out.println();
 		}
+		if (user != null) {
+			model.addAttribute("lateAusleihen", ausleiheService.findLateAusleihen(user.getAusleihen()));
+		}
+		model.addAttribute("dateformat", DATEFORMAT);
 		return "startseite";
 	}
 
 	@GetMapping("/profil/{id}")
 	public String otherUser(Model model, @PathVariable Long id, Principal p) {
 		Person benutzer = personService.findById(id);
+		boolean isProPayAvailable = proPayService.isAvailable();
+		model.addAttribute("isProPayAvailable", isProPayAvailable);
 		model.addAttribute("benutzer", benutzer);
-		model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		model.addAttribute("user", personService.get(p));
+
+		if (isProPayAvailable) {
+			model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
+		}
 		return "profil";
 	}
 
@@ -96,6 +120,7 @@ public class PersonController {
 			System.out.println("Now updating..");
 			personService.updateById(id, benutzer);
 			model.addAttribute("benutzer", personService.findById(id));
+			model.addAttribute("moneten", proPayService.getProPayKontostand(personService.findById(id)));
 			model.addAttribute("user", personService.get(p));
 			return "profil";
 		}
@@ -114,7 +139,7 @@ public class PersonController {
 	@PostMapping("/profiladdmoney/{id}")
 	public String chargeProPayById
 			(Model model, @RequestParam("moneten") double moneten, @PathVariable Long id, Principal p) {
-		if (personService.get(p).isHimself(personService.findById(id))) {
+		if (personService.get(p).isHimself(personService.findById(id)) && moneten > 0) {
 			proPayService.addFunds(personService.findById(id), moneten);
 			return "redirect:/profil/" + id;
 		} else {
@@ -171,8 +196,40 @@ public class PersonController {
 	}
 
 	@GetMapping("/admin")
-	public String admin(Model model) {
+	public String admin(Model model, Principal p) {
+		model.addAttribute("user", personService.get(p));
 		return "admin";
 	}
 
+	@GetMapping("/admin/allconflicts")
+	public String showAllconflicts(Model model, Principal p) {
+		model.addAttribute("user", personService.get(p));
+		List<Ausleihe> konflikte = ausleiheService.findAllConflicts();
+		model.addAttribute("konflikte", konflikte);
+		return "alleKonflikte";
+	}
+
+
+	@GetMapping("/admin/conflict/{id}")
+	public String showConflict(Model model, Principal p, @PathVariable Long id) {
+		model.addAttribute("user", personService.get(p));
+		Ausleihe konflikt = ausleiheService.findById(id);
+		model.addAttribute("konflikt", konflikt);
+		return "konflikt";
+	}
+
+
+	@PostMapping("/admin/conflict/{id}")
+	public String resolveConflict
+			(Principal p, @PathVariable Long id, @RequestParam("entscheidung") String entscheidung) {
+		Ausleihe konflikt = ausleiheService.findById(id);
+		if (entscheidung.equals("bestrafen")) {
+			proPayService.punishRerservation(konflikt);
+		} else {
+			proPayService.releaseReservation(konflikt);
+		}
+		konflikt.setKonflikt(false);
+		ausleiheService.save(konflikt);
+		return "redirect:/admin/allconflicts/";
+	}
 }

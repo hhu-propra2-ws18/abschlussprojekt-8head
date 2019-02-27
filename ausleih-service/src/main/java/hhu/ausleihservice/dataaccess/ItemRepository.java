@@ -1,12 +1,13 @@
 package hhu.ausleihservice.dataaccess;
 
 import hhu.ausleihservice.databasemodel.Item;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ItemRepository extends CrudRepository<Item, Long> {
+@Transactional
+public interface ItemRepository extends ItemBaseRepository<Item> {
 	List<Item> findAll();
 
 	Optional<Item> findById(long id);

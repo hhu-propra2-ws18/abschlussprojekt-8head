@@ -24,11 +24,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class ItemController {
 
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 	private final PersonService personService;
 	private final ItemService itemService;
+	private final AusleihItemService ausleihItemService;
+	private final KaufItemService kaufItemService;
 	private final AbholortService abholortService;
 	private final ItemAvailabilityService itemAvailabilityService;
 	private ItemValidator itemValidator;
@@ -38,7 +41,9 @@ public class ItemController {
 
 	public ItemController(AusleiheService ausleiheService,
 						  PersonService perService,
-						  ItemService iService,
+						  ItemService itemService,
+						  AusleihItemService ausleihItemService,
+						  KaufItemService kaufItemService,
 						  AbholortService abholortService,
 						  ItemAvailabilityService itemAvailabilityService,
 						  ItemValidator itemValidator,
@@ -47,7 +52,9 @@ public class ItemController {
 	) {
 		this.ausleiheService = ausleiheService;
 		this.personService = perService;
-		this.itemService = iService;
+		this.itemService = itemService;
+		this.ausleihItemService = ausleihItemService;
+		this.kaufItemService = kaufItemService;
 		this.abholortService = abholortService;
 		this.itemAvailabilityService = itemAvailabilityService;
 		this.itemValidator = itemValidator;
@@ -94,7 +101,8 @@ public class ItemController {
 			query = query.trim();
 		}
 
-		List<Item> list = itemService.extendedSearch(query, tagessatzMax, kautionswertMax, availableMin, availableMax);
+		List<AusleihItem> list = ausleihItemService.extendedSearch(query, tagessatzMax, kautionswertMax,
+				availableMin, availableMax);
 
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("artikelListe", list);
@@ -109,7 +117,10 @@ public class ItemController {
 		try {
 			Item artikel = itemService.findById(id);
 			model.addAttribute("artikel", artikel);
-			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
+			if (artikel.getClass().equals(AusleihItem.class)) {
+				model.addAttribute("availabilityList",
+						itemAvailabilityService.getUnavailableDates((AusleihItem) artikel));
+			}
 		} catch (ItemNichtVorhanden a) {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
@@ -125,9 +136,10 @@ public class ItemController {
 	public String bearbeiteArtikel(Model model,
 								   @PathVariable long id,
 								   Principal p,
-								   @RequestParam(name = "editArtikel", defaultValue = "false")
-									   final boolean changeArticleDetails,
-								   @ModelAttribute("artikel") Item artikel,
+								   @RequestParam(
+										   name = "editArtikel", defaultValue = "false"
+								   ) final boolean changeArticleDetails,
+								   @ModelAttribute("artikel") AusleihItem artikel,
 								   BindingResult bindingResult
 	) {
 		System.out.println("Post triggered at /details/" + id);
@@ -135,7 +147,7 @@ public class ItemController {
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("user", personService.get(p));
 		model.addAttribute("ausleihForm", new AusleihForm());
-		Item item = new Item();
+		Item item = new AusleihItem();
 		System.out.println(item);
 		itemValidator.validate(artikel, bindingResult);
 
@@ -161,11 +173,10 @@ public class ItemController {
 	//2019-05-02 - 2019-05-09
 	@PostMapping("/ausleihen/{id}")
 	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p, Model model) {
-		Item artikel = itemService.findById(id);
+		AusleihItem artikel = (AusleihItem) itemService.findById(id);
 		Ausleihe ausleihe = new Ausleihe();
 		Person user = personService.get(p);
 
-		//Please refactor TODO
 		String startDatum = ausleihForm.getDate().substring(0, 10);
 		String endDatum = ausleihForm.getDate().substring(13);
 
@@ -203,27 +214,41 @@ public class ItemController {
 	}
 
 
-	@GetMapping("/newitem")
-	public String createItem(Model model, Principal p) {
+	@GetMapping("/newitem/ausleihen")
+	public String createAusleihItem(Model model, Principal p) {
 		Person user = personService.get(p);
 		if (user.getAbholorte().isEmpty()) {
 			model.addAttribute("message", "Bitte Abholorte hinzufügen");
 			return "errorMessage";
 		}
 		model.addAttribute("user", user);
-		model.addAttribute("newitem", new Item());
+		model.addAttribute("newitem", new AusleihItem());
 		model.addAttribute("abholorte", user.getAbholorte());
 		model.addAttribute("today", LocalDateTime.now().format(DATEFORMAT));
-		return "neuerArtikel";
+		return "neuerAusleihArtikel";
 	}
 
-	@PostMapping("/newitem")
-	public String addItem(Model model,
-						  @ModelAttribute Item newItem,
-						  Principal p,
-						  @RequestParam("file") MultipartFile picture,
-						  BindingResult bindingResult,
-						  RedirectAttributes redirAttrs) {
+	@GetMapping("/newitem/kaufen")
+	public String createKaufItem(Model model, Principal p) {
+		Person user = personService.get(p);
+		if (user.getAbholorte().isEmpty()) {
+			model.addAttribute("message", "Bitte Abholorte hinzufügen");
+			return "errorMessage";
+		}
+		model.addAttribute("user", user);
+		model.addAttribute("newitem", new KaufItem());
+		model.addAttribute("abholorte", user.getAbholorte());
+		model.addAttribute("today", LocalDateTime.now().format(DATEFORMAT));
+		return "neuerKaufArtikel";
+	}
+
+	@PostMapping("/newitem/ausleihen")
+	public String addAusleihItem(Model model,
+								 @ModelAttribute AusleihItem newItem,
+								 Principal p,
+								 @RequestParam("file") MultipartFile picture,
+								 BindingResult bindingResult,
+								 RedirectAttributes redirAttrs) {
 		itemValidator.validate(newItem, bindingResult);
 		Person besitzer = personService.get(p);
 		if (bindingResult.hasErrors()) {
@@ -241,7 +266,7 @@ public class ItemController {
 			}
 			model.addAttribute("user", besitzer);
 			model.addAttribute("abholorte", besitzer.getAbholorte());
-			return "neuerArtikel";
+			return "neuerKaufArtikel";
 		}
 		try {
 			newItem.setPicture(picture.getBytes());
@@ -249,7 +274,28 @@ public class ItemController {
 			model.addAttribute("message", "Datei konnte nicht gespeichert werden");
 			return "errorMessage";
 		}
-		itemService.save(newItem);
+		ausleihItemService.save(newItem);
+		besitzer.addItem(newItem);
+		personService.save(besitzer);
+		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich hinzugefügt!");
+		return "redirect:/";
+	}
+
+	@PostMapping("/newitem/kaufen")
+	public String addKaufItem(Model model,
+							  @ModelAttribute KaufItem newItem,
+							  Principal p,
+							  @RequestParam("file") MultipartFile picture,
+							  BindingResult bindingResult,
+							  RedirectAttributes redirAttrs) {
+		Person besitzer = personService.get(p);
+		try {
+			newItem.setPicture(picture.getBytes());
+		} catch (IOException e) {
+			model.addAttribute("message", "Datei konnte nicht gespeichert werden");
+			return "errorMessage";
+		}
+		kaufItemService.save(newItem);
 		besitzer.addItem(newItem);
 		personService.save(besitzer);
 		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich hinzugefügt!");
@@ -273,14 +319,15 @@ public class ItemController {
 								  Model model,
 								  RedirectAttributes redirAttrs) {
 		abholortValidator.validate(abholort, bindingResult);
+		Person aktuellerNutzer = personService.get(p);
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("user", aktuellerNutzer);
 			model.addAttribute("abholort", abholort);
 			model.addAttribute("longitudeErrors", bindingResult.getFieldError("longitude"));
 			model.addAttribute("latitudeErrors", bindingResult.getFieldError("latitude"));
 			model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
 			return "neuerAbholort";
 		}
-		Person aktuellerNutzer = personService.get(p);
 		abholortService.save(abholort);
 		aktuellerNutzer.getAbholorte().add(abholort);
 		personService.save(aktuellerNutzer);

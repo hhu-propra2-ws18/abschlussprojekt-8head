@@ -3,23 +3,26 @@ package hhu.ausleihservice.web.service;
 import hhu.ausleihservice.dataaccess.ItemRepository;
 import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ItemService {
 
+	@Autowired
 	private ItemRepository items;
+	@Autowired
 	private ItemAvailabilityService itemAvailabilityService;
 
+	public ItemService() {
+	}
 
-	public ItemService(ItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
-		this.items = itemRep;
+	public ItemService(ItemRepository items, ItemAvailabilityService itemAvailabilityService) {
+		this.items = items;
 		this.itemAvailabilityService = itemAvailabilityService;
 	}
 
@@ -36,7 +39,7 @@ public class ItemService {
 		return items.findAll();
 	}
 
-	private boolean containsArray(String string, String[] array) {
+	public boolean containsArray(String string, String[] array) {
 		for (String entry : array) {
 			if (!string.contains(entry)) {
 				return false;
@@ -69,32 +72,6 @@ public class ItemService {
 		return list;
 	}
 
-	public List<Item> extendedSearch(String query,
-									 int tagessatzMax,
-									 int kautionswertMax,
-									 LocalDate availableMin,
-									 LocalDate availableMax) {
-		Stream<Item> listStream = findAll().stream();
-
-		if (query != null && !query.equals("")) {
-			//Ignores Case
-			String[] qArray = query.toLowerCase().split(" ");
-			listStream = listStream.filter(
-					item -> containsArray(
-							(item.getTitel() + item.getBeschreibung()).toLowerCase(),
-							qArray));
-		}
-
-		listStream = listStream.filter(item -> item.getTagessatz() <= tagessatzMax);
-		listStream = listStream.filter(item -> item.getKautionswert() <= kautionswertMax);
-
-		listStream = listStream.filter(
-				item -> itemAvailabilityService.isAvailableFromTill(item, availableMin, availableMax)
-		);
-
-		return listStream.collect(Collectors.toList());
-	}
-
 	public void save(Item newItem) {
 		items.save(newItem);
 	}
@@ -104,10 +81,6 @@ public class ItemService {
 		System.out.println("Starting item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
-		toUpdate.setAvailableFrom(newItem.getAvailableFrom());
-		toUpdate.setAvailableTill(newItem.getAvailableTill());
-		toUpdate.setTagessatz(newItem.getTagessatz());
-		toUpdate.setKautionswert(newItem.getKautionswert());
 		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
 		items.save(toUpdate);
 	}

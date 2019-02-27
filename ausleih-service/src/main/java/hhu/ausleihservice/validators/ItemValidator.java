@@ -1,6 +1,6 @@
 package hhu.ausleihservice.validators;
 
-import hhu.ausleihservice.databasemodel.Item;
+import hhu.ausleihservice.databasemodel.AusleihItem;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -13,12 +13,12 @@ public class ItemValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Item.class.equals(clazz);
+		return AusleihItem.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Item item = (Item) target;
+		AusleihItem item = (AusleihItem) target;
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "titel", Messages.notEmpty);
 		if (item.getTitel().length() < 4 || item.getTitel().length() > 40) {
@@ -46,6 +46,7 @@ public class ItemValidator implements Validator {
 		} else {
 			errors.rejectValue("tagessatz", Messages.notEmpty);
 		}
+
 		if (item.getAvailableFrom() != null && item.getAvailableTill() != null) {
 			if (item.getAvailableFrom().isAfter(item.getAvailableTill())) {
 				errors.rejectValue("availableFrom", Messages.invalidPeriod);
@@ -57,7 +58,8 @@ public class ItemValidator implements Validator {
 			errors.rejectValue("availableFrom", Messages.notEmpty);
 			errors.rejectValue("availableTill", Messages.notEmpty);
 		}
-		if (item.getId() == null) {
+
+		if (item.getAbholort() == null) {
 			ValidationUtils.rejectIfEmpty(errors, "abholort", Messages.notEmpty);
 		}
 	}

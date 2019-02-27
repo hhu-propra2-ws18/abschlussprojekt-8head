@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="../static/css/navbar :: style">
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,12 +9,13 @@
 
 	<title>Artikeldetails</title>
 </head>
+<nav th:replace="../static/css/navbar :: main-menu">menu</nav>
 <body>
 <div class="container-fluid">
 	<div class="row mt-3">
 		<div class="col-md-3">
 			<h2>Neues Item hinzufügen:</h2>
-			<form action="#" th:action="@{/newitem}" th:object="${newitem}" method="post" enctype="multipart/form-data">
+			<form action="#" th:action="@{/newitem/ausleihen}" th:object="${newitem}" method="post" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="titel">Titel:</label>
 					<input type="text" th:field="*{titel}" class="form-control" id="titel">
@@ -53,13 +54,15 @@
 
 				<div class="form-group">
 					<label for="availableFrom">Verfügbar ab: </label>
-					<input type="date" th:field="*{availableFrom}" th:min=${today} class="form-control" id="availableFrom">
+					<input type="date" th:field="*{availableFrom}" th:min=${today} class="form-control"
+						   id="availableFrom">
 					<div id="error" th:text="${availableFromErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
 					<label for="availableTill">Verfügbar bis: </label>
-					<input type="date" th:field="*{availableTill}" th:min=${today} class="form-control" id="availableTill">
+					<input type="date" th:field="*{availableTill}" th:min=${today} class="form-control"
+						   id="availableTill">
 					<div id="error" th:text="${availableTillErrors?.code}"></div>
 				</div>
 
