@@ -23,6 +23,22 @@
 	<br>
 	<br>
 	<h3 th:text="${message}"></h3>
+	<br>
+	<div th:if="${lateAusleihen.size() != 0}">
+		<h4>Du hast vergessen ausgeliehende Gegenstände zurückzugeben</h4>
+		<table id="items">
+			<tr>
+				<th>Gegenstand</th>
+				<th>Ursprüngliches Rückgabedatum</th>
+			</tr>
+			<th:block th:each="ausleihe : ${lateAusleihen}">
+				<tr>
+					<td th:text="${ausleihe.item.titel}"></td>
+					<td th:text="${ausleihe.endDatum.format(dateformat)}"></td>
+				</tr>
+			</th:block>
+		</table>
+	</div>
 </div>
 </body>
 </html>

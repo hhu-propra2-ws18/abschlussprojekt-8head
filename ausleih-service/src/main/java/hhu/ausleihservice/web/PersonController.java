@@ -12,17 +12,23 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
 public class PersonController {
+
+	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
+
 	private PersonService personService;
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
 	private AusleiheService ausleiheService;
 
-	PersonController(PersonService personService, PersonValidator personValidator,
-					 ProPayService proPayService, AusleiheService ausleiheService) {
+	PersonController(PersonService personService,
+					 PersonValidator personValidator,
+					 ProPayService proPayService,
+					 AusleiheService ausleiheService) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
@@ -31,7 +37,12 @@ public class PersonController {
 
 	@GetMapping("/")
 	public String startseite(Model model, Principal p) {
-		model.addAttribute("user", personService.get(p));
+		Person user = personService.get(p);
+		model.addAttribute("user", user);
+		if (user != null) {
+			model.addAttribute("lateAusleihen", ausleiheService.findLateAusleihen(user.getAusleihen()));
+		}
+		model.addAttribute("dateformat", DATEFORMAT);
 		return "startseite";
 	}
 
