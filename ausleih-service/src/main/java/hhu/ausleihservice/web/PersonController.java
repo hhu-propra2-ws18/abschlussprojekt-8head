@@ -80,6 +80,7 @@ public class PersonController {
 			System.out.println("Now updating..");
 			personService.updateById(id, benutzer);
 			model.addAttribute("benutzer", personService.findById(id));
+			model.addAttribute("moneten", proPayService.getProPayKontostand(personService.findById(id)));
 			model.addAttribute("user", personService.get(p));
 			return "profil";
 		}
