@@ -15,6 +15,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class PersonController {
 	private PersonService personService;
 	private PersonValidator personValidator;
