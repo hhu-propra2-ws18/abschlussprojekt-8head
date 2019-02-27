@@ -34,7 +34,8 @@ public class AusleiheValidator implements Validator {
 
 		ValidationUtils.rejectIfEmpty(errors, "item", Messages.notEmpty);
 
-		if (ausleihe.getStatus() == Status.ANGEFRAGT && !availabilityService.isAvailableFromTill(ausleiheItem, ausleihe.getStartDatum(), ausleihe.getEndDatum())) {
+		if (ausleihe.getStatus() == Status.ANGEFRAGT && !availabilityService
+				.isAvailableFromTill(ausleiheItem, ausleihe.getStartDatum(), ausleihe.getEndDatum())) {
 			errors.rejectValue("startDatum", Messages.itemNotAvailable);
 			errors.rejectValue("endDatum", Messages.itemNotAvailable);
 		}
@@ -53,8 +54,7 @@ public class AusleiheValidator implements Validator {
 			int ausleihDauer = ausleihe.getStartDatum().compareTo(ausleihe.getEndDatum());
 			if (ausleihe.getStatus() == Status.ANGEFRAGT && kontostand < kautionswert) {
 				errors.rejectValue("ausleiher", Messages.notEnoughMoney);
-			}
-			else if (kontostand < (ausleiheItem.getTagessatz() * ausleihDauer)) {
+			} else if (kontostand < (ausleiheItem.getTagessatz() * ausleihDauer)) {
 				errors.rejectValue("ausleiher", Messages.notEnoughMoney);
 			}
 		}

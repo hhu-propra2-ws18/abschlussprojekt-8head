@@ -212,9 +212,9 @@ public class PersonController {
 	public String ausleiheBestaetigen(@PathVariable Long id, Principal principal) {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		Person person = personService.get(principal);
-		if(ausleihe.getStartDatum().equals(LocalDate.now())){
+		if (ausleihe.getStartDatum().equals(LocalDate.now())) {
 			ausleihe.setStatus(Status.AUSGELIEHEN);
-		}else{
+		} else {
 			ausleihe.setStatus(Status.BESTAETIGT);
 		}
 		personService.save(person);
