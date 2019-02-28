@@ -1,5 +1,6 @@
 package hhu.ausleihservice.databasemodel;
 
+import hhu.ausleihservice.dataaccess.KaufItemRepository;
 import hhu.ausleihservice.dataaccess.AbholortRepository;
 import hhu.ausleihservice.dataaccess.AusleihItemRepository;
 import hhu.ausleihservice.dataaccess.AusleiheRepository;
@@ -22,16 +23,19 @@ import java.util.Set;
 public class DatabaseInitializer implements ServletContextInitializer {
 
 	private PersonRepository personRepository;
-	private AusleihItemRepository itemRepository;
+	private AusleihItemRepository ausleihItemRepository;
+	private KaufItemRepository kaufItemRepository;
 	private AbholortRepository abholortRepository;
 	private AusleiheRepository ausleiheRepository;
 
 	public DatabaseInitializer(PersonRepository perRepository,
 							   AusleihItemRepository iRepository,
+							   KaufItemRepository kaufItemRepository,
 							   AbholortRepository abhRepository,
 							   AusleiheRepository ausleiheRepository) {
 		this.personRepository = perRepository;
-		this.itemRepository = iRepository;
+		this.ausleihItemRepository = iRepository;
+		this.kaufItemRepository = kaufItemRepository;
 		this.abholortRepository = abhRepository;
 		this.ausleiheRepository = ausleiheRepository;
 	}
@@ -90,7 +94,6 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		orte3.add(ort4);
 		orte4.add(ort5);
 		orte5.add(ort6);
-
 
 		Person person1 = new Person();
 		Person person2 = new Person();
@@ -162,18 +165,21 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		AusleihItem item3 = new AusleihItem();
 		AusleihItem item4 = new AusleihItem();
 		AusleihItem item5 = new AusleihItem();
+		KaufItem kaufItem1 = new KaufItem();
 
 		item1.setTitel("Stift");
 		item2.setTitel("Fahrrad");
 		item3.setTitel("Pfeil");
 		item4.setTitel("Dose Bohnen");
 		item5.setTitel("Frittiertes Fahrrad");
+		kaufItem1.setTitel("Schwein");
 
 		item1.setBeschreibung("Zum stiften gehen");
 		item2.setBeschreibung("Falls man sich radlos fühlt");
 		item3.setBeschreibung("Wenn man den Bogen schon raus hat");
 		item4.setBeschreibung("Genau die richtige Dosis");
 		item5.setBeschreibung("Du hast doch ein Rad ab");
+		kaufItem1.setBeschreibung("Um Schwein gehabt zu haben");
 
 		item1.setTagessatz(3);
 		item2.setTagessatz(8);
@@ -186,12 +192,14 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item3.setKautionswert(55);
 		item4.setKautionswert(432);
 		item5.setKautionswert(606);
+		kaufItem1.setKaufpreis(1000);
 
 		item1.setAbholort(ort1);
 		item2.setAbholort(ort3);
 		item3.setAbholort(ort4);
 		item4.setAbholort(ort5);
 		item5.setAbholort(ort6);
+		kaufItem1.setAbholort(ort1);
 
 		LocalDate mai = LocalDate.of(2019, 4, 30);
 
@@ -212,6 +220,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person3.addItem(item3);
 		person4.addItem(item4);
 		person5.addItem(item5);
+		person1.addItem(kaufItem1);
 
 		try {
 			item1.setPicture(Files.readAllBytes(
@@ -224,6 +233,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/bohnen.jpg")));
 			item5.setPicture(Files.readAllBytes(
 					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/deepFriedFahrrad.jpg")));
+			kaufItem1.setPicture(Files.readAllBytes(
+					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/schwein.jpeg")));
 		} catch (IOException e) {
 			System.out.println("Files could not be stored");
 		}
@@ -241,11 +252,12 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.personRepository.save(person4);
 		this.personRepository.save(person5);
 
-		this.itemRepository.save(item1);
-		this.itemRepository.save(item2);
-		this.itemRepository.save(item3);
-		this.itemRepository.save(item4);
-		this.itemRepository.save(item5);
+		this.ausleihItemRepository.save(item1);
+		this.ausleihItemRepository.save(item2);
+		this.ausleihItemRepository.save(item3);
+		this.ausleihItemRepository.save(item4);
+		this.ausleihItemRepository.save(item5);
+		this.kaufItemRepository.save(kaufItem1);
 
 		Ausleihe ausleihe1 = new Ausleihe();
 		ausleihe1.setReservationId(0L);
@@ -293,9 +305,6 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.ausleiheRepository.save(ausleihe2);
 		this.ausleiheRepository.save(ausleihe3);
 		this.ausleiheRepository.save(ausleihe4);
-		this.personRepository.save(person2);
-		this.personRepository.save(person3);
-		this.personRepository.save(person4);
-		this.personRepository.save(person5);
+
 	}
 }

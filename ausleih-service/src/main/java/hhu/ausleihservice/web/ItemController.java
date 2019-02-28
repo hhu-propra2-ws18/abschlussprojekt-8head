@@ -30,7 +30,6 @@ public class ItemController {
 
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 	private final PersonService personService;
-	private final ItemService itemService;
 	private final AusleihItemService ausleihItemService;
 	private final KaufItemService kaufItemService;
 	private final AbholortService abholortService;
@@ -42,7 +41,6 @@ public class ItemController {
 
 	public ItemController(AusleiheService ausleiheService,
 						  PersonService perService,
-						  ItemService itemService,
 						  AusleihItemService ausleihItemService,
 						  KaufItemService kaufItemService,
 						  AbholortService abholortService,
@@ -53,7 +51,6 @@ public class ItemController {
 	) {
 		this.ausleiheService = ausleiheService;
 		this.personService = perService;
-		this.itemService = itemService;
 		this.ausleihItemService = ausleihItemService;
 		this.kaufItemService = kaufItemService;
 		this.abholortService = abholortService;
@@ -68,25 +65,14 @@ public class ItemController {
 		if (q != null) {
 			q = q.trim();
 		}
-		List<Item> list = itemService.simpleSearch(q);
 
-		List<AusleihItem> ausleihItems = new ArrayList<>();
-		List<KaufItem> kaufItems = new ArrayList<>();
-
-		for (Item item : list) {
-			if (item.getClass().getSimpleName().equals("AusleihItem")) {
-				ausleihItems.add((AusleihItem) item);
-				
-			}
-
-			if (item.getClass().getSimpleName().equals("KaufItem")) {
-				kaufItems.add((KaufItem) item);
-			}
-		}
-		model.addAttribute("ausleihItems", ausleihItems);
-		model.addAttribute("kaufItems", kaufItems);
-
+		List<AusleihItem> ausleihItems = ausleihItemService.simpleSearch(q);
+		List<KaufItem> kaufItems = kaufItemService.simpleSearch(q);
+		
 		model.addAttribute("dateformat", DATEFORMAT);
+		model.addAttribute("artikelListe", ausleihItems);
+		model.addAttribute("kaufItems", kaufItems);
+		model.addAttribute("ausleihItems", ausleihItems);
 		model.addAttribute("user", personService.get(p));
 		return "artikelListe";
 	}
@@ -101,17 +87,12 @@ public class ItemController {
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
 							   String query, //For titel or beschreibung
-							   @RequestParam(defaultValue = "2147483647")
-									   int tagessatzMax,
-							   @RequestParam(defaultValue = "2147483647")
-									   int kautionswertMax,
+							   @RequestParam(defaultValue = "2147483647") int tagessatzMax,
+							   @RequestParam(defaultValue = "2147483647") int kautionswertMax,
 							   @RequestParam
-							   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-									   LocalDate availableMin,
+							   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate availableMin,
 							   @RequestParam
-							   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-									   LocalDate availableMax,
-							   Principal p) {
+							   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate availableMax, Principal p) {
 		model.addAttribute("user", personService.get(p));
 
 		if (query != null) {
@@ -133,7 +114,8 @@ public class ItemController {
 								 @PathVariable long id,
 								 Principal p) {
 		try {
-			Item artikel = itemService.findById(id);
+			AusleihItem artikel = (AusleihItem) ausleihItemService.findById(id);
+
 			model.addAttribute("artikel", artikel);
 			if (artikel.getClass().equals(AusleihItem.class)) {
 				model.addAttribute("availabilityList",
@@ -171,7 +153,7 @@ public class ItemController {
 
 		if (changeArticleDetails) {
 			if (bindingResult.hasErrors()) {
-				model.addAttribute("artikel", itemService.findById(id));
+				model.addAttribute("artikel", ausleihItemService.findById(id));
 				model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
 				model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
 				model.addAttribute("tagessatzErrors", bindingResult.getFieldError("tagessatz"));
@@ -181,9 +163,9 @@ public class ItemController {
 				model.addAttribute("dateformat", DATEFORMAT);
 				return "artikelDetails";
 			}
-			itemService.updateById(id, artikel);
+			ausleihItemService.updateById(id, artikel);
 		}
-		model.addAttribute("artikel", itemService.findById(id));
+		model.addAttribute("artikel", ausleihItemService.findById(id));
 
 		return "artikelDetails";
 	}
@@ -199,7 +181,7 @@ public class ItemController {
 							@ModelAttribute AusleihForm ausleihForm,
 							Principal p,
 							RedirectAttributes redirAttrs) {
-		AusleihItem artikel = (AusleihItem) itemService.findById(id);
+		AusleihItem artikel = (AusleihItem) ausleihItemService.findById(id);
 		Ausleihe ausleihe = new Ausleihe();
 		Person user = personService.get(p);
 
@@ -233,7 +215,7 @@ public class ItemController {
 
 		ausleiheService.save(ausleihe);
 		personService.save(user);
-		itemService.save(artikel);
+		ausleihItemService.save(artikel);
 
 		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich ausgeliehen!");
 
