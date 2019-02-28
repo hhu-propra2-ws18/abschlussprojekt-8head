@@ -1,9 +1,6 @@
 package hhu.ausleihservice.databasemodel;
 
-import hhu.ausleihservice.dataaccess.AbholortRepository;
-import hhu.ausleihservice.dataaccess.AusleihItemRepository;
-import hhu.ausleihservice.dataaccess.AusleiheRepository;
-import hhu.ausleihservice.dataaccess.PersonRepository;
+import hhu.ausleihservice.dataaccess.*;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -21,15 +18,18 @@ public class DatabaseInitializer implements ServletContextInitializer {
 
 	private PersonRepository personRepository;
 	private AusleihItemRepository ausleihItemRepository;
+	private final KaufItemRepository kaufItemRepository;
 	private AbholortRepository abholortRepository;
 	private AusleiheRepository ausleiheRepository;
 
 	public DatabaseInitializer(PersonRepository perRepository,
 							   AusleihItemRepository iRepository,
+							   KaufItemRepository kaufItemRepository,
 							   AbholortRepository abhRepository,
 							   AusleiheRepository ausleiheRepository) {
 		this.personRepository = perRepository;
 		this.ausleihItemRepository = iRepository;
+		this.kaufItemRepository = kaufItemRepository;
 		this.abholortRepository = abhRepository;
 		this.ausleiheRepository = ausleiheRepository;
 	}
@@ -118,14 +118,17 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		AusleihItem item1 = new AusleihItem();
 		AusleihItem item2 = new AusleihItem();
 		AusleihItem item3 = new AusleihItem();
+		KaufItem kaufItem1 = new KaufItem();
 
 		item1.setTitel("Stift");
 		item2.setTitel("Fahrrad");
 		item3.setTitel("Pfeil");
+		kaufItem1.setTitel("Schwein");
 
 		item1.setBeschreibung("Zum stiften gehen");
 		item2.setBeschreibung("Falls man sich radlos fühlt");
 		item3.setBeschreibung("Wenn man den Bogen schon raus hat");
+		kaufItem1.setBeschreibung("Um Schwein gehabt zu haben");
 
 		item1.setTagessatz(3);
 		item2.setTagessatz(8);
@@ -134,10 +137,12 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		item1.setKautionswert(34);
 		item2.setKautionswert(1245);
 		item3.setKautionswert(55);
+		kaufItem1.setKaufpreis(1000);
 
 		item1.setAbholort(ort1);
 		item2.setAbholort(ort3);
 		item3.setAbholort(ort4);
+		kaufItem1.setAbholort(ort1);
 
 		LocalDate ersterMai = LocalDate.of(2019, 5, 1);
 
@@ -152,6 +157,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person1.addItem(item1);
 		person2.addItem(item2);
 		person3.addItem(item3);
+		person1.addItem(kaufItem1);
 
 		try {
 			item1.setPicture(Files.readAllBytes(
@@ -160,6 +166,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/fahrrad.jpg")));
 			item3.setPicture(Files.readAllBytes(
 					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/pfeil.jpg")));
+			kaufItem1.setPicture(Files.readAllBytes(
+					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/schwein.jpeg")));
 		} catch (IOException e) {
 			System.out.println("Files could not be stored");
 		}
@@ -178,6 +186,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.ausleihItemRepository.save(item1);
 		this.ausleihItemRepository.save(item2);
 		this.ausleihItemRepository.save(item3);
+		kaufItemRepository.save(kaufItem1);
 
 		Ausleihe ausleihe1 = new Ausleihe();
 		ausleihe1.setReservationId(0L);
