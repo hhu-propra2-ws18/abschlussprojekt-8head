@@ -65,6 +65,10 @@ public class PersonService implements UserDetailsService {
 		return person.get();
 	}
 
+	public boolean existsByUsername(String username) {
+		return users.existsByUsername(username);
+	}
+
 	public Person findById(Long id) {
 		Optional<Person> person = users.findById(id);
 		if (!person.isPresent()) {

@@ -1,29 +1,36 @@
 package hhu.ausleihservice.validators;
 
-import hhu.ausleihservice.databasemodel.AusleihItem;
-import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.databasemodel.Person;
-import hhu.ausleihservice.web.service.ItemAvailabilityService;
-import org.junit.Test;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.DataBinder;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.Test;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
+
+import hhu.ausleihservice.databasemodel.AusleihItem;
+import hhu.ausleihservice.databasemodel.Ausleihe;
+import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.databasemodel.Status;
+import hhu.ausleihservice.web.service.ItemAvailabilityService;
+import hhu.ausleihservice.web.service.ProPayService;
 
 public class AusleiheValidatorTest {
 
 	@Test
 	public void startDatumAfterEndDatum() {
 		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
+		ProPayService proPayService = mock(ProPayService.class);
 		AusleihItem ausleiheItem = mock(AusleihItem.class);
-		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService);
+		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setStatus(Status.ANGEFRAGT);
 		ausleihe.setStartDatum(LocalDate.of(2000, 5, 5));
 		ausleihe.setEndDatum(LocalDate.of(2000, 5, 4));
 		ausleihe.setItem(ausleiheItem);
@@ -38,16 +45,15 @@ public class AusleiheValidatorTest {
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		assertTrue(bindingResult.hasFieldErrors("startDatum"));
-		assertTrue(bindingResult.hasFieldErrors("endDatum"));
 		assertEquals(Messages.itemNotAvailable, bindingResult.getFieldError("startDatum").getCode());
-		assertEquals(Messages.itemNotAvailable, bindingResult.getFieldError("endDatum").getCode());
 	}
 
 	@Test
 	public void startDatumAndEndDatumAreTheSame() {
 		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
 		AusleihItem ausleiheItem = mock(AusleihItem.class);
-		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService);
+		ProPayService proPayService = mock(ProPayService.class);
+		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setStartDatum(LocalDate.of(2019, 5, 5));
 		ausleihe.setEndDatum(LocalDate.of(2019, 5, 5));
@@ -66,13 +72,13 @@ public class AusleiheValidatorTest {
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		assertFalse(bindingResult.hasFieldErrors("startDatum"));
-		assertFalse(bindingResult.hasFieldErrors("endDatum"));
 	}
 
 	@Test
 	public void itemIsEmpty() {
 		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
-		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService);
+		ProPayService proPayService = mock(ProPayService.class);
+		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setStartDatum(LocalDate.of(2019, 5, 5));
 		ausleihe.setEndDatum(LocalDate.of(2019, 5, 5));
@@ -90,9 +96,10 @@ public class AusleiheValidatorTest {
 	public void leiheEigenesItemAus() {
 		Person person = mock(Person.class);
 		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
+		ProPayService proPayService = mock(ProPayService.class);
 		AusleihItem ausleiheItem = mock(AusleihItem.class);
 		when(ausleiheItem.getBesitzer()).thenReturn(person);
-		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService);
+		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setStartDatum(LocalDate.of(2019, 1, 5));
 		ausleihe.setEndDatum(LocalDate.of(2019, 5, 5));
@@ -117,9 +124,10 @@ public class AusleiheValidatorTest {
 	@Test
 	public void emptyAusleiher() {
 		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
+		ProPayService proPayService = mock(ProPayService.class);
 		AusleihItem ausleiheItem = mock(AusleihItem.class);
 		when(ausleiheItem.getBesitzer()).thenReturn(null);
-		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService);
+		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setStartDatum(LocalDate.of(2019, 1, 5));
 		ausleihe.setEndDatum(LocalDate.of(2019, 5, 5));
@@ -148,9 +156,13 @@ public class AusleiheValidatorTest {
 
 
 		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
+
+		ProPayService proPayService = mock(ProPayService.class);
 		AusleihItem ausleiheItem = mock(AusleihItem.class);
-		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService);
+		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
+
 		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setStatus(Status.ANGEFRAGT);
 		ausleihe.setStartDatum(LocalDate.of(2019, 5, 3));
 		ausleihe.setEndDatum(LocalDate.of(2019, 5, 3));
 		ausleihe.setItem(ausleiheItem);
@@ -165,6 +177,5 @@ public class AusleiheValidatorTest {
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		assertEquals(Messages.itemNotAvailable, bindingResult.getFieldError("startDatum").getCode());
-		assertEquals(Messages.itemNotAvailable, bindingResult.getFieldError("endDatum").getCode());
 	}
 }

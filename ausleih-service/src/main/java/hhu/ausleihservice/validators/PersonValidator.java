@@ -25,21 +25,6 @@ public class PersonValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		Person person = (Person) target;
 
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", Messages.notEmpty);
-		if (person.getUsername().length() < 4 || person.getUsername().length() > 32) {
-			errors.rejectValue("username", Messages.usernameSize);
-		}
-
-		if (person.getId() == null || personService.findOptionalById(person.getId()).isPresent()) {
-			if (personService.findByUsername(person.getUsername()).isPresent() &&
-					!person.getUsername().equals(personService.findById(person.getId()).getUsername())) {
-				errors.rejectValue("username", Messages.duplicateUsername);
-			}
-		} else {
-			if (personService.findByUsername(person.getUsername()).isPresent()) {
-				errors.rejectValue("username", Messages.duplicateUsername);
-			}
-		}
 		if (person.getId() == null || personService.findOptionalById(person.getId()).isPresent()) {
 			if (person.getPassword().length() != 0) {
 				if (person.getPassword().trim().length() == 0) {

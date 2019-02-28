@@ -6,9 +6,11 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<a th:href="@{|/details/${konflikt.item.id}|}" th:text="|Artikel: ${konflikt.item.titel}|"></a>
-<a th:href="@{|/profil/${konflikt.item.besitzer.id}|}" th:text="|Besitzer: ${konflikt.item.besitzer.username}|"></a>
-<a th:href="@{|/profil/${konflikt.ausleiher.id}|}" th:text="|Ausleiher: ${konflikt.ausleiher.username}|"></a>
+
+<p>Besitzer: <a th:href="@{/profil/{benutzerID} (benutzerID=${konflikt.item.besitzer.id})}" th:text="${konflikt.item.besitzer.username}"></a></p>
+<p>Ausleiher: <a th:href="@{/profil/{benutzerID} (benutzerID=${konflikt.ausleiher.id})}"  th:text="${konflikt.ausleiher.username}"></a></p>
+<p>Item: <a th:href="@{'/details/' + ${konflikt.item.id}}" th:text="${konflikt.item.titel}"></a></p>
+
 <form action="#" method="post" th:action="@{|/conflict/${konflikt.id}|}">
 	<button name="entscheidung" type="submit" value="verwerfen">Konflikt verwerfen</button>
 	<button name="entscheidung" type="submit" value="bestrafen">Ausleiher bestrafen</button>
