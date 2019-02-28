@@ -23,7 +23,6 @@ import java.util.Set;
 @Component
 public class DatabaseInitializer implements ServletContextInitializer {
 
-	private static final String IMG_PATH = "/app/img/";
 	private PersonRepository personRepository;
 	private AusleihItemRepository ausleihItemRepository;
 	private KaufItemRepository kaufItemRepository;
@@ -242,19 +241,19 @@ public class DatabaseInitializer implements ServletContextInitializer {
 
 		try {
 			item1.setPicture(Files.readAllBytes(
-					Paths.get(IMG_PATH + "stift.jpg")));
+					Paths.get(System.getProperty("user.dir") + "/img/stift.jpg")));
 			item2.setPicture(Files.readAllBytes(
-					Paths.get(IMG_PATH + "fahrrad.jpg")));
+					Paths.get(System.getProperty("user.dir") + "/img/fahrrad.jpg")));
 			item3.setPicture(Files.readAllBytes(
-					Paths.get(IMG_PATH + "pfeil.jpg")));
+					Paths.get(System.getProperty("user.dir") + "/img/pfeil.jpg")));
 			item4.setPicture(Files.readAllBytes(
-					Paths.get(IMG_PATH + "bohnen.jpg")));
+					Paths.get(System.getProperty("user.dir") + "/img/bohnen.jpg")));
 			item5.setPicture(Files.readAllBytes(
-					Paths.get(IMG_PATH + "deepFriedFahrrad.jpg")));
+					Paths.get(System.getProperty("user.dir") + "/img/deepFriedFahrrad.jpg")));
 			item6.setPicture(Files.readAllBytes(
-					Paths.get(IMG_PATH + "doener.jpg")));
+					Paths.get(System.getProperty("user.dir") + "/img/doener.jpg")));
 			kaufItem1.setPicture(Files.readAllBytes(
-					Paths.get(IMG_PATH + "schwein.jpeg")));
+					Paths.get(System.getProperty("user.dir") + "/img/schwein.jpeg")));
 		} catch (IOException e) {
 			System.out.println("Files could not be stored");
 		}
