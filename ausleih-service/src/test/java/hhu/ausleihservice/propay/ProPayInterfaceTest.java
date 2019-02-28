@@ -17,7 +17,7 @@ public class ProPayInterfaceTest {
 
 	@Test
 	public void testGetAccountInfo_CorrectUrl() {
-		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayInterface proPayInterface = new ProPayInterface("localhost");
 
 		stubFor(get(urlEqualTo("/account/John"))
 				.willReturn(aResponse().withStatus(200)));
@@ -30,7 +30,7 @@ public class ProPayInterfaceTest {
 
 	@Test
 	public void testGetAccountInfo_ResponseConversion_1() {
-		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayInterface proPayInterface = new ProPayInterface("localhost");
 
 		stubFor(get(urlEqualTo("/account/John"))
 				.willReturn(aResponse()
@@ -47,7 +47,7 @@ public class ProPayInterfaceTest {
 
 	@Test
 	public void testGetAccountInfo_ResponseConversion_2() {
-		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayInterface proPayInterface = new ProPayInterface("localhost");
 
 		stubFor(get(urlEqualTo("/account/John"))
 				.willReturn(aResponse()
@@ -77,7 +77,7 @@ public class ProPayInterfaceTest {
 
 	@Test
 	public void testAddFunds_CorrectUrl() {
-		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayInterface proPayInterface = new ProPayInterface("localhost");
 
 		stubFor(post(urlEqualTo("/account/John?amount=413.0"))
 				.withQueryParam("amount", equalTo("413.0"))
@@ -91,7 +91,7 @@ public class ProPayInterfaceTest {
 
 	@Test
 	public void testAddFunds_ResponseConversion() {
-		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayInterface proPayInterface = new ProPayInterface("localhost");
 
 		stubFor(post(urlEqualTo("/account/John?amount=413.0"))
 				.withQueryParam("amount", equalTo("413.0"))
@@ -109,7 +109,7 @@ public class ProPayInterfaceTest {
 
 	@Test
 	public void testTransferFunds_CorrectUrl() {
-		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayInterface proPayInterface = new ProPayInterface("localhost");
 
 		stubFor(post(urlEqualTo("/account/John/transfer/Jade?amount=413.0"))
 				.withQueryParam("amount", equalTo("413.0"))
@@ -123,7 +123,7 @@ public class ProPayInterfaceTest {
 
 	@Test
 	public void testCreateReservation_CorrectUrl() {
-		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayInterface proPayInterface = new ProPayInterface("localhost");
 
 		stubFor(post(urlEqualTo("/reservation/reserve/John/Jade?amount=413.0"))
 				.withQueryParam("amount", equalTo("413.0"))
@@ -137,7 +137,7 @@ public class ProPayInterfaceTest {
 
 	@Test
 	public void testCreateReservation_ResponseConversion() {
-		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayInterface proPayInterface = new ProPayInterface("localhost");
 
 		stubFor(post(urlEqualTo("/reservation/reserve/John/Jade?amount=413.0"))
 				.withQueryParam("amount", equalTo("413.0"))
@@ -154,7 +154,7 @@ public class ProPayInterfaceTest {
 
 	@Test
 	public void testReleaseReservation_CorrectUrl() {
-		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayInterface proPayInterface = new ProPayInterface("localhost");
 
 		stubFor(post(urlEqualTo("/reservation/release/John?reservationId=1"))
 				.withQueryParam("reservationId", equalTo("1"))
@@ -168,7 +168,7 @@ public class ProPayInterfaceTest {
 
 	@Test
 	public void testReleaseReservation_ResponseConversion() {
-		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayInterface proPayInterface = new ProPayInterface("localhost");
 
 		stubFor(post(urlEqualTo("/reservation/release/John?reservationId=1"))
 				.withQueryParam("reservationId", equalTo("1"))
@@ -186,7 +186,7 @@ public class ProPayInterfaceTest {
 
 	@Test
 	public void testPunishReservation_CorrectUrl() {
-		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayInterface proPayInterface = new ProPayInterface("localhost");
 
 		stubFor(post(urlEqualTo("/reservation/punish/John?reservationId=1"))
 				.withQueryParam("reservationId", equalTo("1"))
@@ -200,7 +200,7 @@ public class ProPayInterfaceTest {
 
 	@Test
 	public void testPunishReservation_ResponseConversion() {
-		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayInterface proPayInterface = new ProPayInterface("localhost");
 
 		stubFor(post(urlEqualTo("/reservation/punish/John?reservationId=1"))
 				.withQueryParam("reservationId", equalTo("1"))
