@@ -149,7 +149,7 @@
 				</button>
 				<div th:case="'RUECKGABE_ANGEFRAGT'" class="row">
 					<form th:action="@{/rueckgabe/bestaetigen/{id}(id=${ausleihe.id})}" method="post">
-						<button type="submit" class="btn btn-success" th:text="Rückgabe Bestätigen">
+						<button type="submit" class="btn btn-success" th:text="|Rückgabe Bestätigen|">
 							Rückgabe Bestätigen
 						</button>
 					</form>

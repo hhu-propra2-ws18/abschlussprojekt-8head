@@ -5,7 +5,7 @@ public enum Status {
 	BESTAETIGT("DIe Ausleihe wurde bestätigt"),
 	ABGELEHNT("Die Ausleihe wurde abgelehnt"),
 	AUSGELIEHEN("Der Artikel wurde ausgeliehen"),
-	ABGESCHLOSSEN("Die Ausleihe ist Abgeschlossen"),
+	ABGESCHLOSSEN("Die Ausleihe ist abgeschlossen"),
 	RUECKGABE_ANGEFRAGT("Die Rückgabe wurde angefragt"),
 	RUECKGABE_VERPASST("Die Rückgabefrist ist überschritten"),
 	VERKAUFT("Der Artikel wurde erfolgreich verkauft");
