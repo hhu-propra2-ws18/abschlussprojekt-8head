@@ -169,9 +169,9 @@
 	</table>
 </div>
 <div class="container-fluid">
-	<h1 th:if="${user.isHimself(benutzer)}" th:text="${moneten}"></h1>
+	<h1 th:if="${user.isHimself(benutzer) AND isProPayAvailable}" th:text="${moneten}"></h1>
 
-	<form th:if="${user.isHimself(benutzer)}" th:action="@{/profiladdmoney/{id} (id=${benutzer.getId()})}"
+	<form th:if="${user.isHimself(benutzer) AND isProPayAvailable}" th:action="@{/profiladdmoney/{id} (id=${benutzer.getId()})}"
 		  method="post">
 		<input type="number" name="moneten" min="0" th:value="100">
 		<button type="submit">€ Aufladen</button>

@@ -125,7 +125,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person4.setRole(Role.ADMIN);
 
 		person1.setEmail("sleeping@home.com");
-		person2.setEmail("notWorking@uni.com");
+		person2.setEmail("notworking@uni.com");
 		person3.setEmail("screaming@computer.de");
 		person4.setEmail("admin@uni-dusseldorf.de");
 		person5.setEmail("asdf@gmail.com");

@@ -133,8 +133,7 @@ public class ItemController {
 	public String bearbeiteArtikelVerkauf(Model model,
 										  @PathVariable long id,
 										  Principal p,
-										  @RequestParam(name = "editArtikel", defaultValue = "false")
-										  final boolean changeArticleDetails,
+										  @RequestParam(name = "editArtikel", defaultValue = "false") final boolean changeArticleDetails,
 										  @ModelAttribute("artikel") KaufItem artikel,
 										  BindingResult bindingResult
 	) {
@@ -189,8 +188,8 @@ public class ItemController {
 
 	@GetMapping("/details/ausleih/{id}")
 	public String artikelDetailsAusleih(Model model,
-								 @PathVariable long id,
-								 Principal p) {
+										@PathVariable long id,
+										Principal p) {
 		try {
 			AusleihItem artikel = ausleihItemService.findById(id);
 			model.addAttribute("artikel", artikel);
@@ -211,13 +210,13 @@ public class ItemController {
 
 	@PostMapping("/details/ausleih/{id}")
 	public String bearbeiteArtikelAusleih(Model model,
-								   @PathVariable long id,
-								   Principal p,
-								   @RequestParam(
-										   name = "editArtikel", defaultValue = "false"
-								   ) final boolean changeArticleDetails,
-								   @ModelAttribute("artikel") AusleihItem artikel,
-								   BindingResult bindingResult
+										  @PathVariable long id,
+										  Principal p,
+										  @RequestParam(
+												  name = "editArtikel", defaultValue = "false"
+										  ) final boolean changeArticleDetails,
+										  @ModelAttribute("artikel") AusleihItem artikel,
+										  BindingResult bindingResult
 	) {
 		System.out.println("Post triggered at /details/verleih/" + id);
 		System.out.println(artikel + " " + changeArticleDetails);

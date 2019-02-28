@@ -20,8 +20,10 @@
 		</th:block>
 		<div class="product">
 			<div class="product-top">
-				<span th:if="${artikel.getClass().getSimpleName().equals('AusleihItem')}" class="itemName" th:text="${'Verleih: ' + artikel.titel}">itemName</span>
-				<span th:unless="${artikel.getClass().getSimpleName().equals('AusleihItem')}" class="itemName" th:text="${'Verkauf: ' + artikel.titel}">itemName</span>
+				<span th:if="${artikel.getClass().getSimpleName().equals('AusleihItem')}" class="itemName"
+					  th:text="${'Verleih: ' + artikel.titel}">itemName</span>
+				<span th:unless="${artikel.getClass().getSimpleName().equals('AusleihItem')}" class="itemName"
+					  th:text="${'Verkauf: ' + artikel.titel}">itemName</span>
 			</div>
 			<div class="product-middle">
 				<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"

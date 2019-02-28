@@ -11,7 +11,8 @@
 <container class="container px-lg-5">
 	<div class="row mx-lg-n5 product-details-row">
 		<div>
-			<form th:action="@{/details/verkauf/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}" method="post">
+			<form th:action="@{/details/verkauf/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}"
+				  method="post">
 				<table class="product-details">
 					<tr>
 						<td><h2 th:text="${artikel.titel}">ITEM</h2></td>
@@ -100,7 +101,6 @@
         L.marker([latitude, longitude]).addTo(map)
             .bindPopup(message).openPopup();
     /*]]>*/
-
 
 
 </script>
