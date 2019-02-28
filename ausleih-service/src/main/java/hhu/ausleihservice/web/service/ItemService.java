@@ -81,7 +81,7 @@ public class ItemService {
 		System.out.println("Starting item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
-		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
+		toUpdate.setAbholort(newItem.getAbholort());
 		items.save(toUpdate);
 	}
 }
