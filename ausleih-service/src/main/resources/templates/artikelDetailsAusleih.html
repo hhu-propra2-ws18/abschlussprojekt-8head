@@ -11,7 +11,8 @@
 <container class="container px-lg-5">
 	<div class="row mx-lg-n5 product-details-row">
 		<div>
-			<form th:action="@{/details/ausleih/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}" method="post">
+			<form th:action="@{/details/ausleih/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}"
+				  method="post">
 				<table class="product-details">
 					<tr>
 						<td><h2 th:text="${artikel.titel}">ITEM</h2></td>
@@ -23,7 +24,7 @@
 								th:height="60px"/></a></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<input name="newTitle" type="text" th:field="*{titel}" id="titel">
-							<div id="error" th:text="${titelErrors?.code}"></div>
+							<div th:text="${titelErrors?.code}"></div>
 						</td>
 					</tr>
 					<tr>
@@ -31,26 +32,26 @@
 						<td th:text="${artikel.beschreibung}"></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<input name="newBeschreibung" type="text" th:field="*{beschreibung}" id="beschreibung">
-							<div id="error" th:text="${beschreibungErrors?.code}"></div>
+							<div th:text="${beschreibungErrors?.code}"></div>
 						</td>
 					</tr>
-					<tr th:if="${artikel.class.name == AusleihItem}">
+					<tr>
 						<td>Verfügbarkeit ab</td>
 						<td th:text="${artikel.availableFrom.format(dateformat)}"></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<input name="newAvailableFrom" type="date" th:field="*{availableFrom}" id="availableFrom">
-							<div id="error" th:text="${availableFromErrors?.code}"></div>
+							<div th:text="${availableFromErrors?.code}"></div>
 						</td>
 					</tr>
-					<tr th:if="${artikel.class.name == AusleihItem}">
+					<tr>
 						<td>Verfügbar bis</td>
 						<td th:text="${artikel.availableTill.format(dateformat)}"></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<input name="newAvailableTill" type="date" th:field="*{availableTill}" id="availableTill">
-							<div id="error" th:text="${availableTillErrors?.code}"></div>
+							<div th:text="${availableTillErrors?.code}"></div>
 						</td>
 					</tr>
-					<tr th:if="${artikel.class.name == AusleihItem}">
+					<tr>
 						<td>Tagessatz</td>
 						<td th:text="${artikel.tagessatz} + &euro;"></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
@@ -59,22 +60,13 @@
 							<div id="error" th:text="${tagessatzErrors?.code}"></div>
 						</td>
 					</tr>
-					<tr th:if="${artikel.class.name == AusleihItem}">
+					<tr>
 						<td>Kaution</td>
 						<td th:text="${artikel.kautionswert} + &euro;"></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<input name="newKautionswert" type="number" step="1" min="0" th:field="*{kautionswert}"
 								   id="kautionswert">
-							<div id="error" th:text="${kautionswertErrors?.code}"></div>
-						</td>
-					</tr>
-					<tr th:if="${artikel.class.name == KaufItem}">
-						<td>Kaufpreis</td>
-						<td th:text="${artikel.kaufpreis} + &euro;"></td>
-						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
-							<input name="newKautionswert" type="number" step="1" min="0" th:field="*{kaufpreis}"
-								   id="kaufpreis">
-							<div id="error" th:text="${kautionswertErrors?.code}"></div>
+							<div th:text="${kautionswertErrors?.code}"></div>
 						</td>
 					</tr>
 					<tr>
@@ -83,7 +75,7 @@
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<input name="newAbholortBeschreibung" type="text" th:field="*{abholort.beschreibung}"
 								   id="abholort">
-							<div id="error" th:text="${abholortErrors?.code}"></div>
+							<div th:text="${abholortErrors?.code}"></div>
 						</td>
 					</tr>
 					<tr>
@@ -109,8 +101,8 @@
 		<div th:unless="${user.isOwner(artikel)}">
 			<form th:action="@{/ausleihen/{id}(id=${artikel.id})}" th:object="${ausleihForm}" method="post">
 				<input type="text" class="daterange" th:field="*{date}"/>
-				<div id="error" th:text="${startDatumErrors?.code}"></div>
-				<div id="error" th:text="${ausleiherErrors?.code}"></div>
+				<div th:text="${startDatumErrors?.code}"></div>
+				<div th:text="${ausleiherErrors?.code}"></div>
 				<script th:inline="javascript">
                     /*<![CDATA[*/
                     var start_date =
@@ -141,7 +133,6 @@
 				<button type="submit">Ausleihen</button>
 			</form>
 		</div>
-	</div>
 </container>
 
 <script th:inline="javascript">
@@ -161,7 +152,6 @@
         L.marker([latitude, longitude]).addTo(map)
             .bindPopup(message).openPopup();
     /*]]>*/
-
 
 
 </script>

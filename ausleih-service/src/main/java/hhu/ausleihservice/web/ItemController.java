@@ -245,9 +245,17 @@ public class ItemController {
 		return "artikelDetailsAusleih";
 	}
 
-	//2019-05-02 - 2019-05-09
+	@GetMapping("/ausleihen/{id}")
+	public String ausleihenAbbrechen(Model model, @PathVariable Long id) {
+		return "redirect:/details/" + id;
+	}
+
 	@PostMapping("/ausleihen/{id}")
-	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p, Model model) {
+	public String ausleihen(Model model,
+							@PathVariable Long id,
+							@ModelAttribute AusleihForm ausleihForm,
+							Principal p,
+							RedirectAttributes redirAttrs) {
 		AusleihItem artikel = ausleihItemService.findById(id);
 		Ausleihe ausleihe = new Ausleihe();
 		Person user = personService.get(p);
@@ -268,7 +276,6 @@ public class ItemController {
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("startDatumErrors", bindingResult.getFieldError("startDatum"));
-			model.addAttribute("endDatumErrors", bindingResult.getFieldError("endDatum"));
 			model.addAttribute("ausleiherErrors", bindingResult.getFieldError("ausleiher"));
 			model.addAttribute("artikel", artikel);
 			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
@@ -285,7 +292,9 @@ public class ItemController {
 		personService.save(user);
 		ausleihItemService.save(artikel);
 
-		return "redirect:/";
+		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich ausgeliehen!");
+
+		return "redirect:/details/" + id;
 	}
 
 

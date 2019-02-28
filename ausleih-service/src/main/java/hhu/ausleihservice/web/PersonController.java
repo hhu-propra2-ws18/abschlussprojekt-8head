@@ -1,17 +1,21 @@
 package hhu.ausleihservice.web;
 
-import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.databasemodel.*;
+import hhu.ausleihservice.validators.AusleiheValidator;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
 import hhu.ausleihservice.web.service.ProPayService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -25,15 +29,17 @@ public class PersonController {
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
 	private AusleiheService ausleiheService;
+	private final AusleiheValidator ausleiheValidator;
 
-	PersonController(PersonService personService,
-					 PersonValidator personValidator,
-					 ProPayService proPayService,
-					 AusleiheService ausleiheService) {
+	@Autowired
+	PersonController(PersonService personService, PersonValidator personValidator,
+					 ProPayService proPayService, AusleiheService ausleiheService,
+					 AusleiheValidator ausleiheValidator) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
 		this.ausleiheService = ausleiheService;
+		this.ausleiheValidator = ausleiheValidator;
 	}
 
 	@GetMapping("/")
@@ -50,11 +56,18 @@ public class PersonController {
 	@GetMapping("/profil/{id}")
 	public String otherUser(Model model, @PathVariable Long id, Principal p) {
 		Person benutzer = personService.findById(id);
+		List<AusleihItem> ausleihenItems = new ArrayList<>();
+		for (Item item : benutzer.getItems()) {
+			if (item instanceof AusleihItem) {
+				ausleihenItems.add((AusleihItem) item);
+			}
+		}
 		boolean isProPayAvailable = proPayService.isAvailable();
 		model.addAttribute("isProPayAvailable", isProPayAvailable);
+		model.addAttribute("proPayError", "ProPay ist aktuell nicht verfügbar");
 		model.addAttribute("benutzer", benutzer);
 		model.addAttribute("user", personService.get(p));
-
+		model.addAttribute("ausleihen", ausleihenItems);
 		if (isProPayAvailable) {
 			model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		}
@@ -210,7 +223,70 @@ public class PersonController {
 			proPayService.releaseReservation(konflikt);
 		}
 		konflikt.setKonflikt(false);
+		konflikt.setStatus(Status.ABGESCHLOSSEN);
 		ausleiheService.save(konflikt);
 		return "redirect:/admin/allconflicts/";
+	}
+
+	@PostMapping("/ausleihe/bestaetigen/{id}")
+	public String ausleiheBestaetigen(@PathVariable Long id, Principal principal) {
+		Ausleihe ausleihe = ausleiheService.findById(id);
+		Person person = personService.get(principal);
+		if (ausleihe.getStartDatum().equals(LocalDate.now())) {
+			ausleihe.setStatus(Status.AUSGELIEHEN);
+		} else {
+			ausleihe.setStatus(Status.BESTAETIGT);
+		}
+		proPayService.kautionReservieren(ausleihe);
+		personService.save(person);
+		return "redirect:/profil/" + person.getId();
+	}
+
+	@PostMapping("/ausleihe/ablehnen/{id}")
+	public String ausleiheAblehnen(@PathVariable Long id, Principal principal) {
+		Ausleihe ausleihe = ausleiheService.findById(id);
+		Person person = personService.get(principal);
+		ausleihe.setStatus(Status.ABGELEHNT);
+		personService.save(person);
+		return "redirect:/profil/" + person.getId();
+	}
+
+	@PostMapping("/rueckgabe/bestaetigen/{id}")
+	public String rueckgabeBestaetigen(@PathVariable Long id, Principal principal) {
+		Ausleihe ausleihe = ausleiheService.findById(id);
+		Person person = personService.get(principal);
+		ausleihe.setStatus(Status.ABGESCHLOSSEN);
+		proPayService.releaseReservation(ausleihe);
+		personService.save(person);
+		return "redirect:/profil/" + person.getId();
+	}
+
+	@PostMapping("/rueckgabe/ablehnen/{id}")
+	public String rueckgabeKonflikt(@PathVariable Long id, Principal principal) {
+		Ausleihe ausleihe = ausleiheService.findById(id);
+		Person person = personService.get(principal);
+		ausleihe.setKonflikt(true);
+		return "redirect:/profil/" + person.getId();
+	}
+
+	@PostMapping("/zurueckgeben/{id}")
+	public String returnArticle(Principal p, @PathVariable Long id) {
+		Ausleihe ausleihe = ausleiheService.findById(id);
+		DataBinder dataBinder = new DataBinder(ausleihe);
+		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.validate();
+
+		BindingResult bindingResult = dataBinder.getBindingResult();
+		if (bindingResult.hasErrors()) {
+			//TODO ErrorMessage nicht genug Geld
+			return "redirect:/profil";
+		}
+
+		Person person = personService.get(p);
+		ausleihe.setStatus(Status.RUECKGABE_ANGEFRAGT);
+		ausleihe.setEndDatum(LocalDate.now());
+		proPayService.ueberweiseTagessaetze(ausleihe);
+		personService.save(person);
+		return "redirect:/profil";
 	}
 }
