@@ -42,7 +42,9 @@ public class AusleihItemService {
 											int kautionswertMax,
 											LocalDate availableMin,
 											LocalDate availableMax) {
-		if (query == null || query.isEmpty()) return items.extendedDateSearch(availableMin, availableMax);
+		if (query == null || query.isEmpty()) {
+			return items.extendedDateSearch(availableMin, availableMax);
+		}
 		return items.extendedSearch(query, availableMin, availableMax);
 	}
 
@@ -64,7 +66,9 @@ public class AusleihItemService {
 	}
 
 	public List<AusleihItem> simpleSearch(String query) {
-		if (query == null || query.isEmpty()) return findAll();
+		if (query == null || query.isEmpty()) {
+			return findAll();
+		}
 		return items.simpleSearch(query);
 	}
 

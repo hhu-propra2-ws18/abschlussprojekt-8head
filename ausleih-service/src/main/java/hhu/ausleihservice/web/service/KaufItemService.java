@@ -44,7 +44,9 @@ public class KaufItemService {
 	}
 
 	public List<KaufItem> simpleSearch(String query) {
-		if (query == null || query.isEmpty()) return findAll();
+		if (query == null || query.isEmpty()) {
+			return findAll();
+		}
 		return items.simpleSearch(query);
 	}
 
