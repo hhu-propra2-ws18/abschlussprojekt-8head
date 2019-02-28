@@ -18,7 +18,12 @@
 	Alle angebotenen Artikel:
 	<ul>
 		<li th:each="item : ${benutzer.items}">
-			<a th:href="@{'/details/' + ${item.id}}" th:text="${item.titel}"></a>
+			<th:block th:if="${konflikt.item.getClass().getSimpleName().equals('AusleihItem')}">
+				<a th:href="@{'/details/ausleih/' + ${item.id}}" th:text="${item.titel}"></a>
+			</th:block>
+			<th:block th:unless="${konflikt.item.getClass().getSimpleName().equals('AusleihItem')}">
+				<a th:href="@{'/details/verkauf/' + ${item.id}}" th:text="${item.titel}"></a>
+			</th:block>
 		</li>
 	</ul>
 </div>
