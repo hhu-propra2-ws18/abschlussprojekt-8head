@@ -47,6 +47,10 @@ public class ProPayService {
 		proPayInterface.releaseReservation(reservationId, ausleiher);
 	}
 
+	public void transferFunds(Person person1, Person person2, double betrag) {
+		proPayInterface.transferFunds(person1.getUsername(), person2.getUsername(), betrag);
+	}
+
 	public double getProPayKontostand(Person person) {
 		ProPayAccount account = proPayInterface.getAccountInfo(person.getUsername());
 		double amount = account.getAmount();

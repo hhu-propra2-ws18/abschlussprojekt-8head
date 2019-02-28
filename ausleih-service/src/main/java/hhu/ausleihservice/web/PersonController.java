@@ -1,7 +1,8 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.*;
-import hhu.ausleihservice.validators.AusleiheValidator;
+import hhu.ausleihservice.validators.AusleiheAbgabeValidator;
+import hhu.ausleihservice.validators.AusleiheAnfragenValidator;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.validators.RegisterValidator;
 import hhu.ausleihservice.web.service.AusleiheService;
@@ -30,18 +31,22 @@ public class PersonController {
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
 	private AusleiheService ausleiheService;
-	private final AusleiheValidator ausleiheValidator;
+	private final AusleiheAnfragenValidator ausleiheAnfragenValidator;
+	private final AusleiheAbgabeValidator ausleiheAbgabeValidator;
 	private final RegisterValidator registerValidator;
 
 	@Autowired
 	PersonController(PersonService personService, PersonValidator personValidator,
 					 ProPayService proPayService, AusleiheService ausleiheService,
-					 AusleiheValidator ausleiheValidator, RegisterValidator registerValidator) {
+					 AusleiheAnfragenValidator ausleiheAnfragenValidator,
+					 AusleiheAbgabeValidator ausleiheAbgabeValidator,
+					 RegisterValidator registerValidator) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
 		this.ausleiheService = ausleiheService;
-		this.ausleiheValidator = ausleiheValidator;
+		this.ausleiheAnfragenValidator = ausleiheAnfragenValidator;
+		this.ausleiheAbgabeValidator = ausleiheAbgabeValidator;
 		this.registerValidator = registerValidator;
 	}
 
@@ -100,9 +105,14 @@ public class PersonController {
 					"Alter Username: " + personService.findById(id).getUsername());
 			benutzer.setUsername(personService.findById(id).getUsername());
 		}
-		personValidator.validate(benutzer, bindingResult);
 
 		if (changePerson) {
+			personValidator.validate(benutzer, bindingResult);
+			boolean isProPayAvailable = proPayService.isAvailable();
+			model.addAttribute("isProPayAvailable", isProPayAvailable);
+			if (isProPayAvailable) {
+				model.addAttribute("moneten", proPayService.getProPayKontostand(personService.findById(id)));
+			}
 			if (bindingResult.hasErrors()) {
 				model.addAttribute("benutzer", benutzer);
 				model.addAttribute("usernameErrors", bindingResult.getFieldError("username"));
@@ -117,7 +127,6 @@ public class PersonController {
 			System.out.println("Now updating..");
 			personService.updateById(id, benutzer);
 			model.addAttribute("benutzer", personService.findById(id));
-			model.addAttribute("moneten", proPayService.getProPayKontostand(personService.findById(id)));
 			model.addAttribute("user", personService.get(p));
 			return "profil";
 		}
@@ -278,7 +287,7 @@ public class PersonController {
 	public String returnArticle(Principal p, @PathVariable Long id) {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		DataBinder dataBinder = new DataBinder(ausleihe);
-		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.setValidator(ausleiheAbgabeValidator);
 		dataBinder.validate();
 
 		BindingResult bindingResult = dataBinder.getBindingResult();
