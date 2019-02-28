@@ -58,15 +58,18 @@
 		</tr>
 	</form>
 </table>
-<h1 th:if="${user.isHimself(benutzer)}">
-	<div th:text="${moneten}"></div>
-</h1>
+<h1 th:unless="${isProPayAvailable}" id="error">ProPay ist aktuell nicht verfügbar.</h1>
+<div th:if="${isProPayAvailable}">
+	<h1 th:if="${user.isHimself(benutzer)}">
+		<div th:text="${moneten}"></div>
+	</h1>
 
-<form th:if="${user.isHimself(benutzer)}" action="#"
-	  th:action="@{/profiladdmoney/{benutzerID} (benutzerID=${benutzer.getId()})}" method="post">
-	<input type="number" name="moneten" min="0">
-	<button type="submit">€ Aufladen</button>
-</form>
+	<form th:if="${user.isHimself(benutzer)}" action="#"
+	  	th:action="@{/profiladdmoney/{benutzerID} (benutzerID=${benutzer.getId()})}" method="post">
+		<input type="number" name="moneten" min="0">
+		<button type="submit">€ Aufladen</button>
+	</form>
+</div>
 
 <div class="container">
 	<h2>Ausgeliehene Items </h2>

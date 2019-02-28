@@ -6,14 +6,18 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<th:block th:if="${konflikt.item.getClass().getSimpleName().equals('AusleihItem')}">
-	<a th:href="@{|/details/ausleih/${konflikt.item.id}|}" th:text="|Artikel: ${konflikt.item.titel}|"></a>
-</th:block>
-<th:block th:unless="${konflikt.item.getClass().getSimpleName().equals('AusleihItem')}">
-	<a th:href="@{|/details/verkauf/${konflikt.item.id}|}" th:text="|Artikel: ${konflikt.item.titel}|"></a>
-</th:block>
-<a th:href="@{|/profil/${konflikt.item.besitzer.id}|}" th:text="|Besitzer: ${konflikt.item.besitzer.username}|"></a>
-<a th:href="@{|/profil/${konflikt.ausleiher.id}|}" th:text="|Ausleiher: ${konflikt.ausleiher.username}|"></a>
+
+<p>Besitzer: <a th:href="@{/profil/{benutzerID} (benutzerID=${konflikt.item.besitzer.id})}" th:text="${konflikt.item.besitzer.username}"></a></p>
+<p>Ausleiher: <a th:href="@{/profil/{benutzerID} (benutzerID=${konflikt.ausleiher.id})}"  th:text="${konflikt.ausleiher.username}"></a></p>
+<p>Item:
+	<th:block th:if="${konflikt.item.getClass().getSimpleName().equals('AusleihItem')}">
+		<a th:href="@{'/details/ausleih/' + ${konflikt.item.id}}" th:text="${konflikt.item.titel}"></a>
+	</th:block>
+	<th:block th:unless="${konflikt.item.getClass().getSimpleName().equals('AusleihItem')}">
+		<a th:href="@{'/details/verkauf/' + ${konflikt.item.id}}" th:text="${konflikt.item.titel}"></a>
+	</th:block>
+</p>
+
 <form action="#" method="post" th:action="@{|/conflict/${konflikt.id}|}">
 	<button name="entscheidung" type="submit" value="verwerfen">Konflikt verwerfen</button>
 	<button name="entscheidung" type="submit" value="bestrafen">Ausleiher bestrafen</button>

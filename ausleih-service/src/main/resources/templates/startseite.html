@@ -14,14 +14,33 @@
 		<div th:text="${'Willkommen, ' + user.vorname + ' ' + user.nachname + '!'}">Willkommen!</div>
 	</h2>
 	<a href="/liste">Artikel durchstöbern</a><br>
-	<a href="/newitem">Neuen Artikel verleihen</a><br>
 	<div th:if="${user.isAdmin()}">
-		<a th:href="@{/allconflicts}">Konflikte anzeigen</a>
+		<a th:href="@{/admin/allconflicts}">Konflikte anzeigen</a>
 	</div>
 	<a href="/newitem">Neuen Artikel verleihen</a><br>
 	<a href="/newlocation">Neuen Abholort hinzufügen</a><br>
+	<a th:href="@{/newitem/ausleihen}">Neuen Artikel verleihen</a>
+	<a th:href="@{/newitem/kaufen}">Neuen Artikel verkaufen</a><br>
+	<a href="/newlocation">Neuen Abholort hinzufügen</a>
+	<br>
 	<br>
 	<h3 th:text="${message}"></h3>
+	<br>
+	<div th:if="${lateAusleihen.size() != 0}">
+		<h4>Du hast vergessen ausgeliehende Gegenstände zurückzugeben</h4>
+		<table id="items">
+			<tr>
+				<th>Gegenstand</th>
+				<th>Ursprüngliches Rückgabedatum</th>
+			</tr>
+			<th:block th:each="ausleihe : ${lateAusleihen}">
+				<tr>
+					<td th:text="${ausleihe.item.titel}"></td>
+					<td th:text="${ausleihe.endDatum.format(dateformat)}"></td>
+				</tr>
+			</th:block>
+		</table>
+	</div>
 </div>
 </body>
 </html>

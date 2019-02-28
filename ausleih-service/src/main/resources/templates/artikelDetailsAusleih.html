@@ -34,7 +34,7 @@
 							<div id="error" th:text="${beschreibungErrors?.code}"></div>
 						</td>
 					</tr>
-					<tr>
+					<tr th:if="${artikel.class.name == AusleihItem}">
 						<td>Verfügbarkeit ab</td>
 						<td th:text="${artikel.availableFrom.format(dateformat)}"></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
@@ -42,7 +42,7 @@
 							<div id="error" th:text="${availableFromErrors?.code}"></div>
 						</td>
 					</tr>
-					<tr>
+					<tr th:if="${artikel.class.name == AusleihItem}">
 						<td>Verfügbar bis</td>
 						<td th:text="${artikel.availableTill.format(dateformat)}"></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
@@ -50,7 +50,7 @@
 							<div id="error" th:text="${availableTillErrors?.code}"></div>
 						</td>
 					</tr>
-					<tr>
+					<tr th:if="${artikel.class.name == AusleihItem}">
 						<td>Tagessatz</td>
 						<td th:text="${artikel.tagessatz} + &euro;"></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
@@ -59,12 +59,21 @@
 							<div id="error" th:text="${tagessatzErrors?.code}"></div>
 						</td>
 					</tr>
-					<tr>
+					<tr th:if="${artikel.class.name == AusleihItem}">
 						<td>Kaution</td>
 						<td th:text="${artikel.kautionswert} + &euro;"></td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<input name="newKautionswert" type="number" step="1" min="0" th:field="*{kautionswert}"
 								   id="kautionswert">
+							<div id="error" th:text="${kautionswertErrors?.code}"></div>
+						</td>
+					</tr>
+					<tr th:if="${artikel.class.name == KaufItem}">
+						<td>Kaufpreis</td>
+						<td th:text="${artikel.kaufpreis} + &euro;"></td>
+						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
+							<input name="newKautionswert" type="number" step="1" min="0" th:field="*{kaufpreis}"
+								   id="kaufpreis">
 							<div id="error" th:text="${kautionswertErrors?.code}"></div>
 						</td>
 					</tr>

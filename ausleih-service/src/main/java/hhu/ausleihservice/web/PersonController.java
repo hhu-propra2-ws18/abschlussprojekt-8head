@@ -1,7 +1,6 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.databasemodel.Kauf;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.service.AusleiheService;
@@ -13,18 +12,24 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Iterator;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class PersonController {
+
+	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
+
 	private PersonService personService;
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
 	private AusleiheService ausleiheService;
 
-	PersonController(PersonService personService, PersonValidator personValidator,
-					 ProPayService proPayService, AusleiheService ausleiheService) {
+	PersonController(PersonService personService,
+					 PersonValidator personValidator,
+					 ProPayService proPayService,
+					 AusleiheService ausleiheService) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
@@ -33,20 +38,26 @@ public class PersonController {
 
 	@GetMapping("/")
 	public String startseite(Model model, Principal p) {
-		model.addAttribute("user", personService.get(p));
-		Iterator<Kauf> kaeufe = personService.get(p).getKaeufe().iterator();
-		while (kaeufe.hasNext()) {
-			System.out.println(kaeufe.next().getItem().getBesitzer());
+		Person user = personService.get(p);
+		model.addAttribute("user", user);
+		if (user != null) {
+			model.addAttribute("lateAusleihen", ausleiheService.findLateAusleihen(user.getAusleihen()));
 		}
+		model.addAttribute("dateformat", DATEFORMAT);
 		return "startseite";
 	}
 
 	@GetMapping("/profil/{id}")
 	public String otherUser(Model model, @PathVariable Long id, Principal p) {
 		Person benutzer = personService.findById(id);
+		boolean isProPayAvailable = proPayService.isAvailable();
+		model.addAttribute("isProPayAvailable", isProPayAvailable);
 		model.addAttribute("benutzer", benutzer);
-		model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		model.addAttribute("user", personService.get(p));
+
+		if (isProPayAvailable) {
+			model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
+		}
 		return "profil";
 	}
 
@@ -69,9 +80,14 @@ public class PersonController {
 					"Alter Username: " + personService.findById(id).getUsername());
 			benutzer.setUsername(personService.findById(id).getUsername());
 		}
-		personValidator.validate(benutzer, bindingResult);
 
 		if (changePerson) {
+			personValidator.validate(benutzer, bindingResult);
+			boolean isProPayAvailable = proPayService.isAvailable();
+			model.addAttribute("isProPayAvailable", isProPayAvailable);
+			if (isProPayAvailable) {
+				model.addAttribute("moneten", proPayService.getProPayKontostand(personService.findById(id)));
+			}
 			if (bindingResult.hasErrors()) {
 				model.addAttribute("benutzer", benutzer);
 				model.addAttribute("usernameErrors", bindingResult.getFieldError("username"));
@@ -104,7 +120,7 @@ public class PersonController {
 	@PostMapping("/profiladdmoney/{id}")
 	public String chargeProPayById
 			(Model model, @RequestParam("moneten") double moneten, @PathVariable Long id, Principal p) {
-		if (personService.get(p).isHimself(personService.findById(id))) {
+		if (personService.get(p).isHimself(personService.findById(id)) && moneten > 0) {
 			proPayService.addFunds(personService.findById(id), moneten);
 			return "redirect:/profil/" + id;
 		} else {
@@ -161,55 +177,40 @@ public class PersonController {
 	}
 
 	@GetMapping("/admin")
-	public String admin(Model model) {
+	public String admin(Model model, Principal p) {
+		model.addAttribute("user", personService.get(p));
 		return "admin";
 	}
 
-	@GetMapping("/allconflicts")
+	@GetMapping("/admin/allconflicts")
 	public String showAllconflicts(Model model, Principal p) {
 		model.addAttribute("user", personService.get(p));
-		if (!personService.get(p).isAdmin()) {
-			model.addAttribute("message", "Administrator depostulatur");
-			return "errorMessage";
-
-
-		} else {
-			List<Ausleihe> konflikte = ausleiheService.findAllConflicts();
-			model.addAttribute("konflikte", konflikte);
-			return "alleKonflikte";
-		}
+		List<Ausleihe> konflikte = ausleiheService.findAllConflicts();
+		model.addAttribute("konflikte", konflikte);
+		return "alleKonflikte";
 	}
 
-	@GetMapping("/conflict/{id}")
+
+	@GetMapping("/admin/conflict/{id}")
 	public String showConflict(Model model, Principal p, @PathVariable Long id) {
 		model.addAttribute("user", personService.get(p));
-		if (!personService.get(p).isAdmin()) {
-			model.addAttribute("message", "Administrator depostulatur");
-			return "errorMessage";
-		} else {
-			Ausleihe konflikt = ausleiheService.findById(id);
-			model.addAttribute("konflikt", konflikt);
-			return "konflikt";
-		}
+		Ausleihe konflikt = ausleiheService.findById(id);
+		model.addAttribute("konflikt", konflikt);
+		return "konflikt";
 	}
 
-	@PostMapping("/conflict/{id}")
-	public String resolveConflict
-			(Model model, Principal p, @PathVariable Long id, @RequestParam("entscheidung") String entscheidung) {
-		if (!personService.get(p).isAdmin()) {
-			model.addAttribute("message", "Administrator depostulatur");
-			return "errorMessage";
-		} else {
-			Ausleihe konflikt = ausleiheService.findById(id);
-			if (entscheidung.equals("bestrafen")) {
-				proPayService.punishRerservation(konflikt);
-			} else {
-				proPayService.releaseReservation(konflikt);
-			}
-			konflikt.setKonflikt(false);
-			ausleiheService.save(konflikt);
-			return "redirect:/allconflicts/";
-		}
 
+	@PostMapping("/admin/conflict/{id}")
+	public String resolveConflict
+			(Principal p, @PathVariable Long id, @RequestParam("entscheidung") String entscheidung) {
+		Ausleihe konflikt = ausleiheService.findById(id);
+		if (entscheidung.equals("bestrafen")) {
+			proPayService.punishRerservation(konflikt);
+		} else {
+			proPayService.releaseReservation(konflikt);
+		}
+		konflikt.setKonflikt(false);
+		ausleiheService.save(konflikt);
+		return "redirect:/admin/allconflicts/";
 	}
 }
