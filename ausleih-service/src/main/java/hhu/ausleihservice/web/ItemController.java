@@ -266,7 +266,7 @@ public class ItemController {
 			}
 			model.addAttribute("user", besitzer);
 			model.addAttribute("abholorte", besitzer.getAbholorte());
-			return "neuerKaufArtikel";
+			return "neuerAusleihArtikel";
 		}
 		try {
 			newItem.setPicture(picture.getBytes());
