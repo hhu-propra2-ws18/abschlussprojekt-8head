@@ -22,11 +22,11 @@ public class ProPayInterface {
 	private static final MediaType MIME_TYPE = MediaType.APPLICATION_JSON_UTF8;
 	private static final Duration timeout = Duration.ofSeconds(1);
 
-	public ProPayInterface(String host){
+	public ProPayInterface(String host) {
 		this.host = host;
 	}
 
-	public ProPayInterface(){
+	public ProPayInterface() {
 		host = "propay";
 	}
 
