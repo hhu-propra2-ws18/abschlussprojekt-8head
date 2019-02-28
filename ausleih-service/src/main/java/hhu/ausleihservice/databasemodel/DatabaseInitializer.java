@@ -8,11 +8,16 @@ import hhu.ausleihservice.dataaccess.AusleiheRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.propay.ProPayInterface;
 import hhu.ausleihservice.web.service.ProPayService;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.ServletContext;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -238,21 +243,22 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person5.addItem(item6);
 		person1.addItem(kaufItem1);
 
+
 		try {
 			item1.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/stift.jpg")));
+					Paths.get("/app/img/stift.jpg")));
 			item2.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/fahrrad.jpg")));
+					Paths.get("/app/img/fahrrad.jpg")));
 			item3.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/pfeil.jpg")));
+					Paths.get("/app/img/pfeil.jpg")));
 			item4.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/bohnen.jpg")));
+					Paths.get("/app/img/bohnen.jpg")));
 			item5.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/deepFriedFahrrad.jpg")));
+					Paths.get("/app/img/deepFriedFahrrad.jpg")));
 			item6.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/doener.jpg")));
+					Paths.get("/app/img/doener.jpg")));
 			kaufItem1.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/schwein.jpeg")));
+					Paths.get("/app/img/schwein.jpeg")));
 		} catch (IOException e) {
 			System.out.println("Files could not be stored");
 		}
