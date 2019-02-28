@@ -59,7 +59,17 @@
 			</tr>
 		</form>
 	</table>
-
+	<div th:if="${user.isHimself(benutzer)}">
+		<h1 th:unless="${isProPayAvailable}" id="error">ProPay ist aktuell nicht verfügbar.</h1>
+		<h1 th:if="${isProPayAvailable}">
+			<div th:text="${moneten}"></div>
+		</h1>
+		<form action="#"
+			  th:action="@{/profiladdmoney/{benutzerID} (benutzerID=${benutzer.getId()})}" method="post">
+			<input type="number" name="moneten" min="0">
+			<button type="submit">€ Aufladen</button>
+		</form>
+	</div>
 
 	<div th:if="${benutzer.ausleihen.size() != 0}">
 		<h2>Ausgeliehene Items </h2>
@@ -94,17 +104,6 @@
 			</tr>
 			</tbody>
 		</table>
-	</div>
-	<div th:if="${user.isHimself(benutzer)}">
-		<h1 th:unless="${isProPayAvailable}" id="error">ProPay ist aktuell nicht verfügbar.</h1>
-		<h1 th:if="${isProPayAvailable}">
-			<div th:text="${moneten}"></div>
-		</h1>
-		<form action="#"
-			  th:action="@{/profiladdmoney/{benutzerID} (benutzerID=${benutzer.getId()})}" method="post">
-			<input type="number" name="moneten" min="0">
-			<button type="submit">€ Aufladen</button>
-		</form>
 	</div>
 
 	<div th:if="${ausleihen.size() != 0}">
