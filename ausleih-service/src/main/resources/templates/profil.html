@@ -89,12 +89,17 @@
 			<td th:text="${ausleihe.startDatum.toString()}"></td>
 			<td th:text="${ausleihe.endDatum.toString()}"></td>
 			<td th:switch="${ausleihe.status.name()}">
-				<span th:case="'AUSGELIEHEN'">
+				<div th:case="'AUSGELIEHEN'">
 					<form action="#" th:action="@{'/zurueckgeben/' + ${ausleihe.id}}" method="post">
 							<button type="submit" class="btn btn-primary" th:text="Zurückgeben"></button>
 					</form>
-				</span>
-				<p th:case="*" th:text="${ausleihe.status}"></p>
+				</div>
+				<div th:case="'RUECKGABE_VERPASST'">
+					<form action="#" th:action="@{'/zurueckgeben/' + ${ausleihe.id}}" method="post">
+						<button type="submit" class="btn btn-primary" th:text="Zurückgeben"></button>
+					</form>
+				</div>
+				<p th:case="*" th:text="${ausleihe.status.beschreibung}"></p>
 			</td>
 		</tr>
 		</tbody>
