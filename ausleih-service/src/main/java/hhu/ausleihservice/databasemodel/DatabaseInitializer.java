@@ -83,7 +83,6 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		orte4.add(ort5);
 		orte5.add(ort6);
 
-
 		Person person1 = new Person();
 		Person person2 = new Person();
 		Person person3 = new Person();
@@ -130,14 +129,12 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person4.setAbholorte(orte4);
 		person5.setAbholorte(orte5);
 
-
 		AusleihItem item1 = new AusleihItem();
 		AusleihItem item2 = new AusleihItem();
 		AusleihItem item3 = new AusleihItem();
 		AusleihItem item4 = new AusleihItem();
 		AusleihItem item5 = new AusleihItem();
 		KaufItem kaufItem1 = new KaufItem();
-
 
 		item1.setTitel("Stift");
 		item2.setTitel("Fahrrad");
@@ -270,17 +267,6 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person4.addAusleihe(ausleihe4);
 		person5.addAusleihe(ausleihe3);
 
-		this.ausleiheRepository.save(ausleihe1);
-		this.ausleiheRepository.save(ausleihe2);
-		this.ausleiheRepository.save(ausleihe3);
-		this.ausleiheRepository.save(ausleihe4);
-    
-		this.personRepository.save(person2);
-		this.personRepository.save(person3);
-		this.personRepository.save(person4);
-		this.personRepository.save(person5);
-    
-		this.ausleihItemRepository.save(item3);
-		this.ausleihItemRepository.save(item1);
+
 	}
 }
