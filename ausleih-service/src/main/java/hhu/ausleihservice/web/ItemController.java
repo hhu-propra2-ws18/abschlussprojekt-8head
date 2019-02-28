@@ -162,7 +162,10 @@ public class ItemController {
 	}
 
 	@PostMapping("/kaufen/{id}")
-	public String kaufen(@PathVariable Long id, Principal p, Model model) {
+	public String kaufen(Model model,
+						 @PathVariable Long id,
+						 Principal p,
+						 RedirectAttributes redirAttrs) {
 		KaufItem artikel = kaufItemService.findById(id);
 		Person user = personService.get(p);
 		Kauf kauf = new Kauf();
@@ -183,6 +186,9 @@ public class ItemController {
 		artikel.setStatus(Status.VERKAUFT);
 		proPayService.transferFunds(user, artikel.getBesitzer(), artikel.getKaufpreis());
 		personService.save(user);
+
+		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich gekauft!");
+
 		return "redirect:/";
 	}
 
