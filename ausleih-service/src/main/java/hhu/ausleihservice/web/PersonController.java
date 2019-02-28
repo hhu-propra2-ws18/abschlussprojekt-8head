@@ -64,6 +64,7 @@ public class PersonController {
 		}
 		boolean isProPayAvailable = proPayService.isAvailable();
 		model.addAttribute("isProPayAvailable", isProPayAvailable);
+		model.addAttribute("proPayError", "ProPay ist aktuell nicht verfügbar");
 		model.addAttribute("benutzer", benutzer);
 		model.addAttribute("user", personService.get(p));
 		model.addAttribute("ausleihen", ausleihenItems);
