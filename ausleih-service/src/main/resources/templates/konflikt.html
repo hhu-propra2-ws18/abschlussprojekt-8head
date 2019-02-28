@@ -11,7 +11,7 @@
 <p>Ausleiher: <a th:href="@{/profil/{benutzerID} (benutzerID=${konflikt.ausleiher.id})}"  th:text="${konflikt.ausleiher.username}"></a></p>
 <p>Item: <a th:href="@{'/details/' + ${konflikt.item.id}}" th:text="${konflikt.item.titel}"></a></p>
 
-<form action="#" method="post" th:action="@{|/conflict/${konflikt.id}|}">
+<form action="#" method="post" th:action="@{|/admin/conflict/${konflikt.id}|}">
 	<button name="entscheidung" type="submit" value="verwerfen">Konflikt verwerfen</button>
 	<button name="entscheidung" type="submit" value="bestrafen">Ausleiher bestrafen</button>
 </form>
