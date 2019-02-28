@@ -52,29 +52,6 @@ public class PersonValidatorTest {
 		assertEquals(Messages.notEmpty, bindingResult3.getFieldError("vorname").getCode());
 
 	}
-	
-	@Test
-	public void duplicateUsername() {
-		PersonService personService = mock(PersonService.class);
-		PersonValidator personValidator = new PersonValidator(personService);
-		Person person = new Person();
-		person.setUsername("user1");
-		person.setId(5L);
-		DataBinder dataBinder = new DataBinder(person);
-		dataBinder.setValidator(personValidator);
-
-		Person person2 = new Person();
-		person.setUsername("user1");
-		person.setId(6L);
-		Optional<Person> optionalPerson = Optional.of(person2);
-
-		when(personService.findByUsername(person.getUsername())).thenReturn(optionalPerson);
-
-		dataBinder.validate();
-		BindingResult bindingResult = dataBinder.getBindingResult();
-
-		assertEquals(Messages.duplicateUsername, bindingResult.getFieldError("username").getCode());
-	}
 
 	@Test
 	public void whitespaceNachname() {
@@ -233,28 +210,6 @@ public class PersonValidatorTest {
 		BindingResult bindingResult = dataBinder.getBindingResult();
 
 		assertEquals(Messages.passwordSize, bindingResult.getFieldError("password").getCode());
-	}
-	
-	@Test
-	public void usernameIsNotDuplicate() {
-		PersonService personService = mock(PersonService.class);
-		PersonValidator personValidator = new PersonValidator(personService);
-		Person person = new Person();
-		person.setUsername("user123");
-		person.setId(5L);
-		DataBinder dataBinder = new DataBinder(person);
-		dataBinder.setValidator(personValidator);
-
-		Person person2 = new Person();
-		person2.setUsername("user234");
-		person2.setId(6L);
-		Optional<Person> optionalPerson = Optional.of(person2);
-
-		when(personService.findByUsername(person2.getUsername())).thenReturn(optionalPerson);
-
-		dataBinder.validate();
-		BindingResult bindingResult = dataBinder.getBindingResult();
-		assertEquals(0, bindingResult.getFieldErrorCount("username"));
 	}
 
 }
