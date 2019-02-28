@@ -12,11 +12,11 @@ public enum Status {
 
 	private final String beschreibung;
 
-	Status(String beschreibung){
+	Status(String beschreibung) {
 		this.beschreibung = beschreibung;
 	}
 
-	public String getBeschreibung(){
+	public String getBeschreibung() {
 		return beschreibung;
 	}
 }
