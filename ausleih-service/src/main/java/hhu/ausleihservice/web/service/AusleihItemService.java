@@ -13,12 +13,9 @@ import java.util.Optional;
 public class AusleihItemService {
 
 	private AusleihItemRepository items;
-	private ItemAvailabilityService itemAvailabilityService;
 
-	public AusleihItemService(AusleihItemRepository itemRep,
-							  ItemAvailabilityService itemAvailabilityService) {
+	public AusleihItemService(AusleihItemRepository itemRep) {
 		this.items = itemRep;
-		this.itemAvailabilityService = itemAvailabilityService;
 	}
 
 	public AusleihItem findById(long id) {
