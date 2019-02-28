@@ -19,10 +19,10 @@
 	</th:block>
 </p>
 
-	<form action="#" method="post" th:action="@{|/conflict/${konflikt.id}|}">
-		<button name="entscheidung" type="submit" value="verwerfen">Konflikt verwerfen</button>
-		<button name="entscheidung" type="submit" value="bestrafen">Ausleiher bestrafen</button>
-	</form>
+<form action="#" method="post" th:action="@{|/admin/conflict/${konflikt.id}|}">
+	<button name="entscheidung" type="submit" value="verwerfen">Konflikt verwerfen</button>
+	<button name="entscheidung" type="submit" value="bestrafen">Ausleiher bestrafen</button>
+</form>
 
 </div>
 </body>
