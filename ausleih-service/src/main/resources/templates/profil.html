@@ -2,16 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="../static/css/navbar :: style">
 	<meta charset="UTF-8">
-	<title th:text="${'Profil von ' + benutzer.username}">Profil von xxx</title>
+	<title th:text="${'Profil von ' + benutzer.username}">Profil</title>
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
 <h1>
-	<div th:text="${'Profil von ' + benutzer.username}">siker102</div>
+	<div th:text="${'Profil von ' + benutzer.username}">Benutzername</div>
 </h1>
 <h4>
-	<div th:text="${'Name: ' + benutzer.vorname + ' ' + benutzer.nachname}">Simon Kerkmann</div>
+	<div th:text="${'Name: ' + benutzer.vorname + ' ' + benutzer.nachname}">Name</div>
+	<div th:text="${'Email: ' + benutzer.email}">Email</div>
 </h4>
+
+<div>
+	Alle angebotenen Artikel:
+	<ul>
+		<li th:each="item : ${benutzer.items}">
+			<a th:href="@{'/details/' + ${item.id}}" th:text="${item.titel}"></a>
+		</li>
+	</ul>
+</div>
 
 <table th:if="${user.isAdmin() or user.isHimself(benutzer)}" id="items">
 	<tr>
@@ -30,11 +40,7 @@
 	</tr>
 	<form th:action="@{/profil/{PersonId} (PersonId=${benutzer.getId()})}" th:object="${benutzer}" method="post">
 		<tr>
-			<td th:if="${user.isAdmin() and !(user.isHimself(benutzer))}">
-				<input name="newUsername" type="text" th:field="*{username}">
-			</td>
-			<div th:text="${usernameErrors?.code}"></div>
-			<td th:unless="${user.isAdmin() and !(user.isHimself(benutzer))}">
+			<td>
 			</td>
 			<td>
 				<input name="newVorname" type="text" th:field="*{vorname}">
@@ -58,21 +64,8 @@
 		</tr>
 	</form>
 </table>
-  
-<h1 th:unless="${isProPayAvailable}" th:text="${proPayError}" id="error"></h1>
-<div th:if="${isProPayAvailable}">
-	<h1 th:if="${user.isHimself(benutzer)}">
-		<div th:text="${moneten}"></div>
-	</h1>
 
-	<form th:if="${user.isHimself(benutzer)}" action="#"
-	  	th:action="@{/profiladdmoney/{benutzerID} (benutzerID=${benutzer.getId()})}" method="post">
-		<input type="number" name="moneten" min="0">
-		<button type="submit">€ Aufladen</button>
-	</form>
-</div>
-
-<div class="container">
+<div class="container" th:if="${user.isAdmin() or user.isHimself(benutzer)}">
 	<h2>Ausgeliehene Items </h2>
 	<table class="table table-hover">
 		<thead>
@@ -91,7 +84,7 @@
 			<td th:switch="${ausleihe.status.name()}">
 				<div th:case="'AUSGELIEHEN'">
 					<form action="#" th:action="@{'/zurueckgeben/' + ${ausleihe.id}}" method="post">
-							<button type="submit" class="btn btn-primary" th:text="Zurückgeben"></button>
+						<button type="submit" class="btn btn-primary" th:text="Zurückgeben"></button>
 					</form>
 				</div>
 				<div th:case="'RUECKGABE_VERPASST'">
@@ -107,7 +100,7 @@
 </div>
 
 
-<div class="container-fluid">
+<div class="container-fluid" th:if="${user.isAdmin() or user.isHimself(benutzer)}">
 	<h2>Ausleihen von eigenen Items</h2>
 	<table class="table">
 		<thead class="thead-dark">
@@ -168,14 +161,18 @@
 		</tbody>
 	</table>
 </div>
-<div class="container-fluid">
-	<h1 th:if="${user.isHimself(benutzer)}" th:text="${moneten}"></h1>
-
-	<form th:if="${user.isHimself(benutzer)}" th:action="@{/profiladdmoney/{id} (id=${benutzer.getId()})}"
-		  method="post">
-		<input type="number" name="moneten" min="0" th:value="100">
-		<button type="submit">€ Aufladen</button>
-	</form>
+<div class="container-fluid" th:if="${user.isHimself(benutzer)}">
+	<h2 th:unless="${isProPayAvailable}" th:text="${proPayError}" id="error"></h2>
+	<div th:if="${isProPayAvailable}">
+		<h2>
+			<div th:text="${'Aktueller ProPay-Kontostand: ' + moneten}"></div>
+		</h2>
+		<form th:action="@{/profiladdmoney/{id} (id=${benutzer.getId()})}"
+			  method="post">
+			<input type="number" name="moneten" min="0">
+			<button type="submit">€ Aufladen</button>
+		</form>
+	</div>
 </div>
 
 <div class="container">
