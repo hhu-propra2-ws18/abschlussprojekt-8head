@@ -27,7 +27,6 @@ public class ItemController {
 
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 	private final PersonService personService;
-	private final ItemService itemService;
 	private final AusleihItemService ausleihItemService;
 	private final KaufItemService kaufItemService;
 	private final AbholortService abholortService;
@@ -42,7 +41,6 @@ public class ItemController {
 
 	public ItemController(AusleiheService ausleiheService,
 						  PersonService perService,
-						  ItemService itemService,
 						  AusleihItemService ausleihItemService,
 						  KaufItemService kaufItemService,
 						  AbholortService abholortService,
@@ -56,7 +54,6 @@ public class ItemController {
 	) {
 		this.ausleiheService = ausleiheService;
 		this.personService = perService;
-		this.itemService = itemService;
 		this.ausleihItemService = ausleihItemService;
 		this.kaufItemService = kaufItemService;
 		this.abholortService = abholortService;
@@ -74,9 +71,11 @@ public class ItemController {
 		if (q != null) {
 			q = q.trim();
 		}
-		List<Item> list = itemService.simpleSearch(q);
+		List<AusleihItem> ausleihItems = ausleihItemService.simpleSearch(q);
+		List<KaufItem> kaufItems = kaufItemService.simpleSearch(q);
 		model.addAttribute("dateformat", DATEFORMAT);
-		model.addAttribute("artikelListe", list);
+		model.addAttribute("ausleihItems", ausleihItems);
+		model.addAttribute("kaufItems", kaufItems);
 		model.addAttribute("user", personService.get(p));
 		return "artikelListe";
 	}
@@ -91,17 +90,12 @@ public class ItemController {
 	@PostMapping("/artikelsuche")
 	public String artikelSuche(Model model,
 							   String query, //For titel or beschreibung
-							   @RequestParam(defaultValue = "2147483647")
-									   int tagessatzMax,
-							   @RequestParam(defaultValue = "2147483647")
-									   int kautionswertMax,
+							   @RequestParam(defaultValue = "2147483647") int tagessatzMax,
+							   @RequestParam(defaultValue = "2147483647") int kautionswertMax,
 							   @RequestParam
-							   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-									   LocalDate availableMin,
+							   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate availableMin,
 							   @RequestParam
-							   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-									   LocalDate availableMax,
-							   Principal p) {
+							   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate availableMax, Principal p) {
 		model.addAttribute("user", personService.get(p));
 
 		if (query != null) {

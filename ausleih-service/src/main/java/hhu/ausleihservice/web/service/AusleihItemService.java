@@ -8,22 +8,16 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
-public class AusleihItemService extends ItemService {
+public class AusleihItemService {
 
 	private AusleihItemRepository items;
-	private ItemAvailabilityService itemAvailabilityService;
 
-
-	public AusleihItemService(AusleihItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
+	public AusleihItemService(AusleihItemRepository itemRep) {
 		this.items = itemRep;
-		this.itemAvailabilityService = itemAvailabilityService;
 	}
 
-	@Override
 	public AusleihItem findById(long id) {
 		Optional<AusleihItem> item = items.findById(id);
 		if (!item.isPresent()) {
@@ -32,8 +26,13 @@ public class AusleihItemService extends ItemService {
 		return item.get();
 	}
 
-	List<AusleihItem> findAllAusleihItem() {
+	List<AusleihItem> findAll() {
 		return items.findAll();
+	}
+
+
+	public List<AusleihItem> extendedDateSearch(LocalDate availableMin, LocalDate availableMax) {
+		return items.extendedDateSearch(availableMin, availableMax);
 	}
 
 	public List<AusleihItem> extendedSearch(String query,
@@ -41,25 +40,10 @@ public class AusleihItemService extends ItemService {
 											int kautionswertMax,
 											LocalDate availableMin,
 											LocalDate availableMax) {
-		Stream<AusleihItem> listStream = findAllAusleihItem().stream();
-
-		if (query != null && !query.equals("")) {
-			//Ignores Case
-			String[] qArray = query.toLowerCase().split(" ");
-			listStream = listStream.filter(
-					item -> containsArray(
-							(item.getTitel() + item.getBeschreibung()).toLowerCase(),
-							qArray));
+		if (query == null || query.isEmpty()) {
+			return items.extendedDateSearch(availableMin, availableMax);
 		}
-
-		listStream = listStream.filter(item -> item.getTagessatz() <= tagessatzMax);
-		listStream = listStream.filter(item -> item.getKautionswert() <= kautionswertMax);
-
-		listStream = listStream.filter(
-				item -> itemAvailabilityService.isAvailableFromTill(item, availableMin, availableMax)
-		);
-
-		return listStream.collect(Collectors.toList());
+		return items.extendedSearch(query, availableMin, availableMax);
 	}
 
 	public void updateById(Long id, AusleihItem newItem) {
@@ -75,8 +59,16 @@ public class AusleihItemService extends ItemService {
 		items.save(toUpdate);
 	}
 
-	public void save(AusleihItem newItem) {
-		items.save(newItem);
+
+	public void save(AusleihItem item) {
+		items.save(item);
+	}
+
+	public List<AusleihItem> simpleSearch(String query) {
+		if (query == null || query.isEmpty()) {
+			return findAll();
+		}
+		return items.simpleSearch(query);
 	}
 
 }

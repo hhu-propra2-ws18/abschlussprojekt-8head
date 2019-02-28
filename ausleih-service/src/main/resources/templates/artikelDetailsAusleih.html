@@ -57,7 +57,7 @@
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<input name="newTagessatz" type="number" step="1" min="0" th:field="*{tagessatz}"
 								   id="tagessatz">
-							<div id="error" th:text="${tagessatzErrors?.code}"></div>
+							<div th:text="${tagessatzErrors?.code}"></div>
 						</td>
 					</tr>
 					<tr>
@@ -103,6 +103,7 @@
 				<input type="text" class="daterange" th:field="*{date}"/>
 				<div th:text="${startDatumErrors?.code}"></div>
 				<div th:text="${ausleiherErrors?.code}"></div>
+				<div th:text="${message}"></div>
 				<script th:inline="javascript">
                     /*<![CDATA[*/
                     var start_date =

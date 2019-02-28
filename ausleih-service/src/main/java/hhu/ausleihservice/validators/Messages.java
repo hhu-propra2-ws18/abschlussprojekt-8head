@@ -12,7 +12,7 @@ class Messages {
 
 	static String latitudeOutOfBounds = "Breitengrad muss zwischen -90 und 90 sein.";
 	static String longitudeOutOfBounds = "Längengrad muss zwischen -180 und 180 sein.";
-	static String sizeLocationDescription = "Beschreibung muss zwischen 6 und 400 Zeichen lang sein.";
+	static String sizeLocationDescription = "Beschreibung muss zwischen 6 und 250 Zeichen lang sein.";
 
 	static String sizeTitle = "Titel muss zwischen 6 und 40 Zeichen lang sein.";
 	static String sizeItemDescription = "Beschreibung muss zwischen 6 und 4000 Zeichen lang sein.";

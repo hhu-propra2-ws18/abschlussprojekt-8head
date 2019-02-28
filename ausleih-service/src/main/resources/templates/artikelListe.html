@@ -11,44 +11,52 @@
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
 
 <div class="products">
-	<th:block class="products" th:each="artikel : ${artikelListe}">
-		<div th:unless="${artikel.getClass().getSimpleName().equals('KaufItem') AND artikel.getStatus() != null}">
-			<th:block th:if="${artikel.getClass().getSimpleName().equals('AusleihItem')}">
-				<a th:href="@{'/details/ausleih/' + ${artikel.id}}">
-			</th:block>
-			<th:block th:if="${artikel.getClass().getSimpleName().equals('KaufItem')}">
-				<a th:href="@{'/details/verkauf/' + ${artikel.id}}">
-			</th:block>
+	<th:block class="products" th:each="artikel : ${ausleihItems}">
+		<a th:href="@{'/details/verleih/' + ${artikel.id}}">
 			<div class="product">
 				<div class="product-top">
-				<span th:if="${artikel.getClass().getSimpleName().equals('AusleihItem')}" class="itemName"
-					  th:text="${'Verleih: ' + artikel.titel}">itemName</span>
-					<span th:unless="${artikel.getClass().getSimpleName().equals('AusleihItem')}" class="itemName"
-						  th:text="${'Verkauf: ' + artikel.titel}">itemName</span>
+					<span class="itemName" th:text="${artikel.titel}">itemName</span>
 				</div>
 				<div class="product-middle">
 					<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
 						 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
 				</div>
+				<span class="d-inline-block text-truncate">
 				<div class="product-bottom">
-					<th:block th:if="${artikel.getClass().getSimpleName().equals('AusleihItem')}">
-						<div class="heading"
-							 th:text="${artikel.availableFrom.format(dateformat) + '-' + artikel.availableTill.format(dateformat)}">
-							Chuck Taylor All Star Classic Colours
-						</div>
-					</th:block>
+					<div class="heading"
+						 th:text="${artikel.availableFrom.format(dateformat) + '-' + artikel.availableTill.format(dateformat)}">
+						Chuck Taylor All Star Classic Colours
+					</div>
 					<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
 					<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
-					<th:block th:if="${artikel.getClass().getSimpleName().equals('AusleihItem')}">
-						<div class="price" th:text="${'Tagessatz: ' + artikel.tagessatz} + &euro;">$50.00
-						</div>
-					</th:block>
-					<th:block th:unless="${artikel.getClass().getSimpleName().equals('AusleihItem')}">
-						<div class="price" th:text="${'Kaufpreis: ' + artikel.kaufpreis} + &euro;">$50.00
-						</div>
-					</th:block>
+					<div class="price" th:text="${artikel.tagessatz} + &euro;">$50.00</div>
 				</div>
+				</span>
 			</div>
+		</a>
+	</th:block>
+</div>
+<div class="products">
+	<th:block class="products" th:each="artikel : ${kaufItems}">
+		<div th:if="${artikel.getStatus() == null}">
+			<a th:href="@{'/details/verkauf/' + ${artikel.id}}">
+				<div class="product">
+					<div class="product-top">
+						<span class="itemName" th:text="${artikel.titel}">itemName</span>
+					</div>
+					<div class="product-middle">
+						<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
+							 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
+					</div>
+					<div class="product-bottom">
+						<div class="heading">
+							Wird verkauft
+						</div>
+						<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
+						<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
+						<div class="price" th:text="${artikel.kaufpreis} + &euro;">$50.00</div>
+					</div>
+				</div>
 		</div>
 	</th:block>
 </div>
