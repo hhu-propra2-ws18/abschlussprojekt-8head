@@ -21,6 +21,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -68,8 +69,25 @@ public class ItemController {
 			q = q.trim();
 		}
 		List<Item> list = itemService.simpleSearch(q);
+
+		List<AusleihItem> ausleihItems = new ArrayList<>();
+		List<KaufItem> kaufItems = new ArrayList<>();
+
+		for (Item item : list) {
+			System.out.println(item.getClass().getSimpleName());
+			if (item.getClass().getSimpleName().equals("AusleihItem")) {
+				ausleihItems.add((AusleihItem) item);
+
+			}
+
+			if (item.getClass().getSimpleName().equals("KaufItem")) {
+				kaufItems.add((KaufItem) item);
+			}
+		}
+		model.addAttribute("ausleihItems", ausleihItems);
+		model.addAttribute("kaufItems", kaufItems);
+
 		model.addAttribute("dateformat", DATEFORMAT);
-		model.addAttribute("artikelListe", list);
 		model.addAttribute("user", personService.get(p));
 		return "artikelListe";
 	}
@@ -105,7 +123,7 @@ public class ItemController {
 				availableMin, availableMax);
 
 		model.addAttribute("dateformat", DATEFORMAT);
-		model.addAttribute("artikelListe", list);
+		model.addAttribute("ausleihItems", list);
 
 		return "artikelListe";
 	}
