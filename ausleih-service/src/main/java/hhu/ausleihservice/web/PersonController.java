@@ -1,9 +1,6 @@
 package hhu.ausleihservice.web;
 
-import hhu.ausleihservice.databasemodel.AusleihItem;
-import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.databasemodel.Item;
-import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.databasemodel.*;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
@@ -15,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -44,26 +41,23 @@ public class PersonController {
 		Person user = personService.get(p);
 		model.addAttribute("user", user);
 		if (user != null) {
-			System.out.println(user.getItems());
-			Iterator<Item> iitem = user.getItems().iterator();
-			Iterator<Ausleihe> iausleihe;
-			while (iitem.hasNext()) {
-				Item element = iitem.next();
-				if (element.getClass().getSimpleName().equals("AusleihItem")) {
-					iausleihe = ((AusleihItem) element).getAusleihen().iterator();
-					while (iausleihe.hasNext()) {
-						Ausleihe itemAusleihe = iausleihe.next();
-						System.out.println(itemAusleihe.getItem().getTitel() +
-								" wird verliehen in " +
-								itemAusleihe +
-								" an " +
-								itemAusleihe.getAusleiher());
-					}
+			List<AusleihItem> ausleihItems = new ArrayList<>();
+			List<KaufItem> kaufItems = new ArrayList<>();
+
+			for (Item item : user.getItems()) {
+				System.out.println(item.getClass().getSimpleName());
+				if (item.getClass().getSimpleName().equals("AusleihItem")) {
+					ausleihItems.add((AusleihItem) item);
+
+				}
+
+				if (item.getClass().getSimpleName().equals("KaufItem")) {
+					kaufItems.add((KaufItem) item);
 				}
 			}
-			System.out.println();
-		}
-		if (user != null) {
+			model.addAttribute("ausleihItems", ausleihItems);
+			model.addAttribute("kaufItems", kaufItems);
+
 			model.addAttribute("lateAusleihen", ausleiheService.findLateAusleihen(user.getAusleihen()));
 		}
 		model.addAttribute("dateformat", DATEFORMAT);
