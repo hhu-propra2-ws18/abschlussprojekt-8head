@@ -100,7 +100,7 @@ public class PersonController {
 		model.addAttribute("benutzer", benutzer);
 		model.addAttribute("user", user);
 		model.addAttribute("ausleihItems", ausleihItems);
-		model.addAttribute("verkaeufe", kaufItems);
+		model.addAttribute("kaufItems", kaufItems);
 		if (isProPayAvailable) {
 			model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		}
@@ -136,7 +136,7 @@ public class PersonController {
 				}
 			}
 			model.addAttribute("ausleihItems", ausleihItems);
-			model.addAttribute("verkaeufe", kaufItems);
+			model.addAttribute("kaufItems", kaufItems);
 			if (isProPayAvailable) {
 				model.addAttribute("moneten", proPayService.getProPayKontostand(personService.findById(id)));
 			}
@@ -155,7 +155,7 @@ public class PersonController {
 			personService.updateById(id, benutzer);
 			model.addAttribute("benutzer", personService.findById(id));
 			model.addAttribute("user", personService.get(p));
-			return "profil";
+			return "redirect:/profil/" + id;
 		}
 		return "redirect:/profil/" + id;
 	}
