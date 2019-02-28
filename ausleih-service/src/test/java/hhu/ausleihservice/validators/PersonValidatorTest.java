@@ -1,17 +1,15 @@
 package hhu.ausleihservice.validators;
 
-import hhu.ausleihservice.databasemodel.Person;
-import hhu.ausleihservice.web.service.PersonService;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.mock;
+
 import org.junit.Test;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Optional;
+import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.web.service.PersonService;
 
 public class PersonValidatorTest {
 
