@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class AusleiheServiceTest {
 
@@ -26,9 +27,9 @@ public class AusleiheServiceTest {
 		List<Ausleihe> testInputList = null;
 		LocalDate testInputDate = LocalDate.of(2000, 1, 1);
 
-		ausleiheService.updateAusleihenIfTooLate(testInputList, testInputDate);
+		ausleiheService.update(testInputList, testInputDate);
 
-		assertEquals(null, testInputList);
+		assertNull(testInputList);
 	}
 
 	@Test
@@ -36,7 +37,7 @@ public class AusleiheServiceTest {
 		List<Ausleihe> testInputList = new ArrayList<>();
 		LocalDate testInputDate = LocalDate.of(2000, 1, 1);
 
-		ausleiheService.updateAusleihenIfTooLate(testInputList, testInputDate);
+		ausleiheService.update(testInputList, testInputDate);
 
 		assertEquals(0, testInputList.size());
 	}
@@ -67,7 +68,7 @@ public class AusleiheServiceTest {
 
 		LocalDate testInputDate = LocalDate.of(2000, 1, 1);
 
-		ausleiheService.updateAusleihenIfTooLate(testInputList, testInputDate);
+		ausleiheService.update(testInputList, testInputDate);
 
 		assertEquals(4, testInputList.size());
 
@@ -111,7 +112,7 @@ public class AusleiheServiceTest {
 
 		LocalDate testInputDate = LocalDate.of(2000, 1, 1);
 
-		ausleiheService.updateAusleihenIfTooLate(testInputList, testInputDate);
+		ausleiheService.update(testInputList, testInputDate);
 
 		assertEquals(6, testInputList.size());
 

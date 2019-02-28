@@ -1,17 +1,15 @@
 package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.KaufItemRepository;
-import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.KaufItem;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class KaufItemService extends ItemService {
+public class KaufItemService {
 
 	private KaufItemRepository items;
 
@@ -19,7 +17,7 @@ public class KaufItemService extends ItemService {
 		this.items = itemRep;
 	}
 
-	public KaufItem findKaufItemById(long id) {
+	public KaufItem findById(long id) {
 		Optional<KaufItem> item = items.findById(id);
 		if (!item.isPresent()) {
 			throw new ItemNichtVorhanden();
@@ -27,32 +25,8 @@ public class KaufItemService extends ItemService {
 		return item.get();
 	}
 
-	List<KaufItem> findAllKaufItem() {
+	List<KaufItem> findAll() {
 		return items.findAll();
-	}
-
-	public List<Item> simpleSearch(String query) {
-		List<Item> list;
-
-		if (query == null || query.isEmpty()) {
-			list = findAll();
-		} else {
-			//Ignores case
-			String[] qArray = query.toLowerCase().split(" ");
-			list = findAll()
-					.stream()
-					.filter(
-							item -> containsArray(
-									(item.getTitel()
-											+ item.getBeschreibung())
-											.toLowerCase(),
-									qArray
-							)
-					)
-					.collect(Collectors.toList());
-		}
-
-		return list;
 	}
 
 	public void save(KaufItem newItem) {
@@ -60,12 +34,20 @@ public class KaufItemService extends ItemService {
 	}
 
 	public void updateById(Long id, KaufItem newItem) {
-		KaufItem toUpdate = findKaufItemById(id);
-		System.out.println("Starting item update");
+		KaufItem toUpdate = findById(id);
+		System.out.println("Starting verkauf item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
 		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
 		toUpdate.setKaufpreis(newItem.getKaufpreis());
 		items.save(toUpdate);
 	}
+
+	public List<KaufItem> simpleSearch(String query) {
+		if (query == null || query.isEmpty()) {
+			return findAll();
+		}
+		return items.simpleSearch(query);
+	}
+
 }
