@@ -31,8 +31,7 @@ public class PersonValidator implements Validator {
 		}
 
 		if (person.getId() == null || personService.findOptionalById(person.getId()).isPresent()) {
-			if (personService.findByUsername(person.getUsername()).isPresent() &&
-					!person.getUsername().equals(personService.findById(person.getId()).getUsername())) {
+			if (personService.findByUsername(person.getUsername()).isPresent()) {
 				errors.rejectValue("username", Messages.duplicateUsername);
 			}
 		} else {
