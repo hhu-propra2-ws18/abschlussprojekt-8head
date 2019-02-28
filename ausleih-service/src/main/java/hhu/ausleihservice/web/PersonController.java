@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -57,9 +57,13 @@ public class PersonController {
 	public String otherUser(Model model, @PathVariable Long id, Principal p) {
 		Person benutzer = personService.findById(id);
 		List<AusleihItem> ausleihenItems = new ArrayList<>();
+		List<KaufItem> kaufItems = new ArrayList<>();
 		for (Item item : benutzer.getItems()) {
 			if (item instanceof AusleihItem) {
 				ausleihenItems.add((AusleihItem) item);
+			}
+			else if(item instanceof KaufItem){
+				kaufItems.add((KaufItem) item);
 			}
 		}
 		boolean isProPayAvailable = proPayService.isAvailable();
@@ -68,6 +72,7 @@ public class PersonController {
 		model.addAttribute("benutzer", benutzer);
 		model.addAttribute("user", personService.get(p));
 		model.addAttribute("ausleihen", ausleihenItems);
+		model.addAttribute("verkaeufe",kaufItems);
 		if (isProPayAvailable) {
 			model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		}

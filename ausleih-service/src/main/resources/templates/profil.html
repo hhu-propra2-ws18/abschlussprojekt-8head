@@ -178,6 +178,38 @@
 	</form>
 </div>
 
+<div class="container">
+	<h2>Verkaufte Items:</h2>
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th>Item</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="verkauf : ${verkaeufe}">
+			<td th:text="${verkauf.item.titel}"></td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="container">
+	<h2>Käufe</h2>
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th>Item</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="kauf : ${benutzer.kaeufe}">
+			<td th:text="${kauf.item.titel}"></td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
 
 </body>
 </html>
