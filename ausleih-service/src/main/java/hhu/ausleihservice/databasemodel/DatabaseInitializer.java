@@ -4,6 +4,8 @@ import hhu.ausleihservice.dataaccess.AbholortRepository;
 import hhu.ausleihservice.dataaccess.AusleihItemRepository;
 import hhu.ausleihservice.dataaccess.AusleiheRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
+import hhu.ausleihservice.propay.ProPayInterface;
+import hhu.ausleihservice.web.service.ProPayService;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -36,6 +38,12 @@ public class DatabaseInitializer implements ServletContextInitializer {
 
 	@Override
 	public void onStartup(ServletContext servletContext) {
+
+		//Terminates the initializer if data already exists
+		if (personRepository.findByUsername("Miner4lwasser").isPresent()) {
+			return;
+		}
+
 		System.out.println("Populating the database");
 
 		Abholort ort1 = new Abholort();
@@ -129,6 +137,24 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person3.setAbholorte(orte3);
 		person4.setAbholorte(orte4);
 		person5.setAbholorte(orte5);
+
+		ProPayInterface proPayInterface = new ProPayInterface();
+		ProPayService proPayService = new ProPayService(proPayInterface);
+
+		//Raises all Funds to at least 2500
+		if (proPayService.isAvailable()) {
+			double funds1 = proPayService.getProPayKontostand(person1);
+			double funds2 = proPayService.getProPayKontostand(person2);
+			double funds3 = proPayService.getProPayKontostand(person3);
+			double funds4 = proPayService.getProPayKontostand(person4);
+			double funds5 = proPayService.getProPayKontostand(person5);
+
+			proPayService.addFunds(person1, (funds1 >= 2500) ? 0 : 2500 - funds1);
+			proPayService.addFunds(person2, (funds2 >= 2500) ? 0 : 2500 - funds2);
+			proPayService.addFunds(person3, (funds3 >= 2500) ? 0 : 2500 - funds3);
+			proPayService.addFunds(person4, (funds4 >= 2500) ? 0 : 2500 - funds4);
+			proPayService.addFunds(person5, (funds5 >= 2500) ? 0 : 2500 - funds5);
+		}
 
 
 		AusleihItem item1 = new AusleihItem();
