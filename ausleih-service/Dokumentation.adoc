@@ -1,6 +1,6 @@
 = Softwareentwicklung im Team
 
-image::/src/main/resources/static/img/8head.jpg[Logo,100,float=right]
+image::/src/main/resources/static/img/8head.jpg[width=100,float=right]
 
 = Abschlussprojekt Gruppe 8head - Dokumentation
 
@@ -125,23 +125,23 @@ wird für Artikel verwendet die zum Ausleihen angeboten werden, die andere für 
 die verkauft werden. Um diese Klassen zu verarbeiten, wurden weitere Klassen und HTML-Dateien
 in zwei Dateien aufgeteilt, in denen jeweils mit Kauf- oder Verleihlogik umgegangen wird.
 
-== Database
+
+== Datenbank
 
 === Implementierung
 
-Während der Entwicklung wird eine H2 Datenbank verwendet
-zum einfachen und schnellen Testen, bei der Delivary wird
-auf Postgress geswitcht. Zur implementierung wird auf Hibernate
-gesetzt.
+Während der Entwicklung wurde zum schnellen und einfachen Testen
+eine H2 Datenbank verwendet, vor der Abgabe wurde auf Postgres
+gewechselt. Zur Implementierung wird Hibernate verwendet.
 
 === Schema
 
-image::/Dokumentationsbilder/DatabaseDiagramm.png[Database]
+image::/Dokumentationsbilder/DatabaseDiagramm.png[float=right]
 
 In der Übersetzung des Schemas in Hibernate wurden Kompromisse
 eingangen. Anstatt Foreign-Keys speichern Objekte Referenzen
-auf die Klassen zu denen mit denen sie verbunden sind. Außerdem
-sind alle Beziehungen Bi-Direktional um den Zugriff beidseitig
+auf die Klassen mit denen sie verbunden sind. Außerdem
+sind alle Beziehungen bidirektional, um den Zugriff beidseitig
 zu vereinfachen. AusleihItem und KaufItem erben eigentlich
-noch von einer ItemKlasse, was sich im SQL-Diagramm nicht
+noch von einer Item-Klasse, was sich im SQL-Diagramm nicht
 darstellen ließ.
