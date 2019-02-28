@@ -121,3 +121,24 @@ als eine Oberklasse für die Klassen AusleihItem und KaufItem zu verwenden. Die 
 wird für Artikel verwendet die zum Ausleihen angeboten werden, die andere für Artikel
 die verkauft werden. Um diese Klassen zu verarbeiten, wurden weitere Klassen und HTML-Dateien
 in zwei Dateien aufgeteilt, in denen jeweils mit Kauf- oder Verleihlogik umgegangen wird.
+
+== Database
+
+=== Implementierung
+
+Während der Entwicklung wird eine H2 Datenbank verwendet
+zum einfachen und schnellen Testen, bei der Delivary wird
+auf Postgress geswitcht. Zur implementierung wird auf Hibernate
+gesetzt.
+
+=== Schema
+
+image::/Dokumentationsbilder/DatabaseDiagramm.png[Database]
+
+In der Übersetzung des Schemas in Hibernate wurden Kompromisse
+eingangen. Anstatt Foreign-Keys speichern Objekte Referenzen
+auf die Klassen zu denen mit denen sie verbunden sind. Außerdem
+sind alle Beziehungen Bi-Direktional um den Zugriff beidseitig
+zu vereinfachen. AusleihItem und KaufItem erben eigentlich
+noch von einer ItemKlasse, was sich im SQL-Diagramm nicht
+darstellen ließ.
