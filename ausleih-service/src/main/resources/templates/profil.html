@@ -188,7 +188,7 @@
 		</thead>
 		<tbody>
 		<tr th:each="verkauf : ${verkaeufe}">
-			<td th:text="${verkauf.item.titel}"></td>
+			<td th:if="${verkauf.status == 'VERKAUFT'}" th:text="${verkauf.item.titel}"></td>
 		</tr>
 		</tbody>
 	</table>
