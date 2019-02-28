@@ -181,6 +181,8 @@ public class PersonController {
 		registerValidator.validate(userForm, bindingResult);
 		personValidator.validate(userForm, bindingResult);
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("vornameErrors", bindingResult.getFieldError("vorname"));
+			model.addAttribute("nachnameErrors", bindingResult.getFieldError("nachname"));
 			model.addAttribute("userForm", userForm);
 			model.addAttribute("usernameErrors", bindingResult.getFieldError("username"));
 			model.addAttribute("passwordErrors", bindingResult.getFieldError("password"));
@@ -268,6 +270,7 @@ public class PersonController {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		Person person = personService.get(principal);
 		ausleihe.setKonflikt(true);
+		ausleiheService.save(ausleihe);
 		return "redirect:/profil/" + person.getId();
 	}
 
