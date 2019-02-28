@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -282,6 +282,7 @@ public class PersonController {
 		ausleihe.setStatus(Status.RUECKGABE_ANGEFRAGT);
 		ausleihe.setEndDatum(LocalDate.now());
 		proPayService.ueberweiseTagessaetze(ausleihe);
+		ausleiheService.save(ausleihe);
 		personService.save(person);
 		return "redirect:/profil";
 	}

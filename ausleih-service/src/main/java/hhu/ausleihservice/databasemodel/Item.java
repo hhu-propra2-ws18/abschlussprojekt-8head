@@ -2,7 +2,6 @@ package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.Type;
 import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
@@ -54,7 +53,7 @@ public class Item {
 	}
 
 	private void setPicture250(byte[] in) {
-		this.picture250=Base64.getEncoder().encodeToString(in);
+		this.picture250 = Base64.getEncoder().encodeToString(in);
 	}
 
 	private void setPicture100(byte[] in) {
