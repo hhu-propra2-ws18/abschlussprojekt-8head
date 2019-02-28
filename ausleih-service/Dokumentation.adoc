@@ -12,7 +12,10 @@ Die Dokumentation wird auf Deutsch verfasst. +
 Die Codeformatierung ist IntelliJ default mit "Use tab character", aber ohne Smart Tabs. +
 In Travis werden checkstyle und spotBugs verwendet. Wenn diese nicht erfolgreich durchlaufen, sollte
 ein Branch im Allgemeinen nicht in den Master gemerged werden. PMD wird ebenfalls in Travis verwendet, allerdings führen
-Fehler dort nicht dazu, dass der Build fehlschlägt.
+Fehler dort nicht dazu, dass der Build fehlschlägt. +
+Normalerweise wird nicht direkt im Master-Branch gearbeitet, sondern in Feature-Branches, die
+per Pull-Request durch ein anderes Teammitglied in den Master gemerged werden. Für kleine Änderungen
+ist Pair-Programming auch akzeptabel.
 
 
 == Bedienung
