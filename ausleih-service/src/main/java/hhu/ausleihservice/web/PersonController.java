@@ -66,11 +66,28 @@ public class PersonController {
 
 	@GetMapping("/profil/{id}")
 	public String otherUser(Model model, @PathVariable Long id, Principal p) {
+		Person user = personService.get(p);
 		Person benutzer = personService.findById(id);
-		boolean isProPayAvailable = proPayService.isAvailable();
+
+		boolean isProPayAvailable = false;
+		if (user.getId().longValue() == benutzer.getId().longValue()) {
+			isProPayAvailable = proPayService.isAvailable();
+		}
+
+
+		List<AusleihItem> ausleihItems = new ArrayList<>();
+
+		for (Item item : user.getItems()) {
+			System.out.println(item.getClass().getSimpleName());
+			if (item.getClass().getSimpleName().equals("AusleihItem")) {
+				ausleihItems.add((AusleihItem) item);
+			}
+		}
+
 		model.addAttribute("isProPayAvailable", isProPayAvailable);
 		model.addAttribute("benutzer", benutzer);
-		model.addAttribute("user", personService.get(p));
+		model.addAttribute("user", user);
+		model.addAttribute("ausleihItems", ausleihItems);
 
 		if (isProPayAvailable) {
 			model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
