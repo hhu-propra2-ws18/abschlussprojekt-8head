@@ -6,7 +6,6 @@ import hhu.ausleihservice.dataaccess.KaufItemRepository;
 import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.KaufItem;
 import hhu.ausleihservice.web.service.AusleihItemService;
-import hhu.ausleihservice.web.service.ItemAvailabilityService;
 import hhu.ausleihservice.web.service.KaufItemService;
 import org.junit.Before;
 import org.junit.Rule;
