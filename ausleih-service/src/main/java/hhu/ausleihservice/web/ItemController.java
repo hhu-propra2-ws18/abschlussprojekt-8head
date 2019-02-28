@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class ItemController {
 
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -109,8 +110,12 @@ public class ItemController {
 								 Principal p) {
 		try {
 			AusleihItem artikel = (AusleihItem) ausleihItemService.findById(id);
+
 			model.addAttribute("artikel", artikel);
-			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
+			if (artikel.getClass().equals(AusleihItem.class)) {
+				model.addAttribute("availabilityList",
+						itemAvailabilityService.getUnavailableDates((AusleihItem) artikel));
+			}
 		} catch (ItemNichtVorhanden a) {
 			model.addAttribute("id", id);
 			return "artikelNichtGefunden";
@@ -126,8 +131,9 @@ public class ItemController {
 	public String bearbeiteArtikel(Model model,
 								   @PathVariable long id,
 								   Principal p,
-								   @RequestParam(name = "editArtikel", defaultValue = "false")
-									   final boolean changeArticleDetails,
+								   @RequestParam(
+										   name = "editArtikel", defaultValue = "false"
+								   ) final boolean changeArticleDetails,
 								   @ModelAttribute("artikel") AusleihItem artikel,
 								   BindingResult bindingResult
 	) {
@@ -159,14 +165,21 @@ public class ItemController {
 		return "artikelDetails";
 	}
 
-	//2019-05-02 - 2019-05-09
+	@GetMapping("/ausleihen/{id}")
+	public String ausleihenAbbrechen(Model model, @PathVariable Long id) {
+		return "redirect:/details/" + id;
+	}
+
 	@PostMapping("/ausleihen/{id}")
-	public String ausleihen(@PathVariable Long id, @ModelAttribute AusleihForm ausleihForm, Principal p, Model model) {
+	public String ausleihen(Model model,
+							@PathVariable Long id,
+							@ModelAttribute AusleihForm ausleihForm,
+							Principal p,
+							RedirectAttributes redirAttrs) {
 		AusleihItem artikel = (AusleihItem) ausleihItemService.findById(id);
 		Ausleihe ausleihe = new Ausleihe();
 		Person user = personService.get(p);
 
-		//Please refactor TODO
 		String startDatum = ausleihForm.getDate().substring(0, 10);
 		String endDatum = ausleihForm.getDate().substring(13);
 
@@ -183,7 +196,6 @@ public class ItemController {
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("startDatumErrors", bindingResult.getFieldError("startDatum"));
-			model.addAttribute("endDatumErrors", bindingResult.getFieldError("endDatum"));
 			model.addAttribute("ausleiherErrors", bindingResult.getFieldError("ausleiher"));
 			model.addAttribute("artikel", artikel);
 			model.addAttribute("availabilityList", itemAvailabilityService.getUnavailableDates(artikel));
@@ -200,12 +212,14 @@ public class ItemController {
 		personService.save(user);
 		ausleihItemService.save(artikel);
 
-		return "redirect:/";
+		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich ausgeliehen!");
+
+		return "redirect:/details/" + id;
 	}
 
 
-	@GetMapping("/newitem")
-	public String createItem(Model model, Principal p) {
+	@GetMapping("/newitem/ausleihen")
+	public String createAusleihItem(Model model, Principal p) {
 		Person user = personService.get(p);
 		if (user.getAbholorte().isEmpty()) {
 			model.addAttribute("message", "Bitte Abholorte hinzufügen");
@@ -215,16 +229,30 @@ public class ItemController {
 		model.addAttribute("newitem", new AusleihItem());
 		model.addAttribute("abholorte", user.getAbholorte());
 		model.addAttribute("today", LocalDateTime.now().format(DATEFORMAT));
-		return "neuerArtikel";
+		return "neuerAusleihArtikel";
 	}
 
-	@PostMapping("/newitem")
-	public String addItem(Model model,
-						  @ModelAttribute AusleihItem newItem,
-						  Principal p,
-						  @RequestParam("file") MultipartFile picture,
-						  BindingResult bindingResult,
-						  RedirectAttributes redirAttrs) {
+	@GetMapping("/newitem/kaufen")
+	public String createKaufItem(Model model, Principal p) {
+		Person user = personService.get(p);
+		if (user.getAbholorte().isEmpty()) {
+			model.addAttribute("message", "Bitte Abholorte hinzufügen");
+			return "errorMessage";
+		}
+		model.addAttribute("user", user);
+		model.addAttribute("newitem", new KaufItem());
+		model.addAttribute("abholorte", user.getAbholorte());
+		model.addAttribute("today", LocalDateTime.now().format(DATEFORMAT));
+		return "neuerKaufArtikel";
+	}
+
+	@PostMapping("/newitem/ausleihen")
+	public String addAusleihItem(Model model,
+								 @ModelAttribute AusleihItem newItem,
+								 Principal p,
+								 @RequestParam("file") MultipartFile picture,
+								 BindingResult bindingResult,
+								 RedirectAttributes redirAttrs) {
 		itemValidator.validate(newItem, bindingResult);
 		Person besitzer = personService.get(p);
 		if (bindingResult.hasErrors()) {
@@ -242,7 +270,7 @@ public class ItemController {
 			}
 			model.addAttribute("user", besitzer);
 			model.addAttribute("abholorte", besitzer.getAbholorte());
-			return "neuerArtikel";
+			return "neuerKaufArtikel";
 		}
 		try {
 			newItem.setPicture(picture.getBytes());
@@ -251,6 +279,27 @@ public class ItemController {
 			return "errorMessage";
 		}
 		ausleihItemService.save(newItem);
+		besitzer.addItem(newItem);
+		personService.save(besitzer);
+		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich hinzugefügt!");
+		return "redirect:/";
+	}
+
+	@PostMapping("/newitem/kaufen")
+	public String addKaufItem(Model model,
+							  @ModelAttribute KaufItem newItem,
+							  Principal p,
+							  @RequestParam("file") MultipartFile picture,
+							  BindingResult bindingResult,
+							  RedirectAttributes redirAttrs) {
+		Person besitzer = personService.get(p);
+		try {
+			newItem.setPicture(picture.getBytes());
+		} catch (IOException e) {
+			model.addAttribute("message", "Datei konnte nicht gespeichert werden");
+			return "errorMessage";
+		}
+		kaufItemService.save(newItem);
 		besitzer.addItem(newItem);
 		personService.save(besitzer);
 		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich hinzugefügt!");

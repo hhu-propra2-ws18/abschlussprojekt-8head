@@ -2,6 +2,7 @@ package hhu.ausleihservice.validators;
 
 class Messages {
 
+
 	static String notEmpty = "Benötigtes Feld";
 
 	static String usernameSize = "Der Benutzername muss zwischen 6 und 32 Zeichen lang sein.";
@@ -23,4 +24,7 @@ class Messages {
 	static String itemNotAvailable = "Der Artikel ist im gewählten Zeitraum nicht verfügbar";
 	static String invalidUser = "Der angegebene Nutzer stimmt nicht mit dem Login überein";
 	static String ownItemAusleihe = "Ein eigener Artikel kann nicht ausgeliehen werden";
+	static String notEnoughMoney = "Das Guthaben auf dem ProPay-Konto reicht nicht für die Kaution";
+
+	static String propayUnavailable = "ProPay ist aktuell nicht verfügbar";
 }

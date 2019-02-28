@@ -7,9 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -42,29 +40,4 @@ public class AusleihItem extends Item {
 		ausleihen.remove(ausleihe);
 		ausleihe.setItem(null);
 	}
-
-	Ausleihe[] getSortierteAusleihen() {
-
-		Ausleihe[] sortierteAusleihen = new Ausleihe[ausleihen.size()];
-		List<Ausleihe> tempAusleihen = new ArrayList<>(ausleihen);
-
-		for (int i = 0; i < ausleihen.size(); i++) {
-
-			Ausleihe smallest = tempAusleihen.get(0);
-			LocalDate smallestDate = smallest.getStartDatum();
-
-			for (Ausleihe test : tempAusleihen) {
-				LocalDate testDate = test.getStartDatum();
-				if (testDate.isBefore(smallestDate)) {
-					smallest = test;
-					smallestDate = smallest.getStartDatum();
-				}
-			}
-			sortierteAusleihen[i] = smallest;
-			tempAusleihen.remove(smallest);
-		}
-
-		return sortierteAusleihen;
-	}
-
 }

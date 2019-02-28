@@ -1,0 +1,72 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="../static/css/navbar :: style">
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<title>Artikeldetails</title>
+</head>
+<nav th:replace="../static/css/navbar :: main-menu">menu</nav>
+<body>
+<div class="container-fluid">
+	<div class="row mt-3">
+		<div class="col-md-3">
+			<h2>Neues Item hinzufügen:</h2>
+			<form action="#" th:action="@{/newitem/kaufen}" th:object="${newitem}" method="post" enctype="multipart/form-data">
+				<div class="form-group">
+					<label for="titel">Titel:</label>
+					<input type="text" th:field="*{titel}" class="form-control" id="titel">
+					<div id="error" th:text="${titelErrors?.code}"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="beschreibung">Beschreibung: </label>
+					<input type="text" th:field="*{beschreibung}" class="form-control" id="beschreibung">
+					<div id="error" th:text="${beschreibungErrors?.code}"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="kaufpreis">Kaufpreis: </label>
+					<input type="number" th:field="*{kaufpreis}" step="1" min="0.00"
+						   class="form-control" id="kaufpreis">
+				</div>
+
+				<div class="form-group">
+					<label for="abholort">Abholort: </label>
+					<select class="form-control" id="abholort" name="abholort">
+						<option th:each="abholort: ${abholorte}"
+								th:value="${abholort.id}"
+								th:text="${abholort.beschreibung}"></option>
+					</select>
+					<div id="error" th:text="${abholortErrors?.code}"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="file">Bild: </label>
+					<input type="file" id="file" class="form-control" accept=".png, .jpg, .jpeg" name="file">
+					<div id="error" th:text="${fileErrors?.code}"></div>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Hinzufügen</button>
+				<button type="reset" class="btn btn-primary">Zurücksetzen</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+		crossorigin="anonymous"></script>
+</body>
+</html>
