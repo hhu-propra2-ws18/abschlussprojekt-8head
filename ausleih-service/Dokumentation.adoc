@@ -1,120 +1,123 @@
-## Style
+= Softwareentwicklung im Team
 
-Commit Nachrichten in Englisch, Präsens, kurz und kompakt. +
-Klassen-, Methoden- und Variabelnnamen sind gemischt Deutsch und Englisch. +
-HTML-Dateien sind auf deutsch, Urls auf Englisch. +
+image::/src/main/resources/static/img/8head.jpg[Logo,100,float=right]
+
+= Abschlussprojekt Gruppe 8head - Dokumentation
+
+== Style
+
+Commit-Nachrichten werden in Englisch und im Präsens verfasst und sollten kurz und kompakt gehalten sein. +
+Namen von Klassen, Methoden, Variabeln, HTML-Dateien und URLs sind gemischt Deutsch und Englisch. +
 Die Dokumentation wird auf Deutsch verfasst. +
-Codeformatierung ist IntelliJ default mit "Use tab character", aber ohne Smart Tabs. +
-In Travis werden checkstyle und spotBugs verwendet. Wenn diese nicht erfolgreich durchlaufen, dann sollte
+Die Codeformatierung ist IntelliJ default mit "Use tab character", aber ohne Smart Tabs. +
+In Travis werden checkstyle und spotBugs verwendet. Wenn diese nicht erfolgreich durchlaufen, sollte
 ein Branch im Allgemeinen nicht in den Master gemerged werden. PMD wird ebenfalls in Travis verwendet, allerdings führen
 Fehler dort nicht dazu, dass der Build fehlschlägt.
 
 
+== Bedienung
 
-## Bedienung
-
-#### Starten der Anwendung
+=== Starten der Anwendung
 Die Anwendung wird über das Terminalkommando "sudo docker-compose up" gestartet.
+Die Startseite ist zu finden unter http://localhost:8080.
 
-#### Bestehende Accounts
-Im DatabaseInizializer werden bereits mehrere Personen initialisiert
-über die man sich auch einloggen kann. Beispielsweise:
+=== Bestehende Accounts
+Im DatabaseInitializer werden bereits mehrere Personen initialisiert,
+über welche man sich einloggen kann. Beispielsweise:
 
+* Username Miner4lwasser mit Passwort pl4tsh (hat Admin Rechte)
 * Username Kawumms mit Passwort rumbl7
-* Username Admin mit Passwort 123 (hat Admin Rechte)
 
-#### Navbar
+Weitere beispielhafte Nutzer lassen sich im DatabaseInitializer finden.
 
-Im gesamten Service wird zur Hilfestellung eine Navigationsleiste angezeigt. Mit dieser
-kann man direkt zur Artikel- oder Personensuche. Wenn man uneingelogt stellt sie einem
-außerdem Links zur Registrierungs- und Anmeldeseite zurverfügung, ansonsten erhält
-man Links zum Auslogen und zur Profilseite und noch zur Adminseite als Admin.
+=== Navigationsleiste
+Im gesamten Service wird zur Hilfe eine Navigationsleiste angezeigt, mithilfe dieser
+kommt man direkt zur Artikel- oder Personensuche. +
+Falls man nicht eingeloggt ist, stellt diese außerdem Links zur Registrier- und
+Anmeldeseite zur Verfügung, andernfalls erhält man Links zur Profilseite und zum Ausloggen,
+je nach Rolle des Nutzers zeigt sie zudem noch einen Link zur Adminseite.
 
-#### Startseite
-Die Default-page ist die Startseite auf der uneingelogt nur eine Aufforderung zum
-Anmelden angezeigt wird. +
-Wenn man als Nutzer eingelogt ist befinden sich hier auch die Links auf
-die Artikel Liste und auf die Seiten wo man neue Abholorte oder Artikel
-einfügen kann.
+=== Startseite
+Die Standardseite ist die Startseite auf der nur eine Aufforderung zum
+Anmelden angezeigt wird, falls man nicht eingeloggt ist. +
+Falls man als Nutzer eingeloggt ist, befinden sich hier auch die Links zur
+Artikelliste und zu den Seiten zum Erstellen neuer Abholorte oder Artikel. +
+Falls man als Admin eingeloggt ist, stellt die Startseite zusätzlich einen Link zur Konfliktliste
+bereit.
 
-#### Registrierung
-Bei der Registrierung muss man die notwendigen Daten angeben.
-Durch Validator wird sicher gestellt das diese bestimmten
-Vorgaben erfüllen. Es gibt:
+=== Registrierung
+Während der Registrierung muss man die notwendigen Daten zur Erstellung eines Nutzers angeben.
+Durch einen Validator wird sichergestellt, dass diese feste Vorgaben erfüllen. +
+Es gibt:
 
 * Vorname
 * Nachname
-* Username (zwischen 6 und 32 Zeichen)
-* Passwort (zwischen 3-100 Zeichen)
-* Email (Gültiges Emailformat)
+* Username (6-32 Zeichen)
+* Passwort (3-100 Zeichen)
+* Email (gültiges Format)
 
-#### Login
-Die Loginseite ist die Default von Spring Security mit Username
-#### Login und Logout
-Die Login und Logout Seiten sind die Default Seiten von Spring Security mit Username
-und Passwort.
+=== Login und Logout
+Die Login- und Logoutseite entsprechen den Standardversionen von Spring Security mit Username und Passwort.
 
-#### Neuen Abholort
-Neue Abholorte muss man zu seinem Profil hinzufügen, bevor man
-einen Artikel hinzufügt. Diese stehen dann bei der Einreichung
-von jedem neuen Artikel zurverfügung. +
-Man gibt die Koordinaten des Abholorts entweder manuel oder über
-die einbundene Openstreetmap Karte an. Diese werden bis zu 6 Nachkommastellen
-gespeichert, was Abweichungen von bis zu 11 Zentimetern entsprechen
-kann. Zusätzlich kann man noch eine Beschreibung angeben (z.B.
-"Bitte gehen sie in den dritten Stock." oder
-"Vorsicht! Die Schlangen sind giftig!").
+=== Abholort hinzufügen
+Bevor man einen Artikel verleihen oder verkaufen kann, muss man mindestens einen Abholort zu seinem
+Profil hinzufügen. Diese stehen dann bei der Einreichung von jedem neuen Artikel zur Verfügung. +
+Die Koordinaten des Abholortes lassen sich entweder manuell oder über
+die eingebettete OpenStreetMap-Karte eingeben. Diese werden mit bis zu sechs Nachkommastellen
+gespeichert, was Abweichungen von knapp elf Zentimetern entspricht.
+Zusätzlich kann man noch eine Beschreibung angeben, wie z.B.
+"Bitte gehen Sie in den dritten Stock." oder
+"Vorsicht! Die Schlangen sind giftig!".
 
-#### Artikel reinstellen
-Auf der Starteseite wählt man aus ob man es zum Verleih oder Verkauf
-anbietet.
+=== Artikel anbieten
+Auf der Startseite lässt sich auswählen, ob man einen Artikel zum Verleih oder zum Verkauf
+anbieten möchte.
 
-###### Zum Verleih
-Man gibt die wichtigen Informationen aus den Minimalanforderungen für einen Artikel an. Die Verfügbarkeit
-wird über zwei Daten angeben und geht einschließlich vom ersten bis einschließlich zum zweiten.
-(Das zweite darf nicht vor dem ersten sein).
+* *Zum Verleih* +
+Sämtliche Daten zur Erstellung eines AusleihItem Objekts werden benötigt. Die Verfügbarkeit
+wird über zwei Datumsfelder angegeben und geht einschließlich vom ersten bis zum zweiten. +
+Das zweite Datum darf nicht vor dem ersten sein und das erste muss mindestens heute sein.
 
-###### Zum Verkauf
-Ähnlich zum Verleih. Man gibt keine Kaution oder Tagesssatz an,
-stattdessen einen Kaufpreis. Es gibt auch keine Verfügbarkeit (wenn man etwas zum Verkauf anbietet
-sollte es auch immer verfügbar sein).
+* *Zum Verkauf* +
+Ähnlich zum Verleih, aber statt Kaution und Tagesssatz wird ein Kaufpreis benötigt.
+Eine Verfügbarkeit wird ebenfalls nicht benötigt, da ein zum Kauf freigegebener Artikel stets
+verfügbar sein sollte.
 
-#### Artikel- und Personensuchen
-Führen einfache String Abgleiche durch. Bei der Artikelsuche
-kann über die "Erweiterte  Suche" noch weiter nach Verfügbarkeit
-und Preise.
+=== Artikel- und Personensuchfunktion
+Die Suchfunktionen führen einfache Stringvergleiche durch. Für Artikel kann über die erweiterte Suche
+außerdem nach Verfügbarkeit und Preis gefiltert werden.
 
-#### Profil
-Über die Profilpage sieht man die öffentlichen Daten einer Person. Wenn es
-das eigene Profil ist oder man admin ist kann man alle Daten
-außer den Username modifizieren. Als user selber kann hier auch
-die seinen ProPay-Stand anzeigen lassen und Geld aufladen.
+=== Profil
+Über die Profilseite sieht man die öffentlichen Daten einer Person. Auf dem eigenen Profil, oder
+falls man Administratorrechte besitzt, lassen sich alle Daten mit Ausnahme des Benutzernamens bearbeiten. +
+Auf seinem eigenen Profil kann ein Nutzer hier auch seinen ProPay-Kontostand anzeigen lassen und Geld aufladen.
 
-#### Artikeldetails
-Auf der Detailpage sieht man die Information zu einem eingestellten
-Artikel und kann sie als Besitzer oder Admin ändern.
-Als nicht-Besitzer kann man sie hier ausleihen.
+=== Artikeldetails
+Die Detailseite eines Artikels stellt Information zu diesem bereit, welche sich als Besitzer oder
+Admin bearbeiten lassen.
+Als nicht-Besitzer kann man diesen hier auch ausleihen.
 
-#### Adminfunktionen
-Die Adminpages sind nur als Admin erreichbar.
+=== Adminfunktionen
+Die Adminseiten sind nur als Admin erreichbar. Normale Benutzer erhalten eine Fehlermeldung, falls sie versuchen, auf
+diese zuzugreifen.
 
-###### Admin page
-Zeigt einem, dass man der Admin ist.
+* *Adminhauptseite* +
+Zeigt, dass man Admin ist.
 
-###### Konfliktlösestelle
-In der Konfliktlösestelle wird einem eine Liste aller Ausleihen
-angezeigt, wo sich der Besitzer und der Ausleiher uneinig
-waren. Wenn man auf einen Konfliktklickt kommt man auf die Page
-dieses Konflikt von den man auf alle notwendigen Daten für
-diesen Konflikt kommt und wo der Admin diesen Konflikt zugunsten
-des Besitzers oder des Ausleihers resolven kann.
+* *Konfliktlösestelle* +
+In der Konfliktlösestelle wird eine Liste aller Ausleihen angezeigt, bei denen sich der Besitzer
+und der Ausleiher uneinig waren. Durch Klick auf einen Konflikt wird man auf die Detailseite
+von diesem weitergeleitet, auf der alle notwendigen Daten für diesen Konflikt bereitgestellt werden
+und der Admin diesen zugunsten des Besitzers oder des Ausleihers auflösen kann. +
+Die Kommunikation findet außerhalb der Anwendung via E-Mail statt, wonach der Administrator eine Entscheidung
+treffen kann.
 
 
-## Implementierung der Verkaufsoption
+== Implementierung der Verkaufsoption
 
-Um das Design den neuen Vorgaben unseres gutmütigen Chefs zuentsprechen haben wir
-uns entschieden die Itemklasse (welche einen eingestellten Artikel respäsentiert)
-als eine Oberklasse für die Klassen AusleiheItem und KaufItem zu verwenden. Die erste
-wird für Artikel verwendet die zum Ausleihen eingestellt werden, die andere für Artikel
-die verkauft werden. Um diese Klassen zu verarbeiten wurden weitere Klassen und HTML-Datein
-in zwei geteilt, damit jeweils mit Kauf- oder Verleih Logik umgegangen wird.
+Um das Design den neuen Vorgaben unseres gutmütigen Chefs anzupassen haben wir
+uns entschieden, die Itemklasse (welche einen angebotenen Artikel repräsentiert)
+als eine Oberklasse für die Klassen AusleihItem und KaufItem zu verwenden. Die erste
+wird für Artikel verwendet die zum Ausleihen angeboten werden, die andere für Artikel
+die verkauft werden. Um diese Klassen zu verarbeiten, wurden weitere Klassen und HTML-Dateien
+in zwei Dateien aufgeteilt, in denen jeweils mit Kauf- oder Verleihlogik umgegangen wird.
