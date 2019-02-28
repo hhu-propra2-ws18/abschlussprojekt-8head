@@ -2,28 +2,26 @@ package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.AusleihItemRepository;
 import hhu.ausleihservice.databasemodel.AusleihItem;
-import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
-public class AusleihItemService extends ItemService {
+public class AusleihItemService {
 
 	private AusleihItemRepository items;
 	private ItemAvailabilityService itemAvailabilityService;
 
-	public AusleihItemService(AusleihItemRepository itemRep, ItemAvailabilityService itemAvailabilityService) {
+	public AusleihItemService(AusleihItemRepository itemRep,
+							  ItemAvailabilityService itemAvailabilityService) {
 		this.items = itemRep;
 		this.itemAvailabilityService = itemAvailabilityService;
 	}
 
-	public AusleihItem findAusleihItemById(long id) {
+	public AusleihItem findById(long id) {
 		Optional<AusleihItem> item = items.findById(id);
 		if (!item.isPresent()) {
 			throw new ItemNichtVorhanden();
@@ -31,7 +29,7 @@ public class AusleihItemService extends ItemService {
 		return item.get();
 	}
 
-	List<AusleihItem> findAllAusleihItem() {
+	List<AusleihItem> findAll() {
 		return items.findAll();
 	}
 
@@ -49,7 +47,7 @@ public class AusleihItemService extends ItemService {
 	}
 
 	public void updateById(Long id, AusleihItem newItem) {
-		AusleihItem toUpdate = findAusleihItemById(id);
+		AusleihItem toUpdate = findById(id);
 		System.out.println("Starting item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
@@ -59,6 +57,15 @@ public class AusleihItemService extends ItemService {
 		toUpdate.setKautionswert(newItem.getKautionswert());
 		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
 		items.save(toUpdate);
+	}
+
+	public void save(AusleihItem item) {
+		items.save(item);
+	}
+
+	public List<AusleihItem> simpleSearch(String query) {
+		if (query == null || query.isEmpty()) return findAll();
+		return items.simpleSearch(query);
 	}
 
 }

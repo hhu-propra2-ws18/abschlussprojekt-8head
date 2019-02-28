@@ -1,6 +1,8 @@
 package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.KaufItemRepository;
+import hhu.ausleihservice.databasemodel.AusleihItem;
+import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.KaufItem;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;
@@ -9,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class KaufItemService extends ItemService {
+public class KaufItemService {
 
 	private KaufItemRepository items;
 
@@ -17,7 +19,7 @@ public class KaufItemService extends ItemService {
 		this.items = itemRep;
 	}
 
-	public KaufItem findKaufItemById(long id) {
+	public KaufItem findById(long id) {
 		Optional<KaufItem> item = items.findById(id);
 		if (!item.isPresent()) {
 			throw new ItemNichtVorhanden();
@@ -25,7 +27,7 @@ public class KaufItemService extends ItemService {
 		return item.get();
 	}
 
-	List<KaufItem> findAllKaufItem() {
+	List<KaufItem> findAll() {
 		return items.findAll();
 	}
 
@@ -34,7 +36,7 @@ public class KaufItemService extends ItemService {
 	}
 
 	public void updateById(Long id, KaufItem newItem) {
-		KaufItem toUpdate = findKaufItemById(id);
+		KaufItem toUpdate = (KaufItem) findById(id);
 		System.out.println("Starting item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
@@ -42,4 +44,10 @@ public class KaufItemService extends ItemService {
 		toUpdate.setKaufpreis(newItem.getKaufpreis());
 		items.save(toUpdate);
 	}
+
+	public List<KaufItem> simpleSearch(String query) {
+		if (query == null || query.isEmpty()) return findAll();
+		return items.simpleSearch(query);
+	}
+
 }

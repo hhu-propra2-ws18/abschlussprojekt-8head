@@ -16,5 +16,5 @@ public interface ItemBaseRepository<T extends Item> extends CrudRepository<T, Lo
 	@Query("select distinct f from Item f " +
 			"where lower(:name) in (lower(f.titel)) or " +
 			"lower(:name) in (lower(f.beschreibung))")
-	List<Item> simpleSearch(@Param("name") String name);
+	List<T> simpleSearch(@Param("name") String name);
 }

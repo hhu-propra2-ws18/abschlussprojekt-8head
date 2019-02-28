@@ -5,10 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,6 +18,7 @@ import java.util.Set;
 public class AusleihItem extends Item {
 
 	private String titel = "";
+	@Lob
 	private String beschreibung = "";
 	private Integer tagessatz;
 	private Integer kautionswert;
