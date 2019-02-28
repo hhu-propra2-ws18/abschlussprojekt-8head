@@ -52,6 +52,7 @@ public class PersonController {
 		Person benutzer = personService.findById(id);
 		boolean isProPayAvailable = proPayService.isAvailable();
 		model.addAttribute("isProPayAvailable", isProPayAvailable);
+		model.addAttribute("proPayError", "ProPay ist aktuell nicht verfügbar");
 		model.addAttribute("benutzer", benutzer);
 		model.addAttribute("user", personService.get(p));
 
