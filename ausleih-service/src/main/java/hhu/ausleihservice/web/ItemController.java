@@ -35,9 +35,10 @@ public class ItemController {
 	private AusleihItemValidator ausleihItemValidator;
 	private KaufItemValidator kaufItemValidator;
 	private AbholortValidator abholortValidator;
-	private AusleiheValidator ausleiheValidator;
+	private AusleiheAnfragenValidator ausleiheAnfragenValidator;
 	private KaufValidator kaufValidator;
 	private AusleiheService ausleiheService;
+	private ProPayService proPayService;
 
 	public ItemController(AusleiheService ausleiheService,
 						  PersonService perService,
@@ -49,8 +50,9 @@ public class ItemController {
 						  AusleihItemValidator ausleihItemValidator,
 						  KaufItemValidator kaufItemValidator,
 						  AbholortValidator abholortValidator,
-						  AusleiheValidator ausleiheValidator,
-						  KaufValidator kaufValidator
+						  AusleiheAnfragenValidator ausleiheAnfragenValidator,
+						  KaufValidator kaufValidator,
+						  ProPayService proPayService
 	) {
 		this.ausleiheService = ausleiheService;
 		this.personService = perService;
@@ -62,8 +64,9 @@ public class ItemController {
 		this.ausleihItemValidator = ausleihItemValidator;
 		this.kaufItemValidator = kaufItemValidator;
 		this.abholortValidator = abholortValidator;
-		this.ausleiheValidator = ausleiheValidator;
+		this.ausleiheAnfragenValidator = ausleiheAnfragenValidator;
 		this.kaufValidator = kaufValidator;
+		this.proPayService = proPayService;
 	}
 
 	@GetMapping("/liste")
@@ -133,7 +136,8 @@ public class ItemController {
 	public String bearbeiteArtikelVerkauf(Model model,
 										  @PathVariable long id,
 										  Principal p,
-										  @RequestParam(name = "editArtikel", defaultValue = "false") final boolean changeArticleDetails,
+										  @RequestParam(name = "editArtikel", defaultValue = "false")
+											  final boolean changeArticleDetails,
 										  @ModelAttribute("artikel") KaufItem artikel,
 										  BindingResult bindingResult
 	) {
@@ -163,9 +167,6 @@ public class ItemController {
 		KaufItem artikel = kaufItemService.findById(id);
 		Person user = personService.get(p);
 		Kauf kauf = new Kauf();
-
-		//Please refactor TODO
-		artikel.setStatus(Status.VERKAUFT);
 		kauf.setItem(artikel);
 		user.addKauf(kauf);
 
@@ -175,12 +176,13 @@ public class ItemController {
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("kaeuferErrors", bindingResult.getFieldError("kaeufer"));
-			model.addAttribute("ownItemErrors", bindingResult.getFieldError("ownItem"));
+			model.addAttribute("itemErrors", bindingResult.getFieldError("item"));
 			model.addAttribute("artikel", artikel);
 			model.addAttribute("user", user);
 			return "artikelDetailsVerkauf";
 		}
-
+		artikel.setStatus(Status.VERKAUFT);
+		proPayService.transferFunds(user, artikel.getBesitzer(), artikel.getKaufpreis());
 		personService.save(user);
 		return "redirect:/";
 	}
@@ -270,7 +272,7 @@ public class ItemController {
 		ausleihe.setItem(artikel);
 
 		DataBinder dataBinder = new DataBinder(ausleihe);
-		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.setValidator(ausleiheAnfragenValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		if (bindingResult.hasErrors()) {

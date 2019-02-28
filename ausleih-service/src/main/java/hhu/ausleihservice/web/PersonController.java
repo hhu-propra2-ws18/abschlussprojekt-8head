@@ -1,7 +1,8 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.*;
-import hhu.ausleihservice.validators.AusleiheValidator;
+import hhu.ausleihservice.validators.AusleiheAbgabeValidator;
+import hhu.ausleihservice.validators.AusleiheAnfragenValidator;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
@@ -29,17 +30,20 @@ public class PersonController {
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
 	private AusleiheService ausleiheService;
-	private final AusleiheValidator ausleiheValidator;
+	private final AusleiheAnfragenValidator ausleiheAnfragenValidator;
+	private final AusleiheAbgabeValidator ausleiheAbgabeValidator;
 
 	@Autowired
 	PersonController(PersonService personService, PersonValidator personValidator,
 					 ProPayService proPayService, AusleiheService ausleiheService,
-					 AusleiheValidator ausleiheValidator) {
+					 AusleiheAnfragenValidator ausleiheAnfragenValidator,
+					 AusleiheAbgabeValidator ausleiheAbgabeValidator) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
 		this.ausleiheService = ausleiheService;
-		this.ausleiheValidator = ausleiheValidator;
+		this.ausleiheAnfragenValidator = ausleiheAnfragenValidator;
+		this.ausleiheAbgabeValidator = ausleiheAbgabeValidator;
 	}
 
 	@GetMapping("/")
@@ -273,7 +277,7 @@ public class PersonController {
 	public String returnArticle(Principal p, @PathVariable Long id) {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		DataBinder dataBinder = new DataBinder(ausleihe);
-		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.setValidator(ausleiheAbgabeValidator);
 		dataBinder.validate();
 
 		BindingResult bindingResult = dataBinder.getBindingResult();

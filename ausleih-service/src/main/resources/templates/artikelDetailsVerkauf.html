@@ -8,6 +8,8 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
+<h1 th:if="${artikel.getStatus()!=null}" style="color:#ff1518;"
+	th:text="${'Dieser Artikel ist bereits verkauft!'}"></h1>
 <container class="container px-lg-5">
 	<div class="row mx-lg-n5 product-details-row">
 		<div>
@@ -76,11 +78,11 @@
 	</div>
 </container>
 
-<div th:unless="${user.isOwner(artikel)}">
+<div th:unless="${user.isOwner(artikel) AND artikel.getStatus()==null}">
 	<form th:action="@{/kaufen/{id}(id=${artikel.id})}" th:object="${kaufForm}" method="post">
 		<button type="submit" value="true" name="kaufeArtikel">Kaufen</button>
 		<div th:text="${kaeuferErrors?.code}"></div>
-		<div th:text="${ownItemErrors?.code}"></div>
+		<div th:text="${itemErrors?.code}"></div>
 	</form>
 </div>
 
