@@ -65,7 +65,7 @@ public class PersonService implements UserDetailsService {
 		return person.get();
 	}
 
-	public boolean existsByUsername(String username){
+	public boolean existsByUsername(String username) {
 		return users.existsByUsername(username);
 	}
 
