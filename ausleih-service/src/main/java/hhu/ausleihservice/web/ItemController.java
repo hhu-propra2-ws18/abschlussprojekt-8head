@@ -74,7 +74,6 @@ public class ItemController {
 		List<KaufItem> kaufItems = new ArrayList<>();
 
 		for (Item item : list) {
-			System.out.println(item.getClass().getSimpleName());
 			if (item.getClass().getSimpleName().equals("AusleihItem")) {
 				ausleihItems.add((AusleihItem) item);
 				

@@ -53,10 +53,8 @@ public class PersonController {
 			List<KaufItem> kaufItems = new ArrayList<>();
 
 			for (Item item : user.getItems()) {
-				System.out.println(item.getClass().getSimpleName());
 				if (item.getClass().getSimpleName().equals("AusleihItem")) {
 					ausleihItems.add((AusleihItem) item);
-
 				}
 
 				if (item.getClass().getSimpleName().equals("KaufItem")) {
