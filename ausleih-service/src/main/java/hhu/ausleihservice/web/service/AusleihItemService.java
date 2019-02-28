@@ -54,7 +54,7 @@ public class AusleihItemService {
 		toUpdate.setAvailableTill(newItem.getAvailableTill());
 		toUpdate.setTagessatz(newItem.getTagessatz());
 		toUpdate.setKautionswert(newItem.getKautionswert());
-		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
+		toUpdate.setAbholort(newItem.getAbholort());
 		items.save(toUpdate);
 	}
 
