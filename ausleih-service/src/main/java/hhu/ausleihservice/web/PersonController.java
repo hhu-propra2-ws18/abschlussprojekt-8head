@@ -61,8 +61,7 @@ public class PersonController {
 		for (Item item : benutzer.getItems()) {
 			if (item instanceof AusleihItem) {
 				ausleihenItems.add((AusleihItem) item);
-			}
-			else if(item instanceof KaufItem){
+			} else if (item instanceof KaufItem) {
 				kaufItems.add((KaufItem) item);
 			}
 		}
@@ -72,7 +71,7 @@ public class PersonController {
 		model.addAttribute("benutzer", benutzer);
 		model.addAttribute("user", personService.get(p));
 		model.addAttribute("ausleihen", ausleihenItems);
-		model.addAttribute("verkaeufe",kaufItems);
+		model.addAttribute("verkaeufe", kaufItems);
 		if (isProPayAvailable) {
 			model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		}
