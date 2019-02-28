@@ -28,7 +28,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/style.css").permitAll()
 				.anyRequest().authenticated()
 				.and().formLogin().permitAll()
-				.and().logout().permitAll();
+				.defaultSuccessUrl("/")
+				.and().logout().permitAll()
+				.logoutSuccessUrl("/");
 	}
 
 	@Override

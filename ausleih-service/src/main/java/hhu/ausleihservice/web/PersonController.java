@@ -3,6 +3,7 @@ package hhu.ausleihservice.web;
 import hhu.ausleihservice.databasemodel.*;
 import hhu.ausleihservice.validators.AusleiheValidator;
 import hhu.ausleihservice.validators.PersonValidator;
+import hhu.ausleihservice.validators.RegisterValidator;
 import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
 import hhu.ausleihservice.web.service.ProPayService;
@@ -30,16 +31,18 @@ public class PersonController {
 	private ProPayService proPayService;
 	private AusleiheService ausleiheService;
 	private final AusleiheValidator ausleiheValidator;
+	private final RegisterValidator registerValidator;
 
 	@Autowired
 	PersonController(PersonService personService, PersonValidator personValidator,
 					 ProPayService proPayService, AusleiheService ausleiheService,
-					 AusleiheValidator ausleiheValidator) {
+					 AusleiheValidator ausleiheValidator, RegisterValidator registerValidator) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
 		this.ausleiheService = ausleiheService;
 		this.ausleiheValidator = ausleiheValidator;
+		this.registerValidator = registerValidator;
 	}
 
 	@GetMapping("/")
@@ -171,12 +174,11 @@ public class PersonController {
 
 	@PostMapping("/register")
 	public String added(Model model, Person userForm, BindingResult bindingResult) {
+		registerValidator.validate(userForm, bindingResult);
 		personValidator.validate(userForm, bindingResult);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("userForm", userForm);
 			model.addAttribute("usernameErrors", bindingResult.getFieldError("username"));
-			model.addAttribute("vornameErrors", bindingResult.getFieldError("vorname"));
-			model.addAttribute("nachnameErrors", bindingResult.getFieldError("nachname"));
 			model.addAttribute("passwordErrors", bindingResult.getFieldError("password"));
 			model.addAttribute("emailErrors", bindingResult.getFieldError("email"));
 			return "register";
