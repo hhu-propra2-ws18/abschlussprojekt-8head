@@ -21,7 +21,7 @@ public class ProPayService {
 	public void ueberweiseTagessaetze(Ausleihe ausleihe) {
 		int tagesSatz = ausleihe.getItem().getTagessatz();
 		Period period = Period.between(ausleihe.getStartDatum(), ausleihe.getEndDatum());
-		int amount = tagesSatz * period.getDays();
+		int amount = tagesSatz * (period.getDays() + 1);
 		String ausleiher = ausleihe.getAusleiher().getUsername();
 		String besitzer = ausleihe.getItem().getBesitzer().getUsername();
 		proPayInterface.transferFunds(ausleiher, besitzer, (double) amount);
