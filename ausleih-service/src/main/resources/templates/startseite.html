@@ -40,6 +40,7 @@
 							<td th:text="${ausleihe.endDatum.format(dateformat)}"></td>
 						</tr>
 					</th:block>
+				</th:block>
 			</table>
 		</div>
 		<div th:if="${user.ausleihen.size() != 0}">
@@ -52,8 +53,8 @@
 								<span class="itemName" th:text="${ausleihung.item.titel}">itemName</span>
 							</div>
 							<div class="product-middle">
-								<img th:if="${ausleihung.item.picture != null and ausleihung.item.getPicture250Base64EncodedString()!=null}"
-									 th:src="@{'data:image/png;base64,'+${ausleihung.item.getPicture250Base64EncodedString()}}"/>
+								<img th:if="${ausleihung.item.picture != null and ausleihung.item.getPicture250()!=null}"
+									 th:src="@{'data:image/png;base64,'+${ausleihung.item.getPicture250()}}"/>
 							</div>
 						</a>
 						<a th:href="@{profil/{verleiherID} (verleiherID=${ausleihung.item.besitzer.id})}">
@@ -92,8 +93,8 @@
 								<span class="itemName" th:text="${artikel.titel}">itemName</span>
 							</div>
 							<div class="product-middle">
-								<img th:if="${artikel.picture != null and artikel.getPicture250Base64EncodedString()!=null}"
-									 th:src="@{'data:image/png;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
+								<img th:if="${artikel.picture != null and artikel.getPicture250()!=null}"
+									 th:src="@{'data:image/png;base64,'+${artikel.getPicture250()}}"/>
 							</div>
 							<span class="d-inline-block text-truncate">
 						<div class="product-bottom">
@@ -123,8 +124,8 @@
 									<span class="itemName" th:text="${artikel.titel}">itemName</span>
 								</div>
 								<div class="product-middle">
-									<img th:if="${artikel.picture != null and artikel.getPicture250Base64EncodedString()!=null}"
-										 th:src="@{'data:image/png;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
+									<img th:if="${artikel.picture != null and artikel.getPicture250()!=null}"
+										 th:src="@{'data:image/png;base64,'+${artikel.getPicture250()}}"/>
 								</div>
 							</a>
 							<a th:href="@{profil/{ausleiherID} (ausleiherID=${verleihung.ausleiher.id})}">
@@ -161,8 +162,8 @@
 								<span class="itemName" th:text="${artikel.titel}">itemName</span>
 							</div>
 							<div class="product-middle">
-								<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
-									 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
+								<img th:if="${artikel.picture250 != null and artikel.getPicture250()!=null}"
+									 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250()}}"/>
 							</div>
 							<span class="d-inline-block text-truncate">
 							<div class="product-bottom">
