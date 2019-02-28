@@ -72,12 +72,13 @@
 					<tr>
 						<td>Standort</td>
 						<td th:text="${artikel.abholort.beschreibung}"></td>
-						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
-							<select name="newAbholort" class="form-control" id="abholort" th:field="*{abholort}">
+						<td>
+							<select th:if="${user.isOwner(artikel)}" name="newAbholort" class="form-control" id="abholort" th:field="*{abholort}">
 								<option th:each="abholort: ${user.abholorte}"
 										th:value="${abholort.id}"
 										th:text="${abholort.beschreibung}"></option>
 							</select>
+							<div th:text="${abholortErrors?.code}"></div>
 						</td>
 					</tr>
 					<tr>

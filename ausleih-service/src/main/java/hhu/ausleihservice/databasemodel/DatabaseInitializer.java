@@ -40,7 +40,6 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.kaufItemRepository = kaufItemRepository;
 		this.abholortRepository = abhRepository;
 		this.ausleiheRepository = ausleiheRepository;
-		this.kaufItemRepository = kaufItemRepository;
 	}
 
 	@Override
@@ -67,7 +66,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		ort4.setBeschreibung("Verloren");
 		ort5.setBeschreibung("Zimbabwe");
 		ort6.setBeschreibung("Hell");
-		ort7.setBeschreibung("Doenerladen");
+		ort7.setBeschreibung("Dönerladen");
 
 		ort1.setLatitude(51.227741);
 		ort1.setLongitude(6.773456);
@@ -169,89 +168,89 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		}
 
 
-		AusleihItem item1 = new AusleihItem();
-		AusleihItem item2 = new AusleihItem();
-		AusleihItem item3 = new AusleihItem();
-		AusleihItem item4 = new AusleihItem();
-		AusleihItem item5 = new AusleihItem();
-		KaufItem item6 = new KaufItem();
+		AusleihItem ausleihItem1 = new AusleihItem();
+		AusleihItem ausleihItem2 = new AusleihItem();
+		AusleihItem ausleihItem3 = new AusleihItem();
+		AusleihItem ausleihItem4 = new AusleihItem();
+		AusleihItem ausleihItem5 = new AusleihItem();
 		KaufItem kaufItem1 = new KaufItem();
+		KaufItem kaufItem2 = new KaufItem();
 
-		item1.setTitel("Stift");
-		item2.setTitel("Fahrrad");
-		item3.setTitel("Pfeil");
-		item4.setTitel("Dose Bohnen");
-		item5.setTitel("Frittiertes Fahrrad");
-		item6.setTitel("Guter Doener");
-		kaufItem1.setTitel("Schwein");
+		ausleihItem1.setTitel("Stift");
+		ausleihItem2.setTitel("Fahrrad");
+		ausleihItem3.setTitel("Pfeil");
+		ausleihItem4.setTitel("Dose Bohnen");
+		ausleihItem5.setTitel("Frittiertes Fahrrad");
+		kaufItem1.setTitel("Guter Döner");
+		kaufItem2.setTitel("Schwein");
 
-		item1.setBeschreibung("Zum stiften gehen");
-		item2.setBeschreibung("Falls man sich radlos fühlt");
-		item3.setBeschreibung("Wenn man den Bogen schon raus hat");
-		item4.setBeschreibung("Genau die richtige Dosis");
-		item5.setBeschreibung("Du hast doch ein Rad ab");
-		item6.setBeschreibung("Verkauf nur an freundliche Käufer");
-		kaufItem1.setBeschreibung("Um Schwein gehabt zu haben");
+		ausleihItem1.setBeschreibung("Zum stiften gehen");
+		ausleihItem2.setBeschreibung("Falls man sich radlos fühlt");
+		ausleihItem3.setBeschreibung("Wenn man den Bogen schon raus hat");
+		ausleihItem4.setBeschreibung("Genau die richtige Dosis");
+		ausleihItem5.setBeschreibung("Du hast doch ein Rad ab");
+		kaufItem1.setBeschreibung("Verkauf nur an freundliche Käufer");
+		kaufItem2.setBeschreibung("Um Schwein gehabt zu haben");
 
-		item1.setTagessatz(3);
-		item2.setTagessatz(8);
-		item3.setTagessatz(100);
-		item4.setTagessatz(7);
-		item5.setTagessatz(404);
+		ausleihItem1.setTagessatz(3);
+		ausleihItem2.setTagessatz(8);
+		ausleihItem3.setTagessatz(100);
+		ausleihItem4.setTagessatz(7);
+		ausleihItem5.setTagessatz(404);
 
-		item1.setKautionswert(34);
-		item2.setKautionswert(1245);
-		item3.setKautionswert(55);
-		item4.setKautionswert(432);
-		item5.setKautionswert(606);
-		kaufItem1.setKaufpreis(1000);
+		ausleihItem1.setKautionswert(34);
+		ausleihItem2.setKautionswert(1245);
+		ausleihItem3.setKautionswert(55);
+		ausleihItem4.setKautionswert(432);
+		ausleihItem5.setKautionswert(606);
 
-		item6.setKaufpreis(4);
+		kaufItem1.setKaufpreis(4);
+		kaufItem2.setKaufpreis(1000);
 
-		item1.setAbholort(ort1);
-		item2.setAbholort(ort3);
-		item3.setAbholort(ort4);
-		item4.setAbholort(ort5);
-		item5.setAbholort(ort6);
-		item6.setAbholort(ort7);
-		kaufItem1.setAbholort(ort1);
+		ausleihItem1.setAbholort(ort1);
+		ausleihItem2.setAbholort(ort3);
+		ausleihItem3.setAbholort(ort4);
+		ausleihItem4.setAbholort(ort5);
+		ausleihItem5.setAbholort(ort6);
+		kaufItem1.setAbholort(ort7);
+		kaufItem2.setAbholort(ort1);
 
 		LocalDate mai = LocalDate.of(2019, 4, 30);
 
-		item1.setAvailableFrom(mai.plusDays(1)); //1.Mai
-		item2.setAvailableFrom(mai.plusDays(3)); //3.Mai
-		item3.setAvailableFrom(mai.plusDays(4)); //...
-		item4.setAvailableFrom(mai.plusDays(7));
-		item5.setAvailableFrom(mai.plusDays(11));
+		ausleihItem1.setAvailableFrom(mai.plusDays(1)); //1.Mai
+		ausleihItem2.setAvailableFrom(mai.plusDays(3)); //3.Mai
+		ausleihItem3.setAvailableFrom(mai.plusDays(4)); //...
+		ausleihItem4.setAvailableFrom(mai.plusDays(7));
+		ausleihItem5.setAvailableFrom(mai.plusDays(11));
 
-		item1.setAvailableTill(mai.plusDays(8));
-		item2.setAvailableTill(mai.plusDays(10));
-		item3.setAvailableTill(mai.plusDays(11));
-		item4.setAvailableTill(mai.plusDays(14));
-		item5.setAvailableTill(mai.plusDays(18));
+		ausleihItem1.setAvailableTill(mai.plusDays(8));
+		ausleihItem2.setAvailableTill(mai.plusDays(10));
+		ausleihItem3.setAvailableTill(mai.plusDays(11));
+		ausleihItem4.setAvailableTill(mai.plusDays(14));
+		ausleihItem5.setAvailableTill(mai.plusDays(18));
 
-		person1.addItem(item1);
-		person2.addItem(item2);
-		person3.addItem(item3);
-		person4.addItem(item4);
-		person5.addItem(item5);
-		person5.addItem(item6);
-		person1.addItem(kaufItem1);
+		person1.addItem(ausleihItem1);
+		person2.addItem(ausleihItem2);
+		person3.addItem(ausleihItem3);
+		person4.addItem(ausleihItem4);
+		person5.addItem(ausleihItem5);
+		person5.addItem(kaufItem1);
+		person1.addItem(kaufItem2);
 
 		try {
-			item1.setPicture(Files.readAllBytes(
+			ausleihItem1.setPicture(Files.readAllBytes(
 					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/stift.jpg")));
-			item2.setPicture(Files.readAllBytes(
+			ausleihItem2.setPicture(Files.readAllBytes(
 					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/fahrrad.jpg")));
-			item3.setPicture(Files.readAllBytes(
+			ausleihItem3.setPicture(Files.readAllBytes(
 					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/pfeil.jpg")));
-			item4.setPicture(Files.readAllBytes(
+			ausleihItem4.setPicture(Files.readAllBytes(
 					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/bohnen.jpg")));
-			item5.setPicture(Files.readAllBytes(
+			ausleihItem5.setPicture(Files.readAllBytes(
 					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/deepFriedFahrrad.jpg")));
-			item6.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/doener.jpg")));
 			kaufItem1.setPicture(Files.readAllBytes(
+					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/doener.jpg")));
+			kaufItem2.setPicture(Files.readAllBytes(
 					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/schwein.jpeg")));
 		} catch (IOException e) {
 			System.out.println("Files could not be stored");
@@ -271,13 +270,13 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		this.personRepository.save(person4);
 		this.personRepository.save(person5);
 
-		this.ausleihItemRepository.save(item1);
-		this.ausleihItemRepository.save(item2);
-		this.ausleihItemRepository.save(item3);
-		this.ausleihItemRepository.save(item4);
-		this.ausleihItemRepository.save(item5);
-		this.kaufItemRepository.save(item6);
+		this.ausleihItemRepository.save(ausleihItem1);
+		this.ausleihItemRepository.save(ausleihItem2);
+		this.ausleihItemRepository.save(ausleihItem3);
+		this.ausleihItemRepository.save(ausleihItem4);
+		this.ausleihItemRepository.save(ausleihItem5);
 		this.kaufItemRepository.save(kaufItem1);
+		this.kaufItemRepository.save(kaufItem2);
 
 		Ausleihe ausleihe1 = new Ausleihe();
 		ausleihe1.setReservationId(0L);
@@ -308,10 +307,10 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		ausleihe4.setAusleiher(person4);
 		ausleihe4.setStatus(Status.ANGEFRAGT);
 
-		item3.addAusleihe(ausleihe1);
-		item1.addAusleihe(ausleihe2);
-		item4.addAusleihe(ausleihe3);
-		item5.addAusleihe(ausleihe4);
+		ausleihItem3.addAusleihe(ausleihe1);
+		ausleihItem1.addAusleihe(ausleihe2);
+		ausleihItem4.addAusleihe(ausleihe3);
+		ausleihItem5.addAusleihe(ausleihe4);
 
 		//this.itemRepository.save(item3);
 		//this.itemRepository.save(item1);
