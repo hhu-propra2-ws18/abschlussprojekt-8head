@@ -6,19 +6,22 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<table class="product-details">
-	<tr>
-		<th>Besitzer</th>
-		<th>Ausleiher</th>
-		<th>Artikel</th>
-		<th></th>
-	</tr>
-	<tr th:each="konflikt : ${konflikte}">
-		<td th:text="${konflikt.item.besitzer.username}"></td>
-		<td th:text="${konflikt.ausleiher.username}"></td>
-		<td th:text="${konflikt.item.titel}"></td>
-		<td><a th:href="@{'/conflict/' + ${konflikt.id}}">Zum Konflikt</a></td>
-	</tr>
-</table>
+<div class="container">
+
+	<table class="product-details">
+		<tr>
+			<th>Besitzer</th>
+			<th>Ausleiher</th>
+			<th>Artikel</th>
+			<th></th>
+		</tr>
+		<tr th:each="konflikt : ${konflikte}">
+			<td th:text="${konflikt.item.besitzer.username}"></td>
+			<td th:text="${konflikt.ausleiher.username}"></td>
+			<td th:text="${konflikt.item.titel}"></td>
+			<td><a th:href="@{'/conflict/' + ${konflikt.id}}">Zum Konflikt</a></td>
+		</tr>
+	</table>
+</div>
 </body>
 </html>

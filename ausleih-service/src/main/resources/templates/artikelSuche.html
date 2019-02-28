@@ -9,34 +9,36 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<h1>Detailsuche</h1>
-<table id="items">
+<div class="container">
+	<h1>Detailsuche</h1>
+	<table id="items" class="table table-hover">
 
-	<form method="post" th:action="@{/artikelsuche} + '?' + ${_csrf.parameterName} + '=' + ${_csrf.token}"
-		  id="detailSearch"></form>
-	<tr>
-		<th>Artikelname</th>
-		<th>Verfügbar ab</th>
-		<th>Verfügbar bis</th>
-		<th>Maximaler Tagessatz in €</th>
-		<th>Maximale Kaution in €</th>
-	</tr>
-	<tr>
-		<td><input type="text" form="detailSearch"
-				   placeholder="Name des Artikels.."></td>
-		<td><input type="date" name="availableMin" form="detailSearch"
-				   th:min=${today} required></td>
-		<td><input type="date" name="availableMax" form="detailSearch"
-				   th:min=${today} required></td>
-		<td><input type="number" min="1" name="tagessatzMax"
-				   form="detailSearch"></td>
-		<td><input type="number" min="1" name="kautionswertMax"
-				   form="detailSearch"></td>
-		<td><input form="detailSearch" type="submit" value="Suche"></td>
-	</tr>
-</table>
-<br>
-<a href="/liste">Zurück</a>
+		<form method="post" th:action="@{/artikelsuche} + '?' + ${_csrf.parameterName} + '=' + ${_csrf.token}"
+			  id="detailSearch"></form>
+		<tr>
+			<th>Artikelname</th>
+			<th>Verfügbar ab</th>
+			<th>Verfügbar bis</th>
+			<th>Maximaler Tagessatz in €</th>
+			<th>Maximale Kaution in €</th>
+		</tr>
+		<tr>
+			<td><input type="text" form="detailSearch"
+					   placeholder="Name des Artikels.."></td>
+			<td><input type="date" name="availableMin" form="detailSearch"
+					   th:min=${today} required></td>
+			<td><input type="date" name="availableMax" form="detailSearch"
+					   th:min=${today} required></td>
+			<td><input type="number" min="1" name="tagessatzMax"
+					   form="detailSearch"></td>
+			<td><input type="number" min="1" name="kautionswertMax"
+					   form="detailSearch"></td>
+			<td><input form="detailSearch" type="submit" value="Suche"></td>
+		</tr>
+	</table>
+	<br>
+	<a href="/liste">Zurück</a>
+</div>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
