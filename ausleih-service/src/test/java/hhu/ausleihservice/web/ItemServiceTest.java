@@ -2,10 +2,11 @@ package hhu.ausleihservice.web;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hhu.ausleihservice.dataaccess.AusleihItemRepository;
+import hhu.ausleihservice.dataaccess.KaufItemRepository;
 import hhu.ausleihservice.databasemodel.AusleihItem;
+import hhu.ausleihservice.databasemodel.KaufItem;
 import hhu.ausleihservice.web.service.AusleihItemService;
-import hhu.ausleihservice.web.service.ItemAvailabilityService;
-import org.junit.Assert;
+import hhu.ausleihservice.web.service.KaufItemService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,10 +28,13 @@ public class ItemServiceTest {
 	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	@Mock
-	private AusleihItemRepository itemRepository;
-	private AusleihItemService ausleihItemService =
-			new AusleihItemService(null, new ItemAvailabilityService());
-	private List<AusleihItem> repository = new ArrayList<>();
+	private AusleihItemRepository ausleihItemRepository;
+	private AusleihItemService ausleihItemService;
+	private List<AusleihItem> ausleihItemList; //as proxy for the repository
+	@Mock
+	private KaufItemRepository kaufItemRepository;
+	private KaufItemService kaufItemService;
+	private List<KaufItem> kaufItemList; //as proxy for the repository
 
 	private boolean testItemEquality(AusleihItem base, AusleihItem toTest) {
 		return base.getId().longValue() == toTest.getId().longValue() &&
@@ -44,7 +48,11 @@ public class ItemServiceTest {
 
 	@Before
 	public void prepareTestData() {
-		repository = new ArrayList<>();
+		ausleihItemList = new ArrayList<>();
+		kaufItemList = new ArrayList<>();
+
+		ausleihItemService = new AusleihItemService(ausleihItemRepository);
+		kaufItemService = new KaufItemService(kaufItemRepository);
 
 		AusleihItem item1 = new AusleihItem();
 		item1.setId(1L);
@@ -73,207 +81,36 @@ public class ItemServiceTest {
 		item3.setAvailableFrom(LocalDate.of(2005, 1, 1));
 		item3.setAvailableTill(LocalDate.of(2015, 1, 1));
 
-		AusleihItem item4 = new AusleihItem();
+		KaufItem item4 = new KaufItem();
 		item4.setId(4L);
 		item4.setTitel("Hammer");
 		item4.setBeschreibung("Ein großer Vorschlaghammer");
-		item4.setKautionswert(65);
-		item4.setTagessatz(20);
-		item4.setAvailableFrom(LocalDate.of(1990, 1, 1));
-		item4.setAvailableTill(LocalDate.of(2011, 1, 1));
+		item4.setKaufpreis(43);
 
-		repository.add(item1);
-		repository.add(item2);
-		repository.add(item3);
-		repository.add(item4);
+		ausleihItemList.add(item1);
+		ausleihItemList.add(item2);
+		ausleihItemList.add(item3);
+		kaufItemList.add(item4);
 
-		ausleihItemService = new AusleihItemService(itemRepository, new ItemAvailabilityService());
-
-		Mockito.when(itemRepository.findAll()).thenReturn(repository);
-	}
-
-
-	@Test
-	public void testExtendedSearch_1_nullQuery() {
-
-		List<AusleihItem> searchedList = ausleihItemService.extendedSearch(null,
-				2147483647,
-				2147483647,
-				LocalDate.of(2010, 7, 1),
-				LocalDate.of(2010, 7, 1));
-
-		assertEquals(4, searchedList.size());
-
-		for (AusleihItem searchedItem : searchedList) {
-			if (searchedItem.getId() == 1L) {
-				assertTrue(testItemEquality(repository.get(0), searchedItem));
-			} else if (searchedItem.getId() == 2L) {
-				assertTrue(testItemEquality(repository.get(1), searchedItem));
-			} else if (searchedItem.getId() == 3L) {
-				assertTrue(testItemEquality(repository.get(2), searchedItem));
-			} else if (searchedItem.getId() == 4L) {
-				assertTrue(testItemEquality(repository.get(3), searchedItem));
-			} else {
-				fail();
-			}
-		}
+		Mockito.when(ausleihItemRepository.findAll()).thenReturn(ausleihItemList); //3 items
+		Mockito.when(kaufItemRepository.findAll()).thenReturn(kaufItemList); //1 item
 	}
 
 	@Test
-	public void testExtendedSearch_2_emptyQuery() {
-
-		List<AusleihItem> searchedList = ausleihItemService.extendedSearch("",
-				2147483647,
-				2147483647,
-				LocalDate.of(2010, 7, 1),
-				LocalDate.of(2010, 7, 1));
-
-		assertEquals(4, searchedList.size());
-
-		for (AusleihItem searchedItem : searchedList) {
-			if (searchedItem.getId() == 1L) {
-				assertTrue(testItemEquality(repository.get(0), searchedItem));
-			} else if (searchedItem.getId() == 2L) {
-				assertTrue(testItemEquality(repository.get(1), searchedItem));
-			} else if (searchedItem.getId() == 3L) {
-				assertTrue(testItemEquality(repository.get(2), searchedItem));
-			} else if (searchedItem.getId() == 4L) {
-				assertTrue(testItemEquality(repository.get(3), searchedItem));
-			} else {
-				fail();
-			}
-		}
-	}
-
-	@Test
-	public void testExtendedSearch_3_limitedTagessatz() {
-
-		List<AusleihItem> searchedList = ausleihItemService.extendedSearch(null,
-				15,
-				2147483647,
-				LocalDate.of(2010, 7, 1),
-				LocalDate.of(2010, 7, 1));
-
+	public void testAusleihSimpleSearch_nullQuery() {
+		ausleihItemList.forEach(x -> System.out.println(x.getTitel()));
+		List<AusleihItem> l = ausleihItemRepository.findAll();
+		assertEquals(3, l.size());
+		List<AusleihItem> searchedList = ausleihItemService.simpleSearch(null);
 		assertEquals(3, searchedList.size());
-
-		for (AusleihItem searchedItem : searchedList) {
-			if (searchedItem.getId() == 1L) {
-				assertTrue(testItemEquality(repository.get(0), searchedItem));
-			} else if (searchedItem.getId() == 2L) {
-				assertTrue(testItemEquality(repository.get(1), searchedItem));
-			} else if (searchedItem.getId() == 3L) {
-				assertTrue(testItemEquality(repository.get(2), searchedItem));
-			} else {
-				Assert.fail();
-			}
-		}
 	}
 
 	@Test
-	public void testExtendedSearch_4_limitedKautionswert() {
-
-		List<AusleihItem> searchedList = ausleihItemService.extendedSearch(null,
-				2147483647,
-				100,
-				LocalDate.of(2010, 7, 1),
-				LocalDate.of(2010, 7, 1));
-
-		assertEquals(2, searchedList.size());
-
-		for (AusleihItem searchedItem : searchedList) {
-			if (searchedItem.getId() == 3L) {
-				assertTrue(testItemEquality(repository.get(2), searchedItem));
-			} else if (searchedItem.getId() == 4L) {
-				assertTrue(testItemEquality(repository.get(3), searchedItem));
-			} else {
-				fail();
-			}
-		}
-	}
-
-	@Test
-	public void testExtendedSearch_5_queryFahrrad() {
-
-		List<AusleihItem> searchedList = ausleihItemService.extendedSearch("Fahrrad",
-				2147483647,
-				2147483647,
-				LocalDate.of(2010, 7, 1),
-				LocalDate.of(2010, 7, 1));
-
-		assertEquals(2, searchedList.size());
-
-		for (AusleihItem searchedItem : searchedList) {
-			if (searchedItem.getId() == 1L) {
-				assertTrue(testItemEquality(repository.get(0), searchedItem));
-			} else if (searchedItem.getId() == 3L) {
-				assertTrue(testItemEquality(repository.get(2), searchedItem));
-			} else {
-				fail();
-			}
-		}
-	}
-
-	@Test
-	public void testExtendedSearch_6_queryFahrradLimitedKautionswert() {
-
-		List<AusleihItem> searchedList = ausleihItemService.extendedSearch("Fahrrad",
-				2147483647,
-				100,
-				LocalDate.of(2010, 7, 1),
-				LocalDate.of(2010, 7, 1));
-
+	public void testKaufSimpleSearch_nullQuery() {
+		kaufItemList.forEach(x -> System.out.println(x.getTitel()));
+		List<KaufItem> l = kaufItemRepository.findAll();
+		assertEquals(1, l.size());
+		List<KaufItem> searchedList = kaufItemService.simpleSearch(null);
 		assertEquals(1, searchedList.size());
-
-		for (AusleihItem searchedItem : searchedList) {
-			if (searchedItem.getId() == 3L) {
-				assertTrue(testItemEquality(repository.get(2), searchedItem));
-			} else {
-				fail();
-			}
-		}
-	}
-
-	@Test
-	public void testExtendedSearch_7_dateRange_1() {
-
-		List<AusleihItem> searchedList = ausleihItemService.extendedSearch(null,
-				2147483647,
-				2147483647,
-				LocalDate.of(2007, 1, 1),
-				LocalDate.of(2012, 1, 1));
-
-		assertEquals(2, searchedList.size());
-
-		for (AusleihItem searchedItem : searchedList) {
-			if (searchedItem.getId() == 1L) {
-				assertTrue(testItemEquality(repository.get(0), searchedItem));
-			} else if (searchedItem.getId() == 3L) {
-				assertTrue(testItemEquality(repository.get(2), searchedItem));
-			} else {
-				fail();
-			}
-		}
-	}
-
-	@Test
-	public void testExtendedSearch_8_dateRange_2() {
-
-		List<AusleihItem> searchedList = ausleihItemService.extendedSearch(null,
-				2147483647,
-				2147483647,
-				LocalDate.of(2000, 1, 1),
-				LocalDate.of(2003, 1, 1));
-
-		assertEquals(2, searchedList.size());
-
-		for (AusleihItem searchedItem : searchedList) {
-			if (searchedItem.getId() == 1L) {
-				assertTrue(testItemEquality(repository.get(0), searchedItem));
-			} else if (searchedItem.getId() == 4L) {
-				assertTrue(testItemEquality(repository.get(3), searchedItem));
-			} else {
-				fail();
-			}
-		}
 	}
 }

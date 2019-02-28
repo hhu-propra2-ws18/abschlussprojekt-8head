@@ -1,14 +1,28 @@
 package hhu.ausleihservice.dataaccess;
 
 import hhu.ausleihservice.databasemodel.AusleihItem;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 public interface AusleihItemRepository extends ItemBaseRepository<AusleihItem> {
-	List<AusleihItem> findAll();
 
-	Optional<AusleihItem> findById(long id);
+	@Query("select distinct f from AusleihItem f where " +
+			":availableMin between f.availableFrom and f.availableTill and" +
+			":availableMax between f.availableFrom and f.availableTill")
+	List<AusleihItem> extendedDateSearch(@Param("availableMin") LocalDate availableMin,
+									 @Param("availableMax") LocalDate availableMax);
+
+	@Query("select distinct f from AusleihItem f where " +
+			"lower(:name) in (lower(f.titel)) or " +
+			"lower(:name) in (lower(f.beschreibung)) and " +
+			":availableMin between f.availableFrom and f.availableTill and" +
+			":availableMax between f.availableFrom and f.availableTill")
+	List<AusleihItem> extendedSearch(@Param("name") String name,
+									 @Param("availableMin") LocalDate availableMin,
+									 @Param("availableMax") LocalDate availableMax);
 }

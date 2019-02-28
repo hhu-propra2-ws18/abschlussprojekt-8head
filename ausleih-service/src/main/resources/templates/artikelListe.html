@@ -37,6 +37,29 @@
 		</a>
 	</th:block>
 </div>
+<div class="products">
+	<th:block class="products" th:each="artikel : ${kaufItems}">
+		<a th:href="@{'/details/' + ${artikel.id}}">
+			<div class="product">
+				<div class="product-top">
+					<span class="itemName" th:text="${artikel.titel}">itemName</span>
+				</div>
+				<div class="product-middle">
+					<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
+						 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
+				</div>
+				<div class="product-bottom">
+					<div class="heading">
+						Wird verkauft
+					</div>
+					<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
+					<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
+					<div class="price" th:text="${artikel.kaufpreis} + &euro;">$50.00</div>
+				</div>
+			</div>
+		</a>
+	</th:block>
+</div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
