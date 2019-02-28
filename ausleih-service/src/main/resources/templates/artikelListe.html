@@ -9,37 +9,13 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-
-<div class="products">
-	<th:block class="products" th:each="artikel : ${ausleihItems}">
-		<a th:href="@{'/details/verleih/' + ${artikel.id}}">
-			<div class="product">
-				<div class="product-top">
-					<span class="itemName" th:text="${artikel.titel}">itemName</span>
-				</div>
-				<div class="product-middle">
-					<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
-						 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
-				</div>
-				<span class="d-inline-block text-truncate">
-				<div class="product-bottom">
-					<div class="heading"
-						 th:text="${artikel.availableFrom.format(dateformat) + '-' + artikel.availableTill.format(dateformat)}">
-						Chuck Taylor All Star Classic Colours
-					</div>
-					<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
-					<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
-					<div class="price" th:text="${artikel.tagessatz} + &euro;">$50.00</div>
-				</div>
-				</span>
-			</div>
-		</a>
-	</th:block>
-</div>
-<div class="products">
-	<th:block class="products" th:each="artikel : ${kaufItems}">
-		<div th:if="${artikel.getStatus() == null}">
-			<a th:href="@{'/details/verkauf/' + ${artikel.id}}">
+<div th:if="${ausleihItems.size() != 0}">
+	<div class="container">
+		<h1>Artikel zum Ausleihen</h1>
+	</div>
+	<div class="products">
+		<th:block class="products" th:each="artikel : ${ausleihItems}">
+			<a th:href="@{'/details/ausleih/' + ${artikel.id}}">
 				<div class="product">
 					<div class="product-top">
 						<span class="itemName" th:text="${artikel.titel}">itemName</span>
@@ -48,17 +24,67 @@
 						<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
 							 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
 					</div>
+					<span class="d-inline-block text-truncate">
+
 					<div class="product-bottom">
-						<div class="heading">
-							Wird verkauft
+						<div class="heading"
+							 th:text="${artikel.availableFrom.format(dateformat) + '-' + artikel.availableTill.format(dateformat)}">
+							Chuck Taylor All Star Classic Colours
 						</div>
+						<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
+						<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
+						<div class="price" th:text="${artikel.tagessatz} + &euro;">$50.00
+							<span class="old-price" th:text="${artikel.tagessatz + 5} + &euro;">$75.00</span></div>
+					</div>
+					</span>
+				</div>
+			</a>
+		</th:block>
+	</div>
+</div>
+<div th:if="${kaufItems.size() != 0}">
+	<div class="container">
+		<h1>Artikel zu verkaufen</h1>
+	</div>
+	<div class="products">
+		<th:block class="products" th:each="artikel : ${kaufItems}">
+			<div th:if="${artikel.getStatus() == null}">
+				<a th:href="@{'/details/verkauf/' + ${artikel.id}}">
+					<div class="product">
+						<div class="product-top">
+							<span class="itemName" th:text="${artikel.titel}">itemName</span>
+						</div>
+						<div class="product-middle">
+							<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
+								 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
+							<!--<<<<<< HEAD-->
+						</div>
+						<span class="d-inline-block text-truncate">
+					<div class="product-bottom">
 						<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
 						<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
 						<div class="price" th:text="${artikel.kaufpreis} + &euro;">$50.00</div>
 					</div>
-				</div>
-		</div>
-	</th:block>
+					</span>
+					</div>
+				</a>
+			</div>
+		</th:block>
+	</div>
+	<!--=======
+</div>
+<div class="product-bottom">
+	<div class="heading">
+		Wird verkauft
+	</div>
+	<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
+	<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
+	<div class="price" th:text="${artikel.kaufpreis} + &euro;">$50.00</div>
+</div>
+</div>
+</div>
+</th:block>
+>>>>>>> master-->
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

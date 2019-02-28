@@ -19,6 +19,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -71,11 +72,14 @@ public class ItemController {
 		if (q != null) {
 			q = q.trim();
 		}
+
 		List<AusleihItem> ausleihItems = ausleihItemService.simpleSearch(q);
 		List<KaufItem> kaufItems = kaufItemService.simpleSearch(q);
+		
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("ausleihItems", ausleihItems);
 		model.addAttribute("kaufItems", kaufItems);
+		model.addAttribute("ausleihItems", ausleihItems);
 		model.addAttribute("user", personService.get(p));
 		return "artikelListe";
 	}
@@ -106,7 +110,8 @@ public class ItemController {
 				availableMin, availableMax);
 
 		model.addAttribute("dateformat", DATEFORMAT);
-		model.addAttribute("artikelListe", list);
+		model.addAttribute("ausleihItems", list);
+		model.addAttribute("kaufItems", new ArrayList<KaufItem>());
 
 		return "artikelListe";
 	}
@@ -242,7 +247,7 @@ public class ItemController {
 
 	@GetMapping("/ausleihen/{id}")
 	public String ausleihenAbbrechen(Model model, @PathVariable Long id) {
-		return "redirect:/details/" + id;
+		return "redirect:/details/ausleih/" + id;
 	}
 
 	@PostMapping("/ausleihen/{id}")
@@ -289,7 +294,7 @@ public class ItemController {
 
 		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich ausgeliehen!");
 
-		return "redirect:/details/" + id;
+		return "redirect:/details/ausleih/" + id;
 	}
 
 
@@ -345,7 +350,7 @@ public class ItemController {
 			}
 			model.addAttribute("user", besitzer);
 			model.addAttribute("abholorte", besitzer.getAbholorte());
-			return "neuerKaufArtikel";
+			return "neuerAusleihArtikel";
 		}
 		try {
 			newItem.setPicture(picture.getBytes());
