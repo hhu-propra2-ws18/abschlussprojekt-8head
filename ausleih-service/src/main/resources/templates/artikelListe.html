@@ -24,6 +24,8 @@
 						<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
 							 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
 					</div>
+					<span class="d-inline-block text-truncate">
+
 					<div class="product-bottom">
 						<div class="heading"
 							 th:text="${artikel.availableFrom.format(dateformat) + '-' + artikel.availableTill.format(dateformat)}">
@@ -34,6 +36,7 @@
 						<div class="price" th:text="${artikel.tagessatz} + &euro;">$50.00
 							<span class="old-price" th:text="${artikel.tagessatz + 5} + &euro;">$75.00</span></div>
 					</div>
+					</span>
 				</div>
 			</a>
 		</th:block>
@@ -54,11 +57,13 @@
 						<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
 							 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
 					</div>
+					<span class="d-inline-block text-truncate">
 					<div class="product-bottom">
 						<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
 						<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
 						<div class="price" th:text="${artikel.kaufpreis} + &euro;">$50.00</div>
 					</div>
+					</span>
 				</div>
 			</a>
 		</th:block>

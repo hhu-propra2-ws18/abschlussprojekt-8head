@@ -37,7 +37,7 @@ public class AbholortValidator implements Validator {
 		}
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "beschreibung", Messages.notEmpty);
-		if (abholort.getBeschreibung().length() < 6 || abholort.getBeschreibung().length() > 400) {
+		if (abholort.getBeschreibung().length() < 6 || abholort.getBeschreibung().length() > 250) {
 			errors.rejectValue("beschreibung", Messages.sizeLocationDescription);
 		}
 	}
