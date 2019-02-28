@@ -25,39 +25,27 @@ public class Item {
 	@EqualsAndHashCode.Include
 	private Long id;
 	private String titel = "";
-	@Lob
 	private String beschreibung = "";
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
 	@JoinColumn
 	private Abholort abholort = new Abholort();
 	@ManyToOne
 	private Person besitzer;
-	@Type(type = "org.hibernate.type.BinaryType")
-	private byte[] picture;
-	@Type(type = "org.hibernate.type.BinaryType")
-	private byte[] picture250;
-	@Type(type = "org.hibernate.type.BinaryType")
-	private byte[] picture100;
 
-	// Getter and Setter are copying the array to prevent
-	// data leaking outside by storing/giving the reference to the array
-	@Type(type = "org.hibernate.type.BinaryType")
-	public byte[] getPicture() {
-		if (picture == null) {
-			return null;
-		}
-		byte[] out = new byte[picture.length];
-		System.arraycopy(picture, 0, out, 0, picture.length);
-		return out;
-	}
+
+	@Column(columnDefinition = "text")
+	private String picture;
+	@Column(columnDefinition = "text")
+	private String picture250;
+	@Column(columnDefinition = "text")
+	private String picture100;
+
 
 	public void setPicture(byte[] in) {
 		if (in == null) {
 			return;
 		}
-		picture = new byte[in.length];
-		System.arraycopy(in, 0, picture, 0, in.length);
-
+		picture = Base64.getEncoder().encodeToString(in);
 		try {
 			resizeImages(in);
 		} catch (IOException e) {
@@ -65,40 +53,12 @@ public class Item {
 		}
 	}
 
-	@Type(type = "org.hibernate.type.BinaryType")
-	public byte[] getPicture250() {
-		if (picture250 == null) {
-			return null;
-		}
-		byte[] out = new byte[picture250.length];
-		System.arraycopy(picture250, 0, out, 0, picture250.length);
-		return out;
-	}
-
 	private void setPicture250(byte[] in) {
-		if (in == null) {
-			return;
-		}
-		picture250 = new byte[in.length];
-		System.arraycopy(in, 0, picture250, 0, in.length);
-	}
-
-	@Type(type = "org.hibernate.type.BinaryType")
-	public byte[] getPicture100() {
-		if (picture100 == null) {
-			return null;
-		}
-		byte[] out = new byte[picture100.length];
-		System.arraycopy(picture100, 0, out, 0, picture100.length);
-		return out;
+		this.picture250=Base64.getEncoder().encodeToString(in);
 	}
 
 	private void setPicture100(byte[] in) {
-		if (in == null) {
-			return;
-		}
-		picture100 = new byte[in.length];
-		System.arraycopy(in, 0, picture100, 0, in.length);
+		this.picture100 = Base64.getEncoder().encodeToString(in);
 	}
 
 	private void resizeImages(byte[] in) throws IOException {
@@ -123,17 +83,6 @@ public class Item {
 		this.setPicture100(image100Bytes);
 	}
 
-	public String getPictureBase64EncodedString() {
-		return this.getPicture() != null ? Base64.getEncoder().encodeToString(this.getPicture()) : null;
-	}
-
-	public String getPicture250Base64EncodedString() {
-		return this.getPicture250() != null ? Base64.getEncoder().encodeToString(this.getPicture250()) : null;
-	}
-
-	public String getPicture100Base64EncodedString() {
-		return this.getPicture100() != null ? Base64.getEncoder().encodeToString(this.getPicture100()) : null;
-	}
 
 	public void setTitel(String s) {
 		if (s != null) {

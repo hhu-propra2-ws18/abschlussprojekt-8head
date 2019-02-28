@@ -18,8 +18,8 @@
 					<span class="itemName" th:text="${artikel.titel}">itemName</span>
 				</div>
 				<div class="product-middle">
-					<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
-						 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
+					<img th:if="${artikel.picture250 != null and artikel.getPicture250()!=null}"
+						 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250()}}"/>
 				</div>
 				<div class="product-bottom">
 					<div class="heading"
