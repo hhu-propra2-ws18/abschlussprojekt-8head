@@ -21,14 +21,15 @@ import hhu.ausleihservice.databasemodel.Status;
 import hhu.ausleihservice.web.service.ItemAvailabilityService;
 import hhu.ausleihservice.web.service.ProPayService;
 
-public class AusleiheValidatorTest {
+public class AusleiheAnfragenValidatorTest {
 
 	@Test
 	public void startDatumAfterEndDatum() {
 		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
 		ProPayService proPayService = mock(ProPayService.class);
 		AusleihItem ausleiheItem = mock(AusleihItem.class);
-		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
+		AusleiheAnfragenValidator ausleiheAnfragenValidator =
+				new AusleiheAnfragenValidator(availabilityService, proPayService);
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setStatus(Status.ANGEFRAGT);
 		ausleihe.setStartDatum(LocalDate.of(2000, 5, 5));
@@ -41,7 +42,7 @@ public class AusleiheValidatorTest {
 				.thenReturn(false);
 
 		DataBinder dataBinder = new DataBinder(ausleihe);
-		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.setValidator(ausleiheAnfragenValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		assertTrue(bindingResult.hasFieldErrors("startDatum"));
@@ -53,7 +54,8 @@ public class AusleiheValidatorTest {
 		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
 		AusleihItem ausleiheItem = mock(AusleihItem.class);
 		ProPayService proPayService = mock(ProPayService.class);
-		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
+		AusleiheAnfragenValidator ausleiheAnfragenValidator =
+				new AusleiheAnfragenValidator(availabilityService, proPayService);
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setStartDatum(LocalDate.of(2019, 5, 5));
 		ausleihe.setEndDatum(LocalDate.of(2019, 5, 5));
@@ -68,7 +70,7 @@ public class AusleiheValidatorTest {
 				.thenReturn(true);
 
 		DataBinder dataBinder = new DataBinder(ausleihe);
-		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.setValidator(ausleiheAnfragenValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		assertFalse(bindingResult.hasFieldErrors("startDatum"));
@@ -78,14 +80,15 @@ public class AusleiheValidatorTest {
 	public void itemIsEmpty() {
 		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
 		ProPayService proPayService = mock(ProPayService.class);
-		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
+		AusleiheAnfragenValidator ausleiheAnfragenValidator =
+				new AusleiheAnfragenValidator(availabilityService, proPayService);
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setStartDatum(LocalDate.of(2019, 5, 5));
 		ausleihe.setEndDatum(LocalDate.of(2019, 5, 5));
 		ausleihe.setAusleiher(new Person());
 
 		DataBinder dataBinder = new DataBinder(ausleihe);
-		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.setValidator(ausleiheAnfragenValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		assertTrue(bindingResult.hasFieldErrors("item"));
@@ -99,7 +102,8 @@ public class AusleiheValidatorTest {
 		ProPayService proPayService = mock(ProPayService.class);
 		AusleihItem ausleiheItem = mock(AusleihItem.class);
 		when(ausleiheItem.getBesitzer()).thenReturn(person);
-		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
+		AusleiheAnfragenValidator ausleiheAnfragenValidator =
+				new AusleiheAnfragenValidator(availabilityService, proPayService);
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setStartDatum(LocalDate.of(2019, 1, 5));
 		ausleihe.setEndDatum(LocalDate.of(2019, 5, 5));
@@ -114,7 +118,7 @@ public class AusleiheValidatorTest {
 				.thenReturn(true);
 
 		DataBinder dataBinder = new DataBinder(ausleihe);
-		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.setValidator(ausleiheAnfragenValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		assertTrue(bindingResult.hasFieldErrors("ausleiher"));
@@ -127,7 +131,8 @@ public class AusleiheValidatorTest {
 		ProPayService proPayService = mock(ProPayService.class);
 		AusleihItem ausleiheItem = mock(AusleihItem.class);
 		when(ausleiheItem.getBesitzer()).thenReturn(null);
-		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
+		AusleiheAnfragenValidator ausleiheAnfragenValidator =
+				new AusleiheAnfragenValidator(availabilityService, proPayService);
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setStartDatum(LocalDate.of(2019, 1, 5));
 		ausleihe.setEndDatum(LocalDate.of(2019, 5, 5));
@@ -141,7 +146,7 @@ public class AusleiheValidatorTest {
 				.thenReturn(true);
 
 		DataBinder dataBinder = new DataBinder(ausleihe);
-		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.setValidator(ausleiheAnfragenValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		assertEquals(Messages.notEmpty, bindingResult.getFieldError("ausleiher").getCode());
@@ -159,7 +164,8 @@ public class AusleiheValidatorTest {
 
 		ProPayService proPayService = mock(ProPayService.class);
 		AusleihItem ausleiheItem = mock(AusleihItem.class);
-		AusleiheValidator ausleiheValidator = new AusleiheValidator(availabilityService, proPayService);
+		AusleiheAnfragenValidator ausleiheAnfragenValidator =
+				new AusleiheAnfragenValidator(availabilityService, proPayService);
 
 		Ausleihe ausleihe = new Ausleihe();
 		ausleihe.setStatus(Status.ANGEFRAGT);
@@ -173,7 +179,7 @@ public class AusleiheValidatorTest {
 		when(ausleiheItem.getAvailableTill()).thenReturn(LocalDate.of(2019, 5, 5));
 
 		DataBinder dataBinder = new DataBinder(ausleihe);
-		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.setValidator(ausleiheAnfragenValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		assertEquals(Messages.itemNotAvailable, bindingResult.getFieldError("startDatum").getCode());
