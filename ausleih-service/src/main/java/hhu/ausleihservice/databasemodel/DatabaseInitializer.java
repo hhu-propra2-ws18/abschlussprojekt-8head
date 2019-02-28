@@ -267,6 +267,10 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person4.addAusleihe(ausleihe4);
 		person5.addAusleihe(ausleihe3);
 
+		this.ausleiheRepository.save(ausleihe1);
+		this.ausleiheRepository.save(ausleihe2);
+		this.ausleiheRepository.save(ausleihe3);
+		this.ausleiheRepository.save(ausleihe4);
 
 	}
 }
