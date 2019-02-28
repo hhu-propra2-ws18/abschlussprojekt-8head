@@ -1,8 +1,6 @@
 package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.KaufItemRepository;
-import hhu.ausleihservice.databasemodel.AusleihItem;
-import hhu.ausleihservice.databasemodel.Item;
 import hhu.ausleihservice.databasemodel.KaufItem;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;

@@ -34,16 +34,16 @@ public class AusleihItemService {
 	}
 
 	public List<AusleihItem> extendedDateSearch(LocalDate availableMin, LocalDate availableMax) {
-		return items.extendedDateSearch(availableMin,availableMax);
+		return items.extendedDateSearch(availableMin, availableMax);
 	}
 
 	public List<AusleihItem> extendedSearch(String query,
-												int tagessatzMax,
-												int kautionswertMax,
-												LocalDate availableMin,
-												LocalDate availableMax) {
-		if (query == null || query.isEmpty()) return items.extendedDateSearch(availableMin,availableMax);
-		return items.extendedSearch(query,availableMin,availableMax);
+											int tagessatzMax,
+											int kautionswertMax,
+											LocalDate availableMin,
+											LocalDate availableMax) {
+		if (query == null || query.isEmpty()) return items.extendedDateSearch(availableMin, availableMax);
+		return items.extendedSearch(query, availableMin, availableMax);
 	}
 
 	public void updateById(Long id, AusleihItem newItem) {
