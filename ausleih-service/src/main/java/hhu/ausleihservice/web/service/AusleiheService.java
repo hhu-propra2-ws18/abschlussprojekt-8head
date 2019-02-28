@@ -31,22 +31,34 @@ public class AusleiheService {
 
 	@Scheduled(cron = "0 0 1 * * ?")
 	public void updateAllAusleihenDaily() {
-		System.out.println("Triggering update");
-
-		updateAusleihenIfTooLate(findAll(), LocalDate.now());
+		List<Ausleihe> ausleihen = findAll();
+		LocalDate now = LocalDate.now();
+		update(ausleihen, now);
 	}
 
-	public void updateAusleihenIfTooLate(List<Ausleihe> ausleihen, LocalDate date) {
+	public void update(List<Ausleihe> ausleihen, LocalDate now) {
 		if (ausleihen != null) {
 			for (Ausleihe ausleihe : ausleihen) {
-				if (ausleihe.getStatus().equals(Status.AUSGELIEHEN)) {
-					if (ausleihe.getEndDatum().isBefore(date)) {
-						ausleihe.setStatus(Status.RUECKGABE_VERPASST);
-					}
+				Status status = ausleihe.getStatus();
+				LocalDate startDatum = ausleihe.getStartDatum();
+				switch (status) {
+					case AUSGELIEHEN:
+						if (ausleihe.getEndDatum().isBefore(now)) {
+							ausleihe.setStatus(Status.RUECKGABE_VERPASST);
+						}
+						break;
+					case BESTAETIGT:
+						if (LocalDate.now().equals(startDatum)) {
+							ausleihe.setStatus(Status.AUSGELIEHEN);
+						}
+						break;
+					default:
+						break;
 				}
 			}
 		}
 	}
+
 
 	public List<Ausleihe> findAllConflicts() {
 		return ausleiheRepository.findByKonflikt(true);
@@ -60,6 +72,9 @@ public class AusleiheService {
 		return ausleihe.get();
 	}
 
+	public List<Ausleihe> findAllByAusleiherId(Long id) {
+		return ausleiheRepository.findAllByAusleiherId(id);
+	}
 	public List<Ausleihe> findLateAusleihen(Iterable<Ausleihe> ausleiheList) {
 		List<Ausleihe> lateAusleihen = new ArrayList<>();
 
