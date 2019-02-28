@@ -77,7 +77,7 @@ public class ItemController {
 			System.out.println(item.getClass().getSimpleName());
 			if (item.getClass().getSimpleName().equals("AusleihItem")) {
 				ausleihItems.add((AusleihItem) item);
-
+				
 			}
 
 			if (item.getClass().getSimpleName().equals("KaufItem")) {
@@ -124,6 +124,7 @@ public class ItemController {
 
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("ausleihItems", list);
+		model.addAttribute("kaufItems", new ArrayList<KaufItem>());
 
 		return "artikelListe";
 	}
