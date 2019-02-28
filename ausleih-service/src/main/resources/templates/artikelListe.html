@@ -11,11 +11,11 @@
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
 <div th:if="${ausleihItems.size() != 0}">
 	<div class="container">
-		<h1>Artikel zum ausleihen</h1>
+		<h1>Artikel zum Ausleihen</h1>
 	</div>
 	<div class="products">
 		<th:block class="products" th:each="artikel : ${ausleihItems}">
-			<a th:href="@{'/details/' + ${artikel.id}}">
+			<a th:href="@{'/details/ausleih/' + ${artikel.id}}">
 				<div class="product">
 					<div class="product-top">
 						<span class="itemName" th:text="${artikel.titel}">itemName</span>
@@ -48,26 +48,43 @@
 	</div>
 	<div class="products">
 		<th:block class="products" th:each="artikel : ${kaufItems}">
-			<a th:href="@{'/details/' + ${artikel.id}}">
-				<div class="product">
-					<div class="product-top">
-						<span class="itemName" th:text="${artikel.titel}">itemName</span>
-					</div>
-					<div class="product-middle">
-						<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
-							 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
-					</div>
-					<span class="d-inline-block text-truncate">
+			<div th:if="${artikel.getStatus() == null}">
+				<a th:href="@{'/details/verkauf/' + ${artikel.id}}">
+					<div class="product">
+						<div class="product-top">
+							<span class="itemName" th:text="${artikel.titel}">itemName</span>
+						</div>
+						<div class="product-middle">
+							<img th:if="${artikel.picture250 != null and artikel.getPicture250Base64EncodedString()!=null}"
+								 th:src="@{'data:image/jpg;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
+							<!--<<<<<< HEAD-->
+						</div>
+						<span class="d-inline-block text-truncate">
 					<div class="product-bottom">
 						<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
 						<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
 						<div class="price" th:text="${artikel.kaufpreis} + &euro;">$50.00</div>
 					</div>
 					</span>
-				</div>
-			</a>
+					</div>
+				</a>
+			</div>
 		</th:block>
 	</div>
+	<!--=======
+</div>
+<div class="product-bottom">
+	<div class="heading">
+		Wird verkauft
+	</div>
+	<div class="info" th:text="${artikel.beschreibung}">Classic red converse edition</div>
+	<div class="style" th:text="${artikel.abholort.beschreibung}">Color: Red / Style: M9621C</div>
+	<div class="price" th:text="${artikel.kaufpreis} + &euro;">$50.00</div>
+</div>
+</div>
+</div>
+</th:block>
+>>>>>>> master-->
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

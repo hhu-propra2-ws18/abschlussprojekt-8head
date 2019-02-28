@@ -30,6 +30,7 @@ public class AusleihItemService {
 		return items.findAll();
 	}
 
+
 	public List<AusleihItem> extendedDateSearch(LocalDate availableMin, LocalDate availableMax) {
 		return items.extendedDateSearch(availableMin, availableMax);
 	}
@@ -47,7 +48,7 @@ public class AusleihItemService {
 
 	public void updateById(Long id, AusleihItem newItem) {
 		AusleihItem toUpdate = findById(id);
-		System.out.println("Starting item update");
+		System.out.println("Starting ausleih item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
 		toUpdate.setAvailableFrom(newItem.getAvailableFrom());
@@ -57,6 +58,7 @@ public class AusleihItemService {
 		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
 		items.save(toUpdate);
 	}
+
 
 	public void save(AusleihItem item) {
 		items.save(item);

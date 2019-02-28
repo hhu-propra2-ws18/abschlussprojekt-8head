@@ -14,21 +14,14 @@
 		<h2>
 			<div th:text="${'Willkommen, ' + user.vorname + ' ' + user.nachname + '!'}">Willkommen!</div>
 		</h2>
-		<a href="/liste">Artikel durchstöbern</a>
-		<br>
+		<a href="/liste">Artikel durchstöbern</a><br>
 		<div th:if="${user.isAdmin()}">
-			<a th:href="@{/admin/allconflicts}">Konflikte anzeigen</a>
-			<br>
+			<a th:href="@{/admin/allconflicts}">Konflikte anzeigen</a><br>
 		</div>
-		<a th:href="@{/newitem/ausleihen}">Neuen Artikel verleihen</a>
-		<br>
-		<a th:href="@{/newitem/kaufen}">Neuen Artikel verkaufen</a>
-		<br>
+		<a th:href="@{/newitem/ausleihen}">Neuen Artikel verleihen</a><br>
+		<a th:href="@{/newitem/kaufen}">Neuen Artikel verkaufen</a><br>
 		<a href="/newlocation">Neuen Abholort hinzufügen</a>
-		<br>
-		<br>
 		<h3 th:text="${message}"></h3>
-		<br>
 		<div th:if="${lateAusleihen.size() != 0}">
 			<h4>Du hast vergessen ausgeliehende Gegenstände zurückzugeben</h4>
 			<table id="items">
@@ -38,10 +31,15 @@
 				</tr>
 				<th:block th:each="ausleihe : ${lateAusleihen}">
 					<tr>
-						<td th:text="${ausleihe.item.titel}"></td>
-						<td th:text="${ausleihe.endDatum.format(dateformat)}"></td>
+						<th>Gegenstand</th>
+						<th>Ursprüngliches Rückgabedatum</th>
 					</tr>
-				</th:block>
+					<th:block th:each="ausleihe : ${lateAusleihen}">
+						<tr>
+							<td th:text="${ausleihe.item.titel}"></td>
+							<td th:text="${ausleihe.endDatum.format(dateformat)}"></td>
+						</tr>
+					</th:block>
 			</table>
 		</div>
 		<div th:if="${user.ausleihen.size() != 0}">
@@ -49,7 +47,7 @@
 			<div class="products">
 				<th:block class="products" th:each="ausleihung : ${user.ausleihen}">
 					<div class="product">
-						<a th:href="@{'/details/' + ${ausleihung.item.id}}">
+						<a th:href="@{'/details/ausleih/' + ${ausleihung.item.id}}">
 							<div class="product-top">
 								<span class="itemName" th:text="${ausleihung.item.titel}">itemName</span>
 							</div>
@@ -97,8 +95,7 @@
 								<img th:if="${artikel.picture != null and artikel.getPicture250Base64EncodedString()!=null}"
 									 th:src="@{'data:image/png;base64,'+${artikel.getPicture250Base64EncodedString()}}"/>
 							</div>
-						</a>
-						<span class="d-inline-block text-truncate">
+							<span class="d-inline-block text-truncate">
 						<div class="product-bottom">
 							<div class="heading"
 								 th:text="${artikel.availableFrom.format(dateformat) + '-' + artikel.availableTill.format(dateformat)}">
@@ -110,6 +107,7 @@
 							<div class="price" th:text="${artikel.tagessatz} + &euro;">$50.00</div>
 						</div>
 						</span>
+						</a>
 					</div>
 				</th:block>
 			</div>

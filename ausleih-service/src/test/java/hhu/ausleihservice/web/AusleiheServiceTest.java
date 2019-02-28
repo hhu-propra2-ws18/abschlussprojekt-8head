@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class AusleiheServiceTest {
 
@@ -28,7 +29,7 @@ public class AusleiheServiceTest {
 
 		ausleiheService.update(testInputList, testInputDate);
 
-		assertEquals(null, testInputList);
+		assertNull(testInputList);
 	}
 
 	@Test

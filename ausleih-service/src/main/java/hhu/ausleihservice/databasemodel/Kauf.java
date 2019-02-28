@@ -19,5 +19,4 @@ public class Kauf {
 	private KaufItem item;
 	@ManyToOne
 	private Person kaeufer;
-	private Status status;
 }

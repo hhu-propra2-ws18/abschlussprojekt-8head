@@ -2,9 +2,7 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.*;
 import hhu.ausleihservice.form.AusleihForm;
-import hhu.ausleihservice.validators.AbholortValidator;
-import hhu.ausleihservice.validators.AusleiheValidator;
-import hhu.ausleihservice.validators.ItemValidator;
+import hhu.ausleihservice.validators.*;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import hhu.ausleihservice.web.service.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,10 +32,13 @@ public class ItemController {
 	private final KaufItemService kaufItemService;
 	private final AbholortService abholortService;
 	private final ItemAvailabilityService itemAvailabilityService;
-	private ItemValidator itemValidator;
+	private AusleihItemValidator ausleihItemValidator;
+	private KaufItemValidator kaufItemValidator;
 	private AbholortValidator abholortValidator;
-	private AusleiheValidator ausleiheValidator;
+	private AusleiheAnfragenValidator ausleiheAnfragenValidator;
+	private KaufValidator kaufValidator;
 	private AusleiheService ausleiheService;
+	private ProPayService proPayService;
 
 	public ItemController(AusleiheService ausleiheService,
 						  PersonService perService,
@@ -45,9 +46,12 @@ public class ItemController {
 						  KaufItemService kaufItemService,
 						  AbholortService abholortService,
 						  ItemAvailabilityService itemAvailabilityService,
-						  ItemValidator itemValidator,
+						  AusleihItemValidator ausleihItemValidator,
+						  KaufItemValidator kaufItemValidator,
 						  AbholortValidator abholortValidator,
-						  AusleiheValidator ausleiheValidator
+						  AusleiheAnfragenValidator ausleiheAnfragenValidator,
+						  KaufValidator kaufValidator,
+						  ProPayService proPayService
 	) {
 		this.ausleiheService = ausleiheService;
 		this.personService = perService;
@@ -55,9 +59,12 @@ public class ItemController {
 		this.kaufItemService = kaufItemService;
 		this.abholortService = abholortService;
 		this.itemAvailabilityService = itemAvailabilityService;
-		this.itemValidator = itemValidator;
+		this.ausleihItemValidator = ausleihItemValidator;
+		this.kaufItemValidator = kaufItemValidator;
 		this.abholortValidator = abholortValidator;
-		this.ausleiheValidator = ausleiheValidator;
+		this.ausleiheAnfragenValidator = ausleiheAnfragenValidator;
+		this.kaufValidator = kaufValidator;
+		this.proPayService = proPayService;
 	}
 
 	@GetMapping("/liste")
@@ -70,7 +77,7 @@ public class ItemController {
 		List<KaufItem> kaufItems = kaufItemService.simpleSearch(q);
 		
 		model.addAttribute("dateformat", DATEFORMAT);
-		model.addAttribute("artikelListe", ausleihItems);
+		model.addAttribute("ausleihItems", ausleihItems);
 		model.addAttribute("kaufItems", kaufItems);
 		model.addAttribute("ausleihItems", ausleihItems);
 		model.addAttribute("user", personService.get(p));
@@ -109,17 +116,87 @@ public class ItemController {
 		return "artikelListe";
 	}
 
-	@GetMapping("/details/{id}")
-	public String artikelDetails(Model model,
-								 @PathVariable long id,
-								 Principal p) {
+	@GetMapping("/details/verkauf/{id}")
+	public String artikelDetailsVerkauf(Model model,
+										@PathVariable long id,
+										Principal p) {
 		try {
-			AusleihItem artikel = (AusleihItem) ausleihItemService.findById(id);
+			KaufItem artikel = kaufItemService.findById(id);
+			model.addAttribute("artikel", artikel);
+		} catch (ItemNichtVorhanden a) {
+			model.addAttribute("id", id);
+			return "artikelNichtGefunden";
+		}
+		model.addAttribute("user", personService.get(p));
+		return "artikelDetailsVerkauf";
+	}
 
+	@PostMapping("/details/verkauf/{id}")
+	public String bearbeiteArtikelVerkauf(Model model,
+										  @PathVariable long id,
+										  Principal p,
+										  @RequestParam(name = "editArtikel", defaultValue = "false")
+											  final boolean changeArticleDetails,
+										  @ModelAttribute("artikel") KaufItem artikel,
+										  BindingResult bindingResult
+	) {
+		System.out.println("Post triggered at /details/verkauf/" + id);
+		System.out.println(artikel + " " + changeArticleDetails);
+		model.addAttribute("user", personService.get(p));
+		kaufItemValidator.validate(artikel, bindingResult);
+
+		if (changeArticleDetails) {
+			if (bindingResult.hasErrors()) {
+				model.addAttribute("artikel", kaufItemService.findById(id));
+				model.addAttribute("beschreibungErrors", bindingResult.getFieldError("beschreibung"));
+				model.addAttribute("titelErrors", bindingResult.getFieldError("titel"));
+				model.addAttribute("kaufpreisErrors", bindingResult.getFieldError("kaufpreis"));
+				model.addAttribute("abholortErrors", bindingResult.getFieldError("abholort"));
+				return "artikelDetailsVerkauf";
+			}
+			kaufItemService.updateById(id, artikel);
+		}
+		model.addAttribute("artikel", kaufItemService.findById(id));
+
+		return "artikelDetailsVerkauf";
+	}
+
+	@PostMapping("/kaufen/{id}")
+	public String kaufen(@PathVariable Long id, Principal p, Model model) {
+		KaufItem artikel = kaufItemService.findById(id);
+		Person user = personService.get(p);
+		Kauf kauf = new Kauf();
+		kauf.setItem(artikel);
+		user.addKauf(kauf);
+
+		DataBinder dataBinder = new DataBinder(kauf);
+		dataBinder.setValidator(kaufValidator);
+		dataBinder.validate();
+		BindingResult bindingResult = dataBinder.getBindingResult();
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("kaeuferErrors", bindingResult.getFieldError("kaeufer"));
+			model.addAttribute("itemErrors", bindingResult.getFieldError("item"));
+			model.addAttribute("artikel", artikel);
+			model.addAttribute("user", user);
+			return "artikelDetailsVerkauf";
+		}
+		artikel.setStatus(Status.VERKAUFT);
+		proPayService.transferFunds(user, artikel.getBesitzer(), artikel.getKaufpreis());
+		personService.save(user);
+		return "redirect:/";
+	}
+
+
+	@GetMapping("/details/ausleih/{id}")
+	public String artikelDetailsAusleih(Model model,
+										@PathVariable long id,
+										Principal p) {
+		try {
+			AusleihItem artikel = ausleihItemService.findById(id);
 			model.addAttribute("artikel", artikel);
 			if (artikel.getClass().equals(AusleihItem.class)) {
 				model.addAttribute("availabilityList",
-						itemAvailabilityService.getUnavailableDates((AusleihItem) artikel));
+						itemAvailabilityService.getUnavailableDates(artikel));
 			}
 		} catch (ItemNichtVorhanden a) {
 			model.addAttribute("id", id);
@@ -129,27 +206,25 @@ public class ItemController {
 		model.addAttribute("ausleihForm", new AusleihForm());
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("user", personService.get(p));
-		return "artikelDetails";
+		return "artikelDetailsAusleih";
 	}
 
-	@PostMapping("/details/{id}")
-	public String bearbeiteArtikel(Model model,
-								   @PathVariable long id,
-								   Principal p,
-								   @RequestParam(
-										   name = "editArtikel", defaultValue = "false"
-								   ) final boolean changeArticleDetails,
-								   @ModelAttribute("artikel") AusleihItem artikel,
-								   BindingResult bindingResult
+	@PostMapping("/details/ausleih/{id}")
+	public String bearbeiteArtikelAusleih(Model model,
+										  @PathVariable long id,
+										  Principal p,
+										  @RequestParam(
+												  name = "editArtikel", defaultValue = "false"
+										  ) final boolean changeArticleDetails,
+										  @ModelAttribute("artikel") AusleihItem artikel,
+										  BindingResult bindingResult
 	) {
-		System.out.println("Post triggered at /details/" + id);
+		System.out.println("Post triggered at /details/verleih/" + id);
 		System.out.println(artikel + " " + changeArticleDetails);
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("user", personService.get(p));
 		model.addAttribute("ausleihForm", new AusleihForm());
-		Item item = new AusleihItem();
-		System.out.println(item);
-		itemValidator.validate(artikel, bindingResult);
+		ausleihItemValidator.validate(artikel, bindingResult);
 
 		if (changeArticleDetails) {
 			if (bindingResult.hasErrors()) {
@@ -161,18 +236,18 @@ public class ItemController {
 				model.addAttribute("availableFromErrors", bindingResult.getFieldError("availableFrom"));
 				model.addAttribute("abholortErrors", bindingResult.getFieldError("abholort"));
 				model.addAttribute("dateformat", DATEFORMAT);
-				return "artikelDetails";
+				return "artikelDetailsAusleih";
 			}
 			ausleihItemService.updateById(id, artikel);
 		}
 		model.addAttribute("artikel", ausleihItemService.findById(id));
 
-		return "artikelDetails";
+		return "artikelDetailsAusleih";
 	}
 
 	@GetMapping("/ausleihen/{id}")
 	public String ausleihenAbbrechen(Model model, @PathVariable Long id) {
-		return "redirect:/details/" + id;
+		return "redirect:/details/ausleih/" + id;
 	}
 
 	@PostMapping("/ausleihen/{id}")
@@ -181,7 +256,7 @@ public class ItemController {
 							@ModelAttribute AusleihForm ausleihForm,
 							Principal p,
 							RedirectAttributes redirAttrs) {
-		AusleihItem artikel = (AusleihItem) ausleihItemService.findById(id);
+		AusleihItem artikel = ausleihItemService.findById(id);
 		Ausleihe ausleihe = new Ausleihe();
 		Person user = personService.get(p);
 
@@ -196,7 +271,7 @@ public class ItemController {
 		ausleihe.setItem(artikel);
 
 		DataBinder dataBinder = new DataBinder(ausleihe);
-		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.setValidator(ausleiheAnfragenValidator);
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		if (bindingResult.hasErrors()) {
@@ -207,7 +282,7 @@ public class ItemController {
 			model.addAttribute("ausleihForm", new AusleihForm());
 			model.addAttribute("dateformat", DATEFORMAT);
 			model.addAttribute("user", user);
-			return "artikelDetails";
+			return "artikelDetailsAusleih";
 		}
 
 		user.addAusleihe(ausleihe);
@@ -219,7 +294,7 @@ public class ItemController {
 
 		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich ausgeliehen!");
 
-		return "redirect:/details/" + id;
+		return "redirect:/details/ausleih/" + id;
 	}
 
 
@@ -258,7 +333,7 @@ public class ItemController {
 								 @RequestParam("file") MultipartFile picture,
 								 BindingResult bindingResult,
 								 RedirectAttributes redirAttrs) {
-		itemValidator.validate(newItem, bindingResult);
+		ausleihItemValidator.validate(newItem, bindingResult);
 		Person besitzer = personService.get(p);
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("abholorte", personService.get(p).getAbholorte());

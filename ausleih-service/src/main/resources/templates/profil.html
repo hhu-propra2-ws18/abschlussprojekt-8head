@@ -16,6 +16,19 @@
 		<div th:text="${'Email: ' + benutzer.email}">Email</div>
 	</h4>
 	<br>
+	<div th:if="${benutzer.items.size() != 0}">
+		Alle angebotenen Artikel:
+		<ul>
+			<li th:each="item : ${benutzer.items}">
+				<th:block th:if="${item.getClass().getSimpleName().equals('AusleihItem')}">
+					<a th:href="@{'/details/ausleih/' + ${item.id}}" th:text="${item.titel}"></a>
+				</th:block>
+				<th:block th:unless="${item.getClass().getSimpleName().equals('AusleihItem')}">
+					<a th:href="@{'/details/verkauf/' + ${item.id}}" th:text="${item.titel}"></a>
+				</th:block>
+			</li>
+		</ul>
+	</div>
 
 	<table th:if="${user.isAdmin() or user.isHimself(benutzer)}" id="items">
 		<thead>
@@ -76,16 +89,7 @@
 	</div>
 	<br>
 
-	<div th:if="${benutzer.items.size() != 0}">
-		<h2>Alle angebotenen Artikel:</h2>
-		<ul>
-			<li th:each="item : ${benutzer.items}">
-				<a th:href="@{'/details/' + ${item.id}}" th:text="${item.titel}"></a>
-			</li>
-		</ul>
-	</div>
-
-	<div th:if="${user.isAdmin() or user.isHimself(benutzer)}">
+	<div th:if="${user.isHimself(benutzer) AND benutzer.ausleihen.size() != 0}">
 		<h2>Ausgeliehene Items </h2>
 		<table class="table table-hover">
 			<thead>
@@ -119,7 +123,7 @@
 		</table>
 	</div>
 
-	<div th:if="${ausleihen.size() != 0}">
+	<th:block th:if="${ausleihItems.size() != 0}">
 		<h2>Ausleihen von eigenen Items</h2>
 		<table class="table table-hover">
 			<thead>
@@ -130,7 +134,7 @@
 				<th>Bestätigen</th>
 			</tr>
 			</thead>
-			<tbody th:each="item : ${ausleihen}">
+			<tbody th:each="item : ${ausleihItems}">
 			<tr th:each="ausleihe : ${item.ausleihen}">
 				<td th:text="${ausleihe.getItem().titel}"></td>
 				<td th:text="${ausleihe.getStartDatum().toString()}"></td>
@@ -179,7 +183,7 @@
 			</tr>
 			</tbody>
 		</table>
-	</div>
+	</th:block>
 
 	<div th:if="${verkaeufe.size() != 0}">
 		<h2>Verkaufte Items:</h2>
