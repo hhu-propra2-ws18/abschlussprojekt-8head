@@ -36,7 +36,7 @@ public class AusleiheService {
 		update(ausleihen, now);
 	}
 
-	private void update(List<Ausleihe> ausleihen, LocalDate now) {
+	public void update(List<Ausleihe> ausleihen, LocalDate now) {
 		if (ausleihen != null) {
 			for (Ausleihe ausleihe : ausleihen) {
 				Status status = ausleihe.getStatus();
@@ -51,6 +51,8 @@ public class AusleiheService {
 						if (LocalDate.now().equals(startDatum)) {
 							ausleihe.setStatus(Status.AUSGELIEHEN);
 						}
+						break;
+					default:
 						break;
 				}
 			}
