@@ -2,6 +2,7 @@ package hhu.ausleihservice.databasemodel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Type;
 import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
@@ -31,16 +32,16 @@ public class Item {
 	private Abholort abholort = new Abholort();
 	@ManyToOne
 	private Person besitzer;
-	@Lob
+	@Type(type = "org.hibernate.type.BinaryType")
 	private byte[] picture;
-	@Lob
+	@Type(type = "org.hibernate.type.BinaryType")
 	private byte[] picture250;
-	@Lob
+	@Type(type = "org.hibernate.type.BinaryType")
 	private byte[] picture100;
 
 	// Getter and Setter are copying the array to prevent
 	// data leaking outside by storing/giving the reference to the array
-	@Lob
+	@Type(type = "org.hibernate.type.BinaryType")
 	public byte[] getPicture() {
 		if (picture == null) {
 			return null;
@@ -64,7 +65,7 @@ public class Item {
 		}
 	}
 
-	@Lob
+	@Type(type = "org.hibernate.type.BinaryType")
 	public byte[] getPicture250() {
 		if (picture250 == null) {
 			return null;
@@ -82,7 +83,7 @@ public class Item {
 		System.arraycopy(in, 0, picture250, 0, in.length);
 	}
 
-	@Lob
+	@Type(type = "org.hibernate.type.BinaryType")
 	public byte[] getPicture100() {
 		if (picture100 == null) {
 			return null;

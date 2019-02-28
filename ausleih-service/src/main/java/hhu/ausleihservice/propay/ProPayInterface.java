@@ -16,7 +16,7 @@ import java.util.Map;
 @Component
 public class ProPayInterface {
 
-	private static final String HOST = "localhost";
+	private static final String HOST = "propay";
 	private static final int PORT = 8888;
 	private static final String SCHEME = "http";
 	private static final MediaType MIME_TYPE = MediaType.APPLICATION_JSON_UTF8;
