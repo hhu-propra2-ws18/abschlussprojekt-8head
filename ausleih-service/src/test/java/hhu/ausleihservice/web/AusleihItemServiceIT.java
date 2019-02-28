@@ -196,7 +196,7 @@ public class AusleihItemServiceIT {
 		this.ausleihItemRepository.save(item3);
 		this.ausleihItemRepository.save(item1);
 
-		ausleihItemService = new AusleihItemService(ausleihItemRepository, new ItemAvailabilityService());
+		ausleihItemService = new AusleihItemService(ausleihItemRepository);
 	}
 
 	@Test

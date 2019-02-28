@@ -52,7 +52,7 @@ public class ItemServiceTest {
 		ausleihItemList = new ArrayList<>();
 		kaufItemList = new ArrayList<>();
 
-		ausleihItemService = new AusleihItemService(ausleihItemRepository, new ItemAvailabilityService());
+		ausleihItemService = new AusleihItemService(ausleihItemRepository);
 		kaufItemService = new KaufItemService(kaufItemRepository);
 
 		AusleihItem item1 = new AusleihItem();
