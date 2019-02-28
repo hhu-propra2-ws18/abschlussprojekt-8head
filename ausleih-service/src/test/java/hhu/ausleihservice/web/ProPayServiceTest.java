@@ -48,7 +48,7 @@ public class ProPayServiceTest {
 
 		proPayService.ueberweiseTagessaetze(ausleihe);
 		verify(proPayInterface).transferFunds(ArgumentMatchers.eq("siker102"), ArgumentMatchers.eq("bumar100"),
-				ArgumentMatchers.eq(10.0));
+				ArgumentMatchers.eq(20.0));
 	}
 
 	@Test
@@ -69,7 +69,7 @@ public class ProPayServiceTest {
 
 		proPayService.ueberweiseTagessaetze(ausleihe);
 		verify(proPayInterface).transferFunds(ArgumentMatchers.eq("siker102"), ArgumentMatchers.eq("bumar100"),
-				ArgumentMatchers.eq(50.0));
+				ArgumentMatchers.eq(60.0));
 	}
 
 	@Test
@@ -90,7 +90,7 @@ public class ProPayServiceTest {
 
 		proPayService.ueberweiseTagessaetze(ausleihe);
 		verify(proPayInterface).transferFunds(ArgumentMatchers.eq("siker102"), ArgumentMatchers.eq("bumar100"),
-				ArgumentMatchers.eq(0.0));
+				ArgumentMatchers.eq(10.0));
 	}
 
 	@Test
