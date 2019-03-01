@@ -5,7 +5,7 @@ import hhu.ausleihservice.dataaccess.AusleihItemRepository;
 import hhu.ausleihservice.dataaccess.AusleiheRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Abholort;
-import hhu.ausleihservice.web.service.AusleihItemService;
+import hhu.ausleihservice.web.service.AbholortService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +21,6 @@ import static org.junit.Assert.*;
 @DataJpaTest
 public class AbholortServiceIT {
 
-	AusleihItemService ausleihItemService;
 	TestData testData;
 
 	@Autowired
@@ -41,7 +40,6 @@ public class AbholortServiceIT {
 		testData.getPersonList().forEach(x -> personRepository.save(x));
 		testData.getAusleihItemList().forEach(x -> ausleihItemRepository.save(x));
 		testData.getAusleiheList().forEach(x -> ausleiheRepository.save(x));
-		ausleihItemService = new AusleihItemService(ausleihItemRepository);
 	}
 
 	@Test
