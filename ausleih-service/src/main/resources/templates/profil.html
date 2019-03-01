@@ -126,7 +126,7 @@
 		</table>
 	</div>
 
-	<th:block th:if="${ausleihItems.size() != 0}">
+	<th:block th:if="${user.isHimself(benutzer) AND ausleihItems.size() != 0}">
 		<h2>Ausleihen von eigenen Items</h2>
 		<table class="table table-hover">
 			<thead>

@@ -9,7 +9,7 @@ public class AbholortService {
 
 	private AbholortRepository abholortRepository;
 
-	AbholortService(AbholortRepository abholortRepository) {
+	public AbholortService(AbholortRepository abholortRepository) {
 		this.abholortRepository = abholortRepository;
 	}
 
