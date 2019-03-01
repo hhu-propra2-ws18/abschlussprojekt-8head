@@ -2,7 +2,7 @@ package hhu.ausleihservice.databasemodel;
 
 public enum Status {
 	ANGEFRAGT("Die Ausleihe wurde angefragt"),
-	BESTAETIGT("DIe Ausleihe wurde bestätigt"),
+	BESTAETIGT("Die Ausleihe wurde bestätigt"),
 	ABGELEHNT("Die Ausleihe wurde abgelehnt"),
 	AUSGELIEHEN("Der Artikel wurde ausgeliehen"),
 	ABGESCHLOSSEN("Die Ausleihe ist abgeschlossen"),
