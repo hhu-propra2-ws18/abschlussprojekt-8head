@@ -198,7 +198,8 @@
 			</thead>
 			<tbody>
 			<tr th:each="verkauf : ${kaufItems}">
-				<td th:if="${verkauf.status != null}"><a th:href="@{'/details/verkauf/' + ${verkauf.id}}" th:text="${verkauf.titel}"></a>
+				<td th:if="${verkauf.status != null}"><a th:href="@{'/details/verkauf/' + ${verkauf.id}}"
+														 th:text="${verkauf.titel}"></a>
 				</td>
 			</tr>
 			</tbody>
@@ -215,7 +216,11 @@
 			</thead>
 			<tbody>
 			<tr th:each="kauf : ${benutzer.kaeufe}">
-				<td th:text="${kauf.item.titel}"></td>
+				<td>
+					<a th:href="@{'/details/verkauf/' + ${kauf.item.id}}"
+					   th:text="${kauf.item.titel}">
+					</a>
+				</td>
 			</tr>
 			</tbody>
 		</table>
