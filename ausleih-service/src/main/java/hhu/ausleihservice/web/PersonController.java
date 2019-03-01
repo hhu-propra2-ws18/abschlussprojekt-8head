@@ -1,13 +1,12 @@
 package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.*;
-import hhu.ausleihservice.validators.AusleiheValidator;
+import hhu.ausleihservice.validators.AusleiheAbgabeValidator;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.validators.RegisterValidator;
 import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
 import hhu.ausleihservice.web.service.ProPayService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,23 +24,22 @@ import java.util.List;
 public class PersonController {
 
 	private static final DateTimeFormatter DATEFORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
-
 	private PersonService personService;
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
 	private AusleiheService ausleiheService;
-	private final AusleiheValidator ausleiheValidator;
+	private final AusleiheAbgabeValidator ausleiheAbgabeValidator;
 	private final RegisterValidator registerValidator;
 
-	@Autowired
 	PersonController(PersonService personService, PersonValidator personValidator,
 					 ProPayService proPayService, AusleiheService ausleiheService,
-					 AusleiheValidator ausleiheValidator, RegisterValidator registerValidator) {
+					 AusleiheAbgabeValidator ausleiheAbgabeValidator,
+					 RegisterValidator registerValidator) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
 		this.ausleiheService = ausleiheService;
-		this.ausleiheValidator = ausleiheValidator;
+		this.ausleiheAbgabeValidator = ausleiheAbgabeValidator;
 		this.registerValidator = registerValidator;
 	}
 
@@ -50,7 +48,23 @@ public class PersonController {
 		Person user = personService.get(p);
 		model.addAttribute("user", user);
 		if (user != null) {
+			List<AusleihItem> ausleihItems = new ArrayList<>();
+			List<KaufItem> kaufItems = new ArrayList<>();
+
+			for (Item item : user.getItems()) {
+				if (item.getClass().getSimpleName().equals("AusleihItem")) {
+					ausleihItems.add((AusleihItem) item);
+				}
+
+				if (item.getClass().getSimpleName().equals("KaufItem")) {
+					kaufItems.add((KaufItem) item);
+				}
+			}
+			model.addAttribute("ausleihItems", ausleihItems);
+			model.addAttribute("kaufItems", kaufItems);
+
 			model.addAttribute("lateAusleihen", ausleiheService.findLateAusleihen(user.getAusleihen()));
+			System.out.println(ausleihItems);
 		}
 		model.addAttribute("dateformat", DATEFORMAT);
 		return "startseite";
@@ -58,23 +72,31 @@ public class PersonController {
 
 	@GetMapping("/profil/{id}")
 	public String otherUser(Model model, @PathVariable Long id, Principal p) {
+		Person user = personService.get(p);
 		Person benutzer = personService.findById(id);
-		List<AusleihItem> ausleihenItems = new ArrayList<>();
+
+		boolean isProPayAvailable = false;
+		if (user.getId().longValue() == benutzer.getId().longValue()) {
+			isProPayAvailable = proPayService.isAvailable();
+		}
+
+
+		List<AusleihItem> ausleihItems = new ArrayList<>();
 		List<KaufItem> kaufItems = new ArrayList<>();
 		for (Item item : benutzer.getItems()) {
 			if (item instanceof AusleihItem) {
-				ausleihenItems.add((AusleihItem) item);
+				ausleihItems.add((AusleihItem) item);
 			} else if (item instanceof KaufItem) {
 				kaufItems.add((KaufItem) item);
 			}
 		}
-		boolean isProPayAvailable = proPayService.isAvailable();
+
 		model.addAttribute("isProPayAvailable", isProPayAvailable);
 		model.addAttribute("proPayError", "ProPay ist aktuell nicht verfügbar");
 		model.addAttribute("benutzer", benutzer);
-		model.addAttribute("user", personService.get(p));
-		model.addAttribute("ausleihen", ausleihenItems);
-		model.addAttribute("verkaeufe", kaufItems);
+		model.addAttribute("user", user);
+		model.addAttribute("ausleihItems", ausleihItems);
+		model.addAttribute("kaufItems", kaufItems);
 		if (isProPayAvailable) {
 			model.addAttribute("moneten", proPayService.getProPayKontostand(benutzer));
 		}
@@ -95,14 +117,25 @@ public class PersonController {
 						   BindingResult bindingResult
 	) {
 		System.out.println("Post triggered at /profil/" + id);
-		if (benutzer.getUsername().equals("")) {
-			System.out.println("Da Username leer, setze auf alten, damit Validierung funktioniert.\n" +
-					"Alter Username: " + personService.findById(id).getUsername());
-			benutzer.setUsername(personService.findById(id).getUsername());
-		}
-		personValidator.validate(benutzer, bindingResult);
 
 		if (changePerson) {
+			personValidator.validate(benutzer, bindingResult);
+			boolean isProPayAvailable = proPayService.isAvailable();
+			model.addAttribute("isProPayAvailable", isProPayAvailable);
+			List<AusleihItem> ausleihItems = new ArrayList<>();
+			List<KaufItem> kaufItems = new ArrayList<>();
+			for (Item item : benutzer.getItems()) {
+				if (item instanceof AusleihItem) {
+					ausleihItems.add((AusleihItem) item);
+				} else if (item instanceof KaufItem) {
+					kaufItems.add((KaufItem) item);
+				}
+			}
+			model.addAttribute("ausleihItems", ausleihItems);
+			model.addAttribute("kaufItems", kaufItems);
+			if (isProPayAvailable) {
+				model.addAttribute("moneten", proPayService.getProPayKontostand(personService.findById(id)));
+			}
 			if (bindingResult.hasErrors()) {
 				model.addAttribute("benutzer", benutzer);
 				model.addAttribute("usernameErrors", bindingResult.getFieldError("username"));
@@ -117,9 +150,8 @@ public class PersonController {
 			System.out.println("Now updating..");
 			personService.updateById(id, benutzer);
 			model.addAttribute("benutzer", personService.findById(id));
-			model.addAttribute("moneten", proPayService.getProPayKontostand(personService.findById(id)));
 			model.addAttribute("user", personService.get(p));
-			return "profil";
+			return "redirect:/profil/" + id;
 		}
 		return "redirect:/profil/" + id;
 	}
@@ -278,7 +310,7 @@ public class PersonController {
 	public String returnArticle(Principal p, @PathVariable Long id) {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		DataBinder dataBinder = new DataBinder(ausleihe);
-		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.setValidator(ausleiheAbgabeValidator);
 		dataBinder.validate();
 
 		BindingResult bindingResult = dataBinder.getBindingResult();

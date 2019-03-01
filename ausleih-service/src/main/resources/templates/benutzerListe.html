@@ -9,22 +9,26 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<h1>Personen</h1>
+<div class="container">
+	<h1>Personen</h1>
 
-<table id="items">
-	<tr>
+	<table class="table table-hover" id="items">
+		<thead>
 		<th>Name</th>
 		<th>Username</th>
 		<th>Profil anzeigen</th>
-	</tr>
-	<th:block th:each="benutzer : ${benutzerListe}">
-		<tr>
-			<td th:text="|${benutzer.vorname} ${benutzer.nachname}|"></td>
-			<td th:text="${benutzer.username}"></td>
-			<td><a th:href="@{profil/{benutzerID} (benutzerID=${benutzer.id})}">Anzeigen</a></td>
-		</tr>
-	</th:block>
-</table>
+		</thead>
+		<tbody>
+		<th:block th:each="benutzer : ${benutzerListe}">
+			<tr>
+				<td th:text="|${benutzer.vorname} ${benutzer.nachname}|"></td>
+				<td th:text="${benutzer.username}"></td>
+				<td><a th:href="@{profil/{benutzerID} (benutzerID=${benutzer.id})}">Anzeigen</a></td>
+			</tr>
+		</th:block>
+		</tbody>
+	</table>
+</div>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

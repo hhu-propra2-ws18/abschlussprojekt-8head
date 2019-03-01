@@ -9,7 +9,9 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<h1 th:text="${'Artikel mit ID ' + id + ' nicht gefunden'}">Artikel nicht gefunden</h1>
+<div class="container">
+	<h1 th:text="${'Artikel mit ID ' + id + ' nicht gefunden'}">Artikel nicht gefunden</h1>
+</div>
 <a href="/liste">Zurück</a>
 
 

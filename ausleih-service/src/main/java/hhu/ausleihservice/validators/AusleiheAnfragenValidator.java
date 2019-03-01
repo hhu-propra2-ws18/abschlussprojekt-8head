@@ -9,17 +9,16 @@ import org.springframework.validation.Validator;
 
 import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.databasemodel.Status;
 import hhu.ausleihservice.web.service.ItemAvailabilityService;
 import hhu.ausleihservice.web.service.ProPayService;
 
 @Component
-public class AusleiheValidator implements Validator {
+public class AusleiheAnfragenValidator implements Validator {
 
 	private ItemAvailabilityService availabilityService;
 	private ProPayService proPayService;
 
-	public AusleiheValidator(ItemAvailabilityService availabilityService, ProPayService proPayService) {
+	public AusleiheAnfragenValidator(ItemAvailabilityService availabilityService, ProPayService proPayService) {
 		this.availabilityService = availabilityService;
 		this.proPayService = proPayService;
 	}
@@ -35,18 +34,16 @@ public class AusleiheValidator implements Validator {
 		AusleihItem ausleiheItem = ausleihe.getItem();
 
 		ValidationUtils.rejectIfEmpty(errors, "item", Messages.notEmpty);
+		ValidationUtils.rejectIfEmpty(errors, "ausleiher", Messages.notEmpty);
 
-		if (ausleihe.getStatus() == Status.ANGEFRAGT && !availabilityService.isAvailableFromTill(ausleiheItem,
-				ausleihe.getStartDatum(), ausleihe.getEndDatum())) {
+		if (!availabilityService.isAvailableFromTill(ausleiheItem, ausleihe.getStartDatum(), ausleihe.getEndDatum())) {
 			errors.rejectValue("startDatum", Messages.itemNotAvailable);
 		}
 
-		ValidationUtils.rejectIfEmpty(errors, "ausleiher", Messages.notEmpty);
-
-		if (ausleiheItem != null && ausleihe.getAusleiher() != null) {
-			if (ausleihe.getAusleiher().equals(ausleiheItem.getBesitzer())) {
-				errors.rejectValue("ausleiher", Messages.ownItemAusleihe);
-			}
+		if (ausleiheItem != null &&
+				ausleihe.getAusleiher() != null &&
+				ausleihe.getAusleiher().equals(ausleiheItem.getBesitzer())) {
+			errors.rejectValue("ausleiher", Messages.ownItemAusleihe);
 		}
 
 		if (!proPayService.isAvailable()) {
@@ -56,7 +53,7 @@ public class AusleiheValidator implements Validator {
 			double kontostand = proPayService.getProPayKontostand(ausleihe.getAusleiher());
 			int kautionswert = ausleiheItem.getKautionswert();
 			long ausleihDauer = ChronoUnit.DAYS.between(ausleihe.getStartDatum(), ausleihe.getEndDatum()) + 1;
-			if (ausleihe.getStatus() == Status.ANGEFRAGT && kontostand < kautionswert) {
+			if (kontostand < kautionswert) {
 				errors.rejectValue("ausleiher", Messages.notEnoughMoney);
 			} else if (kontostand < (ausleiheItem.getTagessatz() * ausleihDauer)) {
 				errors.rejectValue("ausleiher", Messages.notEnoughMoney);

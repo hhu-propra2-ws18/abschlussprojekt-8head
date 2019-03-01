@@ -11,7 +11,8 @@
 <container class="container px-lg-5">
 	<div class="row mx-lg-n5 product-details-row">
 		<div>
-			<form th:action="@{/details/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}" method="post">
+			<form th:action="@{/details/ausleih/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}"
+				  method="post">
 				<table class="product-details">
 					<tr>
 						<td><h2 th:text="${artikel.titel}">ITEM</h2></td>
@@ -56,7 +57,7 @@
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<input name="newTagessatz" type="number" step="1" min="0" th:field="*{tagessatz}"
 								   id="tagessatz">
-							<div id="error" th:text="${tagessatzErrors?.code}"></div>
+							<div th:text="${tagessatzErrors?.code}"></div>
 						</td>
 					</tr>
 					<tr>
@@ -71,22 +72,27 @@
 					<tr>
 						<td>Standort</td>
 						<td th:text="${artikel.abholort.beschreibung}"></td>
-						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
-							<input name="newAbholortBeschreibung" type="text" th:field="*{abholort.beschreibung}"
-								   id="abholort">
+						<td>
+							<select th:if="${user.isOwner(artikel)}" name="newAbholort" class="form-control" id="abholort" th:field="*{abholort}">
+								<option th:each="abholort: ${user.abholorte}"
+										th:value="${abholort.id}"
+										th:text="${abholort.beschreibung}"></option>
+							</select>
 							<div th:text="${abholortErrors?.code}"></div>
 						</td>
 					</tr>
 					<tr>
 						<td>Verleihender</td>
-						<td><a th:href="@{../profil/{benutzerID} (benutzerID=${artikel.besitzer.id})}"
-							   th:text="${artikel.besitzer.vorname +' ' + artikel.besitzer.nachname}"></a></td>
-					</tr>
-					<tr style="background:white">
-						<td><a href="/liste">Zurück</a></td>
-						<td th:if="${user.isAdmin() or user.isOwner(artikel)}"></td>
+						<td><a th:href="@{../../profil/{benutzerID} (benutzerID=${artikel.besitzer.id})}"
+							   th:text="${artikel.besitzer.vorname +' ' + artikel.besitzer.nachname}"></a>
+						</td>
 						<td th:if="${user.isAdmin() or user.isOwner(artikel)}">
 							<button type="submit" value="true" name="editArtikel">Artikel Ändern</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="/liste">Zurück</a>
 						</td>
 					</tr>
 				</table>
@@ -95,13 +101,13 @@
 		<div>
 			<div id="mapid" class="product-details-map">map is here</div>
 		</div>
-
-		<form th:action="@{/ausleihen/{id}(id=${artikel.id})}" th:object="${ausleihForm}" method="post">
-			<input type="text" class="daterange" th:field="*{date}"/>
-			<div th:text="${startDatumErrors?.code}"></div>
-			<div th:text="${ausleiherErrors?.code}"></div>
-			<div th:text="${message}"></div>
-			<script th:inline="javascript">
+		<div th:unless="${user.isOwner(artikel)}">
+			<form th:action="@{/ausleihen/{id}(id=${artikel.id})}" th:object="${ausleihForm}" method="post">
+				<input type="text" class="daterange" th:field="*{date}"/>
+				<div th:text="${startDatumErrors?.code}"></div>
+				<div th:text="${ausleiherErrors?.code}"></div>
+				<div th:text="${message}"></div>
+				<script th:inline="javascript">
                     /*<![CDATA[*/
                     var start_date =
                     /*[[${artikel.getAvailableFrom().toString()}]]*/
@@ -127,11 +133,10 @@
                     /*]]>*/
 
 
-
-			</script>
-			<button type="submit">Ausleihen</button>
-		</form>
-	</div>
+				</script>
+				<button type="submit">Ausleihen</button>
+			</form>
+		</div>
 </container>
 
 <script th:inline="javascript">
@@ -151,8 +156,6 @@
         L.marker([latitude, longitude]).addTo(map)
             .bindPopup(message).openPopup();
     /*]]>*/
-
-
 
 
 </script>

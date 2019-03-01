@@ -34,11 +34,11 @@ public class KaufItemService {
 	}
 
 	public void updateById(Long id, KaufItem newItem) {
-		KaufItem toUpdate = (KaufItem) findById(id);
-		System.out.println("Starting item update");
+		KaufItem toUpdate = findById(id);
+		System.out.println("Starting verkauf item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
-		toUpdate.getAbholort().setBeschreibung(newItem.getAbholort().getBeschreibung());
+		toUpdate.setAbholort(newItem.getAbholort());
 		toUpdate.setKaufpreis(newItem.getKaufpreis());
 		items.save(toUpdate);
 	}

@@ -118,23 +118,13 @@ public class PersonService implements UserDetailsService {
 
 	public void updateById(Long id, Person newPerson) {
 		Person toUpdate = this.findById(id);
-		System.out.println("Person found in database.");
-		System.out.println(newPerson.getUsername() + "is the new persons username");
-		if (!newPerson.getUsername().equals("")) {
-			toUpdate.setUsername(newPerson.getUsername());
-			System.out.println("Username set.");
-		}
 		toUpdate.setVorname(newPerson.getVorname());
-		System.out.println("Vorname set.");
 		toUpdate.setNachname(newPerson.getNachname());
-		System.out.println("Nachname set.");
 		toUpdate.setEmail(newPerson.getEmail());
-		System.out.println("EMail set.");
 		if (!newPerson.getPassword().equals("")) {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			newPerson.setPassword(encoder.encode(newPerson.getPassword()));
 			toUpdate.setPassword(newPerson.getPassword());
-			System.out.println("Password set.");
 		}
 		users.save(toUpdate);
 	}

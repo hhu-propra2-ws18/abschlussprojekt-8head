@@ -6,205 +6,220 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<h1>
-	<div th:text="${'Profil von ' + benutzer.username}">Benutzername</div>
-</h1>
-<h4>
-	<div th:text="${'Name: ' + benutzer.vorname + ' ' + benutzer.nachname}">Name</div>
-	<div th:text="${'Email: ' + benutzer.email}">Email</div>
-</h4>
+<div class="container">
 
-<div>
-	Alle angebotenen Artikel:
-	<ul>
-		<li th:each="item : ${benutzer.items}">
-			<a th:href="@{'/details/' + ${item.id}}" th:text="${item.titel}"></a>
-		</li>
-	</ul>
-</div>
+	<h1>
+		<div th:text="${'Profil von ' + benutzer.username}">Benutzername</div>
+	</h1>
+	<h4>
+		<div th:text="${'Name: ' + benutzer.vorname + ' ' + benutzer.nachname}">Name</div>
+		<div th:text="${'Email: ' + benutzer.email}">Email</div>
+	</h4>
+	<br>
+	<div th:if="${benutzer.items.size() != 0}">
+		Alle angebotenen Artikel:
+		<ul>
+			<li th:each="item : ${benutzer.items}">
+				<th:block th:if="${item.getClass().getSimpleName().equals('AusleihItem')}">
+					<a th:href="@{'/details/ausleih/' + ${item.id}}" th:text="${item.titel}"></a>
+				</th:block>
+				<th:block th:if="${item.getClass().getSimpleName().equals('KaufItem')}">
+					<a th:href="@{'/details/verkauf/' + ${item.id}}" th:text="${item.titel}"></a>
+					<th:block th:if="${item.status != null}">
+						- Bereits verkauft.
+					</th:block>
+				</th:block>
+			</li>
+		</ul>
+	</div>
 
-<table th:if="${user.isAdmin() or user.isHimself(benutzer)}" id="items">
-	<tr>
+	<table th:if="${user.isAdmin() or user.isHimself(benutzer)}" id="items">
+		<thead>
 		<th>Username</th>
 		<th>Vorname</th>
 		<th>Nachname</th>
 		<th>E-Mail</th>
 		<th>Passwort</th>
-	</tr>
-	<tr>
-		<td th:text="${benutzer.username}">MaMus</td>
-		<td th:text="${benutzer.vorname}">Max</td>
-		<td th:text="${benutzer.nachname}">Mustermann</td>
-		<td th:text="${benutzer.email}">mamus@gmail.com</td>
 
-	</tr>
-	<form th:action="@{/profil/{PersonId} (PersonId=${benutzer.getId()})}" th:object="${benutzer}" method="post">
-		<tr>
-			<td>
-			</td>
-			<td>
-				<input name="newVorname" type="text" th:field="*{vorname}">
-				<div th:text="${vornameErrors?.code}"></div>
-			</td>
-			<td>
-				<input name="newNachname" type="text" th:field="*{nachname}">
-				<div th:text="${nachnameErrors?.code}"></div>
-			</td>
-			<td>
-				<input name="newEMail" type="email" th:field="*{email}">
-				<div th:text="${emailErrors?.code}"></div>
-			</td>
-			<td>
-				<input name="newPassword" type="password" th:field="*{password}" th:id="password">
-				<div th:text="${passwordErrors?.code}"></div>
-			</td>
-			<td>
-				<button type="submit" value="true" name="editPerson">Nutzer Ändern</button>
-			</td>
-		</tr>
-	</form>
-</table>
-
-<div class="container" th:if="${user.isAdmin() or user.isHimself(benutzer)}">
-	<h2>Ausgeliehene Items </h2>
-	<table class="table table-hover">
-		<thead>
-		<tr>
-			<th>Item</th>
-			<th>Von</th>
-			<th>Bis</th>
-			<th>Status</th>
-		</tr>
 		</thead>
-		<tbody>
-		<tr th:each="ausleihe : ${benutzer.ausleihen}">
-			<td th:text="${ausleihe.item.titel}"></td>
-			<td th:text="${ausleihe.startDatum.toString()}"></td>
-			<td th:text="${ausleihe.endDatum.toString()}"></td>
-			<td th:switch="${ausleihe.status.name()}">
-				<div th:case="'AUSGELIEHEN'">
-					<form action="#" th:action="@{'/zurueckgeben/' + ${ausleihe.id}}" method="post">
-						<button type="submit" class="btn btn-primary" th:text="Zurückgeben"></button>
-					</form>
-				</div>
-				<div th:case="'RUECKGABE_VERPASST'">
-					<form action="#" th:action="@{'/zurueckgeben/' + ${ausleihe.id}}" method="post">
-						<button type="submit" class="btn btn-primary" th:text="Zurückgeben"></button>
-					</form>
-				</div>
-				<p th:case="*" th:text="${ausleihe.status.beschreibung}"></p>
-			</td>
-		</tr>
-		</tbody>
-	</table>
-</div>
-
-
-<div class="container-fluid" th:if="${user.isAdmin() or user.isHimself(benutzer)}">
-	<h2>Ausleihen von eigenen Items</h2>
-	<table class="table">
-		<thead class="thead-dark">
 		<tr>
-			<th>Item</th>
-			<th>Von</th>
-			<th>Bis</th>
-			<th>Bestätigen</th>
+			<td th:text="${benutzer.username}">MaMus</td>
+			<td th:text="${benutzer.vorname}">Max</td>
+			<td th:text="${benutzer.nachname}">Mustermann</td>
+			<td th:text="${benutzer.email}">mamus@gmail.com</td>
+
 		</tr>
-		</thead>
-		<tbody th:each="item : ${ausleihen}">
-		<tr th:each="ausleihe : ${item.ausleihen}">
-			<td th:text="${ausleihe.getItem().titel}"></td>
-			<td th:text="${ausleihe.getStartDatum().toString()}"></td>
-			<td th:text="${ausleihe.getEndDatum().toString()}"></td>
-			<td th:switch="${ausleihe.status.name()}">
-				<div th:case="'ANGEFRAGT'" class="row">
-					<form th:action="@{/ausleihe/bestaetigen/{id}(id=${ausleihe.id})}" method="post">
-						<button type="submit" class="btn btn-success" th:text="Bestätigen">
-							Bestätigen
-						</button>
-					</form>
-					<form th:action="@{/ausleihe/ablehnen/{id}(id=${ausleihe.id})}" method="post">
-						<button type="submit" class="btn btn-danger" th:text="Ablehnen">
-							Ablehnen
-						</button>
-					</form>
-				</div>
-				<button th:case="'BESTAETIGT'" type="button" class="btn btn-success" th:text="Bestätigt"
-						disabled>
-					Abgelehnt
-				</button>
-				<button th:case="'ABGELEHNT'" type="button" class="btn btn-danger" th:text="Abgelehnt" disabled>
-					Abgelehnt
-				</button>
-				<button th:case="'AUSGELIEHEN'" type="button" class="btn btn-info" th:text="Ausgeliehen"
-						disabled>
-					Ausgeliehen
-				</button>
-				<div th:case="'RUECKGABE_ANGEFRAGT'" class="row">
-					<form th:action="@{/rueckgabe/bestaetigen/{id}(id=${ausleihe.id})}" method="post">
-						<button type="submit" class="btn btn-success" th:text="|Rückgabe Bestätigen|">
-							Rückgabe Bestätigen
-						</button>
-					</form>
-					<form th:action="@{/rueckgabe/ablehnen/{id}(id=${ausleihe.id})}" method="post">
-						<button type="submit" class="btn btn-danger" th:text="Konflikt">
-							Konflikt
-						</button>
-					</form>
-				</div>
-				<button th:case="'ABGESCHLOSSEN'" type="button" class="btn btn-success" th:text="Abgeschlossen"
-						disabled>
-					Abgeschlossen
-				</button>
-			</td>
-		</tr>
-		</tbody>
-	</table>
-</div>
-<div class="container-fluid" th:if="${user.isHimself(benutzer)}">
-	<h2 th:unless="${isProPayAvailable}" th:text="${proPayError}" id="error"></h2>
-	<div th:if="${isProPayAvailable}">
-		<h2>
-			<div th:text="${'Aktueller ProPay-Kontostand: ' + moneten}"></div>
-		</h2>
-		<form th:action="@{/profiladdmoney/{id} (id=${benutzer.getId()})}"
-			  method="post">
-			<input type="number" name="moneten" min="0">
-			<button type="submit">€ Aufladen</button>
+		<form th:action="@{/profil/{PersonId} (PersonId=${benutzer.getId()})}" th:object="${benutzer}" method="post">
+			<tr>
+				<td>
+				</td>
+				<td>
+					<input name="newVorname" type="text" th:field="*{vorname}">
+					<div th:text="${vornameErrors?.code}"></div>
+				</td>
+				<td>
+					<input name="newNachname" type="text" th:field="*{nachname}">
+					<div th:text="${nachnameErrors?.code}"></div>
+				</td>
+				<td>
+					<input name="newEMail" type="email" th:field="*{email}">
+					<div th:text="${emailErrors?.code}"></div>
+				</td>
+				<td>
+					<input name="newPassword" type="password" th:field="*{password}" th:id="password">
+					<div th:text="${passwordErrors?.code}"></div>
+				</td>
+				<td>
+					<button type="submit" value="true" name="editPerson">Nutzer Ändern</button>
+				</td>
+			</tr>
 		</form>
+	</table>
+	<br>
+
+	<div th:if="${user.isHimself(benutzer)}">
+		<h2 th:unless="${isProPayAvailable}" th:text="${proPayError}" id="error"></h2>
+		<div th:if="${isProPayAvailable}">
+			<h2>
+				<div th:text="${'Aktueller ProPay-Kontostand: ' + moneten}"></div>
+			</h2>
+			<form th:action="@{/profiladdmoney/{id} (id=${benutzer.getId()})}"
+				  method="post">
+				<input type="number" name="moneten" min="0">
+				<button type="submit">€ Aufladen</button>
+			</form>
+		</div>
 	</div>
-</div>
+	<br>
 
-<div class="container">
-	<h2>Verkaufte Items:</h2>
-	<table class="table table-hover">
-		<thead>
-		<tr>
-			<th>Item</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr th:each="verkauf : ${verkaeufe}">
-			<td th:if="${verkauf.status == 'VERKAUFT'}" th:text="${verkauf.item.titel}"></td>
-		</tr>
-		</tbody>
-	</table>
-</div>
+	<div th:if="${user.isHimself(benutzer) AND benutzer.ausleihen.size() != 0}">
+		<h2>Ausgeliehene Items </h2>
+		<table class="table table-hover">
+			<thead>
+			<tr>
+				<th>Item</th>
+				<th>Von</th>
+				<th>Bis</th>
+				<th>Status</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="ausleihe : ${benutzer.ausleihen}">
+				<td th:text="${ausleihe.item.titel}"></td>
+				<td th:text="${ausleihe.startDatum.toString()}"></td>
+				<td th:text="${ausleihe.endDatum.toString()}"></td>
+				<td th:switch="${ausleihe.status.name()}">
+					<div th:case="'AUSGELIEHEN'">
+						<form action="#" th:action="@{'/zurueckgeben/' + ${ausleihe.id}}" method="post">
+							<button type="submit" class="btn btn-primary" th:text="Zurückgeben"></button>
+						</form>
+					</div>
+					<div th:case="'RUECKGABE_VERPASST'">
+						<form action="#" th:action="@{'/zurueckgeben/' + ${ausleihe.id}}" method="post">
+							<button type="submit" class="btn btn-primary" th:text="Zurückgeben"></button>
+						</form>
+					</div>
+					<p th:case="*" th:text="${ausleihe.status.beschreibung}"></p>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-<div class="container">
-	<h2>Käufe</h2>
-	<table class="table table-hover">
-		<thead>
-		<tr>
-			<th>Item</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr th:each="kauf : ${benutzer.kaeufe}">
-			<td th:text="${kauf.item.titel}"></td>
-		</tr>
-		</tbody>
-	</table>
+	<th:block th:if="${ausleihItems.size() != 0}">
+		<h2>Ausleihen von eigenen Items</h2>
+		<table class="table table-hover">
+			<thead>
+			<tr>
+				<th>Item</th>
+				<th>Von</th>
+				<th>Bis</th>
+				<th>Bestätigen</th>
+			</tr>
+			</thead>
+			<tbody th:each="item : ${ausleihItems}">
+			<tr th:each="ausleihe : ${item.ausleihen}">
+				<td th:text="${ausleihe.getItem().titel}"></td>
+				<td th:text="${ausleihe.getStartDatum().toString()}"></td>
+				<td th:text="${ausleihe.getEndDatum().toString()}"></td>
+				<td th:switch="${ausleihe.status.name()}">
+					<div th:case="'ANGEFRAGT'" class="row">
+						<form th:action="@{/ausleihe/bestaetigen/{id}(id=${ausleihe.id})}" method="post">
+							<button type="submit" class="btn btn-success" th:text="Bestätigen">
+								Bestätigen
+							</button>
+						</form>
+						<form th:action="@{/ausleihe/ablehnen/{id}(id=${ausleihe.id})}" method="post">
+							<button type="submit" class="btn btn-danger" th:text="Ablehnen">
+								Ablehnen
+							</button>
+						</form>
+					</div>
+					<button th:case="'BESTAETIGT'" type="button" class="btn btn-success" th:text="Bestätigt"
+							disabled>
+						Abgelehnt
+					</button>
+					<button th:case="'ABGELEHNT'" type="button" class="btn btn-danger" th:text="Abgelehnt" disabled>
+						Abgelehnt
+					</button>
+					<button th:case="'AUSGELIEHEN'" type="button" class="btn btn-info" th:text="Ausgeliehen"
+							disabled>
+						Ausgeliehen
+					</button>
+					<div th:case="'RUECKGABE_ANGEFRAGT'" class="row">
+						<form th:action="@{/rueckgabe/bestaetigen/{id}(id=${ausleihe.id})}" method="post">
+							<button type="submit" class="btn btn-success" th:text="|Rückgabe Bestätigen|">
+								Rückgabe Bestätigen
+							</button>
+						</form>
+						<form th:action="@{/rueckgabe/ablehnen/{id}(id=${ausleihe.id})}" method="post">
+							<button type="submit" class="btn btn-danger" th:text="Konflikt">
+								Konflikt
+							</button>
+						</form>
+					</div>
+					<button th:case="'ABGESCHLOSSEN'" type="button" class="btn btn-success" th:text="Abgeschlossen"
+							disabled>
+						Abgeschlossen
+					</button>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</th:block>
+
+	<div th:if="${kaufItems.size() != 0}">
+		<h2>Verkaufte Items:</h2>
+		<table class="table table-hover">
+			<thead>
+			<tr>
+				<th>Item</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="verkauf : ${kaufItems}">
+				<td th:if="${verkauf.status != null}"><a th:href="@{'/details/verkauf/' + ${verkauf.id}}" th:text="${verkauf.titel}"></a>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div th:if="${benutzer.kaeufe.size() != 0}">
+		<h2>Käufe</h2>
+		<table class="table table-hover">
+			<thead>
+			<tr>
+				<th>Item</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="kauf : ${benutzer.kaeufe}">
+				<td th:text="${kauf.item.titel}"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
 
 
