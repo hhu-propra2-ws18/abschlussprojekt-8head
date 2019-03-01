@@ -11,6 +11,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import hhu.ausleihservice.web.controller.MainController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,15 +27,15 @@ import hhu.ausleihservice.web.service.PersonService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class PersonControllerUnitTest {
+public class SuchControllerUnitTest {
 
-	MockMvc mockMvc;
+	private MockMvc mockMvc;
 
 	@Autowired
 	protected WebApplicationContext wac;
 
 	@Autowired
-	PersonController personController;
+	MainController mainController;
 
 	@MockBean
 	PersonService personService;
@@ -43,7 +44,7 @@ public class PersonControllerUnitTest {
 
 	@Before
 	public void setup() {
-		this.mockMvc = standaloneSetup(this.personController).build();
+		this.mockMvc = standaloneSetup(this.mainController).build();
 		Person person1 = new Person();
 		Person person2 = new Person();
 		Person person3 = new Person();
