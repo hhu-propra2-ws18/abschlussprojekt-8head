@@ -5,7 +5,6 @@ import hhu.ausleihservice.databasemodel.Status;
 import hhu.ausleihservice.web.service.AusleiheService;
 import hhu.ausleihservice.web.service.PersonService;
 import hhu.ausleihservice.web.service.ProPayService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,7 +66,6 @@ public class AdminController {
 		ausleiheService.save(konflikt);
 		return "redirect:/admin/allconflicts/";
 	}
-
 
 
 }
