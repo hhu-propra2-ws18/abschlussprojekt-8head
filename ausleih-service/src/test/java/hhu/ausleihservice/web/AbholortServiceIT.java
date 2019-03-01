@@ -4,6 +4,7 @@ import hhu.ausleihservice.dataaccess.AbholortRepository;
 import hhu.ausleihservice.dataaccess.AusleihItemRepository;
 import hhu.ausleihservice.dataaccess.AusleiheRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
+import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.web.service.AusleihItemService;
 import org.junit.Before;
@@ -23,6 +24,7 @@ import static org.junit.Assert.*;
 public class AbholortServiceIT {
 
 	AusleihItemService ausleihItemService;
+	TestData testData;
 
 	@Autowired
 	private AusleihItemRepository ausleihItemRepository;
@@ -36,7 +38,7 @@ public class AbholortServiceIT {
 	@Before
 	public void onStartup() {
 		System.out.println("Populating the database");
-		TestData testData = new TestData();
+		testData = new TestData();
 		testData.getAbholortList().forEach(x -> abholortRepository.save(x));
 		testData.getPersonList().forEach(x -> personRepository.save(x));
 		testData.getAusleihItemList().forEach(x -> ausleihItemRepository.save(x));
@@ -45,34 +47,10 @@ public class AbholortServiceIT {
 	}
 
 	@Test
-	public void testSimpleSearch_1_nullQuery() {
-		List<AusleihItem> simple = ausleihItemService.simpleSearch(null);
-		assertEquals(3, simple.size());
-		assertTrue(simple.containsAll(ausleihItemRepository.findAll()));
-	}
-
-	@Test
-	public void testExtendedSearch_1_nullQuery() {
-		List<AusleihItem> searchedList = ausleihItemService.extendedSearch(null,
-				2147483647,
-				2147483647,
-				LocalDate.of(2019, 5, 5),
-				LocalDate.of(2019, 5, 6));
-
-		assertEquals(3, searchedList.size());
-		assertTrue(searchedList.containsAll(ausleihItemRepository.findAll()));
-	}
-
-	@Test
-	public void testExtendedSearch_1_dates() {
-		List<AusleihItem> searchedList = ausleihItemService.extendedSearch(null,
-				2147483647,
-				2147483647,
-				LocalDate.of(2019, 5, 4),
-				LocalDate.of(2019, 5, 5));
-
-		assertFalse(searchedList.containsAll(ausleihItemRepository.findAll()));
-		assertEquals(2, searchedList.size());
+	public void testAbholortDatabase() {
+		List<Abholort> aortList = abholortRepository.findAll();
+		assertEquals(4, aortList.size());
+		assertEquals(testData.abholortList, aortList);
 	}
 
 }
