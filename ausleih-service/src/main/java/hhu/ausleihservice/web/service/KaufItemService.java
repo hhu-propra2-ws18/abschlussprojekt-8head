@@ -35,7 +35,6 @@ public class KaufItemService {
 
 	public void updateById(Long id, KaufItem newItem) {
 		KaufItem toUpdate = findById(id);
-		System.out.println("Starting verkauf item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
 		toUpdate.setAbholort(newItem.getAbholort());
