@@ -1,6 +1,10 @@
 language: java
 install: true
 
+branches:
+  except:
+  - Dokumentation
+
 jdk:
 - oraclejdk8
 

@@ -1,0 +1,147 @@
+= Softwareentwicklung im Team
+
+image::/src/main/resources/static/img/8head.jpg[width=100,float=right]
+
+= Abschlussprojekt Gruppe 8head - Dokumentation
+
+== Style
+
+Commit-Nachrichten werden in Englisch und im Präsens verfasst und sollten kurz und kompakt gehalten sein. +
+Namen von Klassen, Methoden, Variabeln, HTML-Dateien und URLs sind gemischt Deutsch und Englisch. +
+Die Dokumentation wird auf Deutsch verfasst. +
+Die Codeformatierung ist IntelliJ default mit "Use tab character", aber ohne Smart Tabs. +
+In Travis werden checkstyle und spotBugs verwendet. Wenn diese nicht erfolgreich durchlaufen, sollte
+ein Branch im Allgemeinen nicht in den Master gemerged werden. PMD wird ebenfalls in Travis verwendet, allerdings führen
+Fehler dort nicht dazu, dass der Build fehlschlägt. +
+Normalerweise wird nicht direkt im Master-Branch gearbeitet, sondern in Feature-Branches, die
+per Pull-Request durch ein anderes Teammitglied in den Master gemerged werden. Für kleine Änderungen
+ist Pair-Programming auch akzeptabel.
+
+
+== Bedienung
+
+=== Starten der Anwendung
+Die Anwendung wird über das Terminalkommando "sudo docker-compose up" gestartet.
+Die Startseite ist zu finden unter http://localhost:8080.
+
+=== Bestehende Accounts
+Im DatabaseInitializer werden bereits mehrere Personen initialisiert,
+über welche man sich einloggen kann. Beispielsweise:
+
+* Username Miner4lwasser mit Passwort pl4tsh (hat Admin Rechte)
+* Username Kawumms mit Passwort rumbl7
+
+Weitere beispielhafte Nutzer lassen sich im DatabaseInitializer finden.
+
+=== Navigationsleiste
+Im gesamten Service wird zur Hilfe eine Navigationsleiste angezeigt, mithilfe dieser
+kommt man direkt zur Artikel- oder Personensuche. +
+Falls man nicht eingeloggt ist, stellt diese außerdem Links zur Registrier- und
+Anmeldeseite zur Verfügung, andernfalls erhält man Links zur Profilseite und zum Ausloggen,
+je nach Rolle des Nutzers zeigt sie zudem noch einen Link zur Adminseite.
+
+=== Startseite
+Die Standardseite ist die Startseite auf der nur eine Aufforderung zum
+Anmelden angezeigt wird, falls man nicht eingeloggt ist. +
+Falls man als Nutzer eingeloggt ist, befinden sich hier auch die Links zur
+Artikelliste und zu den Seiten zum Erstellen neuer Abholorte oder Artikel. +
+Falls man als Admin eingeloggt ist, stellt die Startseite zusätzlich einen Link zur Konfliktliste
+bereit.
+
+=== Registrierung
+Während der Registrierung muss man die notwendigen Daten zur Erstellung eines Nutzers angeben.
+Durch einen Validator wird sichergestellt, dass diese feste Vorgaben erfüllen. +
+Es gibt:
+
+* Vorname
+* Nachname
+* Username (6-32 Zeichen)
+* Passwort (3-100 Zeichen)
+* Email (gültiges Format)
+
+=== Login und Logout
+Die Login- und Logoutseite entsprechen den Standardversionen von Spring Security mit Username und Passwort.
+
+=== Abholort hinzufügen
+Bevor man einen Artikel verleihen oder verkaufen kann, muss man mindestens einen Abholort zu seinem
+Profil hinzufügen. Diese stehen dann bei der Einreichung von jedem neuen Artikel zur Verfügung. +
+Die Koordinaten des Abholortes lassen sich entweder manuell oder über
+die eingebettete OpenStreetMap-Karte eingeben. Diese werden mit bis zu sechs Nachkommastellen
+gespeichert, was Abweichungen von knapp elf Zentimetern entspricht.
+Zusätzlich kann man noch eine Beschreibung angeben, wie z.B.
+"Bitte gehen Sie in den dritten Stock." oder
+"Vorsicht! Die Schlangen sind giftig!".
+
+=== Artikel anbieten
+Auf der Startseite lässt sich auswählen, ob man einen Artikel zum Verleih oder zum Verkauf
+anbieten möchte.
+
+* *Zum Verleih* +
+Sämtliche Daten zur Erstellung eines AusleihItem Objekts werden benötigt. Die Verfügbarkeit
+wird über zwei Datumsfelder angegeben und geht einschließlich vom ersten bis zum zweiten. +
+Das zweite Datum darf nicht vor dem ersten sein und das erste muss mindestens heute sein.
+
+* *Zum Verkauf* +
+Ähnlich zum Verleih, aber statt Kaution und Tagesssatz wird ein Kaufpreis benötigt.
+Eine Verfügbarkeit wird ebenfalls nicht benötigt, da ein zum Kauf freigegebener Artikel stets
+verfügbar sein sollte.
+
+=== Artikel- und Personensuchfunktion
+Die Suchfunktionen führen einfache Stringvergleiche durch. Für Artikel kann über die erweiterte Suche
+außerdem nach Verfügbarkeit und Preis gefiltert werden.
+
+=== Profil
+Über die Profilseite sieht man die öffentlichen Daten einer Person. Auf dem eigenen Profil, oder
+falls man Administratorrechte besitzt, lassen sich alle Daten mit Ausnahme des Benutzernamens bearbeiten. +
+Auf seinem eigenen Profil kann ein Nutzer hier auch seinen ProPay-Kontostand anzeigen lassen und Geld aufladen.
+
+=== Artikeldetails
+Die Detailseite eines Artikels stellt Information zu diesem bereit, welche sich als Besitzer oder
+Admin bearbeiten lassen.
+Als nicht-Besitzer kann man diesen hier auch ausleihen.
+
+=== Adminfunktionen
+Die Adminseiten sind nur als Admin erreichbar. Normale Benutzer erhalten eine Fehlermeldung, falls sie versuchen, auf
+diese zuzugreifen.
+
+* *Adminhauptseite* +
+Zeigt, dass man Admin ist.
+
+* *Konfliktlösestelle* +
+In der Konfliktlösestelle wird eine Liste aller Ausleihen angezeigt, bei denen sich der Besitzer
+und der Ausleiher uneinig waren. Durch Klick auf einen Konflikt wird man auf die Detailseite
+von diesem weitergeleitet, auf der alle notwendigen Daten für diesen Konflikt bereitgestellt werden
+und der Admin diesen zugunsten des Besitzers oder des Ausleihers auflösen kann. +
+Die Kommunikation findet außerhalb der Anwendung via E-Mail statt, wonach der Administrator eine Entscheidung
+treffen kann.
+
+
+== Implementierung der Verkaufsoption
+
+Um das Design den neuen Vorgaben unseres gutmütigen Chefs anzupassen haben wir
+uns entschieden, die Itemklasse (welche einen angebotenen Artikel repräsentiert)
+als eine Oberklasse für die Klassen AusleihItem und KaufItem zu verwenden. Die erste
+wird für Artikel verwendet die zum Ausleihen angeboten werden, die andere für Artikel
+die verkauft werden. Um diese Klassen zu verarbeiten, wurden weitere Klassen und HTML-Dateien
+in zwei Dateien aufgeteilt, in denen jeweils mit Kauf- oder Verleihlogik umgegangen wird.
+
+
+== Datenbank
+
+=== Implementierung
+
+Während der Entwicklung wurde zum schnellen und einfachen Testen
+eine H2 Datenbank verwendet, vor der Abgabe wurde auf Postgres
+gewechselt. Zur Implementierung wird Hibernate verwendet.
+
+=== Schema
+
+image::/Dokumentationsbilder/DatabaseDiagramm.png[float=right]
+
+In der Übersetzung des Schemas in Hibernate wurden Kompromisse
+eingangen. Anstatt Foreign-Keys speichern Objekte Referenzen
+auf die Klassen mit denen sie verbunden sind. Außerdem
+sind alle Beziehungen bidirektional, um den Zugriff beidseitig
+zu vereinfachen. AusleihItem und KaufItem erben eigentlich
+noch von einer Item-Klasse, was sich im SQL-Diagramm nicht
+darstellen ließ.
