@@ -55,7 +55,6 @@ public class PersonService implements UserDetailsService {
 
 	public Person get(Principal p) {
 		if (p == null) {
-			System.out.println("Null Principal");
 			return null;
 		}
 		Optional<Person> person = users.findByUsername(p.getName());

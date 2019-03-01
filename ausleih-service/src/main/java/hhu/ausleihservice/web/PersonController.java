@@ -2,7 +2,6 @@ package hhu.ausleihservice.web;
 
 import hhu.ausleihservice.databasemodel.*;
 import hhu.ausleihservice.validators.AusleiheAbgabeValidator;
-import hhu.ausleihservice.validators.AusleiheAnfragenValidator;
 import hhu.ausleihservice.validators.PersonValidator;
 import hhu.ausleihservice.validators.RegisterValidator;
 import hhu.ausleihservice.web.service.AusleiheService;
@@ -29,20 +28,17 @@ public class PersonController {
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
 	private AusleiheService ausleiheService;
-	private final AusleiheAnfragenValidator ausleiheAnfragenValidator;
 	private final AusleiheAbgabeValidator ausleiheAbgabeValidator;
 	private final RegisterValidator registerValidator;
 
 	PersonController(PersonService personService, PersonValidator personValidator,
 					 ProPayService proPayService, AusleiheService ausleiheService,
-					 AusleiheAnfragenValidator ausleiheAnfragenValidator,
 					 AusleiheAbgabeValidator ausleiheAbgabeValidator,
 					 RegisterValidator registerValidator) {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
 		this.ausleiheService = ausleiheService;
-		this.ausleiheAnfragenValidator = ausleiheAnfragenValidator;
 		this.ausleiheAbgabeValidator = ausleiheAbgabeValidator;
 		this.registerValidator = registerValidator;
 	}

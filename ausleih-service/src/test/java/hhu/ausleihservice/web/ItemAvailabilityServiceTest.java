@@ -8,7 +8,9 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -184,5 +186,49 @@ public class ItemAvailabilityServiceTest {
 		LocalDate till = LocalDate.of(2000, 7, 1);
 
 		assertFalse(itemAvailabilityService.isAvailableFromTill(item, from, till));
+	}
+	
+	@Test
+	public void isUnavailableOnSingleAusleihe() {
+		AusleihItem item = new AusleihItem();
+		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
+		item.setAvailableTill(LocalDate.of(2001, 1, 1));
+
+		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setStartDatum(LocalDate.of(2000, 7, 1));
+		ausleihe.setEndDatum(LocalDate.of(2000, 7, 1));
+		item.addAusleihe(ausleihe);
+		
+		List<String> unavailableDates = itemAvailabilityService.getUnavailableDates(item);
+		String unavailableDate = unavailableDates.get(0);
+		
+		assertEquals("2000-07-01", unavailableDate);
+	}
+	
+	@Test
+	public void isUnavailableOnMultipleAusleihen() {
+		AusleihItem item = new AusleihItem();
+		item.setAvailableFrom(LocalDate.of(2000, 1, 1));
+		item.setAvailableTill(LocalDate.of(2001, 1, 1));
+
+		Ausleihe ausleihe = new Ausleihe();
+		ausleihe.setStartDatum(LocalDate.of(2000, 7, 1));
+		ausleihe.setEndDatum(LocalDate.of(2000, 7, 1));
+		ausleihe.setId(1L);
+		
+		Ausleihe ausleihe2 = new Ausleihe();
+		ausleihe2.setStartDatum(LocalDate.of(2000, 7, 5));
+		ausleihe2.setEndDatum(LocalDate.of(2000, 7, 7));
+		ausleihe2.setId(2L);
+		
+		item.addAusleihe(ausleihe);
+		item.addAusleihe(ausleihe2);
+		
+		List<String> unavailableDates = itemAvailabilityService.getUnavailableDates(item);
+
+		assertEquals("2000-07-01", unavailableDates.get(0));
+		assertEquals("2000-07-05", unavailableDates.get(1));
+		assertEquals("2000-07-06", unavailableDates.get(2));
+		assertEquals("2000-07-07", unavailableDates.get(3));
 	}
 }
