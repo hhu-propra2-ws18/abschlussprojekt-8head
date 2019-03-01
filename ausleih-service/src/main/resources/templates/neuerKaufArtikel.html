@@ -19,13 +19,13 @@
 				<div class="form-group">
 					<label for="titel">Titel:</label>
 					<input type="text" th:field="*{titel}" class="form-control" id="titel">
-					<div id="error" th:text="${titelErrors?.code}"></div>
+					<div th:text="${titelErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
 					<label for="beschreibung">Beschreibung: </label>
 					<input type="text" th:field="*{beschreibung}" class="form-control" id="beschreibung">
-					<div id="error" th:text="${beschreibungErrors?.code}"></div>
+					<div th:text="${beschreibungErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
@@ -41,13 +41,13 @@
 								th:value="${abholort.id}"
 								th:text="${abholort.beschreibung}"></option>
 					</select>
-					<div id="error" th:text="${abholortErrors?.code}"></div>
+					<div th:text="${abholortErrors?.code}"></div>
 				</div>
 
 				<div class="form-group">
 					<label for="file">Bild: </label>
 					<input type="file" id="file" class="form-control" accept=".png, .jpg, .jpeg" name="file">
-					<div id="error" th:text="${fileErrors?.code}"></div>
+					<div th:text="${fileErrors?.code}"></div>
 				</div>
 
 				<button type="submit" class="btn btn-primary">Hinzufügen</button>
