@@ -11,7 +11,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import hhu.ausleihservice.web.controller.MainController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.web.controller.MainController;
 import hhu.ausleihservice.web.service.PersonService;
 
 @SpringBootTest
@@ -101,4 +101,5 @@ public class SuchControllerUnitTest {
 		.andExpect(model().attribute("benutzerListe", ergebnisListe))
 		.andExpect(model().attribute("user", personListe.get(4)));
 	}
+
 }

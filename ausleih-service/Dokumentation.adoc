@@ -45,6 +45,7 @@ Die Standardseite ist die Startseite auf der nur eine Aufforderung zum
 Anmelden angezeigt wird, falls man nicht eingeloggt ist. +
 Falls man als Nutzer eingeloggt ist, befinden sich hier auch die Links zur
 Artikelliste und zu den Seiten zum Erstellen neuer Abholorte oder Artikel. +
+Außerdem sieht man eine Anzeige der eigenen ausgestellten Artikel.
 Falls man als Admin eingeloggt ist, stellt die Startseite zusätzlich einen Link zur Konfliktliste
 bereit.
 
@@ -55,7 +56,7 @@ Es gibt:
 
 * Vorname
 * Nachname
-* Username (6-32 Zeichen)
+* Username (6-32 Zeichen, Nicht bereits vorhanden)
 * Passwort (3-100 Zeichen)
 * Email (gültiges Format)
 
@@ -94,6 +95,10 @@ außerdem nach Verfügbarkeit und Preis gefiltert werden.
 Über die Profilseite sieht man die öffentlichen Daten einer Person. Auf dem eigenen Profil, oder
 falls man Administratorrechte besitzt, lassen sich alle Daten mit Ausnahme des Benutzernamens bearbeiten. +
 Auf seinem eigenen Profil kann ein Nutzer hier auch seinen ProPay-Kontostand anzeigen lassen und Geld aufladen.
+Im Profil sieht man seine eigenen Ausleihen und die Ausleihen seiner Artikel.
+Hier tätigt man auch die Bestätigungen die mit dem Ausleih-Prozess
+zusammen hängen (Ausleihe-Bestätigen/Ablehnen, Artikelzurückgeben,
+Rückgabebestätigen/Konflikt starten).
 
 === Artikeldetails
 Die Detailseite eines Artikels stellt Information zu diesem bereit, welche sich als Besitzer oder
@@ -124,7 +129,10 @@ als eine Oberklasse für die Klassen AusleihItem und KaufItem zu verwenden. Die 
 wird für Artikel verwendet die zum Ausleihen angeboten werden, die andere für Artikel
 die verkauft werden. Um diese Klassen zu verarbeiten, wurden weitere Klassen und HTML-Dateien
 in zwei Dateien aufgeteilt, in denen jeweils mit Kauf- oder Verleihlogik umgegangen wird.
-
+Die Kauflogik ist so implementiert, dass man einen Artikel zum
+Verkauf reinstellt und dieser dann von jemand anderem (mit genug
+Geld) gekauft werden kann. Weitere bestätigungen werden nicht
+benötigt.
 
 == Datenbank
 

@@ -1,3 +1,5 @@
+import com.github.spotbugs.SpotBugsTask
+
 buildscript {
     ext {
         springBootVersion = '2.1.2.RELEASE'
@@ -41,7 +43,7 @@ spotbugs {
     reportsDir = file("$project.buildDir/reports/spotbugs")
     effort = "max"
 }
-tasks.withType(com.github.spotbugs.SpotBugsTask) {
+tasks.withType(SpotBugsTask) {
     reports.xml.enabled = false
     reports.html.enabled = true
 }
@@ -60,13 +62,10 @@ pmd {
             'java-basic',
             'java-braces',
             'java-clone',
-            'java-codesize',
             'java-finalizers',
             'java-empty',
             'java-imports',
-            'java-strings',
-            'java-unnecessary',
-            'java-unusedcode'
+            'java-unusedcode',
     ]
 }
 
