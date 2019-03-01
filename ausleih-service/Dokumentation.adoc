@@ -56,7 +56,7 @@ Es gibt:
 
 * Vorname
 * Nachname
-* Username (6-32 Zeichen)
+* Username (6-32 Zeichen, Nicht bereits vorhanden)
 * Passwort (3-100 Zeichen)
 * Email (gültiges Format)
 
