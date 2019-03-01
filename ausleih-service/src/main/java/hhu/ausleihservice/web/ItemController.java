@@ -75,7 +75,7 @@ public class ItemController {
 
 		List<AusleihItem> ausleihItems = ausleihItemService.simpleSearch(q);
 		List<KaufItem> kaufItems = kaufItemService.simpleSearch(q);
-		
+
 		model.addAttribute("dateformat", DATEFORMAT);
 		model.addAttribute("ausleihItems", ausleihItems);
 		model.addAttribute("kaufItems", kaufItems);
@@ -184,7 +184,7 @@ public class ItemController {
 			return "artikelDetailsVerkauf";
 		}
 		artikel.setStatus(Status.VERKAUFT);
-		proPayService.transferFunds(user, artikel.getBesitzer(), artikel.getKaufpreis());
+		proPayService.ueberweiseTagessaetze(kauf);
 		personService.save(user);
 
 		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich gekauft!");

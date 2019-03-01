@@ -1,6 +1,8 @@
 package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.databasemodel.Ausleihe;
+import hhu.ausleihservice.databasemodel.Kauf;
+import hhu.ausleihservice.databasemodel.KaufItem;
 import hhu.ausleihservice.databasemodel.Person;
 import hhu.ausleihservice.propay.ProPayAccount;
 import hhu.ausleihservice.propay.ProPayInterface;
@@ -47,8 +49,12 @@ public class ProPayService {
 		proPayInterface.releaseReservation(reservationId, ausleiher);
 	}
 
-	public void transferFunds(Person person1, Person person2, double betrag) {
-		proPayInterface.transferFunds(person1.getUsername(), person2.getUsername(), betrag);
+	public void ueberweiseTagessaetze(Kauf kauf) {
+		KaufItem item = kauf.getItem();
+		String kaeufer = kauf.getKaeufer().getUsername();
+		String besitzer = item.getBesitzer().getUsername();
+		Integer kaufpreis = item.getKaufpreis();
+		proPayInterface.transferFunds(kaeufer, besitzer, kaufpreis);
 	}
 
 	public double getProPayKontostand(Person person) {
