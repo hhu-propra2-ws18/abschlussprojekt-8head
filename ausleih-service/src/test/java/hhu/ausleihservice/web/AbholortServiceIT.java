@@ -5,7 +5,6 @@ import hhu.ausleihservice.dataaccess.AusleihItemRepository;
 import hhu.ausleihservice.dataaccess.AusleiheRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Abholort;
-import hhu.ausleihservice.web.service.AbholortService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
