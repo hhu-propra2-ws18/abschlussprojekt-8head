@@ -1,6 +1,7 @@
 package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.AusleihItemRepository;
+import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,13 @@ public class AusleihItemService {
 		toUpdate.setAvailableTill(newItem.getAvailableTill());
 		toUpdate.setTagessatz(newItem.getTagessatz());
 		toUpdate.setKautionswert(newItem.getKautionswert());
-		toUpdate.setAbholort(newItem.getAbholort());
+
+		Abholort newAbholort = newItem.getAbholort();
+
+		if (newAbholort != null && !newAbholort.equals(new Abholort())) {
+			toUpdate.setAbholort(newAbholort);
+		}
+
 		items.save(toUpdate);
 	}
 

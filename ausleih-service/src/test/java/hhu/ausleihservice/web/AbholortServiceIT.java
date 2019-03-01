@@ -45,7 +45,7 @@ public class AbholortServiceIT {
 	public void testAbholortDatabase() {
 		List<Abholort> aortList = abholortRepository.findAll();
 		assertEquals(4, aortList.size());
-		assertEquals(testData.abholortList, aortList);
+		assertEquals(testData.getAbholortList(), aortList);
 	}
 
 }

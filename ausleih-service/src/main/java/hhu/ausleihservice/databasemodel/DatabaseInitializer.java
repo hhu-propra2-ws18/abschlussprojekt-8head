@@ -156,11 +156,11 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			double funds4 = proPayService.getProPayKontostand(person4);
 			double funds5 = proPayService.getProPayKontostand(person5);
 
-			proPayService.addFunds(person1, (funds1 >= 2500) ? 0 : 2500 - funds1);
-			proPayService.addFunds(person2, (funds2 >= 2500) ? 0 : 2500 - funds2);
-			proPayService.addFunds(person3, (funds3 >= 2500) ? 0 : 2500 - funds3);
-			proPayService.addFunds(person4, (funds4 >= 2500) ? 0 : 2500 - funds4);
-			proPayService.addFunds(person5, (funds5 >= 2500) ? 0 : 2500 - funds5);
+			proPayService.addFunds(person1, funds1 >= 2500 ? 0 : 2500 - funds1);
+			proPayService.addFunds(person2, funds2 >= 2500 ? 0 : 2500 - funds2);
+			proPayService.addFunds(person3, funds3 >= 2500 ? 0 : 2500 - funds3);
+			proPayService.addFunds(person4, funds4 >= 2500 ? 0 : 2500 - funds4);
+			proPayService.addFunds(person5, funds5 >= 2500 ? 0 : 2500 - funds5);
 		}
 
 

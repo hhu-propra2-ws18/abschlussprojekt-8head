@@ -40,6 +40,7 @@
 							<td th:text="${ausleihe.endDatum.format(dateformat)}"></td>
 						</tr>
 					</th:block>
+				</th:block>
 			</table>
 		</div>
 		<div th:if="${user.ausleihen.size() != 0}">
@@ -78,7 +79,6 @@
 							</span>
 						</a>
 					</div>
-				</th:block>
 				</th:block>
 			</div>
 		</div>
