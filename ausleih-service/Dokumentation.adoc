@@ -45,6 +45,7 @@ Die Standardseite ist die Startseite auf der nur eine Aufforderung zum
 Anmelden angezeigt wird, falls man nicht eingeloggt ist. +
 Falls man als Nutzer eingeloggt ist, befinden sich hier auch die Links zur
 Artikelliste und zu den Seiten zum Erstellen neuer Abholorte oder Artikel. +
+Außerdem sieht man eine Anzeige der eigenen ausgestellten Artikel.
 Falls man als Admin eingeloggt ist, stellt die Startseite zusätzlich einen Link zur Konfliktliste
 bereit.
 
