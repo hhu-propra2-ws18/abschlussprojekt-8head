@@ -262,6 +262,7 @@ public class AusleihController {
 		ausleihe.setStatus(Status.RUECKGABE_ANGEFRAGT);
 		ausleihe.setEndDatum(LocalDate.now());
 		proPayService.ueberweiseTagessaetze(ausleihe);
+		ausleiheService.save(ausleihe);
 		personService.save(person);
 		return "redirect:/profil";
 	}
