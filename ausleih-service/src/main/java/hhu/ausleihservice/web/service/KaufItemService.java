@@ -1,6 +1,7 @@
 package hhu.ausleihservice.web.service;
 
 import hhu.ausleihservice.dataaccess.KaufItemRepository;
+import hhu.ausleihservice.databasemodel.Abholort;
 import hhu.ausleihservice.databasemodel.KaufItem;
 import hhu.ausleihservice.web.responsestatus.ItemNichtVorhanden;
 import org.springframework.stereotype.Service;
@@ -35,11 +36,16 @@ public class KaufItemService {
 
 	public void updateById(Long id, KaufItem newItem) {
 		KaufItem toUpdate = findById(id);
-		System.out.println("Starting verkauf item update");
 		toUpdate.setTitel(newItem.getTitel());
 		toUpdate.setBeschreibung(newItem.getBeschreibung());
-		toUpdate.setAbholort(newItem.getAbholort());
 		toUpdate.setKaufpreis(newItem.getKaufpreis());
+
+		Abholort newAbholort = newItem.getAbholort();
+
+		if (newAbholort != null && !newAbholort.equals(new Abholort())) {
+			toUpdate.setAbholort(newAbholort);
+		}
+
 		items.save(toUpdate);
 	}
 

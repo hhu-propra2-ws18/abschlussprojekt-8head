@@ -13,21 +13,21 @@
 		<form th:action="@{/register}" th:object="${userForm}" method="post">
 			<div>
 				<input name="vorname" type="text" th:value="*{vorname}">Vorname
-				<div id="error" th:text="${vornameErrors?.code}"></div>
+				<div th:text="${vornameErrors?.code}"></div>
 			</div>
 			<div>
 				<input name="nachname" type="text" th:value="*{nachname}">Nachname
-				<div id="error" th:text="${nachnameErrors?.code}"></div>
+				<div th:text="${nachnameErrors?.code}"></div>
 			</div>
 			<div>
 				<input name="username" type="text" th:value="*{username}">Username
-				<div id="error" th:text="${usernameErrors?.code}"></div>
+				<div th:text="${usernameErrors?.code}"></div>
 			</div>
 			<input name="password" type="password" th:value="*{password}">Password
-			<div id="error" th:text="${passwordErrors?.code}"></div>
+			<div th:text="${passwordErrors?.code}"></div>
 			<div>
 				<input name="email" type="text" th:value="*{email}">Email
-				<div id="error" th:text="${emailErrors?.code}"></div>
+				<div th:text="${emailErrors?.code}"></div>
 			</div>
 			<div>
 				<button type="submit" class="btn btn-primary">Erstellen</button>

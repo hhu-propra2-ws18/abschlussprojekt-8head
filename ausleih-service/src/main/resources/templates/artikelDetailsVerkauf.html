@@ -81,7 +81,7 @@
 	</div>
 </container>
 
-<div th:unless="${user.isOwner(artikel) AND artikel.getStatus()==null}">
+<div th:if="${!user.isOwner(artikel) AND artikel.getStatus()==null}">
 	<form th:action="@{/kaufen/{id}(id=${artikel.id})}" th:object="${kaufForm}" method="post">
 		<button type="submit" value="true" name="kaufeArtikel">Kaufen</button>
 		<div th:text="${kaeuferErrors?.code}"></div>

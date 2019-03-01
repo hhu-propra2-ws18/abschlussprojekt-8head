@@ -126,7 +126,7 @@
 		</table>
 	</div>
 
-	<th:block th:if="${ausleihItems.size() != 0}">
+	<th:block th:if="${user.isHimself(benutzer) AND ausleihItems.size() != 0}">
 		<h2>Ausleihen von eigenen Items</h2>
 		<table class="table table-hover">
 			<thead>
@@ -198,7 +198,8 @@
 			</thead>
 			<tbody>
 			<tr th:each="verkauf : ${kaufItems}">
-				<td th:if="${verkauf.status != null}"><a th:href="@{'/details/verkauf/' + ${verkauf.id}}" th:text="${verkauf.titel}"></a>
+				<td th:if="${verkauf.status != null}"><a th:href="@{'/details/verkauf/' + ${verkauf.id}}"
+														 th:text="${verkauf.titel}"></a>
 				</td>
 			</tr>
 			</tbody>
@@ -215,7 +216,11 @@
 			</thead>
 			<tbody>
 			<tr th:each="kauf : ${benutzer.kaeufe}">
-				<td th:text="${kauf.item.titel}"></td>
+				<td>
+					<a th:href="@{'/details/verkauf/' + ${kauf.item.id}}"
+					   th:text="${kauf.item.titel}">
+					</a>
+				</td>
 			</tr>
 			</tbody>
 		</table>

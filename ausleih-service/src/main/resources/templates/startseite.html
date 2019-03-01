@@ -80,7 +80,6 @@
 						</a>
 					</div>
 				</th:block>
-				</th:block>
 			</div>
 		</div>
 		<div th:if="${ausleihItems.size() != 0}">
@@ -88,7 +87,7 @@
 			<div class="products">
 				<th:block class="products" th:each="artikel : ${ausleihItems}">
 					<div class="product">
-						<a th:href="@{'/details/' + ${artikel.id}}">
+						<a th:href="@{'/details/ausleih/' + ${artikel.id}}">
 							<div class="product-top">
 								<span class="itemName" th:text="${artikel.titel}">itemName</span>
 							</div>
@@ -119,7 +118,7 @@
 				<th:block class="products" th:each="artikel : ${ausleihItems}">
 					<th:block class="product" th:each="verleihung : ${artikel.ausleihen}">
 						<div class="product">
-							<a th:href="@{'/details/' + ${artikel.id}}">
+							<a th:href="@{'/details/ausleih/' + ${artikel.id}}">
 								<div class="product-top">
 									<span class="itemName" th:text="${artikel.titel}">itemName</span>
 								</div>
@@ -156,7 +155,7 @@
 			<h2>Artikel, die du verkaufst.</h2>
 			<div class="products">
 				<th:block class="products" th:each="artikel : ${kaufItems}">
-					<a th:href="@{'/details/' + ${artikel.id}}">
+					<a th:href="@{'/details/verkauf/' + ${artikel.id}}">
 						<div class="product">
 							<div class="product-top">
 								<span class="itemName" th:text="${artikel.titel}">itemName</span>

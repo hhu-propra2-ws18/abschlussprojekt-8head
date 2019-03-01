@@ -1,4 +1,4 @@
-package hhu.ausleihservice.web;
+package hhu.ausleihservice.web.controller;
 
 import hhu.ausleihservice.databasemodel.*;
 import hhu.ausleihservice.validators.AusleiheAbgabeValidator;
@@ -10,11 +10,9 @@ import hhu.ausleihservice.web.service.ProPayService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +25,6 @@ public class PersonController {
 	private PersonService personService;
 	private PersonValidator personValidator;
 	private ProPayService proPayService;
-	private AusleiheService ausleiheService;
-	private final AusleiheAbgabeValidator ausleiheAbgabeValidator;
 	private final RegisterValidator registerValidator;
 
 	PersonController(PersonService personService, PersonValidator personValidator,
@@ -38,36 +34,7 @@ public class PersonController {
 		this.personService = personService;
 		this.personValidator = personValidator;
 		this.proPayService = proPayService;
-		this.ausleiheService = ausleiheService;
-		this.ausleiheAbgabeValidator = ausleiheAbgabeValidator;
 		this.registerValidator = registerValidator;
-	}
-
-	@GetMapping("/")
-	public String startseite(Model model, Principal p) {
-		Person user = personService.get(p);
-		model.addAttribute("user", user);
-		if (user != null) {
-			List<AusleihItem> ausleihItems = new ArrayList<>();
-			List<KaufItem> kaufItems = new ArrayList<>();
-
-			for (Item item : user.getItems()) {
-				if (item.getClass().getSimpleName().equals("AusleihItem")) {
-					ausleihItems.add((AusleihItem) item);
-				}
-
-				if (item.getClass().getSimpleName().equals("KaufItem")) {
-					kaufItems.add((KaufItem) item);
-				}
-			}
-			model.addAttribute("ausleihItems", ausleihItems);
-			model.addAttribute("kaufItems", kaufItems);
-
-			model.addAttribute("lateAusleihen", ausleiheService.findLateAusleihen(user.getAusleihen()));
-			System.out.println(ausleihItems);
-		}
-		model.addAttribute("dateformat", DATEFORMAT);
-		return "startseite";
 	}
 
 	@GetMapping("/profil/{id}")
@@ -177,25 +144,6 @@ public class PersonController {
 		}
 	}
 
-	@GetMapping("/benutzersuche")
-	public String benutzerSuche(Model model, Principal p) {
-		model.addAttribute("user", personService.get(p));
-		return "benutzerSuche";
-	}
-
-	@PostMapping("/benutzersuche")
-	public String benutzerSuche(Model model,
-								String query, //For nachname, vorname, username
-								Principal p
-	) {
-		if (query != null) {
-			query = query.trim();
-		}
-		List<Person> list = personService.searchByNames(query);
-		model.addAttribute("benutzerListe", list);
-		model.addAttribute("user", personService.get(p));
-		return "benutzerListe";
-	}
 
 	@GetMapping("/register")
 	public String register(Model model, Principal p) {
@@ -222,109 +170,6 @@ public class PersonController {
 			return "register";
 		}
 		personService.encrypteAndSave(userForm);
-		return startseite(model, null);
-	}
-
-	@GetMapping("/admin")
-	public String admin(Model model, Principal p) {
-		model.addAttribute("user", personService.get(p));
-		return "admin";
-	}
-
-	@GetMapping("/admin/allconflicts")
-	public String showAllconflicts(Model model, Principal p) {
-		model.addAttribute("user", personService.get(p));
-		List<Ausleihe> konflikte = ausleiheService.findAllConflicts();
-		model.addAttribute("konflikte", konflikte);
-		return "alleKonflikte";
-	}
-
-
-	@GetMapping("/admin/conflict/{id}")
-	public String showConflict(Model model, Principal p, @PathVariable Long id) {
-		model.addAttribute("user", personService.get(p));
-		Ausleihe konflikt = ausleiheService.findById(id);
-		model.addAttribute("konflikt", konflikt);
-		return "konflikt";
-	}
-
-
-	@PostMapping("/admin/conflict/{id}")
-	public String resolveConflict
-			(Principal p, @PathVariable Long id, @RequestParam("entscheidung") String entscheidung) {
-		Ausleihe konflikt = ausleiheService.findById(id);
-		if (entscheidung.equals("bestrafen")) {
-			proPayService.punishRerservation(konflikt);
-		} else {
-			proPayService.releaseReservation(konflikt);
-		}
-		konflikt.setKonflikt(false);
-		konflikt.setStatus(Status.ABGESCHLOSSEN);
-		ausleiheService.save(konflikt);
-		return "redirect:/admin/allconflicts/";
-	}
-
-	@PostMapping("/ausleihe/bestaetigen/{id}")
-	public String ausleiheBestaetigen(@PathVariable Long id, Principal principal) {
-		Ausleihe ausleihe = ausleiheService.findById(id);
-		Person person = personService.get(principal);
-		if (ausleihe.getStartDatum().equals(LocalDate.now())) {
-			ausleihe.setStatus(Status.AUSGELIEHEN);
-		} else {
-			ausleihe.setStatus(Status.BESTAETIGT);
-		}
-		proPayService.kautionReservieren(ausleihe);
-		personService.save(person);
-		return "redirect:/profil/" + person.getId();
-	}
-
-	@PostMapping("/ausleihe/ablehnen/{id}")
-	public String ausleiheAblehnen(@PathVariable Long id, Principal principal) {
-		Ausleihe ausleihe = ausleiheService.findById(id);
-		Person person = personService.get(principal);
-		ausleihe.setStatus(Status.ABGELEHNT);
-		personService.save(person);
-		return "redirect:/profil/" + person.getId();
-	}
-
-	@PostMapping("/rueckgabe/bestaetigen/{id}")
-	public String rueckgabeBestaetigen(@PathVariable Long id, Principal principal) {
-		Ausleihe ausleihe = ausleiheService.findById(id);
-		Person person = personService.get(principal);
-		ausleihe.setStatus(Status.ABGESCHLOSSEN);
-		proPayService.releaseReservation(ausleihe);
-		personService.save(person);
-		return "redirect:/profil/" + person.getId();
-	}
-
-	@PostMapping("/rueckgabe/ablehnen/{id}")
-	public String rueckgabeKonflikt(@PathVariable Long id, Principal principal) {
-		Ausleihe ausleihe = ausleiheService.findById(id);
-		Person person = personService.get(principal);
-		ausleihe.setKonflikt(true);
-		ausleiheService.save(ausleihe);
-		return "redirect:/profil/" + person.getId();
-	}
-
-	@PostMapping("/zurueckgeben/{id}")
-	public String returnArticle(Principal p, @PathVariable Long id) {
-		Ausleihe ausleihe = ausleiheService.findById(id);
-		DataBinder dataBinder = new DataBinder(ausleihe);
-		dataBinder.setValidator(ausleiheAbgabeValidator);
-		dataBinder.validate();
-
-		BindingResult bindingResult = dataBinder.getBindingResult();
-		if (bindingResult.hasErrors()) {
-			//TODO ErrorMessage nicht genug Geld
-			return "redirect:/profil";
-		}
-
-		Person person = personService.get(p);
-		ausleihe.setStatus(Status.RUECKGABE_ANGEFRAGT);
-		ausleihe.setEndDatum(LocalDate.now());
-		proPayService.ueberweiseTagessaetze(ausleihe);
-		ausleiheService.save(ausleihe);
-		personService.save(person);
-		return "redirect:/profil";
+		return "redirect:/";
 	}
 }

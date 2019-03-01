@@ -1,11 +1,7 @@
 package hhu.ausleihservice.databasemodel;
 
 
-import hhu.ausleihservice.dataaccess.KaufItemRepository;
-import hhu.ausleihservice.dataaccess.AbholortRepository;
-import hhu.ausleihservice.dataaccess.AusleihItemRepository;
-import hhu.ausleihservice.dataaccess.AusleiheRepository;
-import hhu.ausleihservice.dataaccess.PersonRepository;
+import hhu.ausleihservice.dataaccess.*;
 import hhu.ausleihservice.propay.ProPayInterface;
 import hhu.ausleihservice.web.service.ProPayService;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -160,11 +156,11 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			double funds4 = proPayService.getProPayKontostand(person4);
 			double funds5 = proPayService.getProPayKontostand(person5);
 
-			proPayService.addFunds(person1, (funds1 >= 2500) ? 0 : 2500 - funds1);
-			proPayService.addFunds(person2, (funds2 >= 2500) ? 0 : 2500 - funds2);
-			proPayService.addFunds(person3, (funds3 >= 2500) ? 0 : 2500 - funds3);
-			proPayService.addFunds(person4, (funds4 >= 2500) ? 0 : 2500 - funds4);
-			proPayService.addFunds(person5, (funds5 >= 2500) ? 0 : 2500 - funds5);
+			proPayService.addFunds(person1, funds1 >= 2500 ? 0 : 2500 - funds1);
+			proPayService.addFunds(person2, funds2 >= 2500 ? 0 : 2500 - funds2);
+			proPayService.addFunds(person3, funds3 >= 2500 ? 0 : 2500 - funds3);
+			proPayService.addFunds(person4, funds4 >= 2500 ? 0 : 2500 - funds4);
+			proPayService.addFunds(person5, funds5 >= 2500 ? 0 : 2500 - funds5);
 		}
 
 
@@ -292,7 +288,6 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		ausleihe2.setEndDatum(mai.plusDays(3));
 		ausleihe2.setAusleiher(person3);
 		ausleihe2.setStatus(Status.ANGEFRAGT);
-		ausleihe2.setKonflikt(true);
 
 		Ausleihe ausleihe3 = new Ausleihe();
 		ausleihe3.setReservationId(2L);

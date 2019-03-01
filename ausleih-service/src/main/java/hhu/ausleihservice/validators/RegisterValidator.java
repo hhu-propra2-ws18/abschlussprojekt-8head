@@ -24,14 +24,21 @@ public class RegisterValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		Person person = (Person) target;
 
-		if (personService.existsByUsername(person.getUsername())) {
-			errors.rejectValue("username", Messages.duplicateUsername);
-		}
-
+		validateDuplicateUsername(errors, person);
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", Messages.notEmpty);
+		validateUsernameSize(errors, person);
+
+	}
+
+	private void validateUsernameSize(Errors errors, Person person) {
 		if (person.getUsername().length() < 4 || person.getUsername().length() > 32) {
 			errors.rejectValue("username", Messages.usernameSize);
 		}
+	}
 
+	private void validateDuplicateUsername(Errors errors, Person person) {
+		if (personService.existsByUsername(person.getUsername())) {
+			errors.rejectValue("username", Messages.duplicateUsername);
+		}
 	}
 }

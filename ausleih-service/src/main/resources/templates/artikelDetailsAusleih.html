@@ -8,7 +8,7 @@
 </head>
 <body>
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
-<container class="container px-lg-5">
+<div class="container px-lg-5">
 	<div class="row mx-lg-n5 product-details-row">
 		<div>
 			<form th:action="@{/details/ausleih/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}"
@@ -137,7 +137,7 @@
 				<button type="submit">Ausleihen</button>
 			</form>
 		</div>
-</container>
+</div>
 
 <script th:inline="javascript">
 

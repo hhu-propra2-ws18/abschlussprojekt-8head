@@ -22,19 +22,20 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.web.controller.MainController;
 import hhu.ausleihservice.web.service.PersonService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class PersonControllerUnitTest {
+public class SuchControllerUnitTest {
 
-	MockMvc mockMvc;
+	private MockMvc mockMvc;
 
 	@Autowired
 	protected WebApplicationContext wac;
 
 	@Autowired
-	PersonController personController;
+	MainController mainController;
 
 	@MockBean
 	PersonService personService;
@@ -43,7 +44,7 @@ public class PersonControllerUnitTest {
 
 	@Before
 	public void setup() {
-		this.mockMvc = standaloneSetup(this.personController).build();
+		this.mockMvc = standaloneSetup(this.mainController).build();
 		Person person1 = new Person();
 		Person person2 = new Person();
 		Person person3 = new Person();
@@ -100,4 +101,5 @@ public class PersonControllerUnitTest {
 		.andExpect(model().attribute("benutzerListe", ergebnisListe))
 		.andExpect(model().attribute("user", personListe.get(4)));
 	}
+
 }
