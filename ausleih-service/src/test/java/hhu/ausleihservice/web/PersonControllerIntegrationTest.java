@@ -36,9 +36,6 @@ public class PersonControllerIntegrationTest {
 	protected WebApplicationContext wac;
 
 	@Autowired
-	PersonController personController;
-
-	@Autowired
 	DatabaseInitializer dbInit;
 
 	@Before
@@ -105,4 +102,6 @@ public class PersonControllerIntegrationTest {
 				.param("moneten", "22"))
 		.andExpect(model().attribute("message", is("Du bist die falsche Person")));
 	}
+	
+	
 }
