@@ -18,27 +18,51 @@ public class AbholortValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		Abholort abholort = (Abholort) target;
 
-		if (abholort.getLatitude() != null) {
+		validateLatitude(abholort, errors);
+		validateLongitude(abholort, errors);
+		validateDescriptionEmpty(errors);
+		validateDescriptionSize(abholort, errors);
+	}
 
-			if (abholort.getLatitude() < -90 || abholort.getLatitude() > 90) {
-				errors.rejectValue("latitude", Messages.latitudeOutOfBounds);
-			}
+	private void validateDescriptionEmpty(Errors errors) {
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "beschreibung", Messages.notEmpty);
+	}
+
+	private void validateDescriptionSize(Abholort abholort, Errors errors) {
+		if (abholort.getBeschreibung().length() < 6 || abholort.getBeschreibung().length() > 250) {
+			errors.rejectValue("beschreibung", Messages.sizeLocationDescription);
+		}
+	}
+
+	private void validateLongitude(Abholort abholort, Errors errors) {
+		if (abholort.getLongitude() != null) {
+			validateLongitudeOutOfBounds(abholort, errors);
+		} else {
+			validateNotEmpty(errors, "longitude", Messages.notEmpty);
+		}
+	}
+
+	private void validateNotEmpty(Errors errors, String longitude, String notEmpty) {
+		errors.rejectValue(longitude, notEmpty);
+	}
+
+	private void validateLongitudeOutOfBounds(Abholort abholort, Errors errors) {
+		if (abholort.getLongitude() < -180 || abholort.getLongitude() > 180) {
+			errors.rejectValue("longitude", Messages.longitudeOutOfBounds);
+		}
+	}
+
+	private void validateLatitude(Abholort abholort, Errors errors) {
+		if (abholort.getLatitude() != null) {
+			validateLatitudeOutOfBounds(abholort, errors);
 		} else {
 			errors.rejectValue("latitude", Messages.notEmpty);
 		}
+	}
 
-		if (abholort.getLongitude() != null) {
-
-			if (abholort.getLongitude() < -180 || abholort.getLongitude() > 180) {
-				errors.rejectValue("longitude", Messages.longitudeOutOfBounds);
-			}
-		} else {
-			errors.rejectValue("longitude", Messages.notEmpty);
-		}
-
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "beschreibung", Messages.notEmpty);
-		if (abholort.getBeschreibung().length() < 6 || abholort.getBeschreibung().length() > 250) {
-			errors.rejectValue("beschreibung", Messages.sizeLocationDescription);
+	private void validateLatitudeOutOfBounds(Abholort abholort, Errors errors) {
+		if (abholort.getLatitude() < -90 || abholort.getLatitude() > 90) {
+			errors.rejectValue("latitude", Messages.latitudeOutOfBounds);
 		}
 	}
 }
