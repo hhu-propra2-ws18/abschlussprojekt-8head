@@ -5,7 +5,6 @@ import hhu.ausleihservice.dataaccess.AusleihItemRepository;
 import hhu.ausleihservice.dataaccess.AusleiheRepository;
 import hhu.ausleihservice.dataaccess.PersonRepository;
 import hhu.ausleihservice.databasemodel.Abholort;
-import hhu.ausleihservice.databasemodel.AusleihItem;
 import hhu.ausleihservice.web.service.AusleihItemService;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.*;
