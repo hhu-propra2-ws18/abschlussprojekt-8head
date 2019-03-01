@@ -112,7 +112,7 @@ public class KaufController {
 			return "artikelDetailsVerkauf";
 		}
 		artikel.setStatus(Status.VERKAUFT);
-		proPayService.transferFunds(user, artikel.getBesitzer(), artikel.getKaufpreis());
+		proPayService.ueberweiseKaufpreis(kauf);
 		personService.save(user);
 		redirAttrs.addFlashAttribute("message", "Artikel erfolgreich gekauft!");
 		return "redirect:/";
