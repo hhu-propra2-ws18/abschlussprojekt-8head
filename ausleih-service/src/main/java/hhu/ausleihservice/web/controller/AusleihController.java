@@ -1,6 +1,9 @@
 package hhu.ausleihservice.web.controller;
 
-import hhu.ausleihservice.databasemodel.*;
+import hhu.ausleihservice.databasemodel.AusleihItem;
+import hhu.ausleihservice.databasemodel.Ausleihe;
+import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.databasemodel.Status;
 import hhu.ausleihservice.form.AusleihForm;
 import hhu.ausleihservice.validators.AusleihItemValidator;
 import hhu.ausleihservice.validators.AusleiheAbgabeValidator;
@@ -162,7 +165,16 @@ public class AusleihController {
 
 	@GetMapping("/newitem/ausleihen")
 	public String createAusleihItem(Model model, Principal p) {
-		return redirectToNewItem(model, p);
+		Person user = personService.get(p);
+		if (user.getAbholorte().isEmpty()) {
+			model.addAttribute("message", "Bitte Abholorte hinzufügen");
+			return "errorMessage";
+		}
+		model.addAttribute("user", user);
+		model.addAttribute("newitem", new AusleihItem());
+		model.addAttribute("abholorte", user.getAbholorte());
+		model.addAttribute("today", LocalDateTime.now().format(DATEFORMAT));
+		return "neuerAusleihArtikel";
 	}
 
 	@PostMapping("/newitem/ausleihen")
@@ -276,19 +288,6 @@ public class AusleihController {
 		dataBinder.setValidator(validator);
 		dataBinder.validate();
 		return dataBinder.getBindingResult();
-	}
-
-	private String redirectToNewItem(Model model, Principal p) {
-		Person user = personService.get(p);
-		if (user.getAbholorte().isEmpty()) {
-			model.addAttribute("message", "Bitte Abholorte hinzufügen");
-			return "errorMessage";
-		}
-		model.addAttribute("user", user);
-		model.addAttribute("newitem", new AusleihItem());
-		model.addAttribute("abholorte", user.getAbholorte());
-		model.addAttribute("today", LocalDateTime.now().format(DATEFORMAT));
-		return "neuerAusleihArtikel";
 	}
 
 }
