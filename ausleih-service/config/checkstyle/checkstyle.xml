@@ -389,12 +389,11 @@ page at http://checkstyle.sourceforge.net/config.html -->
         </module>
 
         <!-- No System.out -->
-        <!--
         <module name="Regexp">
             <property name="format" value="System\.out\.println" />
             <property name="illegalPattern" value="true" />
         </module>
-        -->
+       
 
         <!-- No System.err -->
         <module name="Regexp">
