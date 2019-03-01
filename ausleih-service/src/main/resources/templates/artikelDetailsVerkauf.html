@@ -10,7 +10,7 @@
 <nav th:replace="../static/css/navbar :: main-menu">menu</nav>
 <h1 th:if="${artikel.getStatus()!=null}" style="color:#ff1518;"
 	th:text="${'Dieser Artikel ist bereits verkauft!'}"></h1>
-<container class="container px-lg-5">
+<div>
 	<div class="row mx-lg-n5 product-details-row">
 		<div>
 			<form th:action="@{/details/verkauf/{ArtikelId}(ArtikelId=${artikel.id})}" th:object="${artikel}"
@@ -79,7 +79,7 @@
 			<div id="mapid" class="product-details-map">map is here</div>
 		</div>
 	</div>
-</container>
+</div>
 
 <div th:if="${!user.isOwner(artikel) AND artikel.getStatus()==null}">
 	<form th:action="@{/kaufen/{id}(id=${artikel.id})}" th:object="${kaufForm}" method="post">
