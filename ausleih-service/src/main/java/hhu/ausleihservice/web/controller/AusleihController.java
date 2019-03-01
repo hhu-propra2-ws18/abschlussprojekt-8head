@@ -247,7 +247,8 @@ public class AusleihController {
 	}
 
 	@PostMapping("/zurueckgeben/{id}")
-	public String returnArticle(Model model, Principal p, @PathVariable Long id) {
+	public String returnArticle(Principal p, @PathVariable Long id,
+								RedirectAttributes redirAttrs) {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		DataBinder dataBinder = new DataBinder(ausleihe);
 		dataBinder.setValidator(ausleiheAbgabeValidator);
@@ -255,8 +256,8 @@ public class AusleihController {
 
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("propayErrors", bindingResult.getFieldError("propay"));
-			model.addAttribute("kontostandErrors", bindingResult.getFieldError("kontostand"));
+			redirAttrs.addFlashAttribute("propayErrors", bindingResult.getFieldError("propay"));
+			redirAttrs.addFlashAttribute("kontostandErrors", bindingResult.getFieldError("kontostand"));
 			return "redirect:/profil";
 		}
 
