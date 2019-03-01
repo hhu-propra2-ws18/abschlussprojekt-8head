@@ -172,5 +172,4 @@ public class PersonController {
 		personService.encrypteAndSave(userForm);
 		return "redirect:/";
 	}
-
 }

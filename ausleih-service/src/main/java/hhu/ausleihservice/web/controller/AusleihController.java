@@ -1,9 +1,6 @@
 package hhu.ausleihservice.web.controller;
 
-import hhu.ausleihservice.databasemodel.AusleihItem;
-import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.databasemodel.Person;
-import hhu.ausleihservice.databasemodel.Status;
+import hhu.ausleihservice.databasemodel.*;
 import hhu.ausleihservice.form.AusleihForm;
 import hhu.ausleihservice.validators.AusleihItemValidator;
 import hhu.ausleihservice.validators.AusleiheAbgabeValidator;
@@ -259,7 +256,8 @@ public class AusleihController {
 	}
 
 	@PostMapping("/zurueckgeben/{id}")
-	public String returnArticle(Principal p, @PathVariable Long id) {
+	public String returnArticle(Principal p, @PathVariable Long id,
+								RedirectAttributes redirAttrs) {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		DataBinder dataBinder = new DataBinder(ausleihe);
 		dataBinder.setValidator(ausleiheAbgabeValidator);
@@ -267,6 +265,8 @@ public class AusleihController {
 
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		if (bindingResult.hasErrors()) {
+			redirAttrs.addFlashAttribute("propayErrors", bindingResult.getFieldError("propay"));
+			redirAttrs.addFlashAttribute("kontostandErrors", bindingResult.getFieldError("kontostand"));
 			return "redirect:/profil";
 		}
 
@@ -274,6 +274,7 @@ public class AusleihController {
 		ausleihe.setStatus(Status.RUECKGABE_ANGEFRAGT);
 		ausleihe.setEndDatum(LocalDate.now());
 		proPayService.ueberweiseTagessaetze(ausleihe);
+		ausleiheService.save(ausleihe);
 		personService.save(person);
 		return "redirect:/profil";
 	}
