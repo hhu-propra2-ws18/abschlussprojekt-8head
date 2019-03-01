@@ -1,19 +1,16 @@
 package hhu.ausleihservice.web;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import hhu.ausleihservice.web.controller.MainController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.web.controller.MainController;
 import hhu.ausleihservice.web.service.PersonService;
 
 @SpringBootTest
@@ -103,16 +101,5 @@ public class SuchControllerUnitTest {
 		.andExpect(model().attribute("benutzerListe", ergebnisListe))
 		.andExpect(model().attribute("user", personListe.get(4)));
 	}
-	
-	@Test
-	public void successfulRegister() throws Exception {
-		mockMvc.perform(post("/register")
-				.param("username", "neuerUsername")
-				.param("vorname", "David")
-				.param("nachname", "Yelldell")
-				.param("email", "valid@mail.de"))
-				.andExpect(status().isOk())
-				.andExpect(view().name("startseite"));
-		verify(personService).encrypteAndSave(org.mockito.ArgumentMatchers.any(Person.class));
-	}
+
 }

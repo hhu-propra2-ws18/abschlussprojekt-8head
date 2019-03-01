@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.security.Principal;
 
-import hhu.ausleihservice.web.controller.PersonController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,13 +56,6 @@ public class PersonControllerIntegrationTest {
 	public void takenUsernameRegister() throws Exception {
 		mockMvc.perform(post("/register").param("username", "admin")).andExpect(
 				model().attribute("usernameErrors", hasProperty("code", is("Benutzername bereits vergeben."))));
-	}
-
-	@Test
-	public void successfulRegister() throws Exception {
-		mockMvc.perform(post("/register").param("username", "neuerUsername").param("vorname", "David")
-				.param("nachname", "Yelldell").param("email", "valid@mail.de")).andExpect(status().isOk())
-				.andExpect(view().name("startseite"));
 	}
 
 	@Test
