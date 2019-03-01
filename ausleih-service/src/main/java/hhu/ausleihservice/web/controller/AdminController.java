@@ -22,7 +22,6 @@ public class AdminController {
 	private final AusleiheService ausleiheService;
 	private final ProPayService proPayService;
 
-	@Autowired
 	public AdminController(PersonService personService, AusleiheService ausleiheService, ProPayService proPayService) {
 		this.personService = personService;
 		this.ausleiheService = ausleiheService;
