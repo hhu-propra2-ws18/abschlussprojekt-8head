@@ -3,6 +3,8 @@ package hhu.ausleihservice.databasemodel;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Base64;
+
 import static org.junit.Assert.assertEquals;
 
 public class ItemTests {
@@ -11,17 +13,7 @@ public class ItemTests {
 		Item item = new Item();
 		byte[] picture = new byte[256];
 		item.setPicture(picture);
-		Assert.assertEquals(256, item.getPicture().length);
-	}
-
-	@Test
-	public void testGetPictureReturnsCopyOfPicture() {
-		Item item = new Item();
-		byte[] picture = new byte[256];
-		item.setPicture(picture);
-		byte[] copy = item.getPicture();
-		copy[255] = 42;
-		Assert.assertEquals(0, item.getPicture()[255]);
+		Assert.assertEquals(Base64.getEncoder().encodeToString(picture), item.getPicture());
 	}
 
 	@Test
@@ -34,16 +26,7 @@ public class ItemTests {
 	public void testGetPictureReturnsEmptyByteArrayIfPictureIsEmpty() {
 		Item item = new Item();
 		item.setPicture(new byte[0]);
-		Assert.assertEquals(0, item.getPicture().length);
-	}
-
-	@Test
-	public void testSetPictureCopiesGivenByteArray() {
-		Item item = new Item();
-		byte[] original = new byte[256];
-		item.setPicture(original);
-		original[255] = 77;
-		Assert.assertEquals(0, item.getPicture()[255]);
+		Assert.assertEquals(0, item.getPicture().length());
 	}
 
 	@Test
@@ -96,12 +79,10 @@ public class ItemTests {
 	}
 
 
-	//Tests for setTitel(String s)
 	@Test
 	public void setTitelToNull() {
 		Item item = new Item();
 		item.setTitel(null);
-
 		assertEquals("", item.getTitel());
 	}
 

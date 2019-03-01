@@ -233,21 +233,22 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		person5.addItem(kaufItem1);
 		person1.addItem(kaufItem2);
 
+
 		try {
 			ausleihItem1.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/stift.jpg")));
+					Paths.get(System.getProperty("user.dir") + "/img/stift.jpg")));
 			ausleihItem2.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/fahrrad.jpg")));
+					Paths.get(System.getProperty("user.dir") + "/img/fahrrad.jpg")));
 			ausleihItem3.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/pfeil.jpg")));
+					Paths.get(System.getProperty("user.dir") + "/img/pfeil.jpg")));
 			ausleihItem4.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/bohnen.jpg")));
+					Paths.get(System.getProperty("user.dir") + "/img/bohnen.jpg")));
 			ausleihItem5.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/deepFriedFahrrad.jpg")));
+					Paths.get(System.getProperty("user.dir") + "/img/deepFriedFahrrad.jpg")));
 			kaufItem1.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/doener.jpg")));
+					Paths.get(System.getProperty("user.dir") + "/img/doener.jpg")));
 			kaufItem2.setPicture(Files.readAllBytes(
-					Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/schwein.jpeg")));
+					Paths.get(System.getProperty("user.dir") + "/img/schwein.jpeg")));
 		} catch (IOException e) {
 			System.out.println("Files could not be stored");
 		}

@@ -16,11 +16,19 @@ import java.util.Map;
 @Component
 public class ProPayInterface {
 
-	private static final String HOST = "localhost";
+	private String host;
 	private static final int PORT = 8888;
 	private static final String SCHEME = "http";
 	private static final MediaType MIME_TYPE = MediaType.APPLICATION_JSON_UTF8;
 	private static final Duration timeout = Duration.ofSeconds(1);
+
+	public ProPayInterface(String host) {
+		this.host = host;
+	}
+
+	public ProPayInterface() {
+		host = "propay";
+	}
 
 	public ProPayAccount getAccountInfo(final String proPayName) {
 		final Mono<ProPayAccount> mono
@@ -28,7 +36,7 @@ public class ProPayInterface {
 				.create()
 				.get()
 				.uri(builder -> builder.scheme(SCHEME)
-						.host(HOST)
+						.host(host)
 						.port(PORT)
 						.pathSegment("account", proPayName)
 						.build())
@@ -43,7 +51,7 @@ public class ProPayInterface {
 			WebClient.create()
 					.get()
 					.uri(builder -> builder.scheme(SCHEME)
-							.host(HOST)
+							.host(host)
 							.port(PORT)
 							.build())
 					.retrieve()
@@ -108,7 +116,7 @@ public class ProPayInterface {
 		UriBuilder uriBuilder = new DefaultUriBuilderFactory()
 				.builder()
 				.scheme(SCHEME)
-				.host(HOST)
+				.host(host)
 				.port(PORT)
 				.pathSegment(path);
 		return setQueryParam(uriBuilder, query).build();

@@ -247,7 +247,8 @@ public class AusleihController {
 	}
 
 	@PostMapping("/zurueckgeben/{id}")
-	public String returnArticle(Principal p, @PathVariable Long id) {
+	public String returnArticle(Principal p, @PathVariable Long id,
+								RedirectAttributes redirAttrs) {
 		Ausleihe ausleihe = ausleiheService.findById(id);
 		DataBinder dataBinder = new DataBinder(ausleihe);
 		dataBinder.setValidator(ausleiheAbgabeValidator);
@@ -255,6 +256,8 @@ public class AusleihController {
 
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		if (bindingResult.hasErrors()) {
+			redirAttrs.addFlashAttribute("propayErrors", bindingResult.getFieldError("propay"));
+			redirAttrs.addFlashAttribute("kontostandErrors", bindingResult.getFieldError("kontostand"));
 			return "redirect:/profil";
 		}
 
@@ -262,6 +265,7 @@ public class AusleihController {
 		ausleihe.setStatus(Status.RUECKGABE_ANGEFRAGT);
 		ausleihe.setEndDatum(LocalDate.now());
 		proPayService.ueberweiseTagessaetze(ausleihe);
+		ausleiheService.save(ausleihe);
 		personService.save(person);
 		return "redirect:/profil";
 	}
@@ -281,10 +285,10 @@ public class AusleihController {
 			return "errorMessage";
 		}
 		model.addAttribute("user", user);
-		model.addAttribute("newitem", new KaufItem());
+		model.addAttribute("newitem", new AusleihItem());
 		model.addAttribute("abholorte", user.getAbholorte());
 		model.addAttribute("today", LocalDateTime.now().format(DATEFORMAT));
-		return "neuerKaufArtikel";
+		return "neuerAusleihArtikel";
 	}
 
 }

@@ -120,6 +120,8 @@
 						</form>
 					</div>
 					<p th:case="*" th:text="${ausleihe.status.beschreibung}"></p>
+					<div id="error" th:text="${propayErrors?.code}"></div>
+					<div id="error" th:text="${kontostandErrors?.code}"></div>
 				</td>
 			</tr>
 			</tbody>
