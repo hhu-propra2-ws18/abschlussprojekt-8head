@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 import java.security.Principal;
@@ -108,7 +109,9 @@ public class PersonControllerUnitTest {
 				.param("username", "neuerUsername")
 				.param("vorname", "David")
 				.param("nachname", "Yelldell")
-				.param("email", "valid@mail.de"));
+				.param("email", "valid@mail.de"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("startseite"));
 		verify(personService).encrypteAndSave(org.mockito.ArgumentMatchers.any(Person.class));
 	}
 }
