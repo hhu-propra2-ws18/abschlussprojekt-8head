@@ -1,13 +1,16 @@
 package hhu.ausleihservice.validators;
 
-import hhu.ausleihservice.databasemodel.AusleihItem;
-import hhu.ausleihservice.databasemodel.Ausleihe;
-import hhu.ausleihservice.web.service.ItemAvailabilityService;
-import hhu.ausleihservice.web.service.ProPayService;
+import java.time.temporal.ChronoUnit;
+
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+
+import hhu.ausleihservice.databasemodel.AusleihItem;
+import hhu.ausleihservice.databasemodel.Ausleihe;
+import hhu.ausleihservice.web.service.ItemAvailabilityService;
+import hhu.ausleihservice.web.service.ProPayService;
 
 @Component
 public class AusleiheAnfragenValidator implements Validator {
@@ -49,8 +52,10 @@ public class AusleiheAnfragenValidator implements Validator {
 		} else if ((ausleiheItem != null) && ausleihe.getAusleiher() != null && ausleiheItem.getBesitzer() != null) {
 			double kontostand = proPayService.getProPayKontostand(ausleihe.getAusleiher());
 			int kautionswert = ausleiheItem.getKautionswert();
-			int ausleihDauer = ausleihe.getStartDatum().compareTo(ausleihe.getEndDatum());
-			if (kontostand < (kautionswert + ausleiheItem.getTagessatz() * ausleihDauer)) {
+			long ausleihDauer = ChronoUnit.DAYS.between(ausleihe.getStartDatum(), ausleihe.getEndDatum()) + 1;
+			if (kontostand < kautionswert) {
+				errors.rejectValue("ausleiher", Messages.notEnoughMoney);
+			} else if (kontostand < (ausleiheItem.getTagessatz() * ausleihDauer)) {
 				errors.rejectValue("ausleiher", Messages.notEnoughMoney);
 			}
 		}

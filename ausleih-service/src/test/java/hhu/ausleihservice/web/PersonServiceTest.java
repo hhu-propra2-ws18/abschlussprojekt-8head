@@ -12,10 +12,14 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PersonServiceTest {
 
@@ -85,6 +89,8 @@ public class PersonServiceTest {
 		personService = new PersonService(personRepository);
 
 		Mockito.when(personRepository.findAll()).thenReturn(repository);
+		Optional<Person> person1Opt = Optional.of(person1);
+		Mockito.when(personRepository.findByUsername("ghostyTrickster")).thenReturn(person1Opt);
 	}
 
 	@Test
@@ -262,5 +268,17 @@ public class PersonServiceTest {
 		List<Person> searchedPeople = personService.searchByNames("Liv Stamos");
 
 		assertEquals(0, searchedPeople.size());
+	}
+	
+	@Test
+	public void getNullPrincipal() {
+		assertEquals(null, personService.get(null));
+	}
+	
+	@Test
+	public void getValidPrincipal() {
+		Principal principal = mock(Principal.class);
+		when(principal.getName()).thenReturn("ghostyTrickster");
+		assertTrue(testPersonEquality(repository.get(0), personService.get(principal)));
 	}
 }

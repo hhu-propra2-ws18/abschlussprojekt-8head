@@ -23,8 +23,11 @@
 				<th:block th:if="${item.getClass().getSimpleName().equals('AusleihItem')}">
 					<a th:href="@{'/details/ausleih/' + ${item.id}}" th:text="${item.titel}"></a>
 				</th:block>
-				<th:block th:unless="${item.getClass().getSimpleName().equals('AusleihItem')}">
+				<th:block th:if="${item.getClass().getSimpleName().equals('KaufItem')}">
 					<a th:href="@{'/details/verkauf/' + ${item.id}}" th:text="${item.titel}"></a>
+					<th:block th:if="${item.status != null}">
+						- Bereits verkauft.
+					</th:block>
 				</th:block>
 			</li>
 		</ul>
@@ -185,7 +188,7 @@
 		</table>
 	</th:block>
 
-	<div th:if="${verkaeufe.size() != 0}">
+	<div th:if="${kaufItems.size() != 0}">
 		<h2>Verkaufte Items:</h2>
 		<table class="table table-hover">
 			<thead>
@@ -194,8 +197,9 @@
 			</tr>
 			</thead>
 			<tbody>
-			<tr th:each="verkauf : ${verkaeufe}">
-				<td th:if="${verkauf.status == 'VERKAUFT'}" th:text="${verkauf.item.titel}"></td>
+			<tr th:each="verkauf : ${kaufItems}">
+				<td th:if="${verkauf.status != null}"><a th:href="@{'/details/verkauf/' + ${verkauf.id}}" th:text="${verkauf.titel}"></a>
+				</td>
 			</tr>
 			</tbody>
 		</table>

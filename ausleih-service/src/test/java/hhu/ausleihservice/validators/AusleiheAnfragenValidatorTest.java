@@ -159,7 +159,6 @@ public class AusleiheAnfragenValidatorTest {
 		when(otherAusleihe.getStartDatum()).thenReturn(LocalDate.of(2019, 5, 2));
 		when(otherAusleihe.getEndDatum()).thenReturn(LocalDate.of(2019, 5, 4));
 
-
 		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
 
 		ProPayService proPayService = mock(ProPayService.class);
@@ -183,5 +182,133 @@ public class AusleiheAnfragenValidatorTest {
 		dataBinder.validate();
 		BindingResult bindingResult = dataBinder.getBindingResult();
 		assertEquals(Messages.itemNotAvailable, bindingResult.getFieldError("startDatum").getCode());
+	}
+
+	@Test
+	public void kontoIstNichtAusreichendGedecktKaution() {
+		Ausleihe ausleihe = new Ausleihe();
+		Person verleihPerson = new Person();
+		verleihPerson.setId(5L);
+		verleihPerson.setUsername("verleih");
+		Person ausleihPerson = new Person();
+		ausleihPerson.setId(4L);
+		ausleihe.setAusleiher(ausleihPerson);
+		ausleihPerson.setUsername("ausleih");
+		ausleihe.setStatus(Status.ANGEFRAGT);
+		ausleihe.setStartDatum(LocalDate.of(2019, 5, 5));
+		ausleihe.setEndDatum(LocalDate.of(2019, 5, 6));
+		AusleihItem item = mock(AusleihItem.class);
+		when(item.getKautionswert()).thenReturn(500);
+		when(item.getBesitzer()).thenReturn(verleihPerson);
+		ausleihe.setItem(item);
+
+		ProPayService proPayService = mock(ProPayService.class);
+		when(proPayService.getProPayKontostand(ausleihe.getAusleiher())).thenReturn(499.9);
+		when(proPayService.isAvailable()).thenReturn(true);
+		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
+
+		AusleiheAnfragenValidator ausleiheValidator = new AusleiheAnfragenValidator(availabilityService, proPayService);
+
+		DataBinder dataBinder = new DataBinder(ausleihe);
+		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.validate();
+		BindingResult bindingResult = dataBinder.getBindingResult();
+		assertEquals(Messages.notEnoughMoney, bindingResult.getFieldError("ausleiher").getCode());
+	}
+
+	@Test
+	public void kontoIstAusreichendGedecktKaution() {
+		Ausleihe ausleihe = new Ausleihe();
+		Person verleihPerson = new Person();
+		verleihPerson.setId(5L);
+		verleihPerson.setUsername("verleih");
+		Person ausleihPerson = new Person();
+		ausleihPerson.setId(4L);
+		ausleihe.setAusleiher(ausleihPerson);
+		ausleihPerson.setUsername("ausleih");
+		ausleihe.setStatus(Status.ANGEFRAGT);
+		ausleihe.setStartDatum(LocalDate.of(2019, 5, 5));
+		ausleihe.setEndDatum(LocalDate.of(2019, 5, 6));
+		AusleihItem item = mock(AusleihItem.class);
+		when(item.getKautionswert()).thenReturn(500);
+		when(item.getBesitzer()).thenReturn(verleihPerson);
+		ausleihe.setItem(item);
+
+		ProPayService proPayService = mock(ProPayService.class);
+		when(proPayService.getProPayKontostand(ausleihe.getAusleiher())).thenReturn(500.0);
+		when(proPayService.isAvailable()).thenReturn(true);
+		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
+
+		AusleiheAnfragenValidator ausleiheValidator = new AusleiheAnfragenValidator(availabilityService, proPayService);
+
+		DataBinder dataBinder = new DataBinder(ausleihe);
+		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.validate();
+		BindingResult bindingResult = dataBinder.getBindingResult();
+		assertEquals(0, bindingResult.getFieldErrorCount("ausleiher"));
+	}
+
+	@Test
+	public void kontoIstNichtAusreichendGedecktTagessatz() {
+		Ausleihe ausleihe = new Ausleihe();
+		Person verleihPerson = new Person();
+		verleihPerson.setId(5L);
+		verleihPerson.setUsername("verleih");
+		Person ausleihPerson = new Person();
+		ausleihPerson.setId(4L);
+		ausleihe.setAusleiher(ausleihPerson);
+		ausleihPerson.setUsername("ausleih");
+		ausleihe.setStatus(Status.AUSGELIEHEN);
+		ausleihe.setStartDatum(LocalDate.of(2019, 5, 5));
+		ausleihe.setEndDatum(LocalDate.of(2019, 5, 6));
+		AusleihItem item = mock(AusleihItem.class);
+		when(item.getTagessatz()).thenReturn(10);
+		when(item.getBesitzer()).thenReturn(verleihPerson);
+		ausleihe.setItem(item);
+
+		ProPayService proPayService = mock(ProPayService.class);
+		when(proPayService.getProPayKontostand(ausleihe.getAusleiher())).thenReturn(19.9);
+		when(proPayService.isAvailable()).thenReturn(true);
+		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
+
+		AusleiheAnfragenValidator ausleiheValidator = new AusleiheAnfragenValidator(availabilityService, proPayService);
+
+		DataBinder dataBinder = new DataBinder(ausleihe);
+		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.validate();
+		BindingResult bindingResult = dataBinder.getBindingResult();
+		assertEquals(Messages.notEnoughMoney, bindingResult.getFieldError("ausleiher").getCode());
+	}
+
+	@Test
+	public void kontoIstAusreichendGedecktTagessatz() {
+		Ausleihe ausleihe = new Ausleihe();
+		Person verleihPerson = new Person();
+		verleihPerson.setId(5L);
+		verleihPerson.setUsername("verleih");
+		Person ausleihPerson = new Person();
+		ausleihPerson.setId(4L);
+		ausleihe.setAusleiher(ausleihPerson);
+		ausleihPerson.setUsername("ausleih");
+		ausleihe.setStatus(Status.AUSGELIEHEN);
+		ausleihe.setStartDatum(LocalDate.of(2019, 5, 5));
+		ausleihe.setEndDatum(LocalDate.of(2019, 5, 6));
+		AusleihItem item = mock(AusleihItem.class);
+		when(item.getTagessatz()).thenReturn(10);
+		when(item.getBesitzer()).thenReturn(verleihPerson);
+		ausleihe.setItem(item);
+
+		ProPayService proPayService = mock(ProPayService.class);
+		when(proPayService.getProPayKontostand(ausleihe.getAusleiher())).thenReturn(20.0);
+		when(proPayService.isAvailable()).thenReturn(true);
+		ItemAvailabilityService availabilityService = mock(ItemAvailabilityService.class);
+
+		AusleiheAnfragenValidator ausleiheValidator = new AusleiheAnfragenValidator(availabilityService, proPayService);
+
+		DataBinder dataBinder = new DataBinder(ausleihe);
+		dataBinder.setValidator(ausleiheValidator);
+		dataBinder.validate();
+		BindingResult bindingResult = dataBinder.getBindingResult();
+		assertEquals(0, bindingResult.getFieldErrorCount("ausleiher"));
 	}
 }
