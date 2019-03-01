@@ -95,10 +95,10 @@ außerdem nach Verfügbarkeit und Preis gefiltert werden.
 Über die Profilseite sieht man die öffentlichen Daten einer Person. Auf dem eigenen Profil, oder
 falls man Administratorrechte besitzt, lassen sich alle Daten mit Ausnahme des Benutzernamens bearbeiten. +
 Auf seinem eigenen Profil kann ein Nutzer hier auch seinen ProPay-Kontostand anzeigen lassen und Geld aufladen.
-Im Profil sieht man seine eigenen Ausleihen und die Ausleihen seiner Artikel.
-Hier tätigt man auch die Bestätigungen die mit dem Ausleih-Prozess
-zusammen hängen (Ausleihe-Bestätigen/Ablehnen, Artikelzurückgeben,
-Rückgabebestätigen/Konflikt starten).
+Im Profil sieht man seine eigenen Ausleihen und die Ausleihen seiner Artikel. +
+Hier tätigt man auch die Bestätigungen die mit dem Ausleihprozess
+zusammenhängen, wie eine Ausleihe zu bestätigen oder abzulehnen, einen Artikel zurückzugeben, oder
+eine Rückgabe bestätigen bzw. einen Konflikt starten.
 
 === Artikeldetails
 Die Detailseite eines Artikels stellt Information zu diesem bereit, welche sich als Besitzer oder
@@ -130,8 +130,8 @@ wird für Artikel verwendet die zum Ausleihen angeboten werden, die andere für 
 die verkauft werden. Um diese Klassen zu verarbeiten, wurden weitere Klassen und HTML-Dateien
 in zwei Dateien aufgeteilt, in denen jeweils mit Kauf- oder Verleihlogik umgegangen wird.
 Die Kauflogik ist so implementiert, dass man einen Artikel zum
-Verkauf reinstellt und dieser dann von jemand anderem (mit genug
-Geld) gekauft werden kann. Weitere bestätigungen werden nicht
+Verkauf freigibt und dieser dann von jemand anderem (mit genug
+Geld) gekauft werden kann. Weitere Bestätigungen werden nicht
 benötigt.
 
 == Datenbank
