@@ -2,7 +2,6 @@ package hhu.ausleihservice.web;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.beans.HasProperty.hasProperty;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
