@@ -49,7 +49,7 @@ public class ProPayService {
 		proPayInterface.releaseReservation(reservationId, ausleiher);
 	}
 
-	public void ueberweiseTagessaetze(Kauf kauf) {
+	public void ueberweiseKaufpreis(Kauf kauf) {
 		KaufItem item = kauf.getItem();
 		String kaeufer = kauf.getKaeufer().getUsername();
 		String besitzer = item.getBesitzer().getUsername();
@@ -75,4 +75,5 @@ public class ProPayService {
 	public boolean isAvailable() {
 		return proPayInterface.isAvailable();
 	}
+
 }

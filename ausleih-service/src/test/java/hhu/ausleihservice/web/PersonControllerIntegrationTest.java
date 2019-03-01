@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.security.Principal;
 
+import hhu.ausleihservice.web.controller.PersonController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
