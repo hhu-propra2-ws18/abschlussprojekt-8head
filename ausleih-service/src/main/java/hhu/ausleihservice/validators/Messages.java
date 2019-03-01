@@ -1,6 +1,6 @@
 package hhu.ausleihservice.validators;
 
-class Messages {
+public class Messages {
 
 
 	static String notEmpty = "Benötigtes Feld";
