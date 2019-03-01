@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import hhu.ausleihservice.databasemodel.DatabaseInitializer;
-import hhu.ausleihservice.validators.Messages;
 
 
 @SpringBootTest
@@ -58,7 +57,8 @@ public class PersonControllerIntegrationTest {
 	@Test
 	public void takenUsernameRegister() throws Exception {
 		mockMvc.perform(post("/register").param("username", "admin"))
-		.andExpect(model().attribute("usernameErrors", hasProperty("code", is(Messages.duplicateUsername))));
+		.andExpect(model().attribute("usernameErrors", 
+				hasProperty("code", is("Benutzername bereits vergeben."))));
 	}
 
 }
