@@ -1,6 +1,9 @@
 package hhu.ausleihservice.web;
 
+import static org.hamcrest.CoreMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -11,6 +14,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -99,5 +103,15 @@ public class PersonControllerUnitTest {
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("benutzerListe", ergebnisListe))
 		.andExpect(model().attribute("user", personListe.get(4)));
+	}
+	
+	@Test
+	public void successfulRegister() throws Exception {
+		mockMvc.perform(post("/register")
+				.param("username", "neuerUsername")
+				.param("vorname", "David")
+				.param("nachname", "Yelldell")
+				.param("email", "valid@mail.de"));
+		verify(personService).encrypteAndSave(org.mockito.ArgumentMatchers.any(Person.class));
 	}
 }
