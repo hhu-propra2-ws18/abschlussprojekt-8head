@@ -129,7 +129,10 @@ als eine Oberklasse für die Klassen AusleihItem und KaufItem zu verwenden. Die 
 wird für Artikel verwendet die zum Ausleihen angeboten werden, die andere für Artikel
 die verkauft werden. Um diese Klassen zu verarbeiten, wurden weitere Klassen und HTML-Dateien
 in zwei Dateien aufgeteilt, in denen jeweils mit Kauf- oder Verleihlogik umgegangen wird.
-
+Die Kauflogik ist so implementiert, dass man einen Artikel zum
+Verkauf reinstellt und dieser dann von jemand anderem (mit genug
+Geld) gekauft werden kann. Weitere bestätigungen werden nicht
+benötigt.
 
 == Datenbank
 
