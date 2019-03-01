@@ -1,6 +1,9 @@
 package hhu.ausleihservice.web.controller;
 
-import hhu.ausleihservice.databasemodel.*;
+import hhu.ausleihservice.databasemodel.AusleihItem;
+import hhu.ausleihservice.databasemodel.Ausleihe;
+import hhu.ausleihservice.databasemodel.Person;
+import hhu.ausleihservice.databasemodel.Status;
 import hhu.ausleihservice.form.AusleihForm;
 import hhu.ausleihservice.validators.AusleihItemValidator;
 import hhu.ausleihservice.validators.AusleiheAbgabeValidator;
